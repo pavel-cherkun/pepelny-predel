@@ -83,13 +83,13 @@ button:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 .cmd-main { pointer-events: auto; display: flex; gap: 5px; padding: 5px; border-radius: 12px; background: rgba(20,16,22,.94); border: 1px solid var(--line); flex: 1 1 auto; max-width: 470px; min-width: 0; }
 .mini-box { position: relative; flex: 1 1 0; min-width: 96px; height: 96px; border-radius: 8px; overflow: hidden; background: #0a090d; box-shadow: inset 0 0 0 1px #2c2428; }
 /* фильтры мини-карты в углах */
-.mf { position: absolute; width: 17px; height: 17px; padding: 0; border-radius: 50%; border: 1px solid var(--c); background: rgba(10,9,13,.82); color: var(--c); font-size: 10px; line-height: 15px; text-align: center; z-index: 2; }
+.mf { position: absolute; width: 24px; height: 24px; padding: 0; border-radius: 50%; border: 1px solid var(--c); background: rgba(10,9,13,.82); color: var(--c); font-size: 10px; line-height: 15px; text-align: center; z-index: 2; }
 .mf.off { opacity: .35; border-style: dashed; color: #6a5e58; }
 .mf.tl { top: 2px; } .mf.tr { top: 2px; } .mf.bl { bottom: 2px; } .mf.br { bottom: 2px; }
-.mf.tl:nth-of-type(1) { left: 2px; } .mf.tl:nth-of-type(2) { left: 21px; }
-.mf.tr:nth-of-type(3) { right: 21px; } .mf.tr:nth-of-type(4) { right: 2px; }
-.mf.bl:nth-of-type(5) { left: 2px; } .mf.bl:nth-of-type(6) { left: 21px; }
-.mf.br:nth-of-type(7) { right: 40px; } .mf.br:nth-of-type(8) { right: 21px; } .mf.br:nth-of-type(9) { right: 2px; }
+.mf.tl:nth-of-type(1) { left: 2px; } .mf.tl:nth-of-type(2) { left: 28px; }
+.mf.tr:nth-of-type(3) { right: 28px; } .mf.tr:nth-of-type(4) { right: 2px; }
+.mf.bl:nth-of-type(5) { left: 2px; } .mf.bl:nth-of-type(6) { left: 28px; }
+.mf.br:nth-of-type(7) { right: 54px; } .mf.br:nth-of-type(8) { right: 28px; } .mf.br:nth-of-type(9) { right: 2px; }
 .vcmd .btn { flex: 1 1 45%; }
 #mini { width: 100%; height: 100%; display: block; touch-action: none; }
 .cmd-grid { display: grid; grid-template-columns: repeat(2, 62px); grid-template-rows: repeat(2, 1fr); gap: 4px; }
@@ -142,7 +142,7 @@ details.ref p { margin: 6px 0 0; font-size: 12.5px; line-height: 1.35; color: #d
   .hud { flex-direction: row; align-items: center; gap: 14px; padding: 6px 14px; }
   .hud-res { display: flex; gap: 6px 14px; flex: 0 0 auto; }
   .hud-st { flex: 1 1 auto; justify-content: flex-end; }
-  .r { font-size: 14px; } .r small { font-size: 11.5px; } .ico { width: 12px; height: 12px; }
+  .r { font-size: 15px; } .r small { font-size: 11.5px; }
   .st { font-size: 13px; padding: 4px 11px !important; }
   .st.goal { flex: 0 1 420px; }
   #feed { top: 52px; width: 360px; }
@@ -163,8 +163,8 @@ details.ref p { margin: 6px 0 0; font-size: 12.5px; line-height: 1.35; color: #d
   .cmd-util { grid-template-columns: repeat(2, 52px); gap: 6px; padding: 7px; }
   .cmd-util button { font-size: 11px; }
   .cmd-grid button::after, .cmd-util button::after { content: attr(data-key); font-size: 10px; color: #6a5e58; font-weight: 500; }
-  .mf { width: 22px; height: 22px; font-size: 13px; line-height: 20px; }
-  .mf.tl:nth-of-type(2), .mf.bl:nth-of-type(6) { left: 27px; } .mf.tr:nth-of-type(3), .mf.br:nth-of-type(8) { right: 27px; } .mf.br:nth-of-type(7) { right: 52px; }
+  .mf { width: 32px; height: 32px; font-size: 15px; line-height: 30px; }
+  .mf.tl:nth-of-type(2), .mf.bl:nth-of-type(6) { left: 37px; } .mf.tr:nth-of-type(3), .mf.br:nth-of-type(8) { right: 37px; } .mf.br:nth-of-type(7) { right: 72px; }
   #sheet { top: 60px; bottom: 16px; right: 14px; width: 440px; }
   #banner { bottom: 220px; }
   .tiles { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); }
@@ -238,13 +238,13 @@ body[data-race="vampires"] { --tint: hue-rotate(330deg) saturate(1.2) brightness
 body[data-race="primates"] { --tint: hue-rotate(60deg) saturate(1.3); }
 body[data-race="bears"] { --tint: hue-rotate(290deg) saturate(.9) brightness(1.15); }
 /* ресурсы — нарисованные иконки, у каждой расы свои */
-.ico { width: 18px; height: 18px; clip-path: none !important; border-radius: 0 !important; background: center / contain no-repeat !important; filter: drop-shadow(0 1px 1px rgba(0,0,0,.8)); }
+.ico { width: 24px; height: 24px; clip-path: none !important; border-radius: 0 !important; background: center / contain no-repeat !important; filter: drop-shadow(0 1px 1px rgba(0,0,0,.8)); }
 .ico-scrap { background-image: var(--rs-scrap) !important; } .ico-food { background-image: var(--rs-food) !important; }
 .ico-water { background-image: var(--rs-water) !important; } .ico-aether { background-image: var(--rs-aether) !important; }
 .ico-fuel { background-image: var(--rs-fuel) !important; } .ico-power { background-image: var(--rs-power) !important; }
 .ico-pop { background-image: var(--ui-i_pop) !important; }
 .race-pick .rp-ico { width: 40px; height: 40px; float: left; margin: 0 8px 4px 0; object-fit: contain; filter: drop-shadow(0 2px 2px #000); }
-.cost .ico, .tile .ico { width: 14px; height: 14px; }
+.cost .ico, .tile .ico { width: 18px; height: 18px; }
 /* верхнее табло — кованая планка */
 .hud { background: linear-gradient(#1b1517, #0e0b0d) !important; border-bottom: 0 !important; padding-bottom: 6px !important; box-shadow: 0 6px 18px rgba(0,0,0,.55); }
 .hud::after { content: ''; position: absolute; left: 0; right: 0; bottom: -2px; height: 3px; background: linear-gradient(90deg, transparent, #7a4a26 15%, #e8a050 50%, #7a4a26 85%, transparent); filter: var(--tint); pointer-events: none; }
@@ -272,7 +272,7 @@ body[data-race="bears"] { --tint: hue-rotate(290deg) saturate(.9) brightness(1.1
 .mini-box { background: none !important; border: 9px solid transparent; border-image: var(--ui-slot) 16% fill / 9px stretch; box-shadow: none !important; overflow: visible !important; border-radius: 0 !important; }
 #mini { position: absolute; inset: 0; width: 100%; height: 100%; }
 .mini-box .mapframe { position: absolute; background: var(--ui-mapframe) center / 100% 100% no-repeat; filter: var(--tint) drop-shadow(0 1px 3px #000); pointer-events: none; z-index: 1; }
-.mf { background-size: 70% 70% !important; background-position: center !important; background-repeat: no-repeat !important; color: transparent !important; }
+.mf { background-size: 84% 84% !important; background-position: center !important; background-repeat: no-repeat !important; color: transparent !important; }
 .mf.txt { color: var(--c) !important; }
 .mf { z-index: 4 !important; background-color: #0e0a0c !important; box-shadow: 0 1px 3px #000; }
 /* лист-панель — окно в кованой раме */
@@ -314,11 +314,12 @@ body[data-race="bears"] { --tint: hue-rotate(290deg) saturate(.9) brightness(1.1
 .cmd-side { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
 .cmd-side .cmd-util { display: grid; grid-template-columns: repeat(4, 1fr) !important; grid-template-rows: auto !important; gap: 2px; padding: 2px 0 !important; background: none !important; box-shadow: none !important; border-bottom: 1px solid rgba(120,90,70,.35) !important; border-radius: 0 !important; }
 .cmd-side .cmd-util::before { display: none; }
-.cmd-side .cmd-util button { height: 36px; gap: 0; }
-.cmd-side .cmd-util .util-ico { width: 22px; height: 22px; }
+.cmd-side .cmd-util button { height: 40px; gap: 0; }
+.cmd-side .cmd-util .util-ico { width: 30px !important; height: 30px !important; }
 .cmd-side .cmd-util button span { font-size: 8.5px; }
 .cmd-side .cmd-grid { flex: 1 1 auto; grid-template-columns: repeat(2, minmax(0, 1fr)) !important; grid-template-rows: repeat(2, 1fr) !important; }
-.cmd-side .cmd-grid button .cmd-ico { width: 34px; height: 34px; }
+.cmd-side .cmd-grid button .cmd-ico { width: 46px !important; height: 46px !important; }
+.cmd-side .cmd-grid button span { font-size: 9px; letter-spacing: -.04em; }
 #banner { bottom: calc(env(safe-area-inset-bottom, 0px) + 46vw) !important; }
 
 @media (min-width: 1100px) and (pointer: fine) {
@@ -326,16 +327,16 @@ body[data-race="bears"] { --tint: hue-rotate(290deg) saturate(.9) brightness(1.1
   .mini-box { flex: 0 0 320px !important; height: 170px !important; aspect-ratio: auto; }
   .cmd-side { flex-direction: row; align-items: stretch; gap: 12px; }
   .cmd-side .cmd-grid { order: 1; grid-template-columns: repeat(4, minmax(92px, 1fr)) !important; grid-template-rows: 1fr !important; }
-  .cmd-side .cmd-grid button .cmd-ico { width: 54px; height: 54px; }
+  .cmd-side .cmd-grid button .cmd-ico { width: 72px !important; height: 72px !important; }
   .cmd-side .cmd-util { order: 2; grid-template-columns: repeat(4, 64px) !important; grid-template-rows: 1fr !important; border-bottom: 0 !important; border-left: 1px solid rgba(120,90,70,.35) !important; padding-left: 10px !important; }
   .cmd-side .cmd-util button { height: auto; }
-  .cmd-side .cmd-util .util-ico { width: 40px; height: 40px; }
+  .cmd-side .cmd-util .util-ico { width: 50px !important; height: 50px !important; }
   .cmd-side .cmd-util button span { font-size: 11px; }
   #banner { bottom: 220px !important; }
   .cmd-grid { grid-template-columns: repeat(4, minmax(92px, 1fr)) !important; grid-template-rows: 1fr !important; }
   .cmd-grid button span { font-size: 13px !important; }
   .cmd-util { grid-template-columns: repeat(4, 64px) !important; grid-template-rows: 1fr !important; }
-  .mf { width: 24px !important; height: 24px !important; }
+  .mf { width: 32px !important; height: 32px !important; }
 }
 </style>
 
@@ -748,6 +749,7 @@ G.siteBonus = function (p) {
     b = { aether: ess, vision: b.vision, heal: b.heal, xp: b.xp };
     if (t === 'monolith') b.note = 'станет стражем-монолитом: бьёт лучом по врагам';
   }
+  if (b.power && !G.RACES[race].power && race !== 'others' && race !== 'mutants') { const k = (G.ECON && G.ECON[race] && G.ECON[race].order[0]) || 'scrap'; b[k] = (b[k] || 0) + b.power * 0.006; delete b.power; }
   // чего у расы нет — тем же весом в её ресурсы
   const M = G.RESMAP && G.RESMAP[race];
   if (M) for (const k of ['scrap', 'food', 'water', 'aether', 'fuel']) if (b[k] && M[k]) { b[M[k]] = (b[M[k]] || 0) + b[k]; delete b[k]; }
@@ -1072,7 +1074,11 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     return (lp = pats);
   };
   // Покачивание при ходьбе и выпад при атаке
-  G.sprAnim = function (walk, moving, atk, face) {
+  // машины не качаются как пешеходы: лишь чуть дрожат на ходу
+  const RIGID = { survivors: ['car', 'bus', 'mech2'], ai: ['car', 'bus', 'mech2'], clowns: ['car'] };
+  G.isRigid = (race, cls) => !!(RIGID[race] && RIGID[race].includes(cls));
+  G.sprAnim = function (walk, moving, atk, face, rigid) {
+    if (rigid) return { dy: moving ? -Math.abs(Math.sin(walk * 2.5)) * 0.5 : 0, rot: 0, dx: atk ? face * 1.5 : 0, sy: 1 };
     const b = moving ? Math.abs(Math.sin(walk)) : 0;
     return { dy: -b * 2, rot: moving ? Math.sin(walk) * 0.05 : 0, dx: atk ? face * 2.5 : 0, sy: 1 - b * 0.03 };
   };
@@ -1091,7 +1097,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
 
   // ---------- Грибы: юнитов нет, только строения и мицелий
   G.SKINS.fungi = {
-    res: { scrap: ['—', '#888'], food: ['—', '#888'], water: ['Вода', '#6ab8e8'], aether: ['Эфир', '#b48cff'], fuel: ['Древесина', '#a8784a'] },
+    res: { scrap: ['—', '#888'], food: ['—', '#888'], water: ['Вода', '#6ab8e8'], aether: ['—', '#888'], fuel: ['Древесина', '#a8784a'] },
     classes: {
       scav: ['Заражённый носильщик', 'Бывший рабочий чужой расы, теперь служит грибнице.', 'ghoul'],
       scout: ['Заражённый разведчик', 'Быстрый носитель спор.', 'hound'], guard: ['Заражённый громила', 'Держит удар.', 'brute'],
@@ -1102,23 +1108,24 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     },
     buildings: {
       citadel: ['Сердце грибницы', 'Корень всего. Растит мицелий во все стороны — и вниз, в подземелья.'],
-      house: ['Споровый мешок', '+4 к лимиту заражённых.'], farm: ['Плодовые тела', 'Выращивают эфир: +0.25 в секунду.'],
-      workshop: ['Гифа-хранилище', 'Растит кристаллы: +0.25 в секунду.'], barracks: ['Капсула перерождения', 'Растит заново тех, кого кордицепс уже заразил, и возвращает павших заражённых с их уровнем — тем дороже, чем выше уровень.'],
+      house: ['Споровый мешок', '+4 к лимиту заражённых.'], farm: ['Плодовые тела', 'Растят древесину: +0.3 в секунду.'],
+      workshop: ['Гифа-хранилище', 'Копит воду из почвы: +0.25 в секунду.'], barracks: ['Капсула перерождения', 'Растит заново тех, кого кордицепс уже заразил, и возвращает павших заражённых с их уровнем — тем дороже, чем выше уровень.'],
       forge: ['Ферментный чан', 'Усиления: споры злее, шанс заражения выше.'], memorial: ['Мавзолей', 'Нужен заражённый выживший: кордицепс должен обратить хотя бы одного человека. Мавзолей открывает Пробуждение Вождя.'],
       spire: ['Дождевики', 'Видят на 24 клетки вокруг.'], tower: ['Грибница кордицепса', 'Стреляет спорами. Убитый враг с шансом 25–75% встаёт заражённым бойцом.'],
-      cannon: ['Мухомор-отравитель', 'Отравляет всех врагов рядом.'], tesla: ['Плесневой узел', 'Пускает плесень к ближайшему чужому месту. Плесень растёт быстро, не лезет на мицелий, жжёт врагов на ней и высасывает вражеские постройки. На ней можно ставить Грибной узел и мухоморы.'],
+      cannon: ['Мухомор-отравитель', 'Отравляет всех врагов рядом.'], tesla: ['Плесневой узел', 'Не стреляет: пускает чёрную плесень к ближайшей вражеской базе (до 260 клеток). Плесень растёт быстро, не лезет на мицелий, жжёт врагов на ней и высасывает вражеские постройки. На ней можно ставить Грибной узел и мухоморы.'],
       beacon: ['Споровый столб', 'Мицелий вокруг него (радиус 10) растёт втрое быстрее.'], outpost: ['Грибной узел', 'Ставится и на плесень: превращает плесень вокруг в мицелий и отстреливается спорами. Так плесень прокладывает мицелию дорогу.'],
       wonder: ['Великая Грибница', 'Нужны реликвии всех соседей. Когда вырастет — мицелий растёт втрое быстрее, а заражение срабатывает всегда.'],
       mechf3: ['Пробуждение Вождя', 'Мавзолей открывает путь: через 120 с встанет Вождь.'], site: ['Проросшее место', 'Мицелий забрал это место себе.'],
       lamp: ['Светящийся гриб', 'Светится ночью.'], garage: ['—', ''], drill: ['—', ''], infirmary: ['—', ''], mechf1: ['—', ''], mechf2: ['—', ''],
     },
     breq: { mechf3: { req: ['memorial'] } },
-    upgrades: { dmg: ['Ядовитые споры', '+10% урона всем'], hp: ['Толстая шляпка', '+10% здоровья всем'], speed: ['Быстрые гифы', '+6% скорости всем'], carry: ['Широкий мицелий', '+30% переноса'], tower: ['Цепкий кордицепс', '+25% урона зданий и +10% к шансу заражения'] },
+    upgrades: { dmg: ['Ядовитые споры', '+10% урона всем'], hp: ['Толстая шляпка', '+10% здоровья всем'], speed: ['Быстрые гифы', '+25% к скорости роста мицелия и плесени'], carry: ['Жадные гифы', '+30% к добыче мицелия'], tower: ['Цепкий кордицепс', '+12% к шансу заражения, +25% урона зданий'] },
     quest: [['Прорасти к трём эфирным пилонам', 'Мицелий должен дойти до них.'], ['Заразить двух вражеских владык', 'Их твердыни — на чужой земле.'], ['Вырастить Великую Грибницу', 'Пока растёт — все идут на неё.']],
     names: ['Гифа', 'Спора', 'Пластинка', 'Ножка', 'Вольва', 'Плесень', 'Трутовик', 'Опёнок', 'Сморчок', 'Груздь', 'Веселка', 'Ложа', 'Мицелий', 'Сапрофит'],
     titles: ['Шёпот Грибницы', 'Тот, кто пророс', 'Носитель Спор', 'Белая Нить'],
     build: [['Рост', ['house', 'farm', 'workshop', 'beacon', 'outpost']], ['Заражённые', ['barracks', 'forge', 'memorial', 'spire']], ['Оборона', ['tower', 'cannon', 'tesla']], ['Великое', ['wonder']]],
-    prod: { farm: { aether: 0.25 }, workshop: { scrap: 0.25 } },
+    prod: { farm: { fuel: 0.3 }, workshop: { water: 0.25 } },
+    upgOrder: ['speed', 'carry', 'tower', 'dmg', 'hp'],
   };
 
   // ---------- ИИ-агенты: только машины, всё на взломе
@@ -1278,7 +1285,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     survivors: { order: ['scrap', 'food', 'water', 'aether', 'fuel'], icons: { scrap: 'i_scrap', food: 'i_mush', water: 'i_water', aether: 'i_aether', fuel: 'i_fuel' }, take: { junk: 'scrap', mush: 'food', water: 'water', aether: 'aether', fuel: 'fuel' } },
     mutants: { order: ['scrap', 'food', 'water', 'aether', 'fuel'], icons: { scrap: 'i_stone', food: 'i_mush', water: 'i_acid', aether: 'i_aether', fuel: 'r_wood' }, take: { mush: 'food', aether: 'aether', acid: 'water' }, obj: { tree: 'fuel', rock: 'scrap', crystal: 'aether', acid: 'water' } },
     others: { order: ['aether'], icons: { aether: 'i_essence', scrap: 'i_essence', food: 'i_essence', water: 'i_essence', fuel: 'i_essence' }, take: {} },
-    fungi: { order: ['fuel', 'aether', 'water'], icons: { fuel: 'r_wood', aether: 'i_aether', water: 'i_water' }, take: { water: 'water', aether: 'aether' }, obj: { tree: 'fuel', crystal: 'aether' } },
+    fungi: { order: ['fuel', 'water'], icons: { fuel: 'r_wood', water: 'i_water' }, take: { water: 'water' }, obj: { tree: 'fuel' } },
     ai: { order: ['scrap', 'aether'], icons: { scrap: 'i_scrap', aether: 'r_data' }, take: { junk: 'scrap', data: 'aether' }, obj: { wreck: 'scrap' } },
     clowns: { order: ['scrap', 'food', 'aether'], icons: { scrap: 'i_scrap', food: 'r_candy', aether: 'r_fear' }, take: { junk: 'scrap' } },
     vampires: { order: ['scrap', 'food', 'aether'], icons: { scrap: 'r_gold', food: 'r_blood', aether: 'r_dark' }, take: { gold: 'scrap', dark: 'aether' } },
@@ -1301,15 +1308,15 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
   };
   G.canBuildType = (type, race) => type === 'citadel' || /^mechf/.test(type) || G.buildGroups(race).some(g => g[1].includes(type));
   // слоты, которых у расы нет: цены и награды в них переводятся в её ресурсы
-  G.RESMAP = { fungi: { scrap: 'fuel', food: 'water' }, ai: { food: 'scrap', water: 'scrap', fuel: 'scrap' }, clowns: { water: 'food', fuel: 'scrap' }, vampires: { water: 'food', fuel: 'scrap' }, primates: { fuel: 'scrap' }, bears: { water: 'food', fuel: 'scrap' } };
+  G.RESMAP = { fungi: { scrap: 'fuel', food: 'water', aether: 'fuel' }, ai: { food: 'scrap', water: 'scrap', fuel: 'scrap' }, clowns: { water: 'food', fuel: 'scrap' }, vampires: { water: 'food', fuel: 'scrap' }, primates: { fuel: 'scrap' }, bears: { water: 'food', fuel: 'scrap' } };
   // одна картинка и одно имя на каждый тип залежи — для всех рас
   G.DEP_SPR = { junk: 'scrap', mush: 'food', water: 'water', aether: 'aether', fuel: 'fuel', gold: 'n_gold', dark: 'n_dark', data: 'n_data', fluff: 'n_fluff', honey: 'n_honey', rainbow: 'n_rainbow' };
   G.DEP_NAME = { junk: 'Груда хлама', mush: 'Грибы', water: 'Родник', aether: 'Эфирные кристаллы', fuel: 'Бочки с топливом', gold: 'Золотая жила', dark: 'Чёрные кристаллы', data: 'Серверная стойка', fluff: 'Облачный пух', honey: 'Облачный улей', rainbow: 'Радужный родник', tree: 'Дерево', rock: 'Камень', crystal: 'Кристалл', wreck: 'Остов машины', acid: 'Кислотное болото' };
 
   // ---------- Карточки рас
   Object.assign(G.RACES, {
-    fungi: { name: 'Грибы', desc: 'Юнитов нет — только грибница. Мицелий медленно ползёт клетка за клеткой, видит всё, что покрыл, и высасывает древесину, эфир, воду и кристаллы. Кордицепс обращает врагов в своих.', power: false, harvestObjects: true, noUnits: true, myc: true,
-      dock: ['Рост', 'Перерождение', '—', 'Вождь'], res: ['fuel', 'aether', 'water'] },
+    fungi: { name: 'Грибы', desc: 'Юнитов нет — только грибница. Мицелий медленно ползёт клетка за клеткой, видит всё, что покрыл, и высасывает древесину из деревьев и воду из родников. Кордицепс обращает врагов в своих.', power: false, harvestObjects: true, noUnits: true, myc: true,
+      dock: ['Рост', 'Споры', 'Перерождение', 'Вождь'], res: ['fuel', 'water'] },
     ai: { name: 'ИИ-агенты', desc: 'Машины без органики. Металл из обломков, данные из взломов и серверов, всё работает от электросети. Не лечатся сами — только ремонтом. Хакеры угоняют чужую технику.', power: true, harvestObjects: true, noEat: true, aiPower: true, noRegen: true,
       dock: ['Сборка', 'Цех', 'Ангар', 'Гиганты'], res: ['scrap', 'aether'] },
     clowns: { name: 'Злые клоуны', desc: 'Цирк из разлома. Хлам со свалок, сладкая вата из лавок и Страх — его дают напуганные и убитые враги. Без Страха не нанять ни одного артиста. Мимы, чревовещатели, люки, особняк страха.', power: false, harvestObjects: false,
@@ -1781,7 +1788,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
       const dep = o === O.TREE ? 'tree' : o === O.ROCK ? 'rock' : o === O.CRYSTAL ? 'crystal' : o === O.WRECK ? 'wreck' : null;
       if (!dep || W.nodeAt[i] >= 0) continue;
       if (!(W.reach[i - 1] || W.reach[i + 1] || W.reach[i - N] || W.reach[i + N])) continue;
-      if (dep !== 'tree' && hash2(x, y, seed + 41) > (dep === 'wreck' ? 0.6 : 0.22)) continue; // каждое дерево можно срубить
+      // всё, до чего можно дойти, — добывается: каждое дерево, камень, кристалл и остов
       // деревьев в лесах много — у каждого мало, выбранное дерево исчезает
       const amt = dep === 'tree' ? 28 + Math.floor(hash2(x, y, 3) * 26) : dep === 'crystal' ? 45 + Math.floor(hash2(x, y, 4) * 50) : 110 + Math.floor(hash2(x, y, 5) * 100);
       const n = addNode(dep, x, y, amt); n.obj = true;
@@ -2165,7 +2172,12 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     G.resetMyc(); S.myc = new Uint8Array(N * N);
     // вампиры живут под землёй: свои подземелья знают с самого начала
     if (G.race === 'vampires') { const L = G.LAYERS.under; for (let y = L.y0; y < L.y0 + L.h; y++) for (let x = L.x0; x < L.x0 + L.w; x++) W.explored[y * N + x] = 1; }
-    if (G.race === 'fungi') { G.mycSeed(cit.x + 1.5, cit.y + 1.5, 3.2, 1); const [ux, uy] = G.toLayer('under', cit.x + 1.5, cit.y + 1.5); G.mycSeed(ux, uy, 2.5, 1); }
+    if (G.race === 'fungi') {
+      G.mycSeed(cit.x + 1.5, cit.y + 1.5, 5, 1);
+      // корни Сердца выходят в пещеру — там с первой минуты своя грибница
+      const rt = (W.portals || []).find(p => p.roots);
+      if (rt) { G.mycSeed(rt.b[0], rt.b[1], 3.5, 1); G.reveal(rt.b[0], rt.b[1], 6); }
+    }
     // стражи локаций
     S.foes = {};
     for (const p of W.pois) setupGuards(p);
@@ -3185,6 +3197,10 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     if (t.kind === 'u' && G.race === 'bears' && src && src.kind === 'e') S.rage = Math.min(100, (S.rage || 0) + 0.8);
     if (t.kind === 'u' && src && src.kind === 'e') t.lastHitT = S.t;
     if (t.kind === 'b' && src && src.kind === 'e' && src.fac) t.lastFac = src.fac;
+    // кордицепс: задетый грибницей враг помечен — умрёт в течение 8 с, и может встать заражённым
+    if (t.kind === 'e' && src && src.kind === 'b' && src.type === 'tower' && G.race === 'fungi') t.cordT = S.t + 8;
+    // враг, по которому бьют, отвечает: ищет обидчика, даже если это постройка
+    if (t.kind === 'e' && src && (src.kind === 'b' || src.kind === 'u') && src.hp > 0) { t.provokedBy = src.id; t.provokedT = S.t + 6; }
     if (src && src.kind === 'e' && t.team === 'u') { const c = center(t); pushAlert(c[0], c[1]); }
     if (t.kind === 'b') {
       if (t.type === 'citadel' && !S.citHitT) { S.citHitT = 20; G.notify(`${G.BUILDINGS.citadel.name} атакуют!`, { x: t.x + 1.5, y: t.y + 1.5, kind: 'bad' }); }
@@ -3213,7 +3229,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     e.hp = 0; e.dead = true;
     const T = G.ENEMIES[e.type];
     // человек, павший от Иных, встаёт послушником; от мутантов — перерождается трутнем
-    if (HUMANS[e.type] && (e.fac === 'survivors' || (e.type !== 'forager' && !e.fac)) && G.race !== 'survivors' && R() < 0.25 && G.people().length + S.queue.length < G.unitCap()) {
+    if (HUMANS[e.type] && !G.RC().noUnits && (e.fac === 'survivors' || (e.type !== 'forager' && !e.fac)) && G.race !== 'survivors' && R() < 0.25 && G.people().length + S.queue.length < G.unitCap()) {
       const nu = G.makeUnit('scav', e.x, e.y);
       G.fxBurst(e.x, e.y, G.race === 'others' ? '#b48cff' : '#9aff60', 18);
       G.notify(G.race === 'others' ? `Павший человек поднимается: ${nu.name}, ${G.CLASSES.scav.name}` : `Тело человека переродилось: ${nu.name}, ${G.CLASSES.scav.name}`, { ent: nu.id, kind: 'good' });
@@ -3227,7 +3243,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     if (byUs && G.race === 'clowns') { S.res.aether += 2; inc('aether', 2); }
     if (byUs && G.race === 'bears') S.rage = Math.min(100, (S.rage || 0) + 6);
     if (byUs && src && src.kind === 'u' && G.race === 'vampires' && (HUMANS[e.type] || e.fac === 'survivors') && src.cls !== 'scav') { src.fedT = S.t + 30; src.hp = Math.min(src.st.hp, src.hp + src.st.hp * 0.3); G.floatText(src.x, src.y, 'кровь!', '#ff3040'); }
-    if (byUs && G.race === 'fungi' && src && src.kind === 'b' && src.type === 'tower' && !T.boss && !T.static) tryInfect(e);
+    if (G.race === 'fungi' && !T.boss && !T.static && ((src && src.kind === 'b' && src.type === 'tower') || e.cordT > S.t)) tryInfect(e);
     if (!byUs) { if (e.poiId) { const p = poiById(e.poiId); if (p && p.guarded && p.guardIds.every(id => { const g = G.ents.get(id); return !g || g.hp <= 0; })) { p.guarded = false; p.guardIds = []; } } return; }
     let killer = src && src.kind === 'u' ? src : (e.lastHit ? G.ents.get(e.lastHit) : null);
     if (killer && killer.hp > 0) killer.kills++;
@@ -3256,7 +3272,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     }
     u.hp = 0; u.dead = true;
     if (S.raid.active) S.raid.lost = (S.raid.lost || 0) + 1;
-    if (u.infected && G.race === 'fungi') { (S.fallenInf = S.fallenInf || []).push({ srace: u.srace, cls: u.cls, lvl: u.lvl, name: u.name }); if (S.fallenInf.length > 30) S.fallenInf.shift(); }
+    if (G.race === 'fungi' && u.srace) { (S.fallenInf = S.fallenInf || []).push({ srace: u.srace, cls: u.cls, lvl: u.lvl, name: u.name }); if (S.fallenInf.length > 30) S.fallenInf.shift(); }
     if (u.cls === 'priest') { S.priestT = S.t + 90; G.notify(`${u.name} пал. Через 90 с вернётся в часовню, если она ещё наша`, { x: u.x, y: u.y, kind: 'bad' }); }
     G.fxDeath(u.x, u.y, '#c33', 16);
     const killerName = src && src.kind === 'e' ? G.ENEMIES[src.type].name : 'неизвестно';
@@ -3523,7 +3539,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     if (g && g.type === 'attack') u.goal = null;
     if (g && g.type === 'interact') { const p = poiById(g.poi); if (p && p.type === 'relic' && p.state === 'new') return; }
     if (task) { doTask(u, task); return; }
-    if (u.carry > 0 && !(u.goal && (u.goal.type === 'gather' || u.goal.type === 'deliver'))) { u.goal = { type: 'deliver' }; return; }
+    if (u.carry > 0 && !(u.goal && (u.goal.type === 'gather' || u.goal.type === 'deliver'))) { if (u.carry >= 1) { u.goal = { type: 'deliver' }; return; } u.carry = 0; u.carryKind = null; }
     idle(u);
   }
 
@@ -3619,7 +3635,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     const cands = [];
     const ds = drops();
     for (const n of W.nodes) {
-      if (n.amount <= 0 || !n.kind) continue;
+      if (n.amount <= 0 || !n.kind || n.skipT > S.t) continue;
       const i = n.y * N + n.x;
       if (!W.explored[i]) continue;
       let dd = 1e9;
@@ -3632,7 +3648,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
       if (n.kind === 'fuel' && S.res.fuel > 120) continue;
       const amt = n.kind === 'aether' ? S.res.aether * 3 : n.kind === 'water' ? S.res.water * 2 : n.kind === 'fuel' ? S.res.fuel * 3 + 80 : S.res[n.kind];
       const need = amt / total * 25;
-      cands.push([hyp(n.x - u.x, n.y - u.y) + dd * 0.6 + need + workers * 4, n]);
+      cands.push([hyp(n.x - u.x, n.y - u.y) + dd * 0.6 + need + workers * 4 - (u.carryKind === n.kind ? 8 : 0), n]);
     }
     cands.sort((a, b) => a[0] - b[0]);
     for (let k = 0; k < cands.length && k < 6; k++) { const n = cands[k][1]; if (!nearestEnemy(n.x + 0.5, n.y + 0.5, 6)) return n; }
@@ -3727,7 +3743,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
       case 'gather': {
         const n = W.nodes[g.node];
         if (!n || n.amount <= 0) { u.goal = null; break; }
-        if (u.carry > 0 && u.carryKind && u.carryKind !== n.kind) { u.goal = { type: 'deliver' }; break; }
+        if (u.carry > 0 && u.carryKind && u.carryKind !== n.kind) { if (u.carry >= 1) { u.goal = { type: 'deliver' }; break; } u.carry = 0; u.carryKind = null; }
         const d = hyp(u.x - n.x - 0.5, u.y - n.y - 0.5);
         const cap = st.carry || 6, gr = st.gather || 1.1;
         if (d > (n.obj ? 1.55 : 0.75)) { moveTo(u, n.x + 0.5, n.y + 0.5, dt); moving = true; }
@@ -3747,8 +3763,9 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
         else {
           if (u.carryKind && u.carry > 0) {
             const amt = Math.round(u.carry);
-            S.res[u.carryKind] += amt; S.stats.gathered += amt; inc(u.carryKind, amt);
-            if (G.race === 'others') G.floatText(u.x, u.y, '+' + Math.max(1, Math.round(amt * (G.ESSENCE_RATE[u.carryKind] || 1))) + ' ' + G.RES.aether.name.toLowerCase(), G.RES.aether.color);
+            S.res[u.carryKind] += u.carry; S.stats.gathered += u.carry; inc(u.carryKind, u.carry);
+            if (amt < 1) { /* крохи — без надписи */ }
+            else if (G.race === 'others') G.floatText(u.x, u.y, '+' + Math.max(1, Math.round(amt * (G.ESSENCE_RATE[u.carryKind] || 1))) + ' ' + G.RES.aether.name.toLowerCase(), G.RES.aether.color);
             else G.floatText(u.x, u.y, '+' + amt + ' ' + G.RES[u.carryKind].name.toLowerCase(), G.RES[u.carryKind].color);
             gainXp(u, 2); u.trips++;
           }
@@ -3809,6 +3826,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
         u.stuckT += dt;
         if (u.stuckT > 1.2) { u.path = null; u.pathKey = -1; u.x += rnd(-0.15, 0.15); u.y += rnd(-0.15, 0.15); }
         if (u.stuckT > 7) {
+          if (u.goal && u.goal.type === 'gather' && W.nodes[u.goal.node]) W.nodes[u.goal.node].skipT = S.t + 60;
           u.stuckT = 0; u.goal = null;
           const t = u.task && G.taskById(u.task);
           if (t && (t.type === 'explore' || t.type === 'interact')) { G.notify(`${u.name}: не пройти к цели, задание снято`, { ent: u.id }); G.cancelTask(t); }
@@ -3844,7 +3862,19 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     if (e.returning) { if (dh < 1.2) { e.returning = false; e.hp = Math.min(e.maxHp, e.hp + e.maxHp * 0.5); } return; }
     if (e.charmT > S.t) { const o = nearestEnemy(e.x, e.y, 7, q => q !== e && !(q.charmT > S.t)); e.target = o ? o.id : null; return; }
     if (e.fearT > S.t) { e.target = null; return; }
-    let tgt = nearestUnit(e.x, e.y, e.aggro) || (e.mode === 'wander' ? nearestBld(e.x, e.y, 3) : null);
+    // плесень жжёт — враг первым делом ищет чистую землю
+    if (S.myc && G.race === 'fungi' && S.myc[Math.floor(e.y) * N + Math.floor(e.x)] === 3) {
+      let best = null, bd = 1e9;
+      for (let r = 1; r <= 7 && !best; r++) for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) {
+        if (Math.max(Math.abs(dx), Math.abs(dy)) !== r) continue;
+        const x = Math.floor(e.x) + dx, y = Math.floor(e.y) + dy, i = y * N + x;
+        if (S.myc[i] !== 3 && G.walk(x, y)) { const d = dx * dx + dy * dy; if (d < bd) { bd = d; best = [x + 0.5, y + 0.5]; } }
+      }
+      if (best && R() < 0.8) { e.wp = best; e.target = null; e.fleeMoldT = S.t + 1.5; return; }
+    }
+    // кто ударил — тому и ответ; постройку, выросшую под носом, тоже не терпят
+    const pv = e.provokedT > S.t ? G.ents.get(e.provokedBy) : null;
+    let tgt = (pv && pv.hp > 0 && !pv.ruin && hyp(pv.x - e.hx, pv.y - e.hy) < e.leash + 4 ? pv : null) || nearestUnit(e.x, e.y, e.aggro) || nearestBld(e.x, e.y, e.mode === 'wander' ? 3 : Math.max(2.5, e.aggro * 0.7));
     // расы воюют между собой: чужак рядом — тоже цель
     if (!tgt && e.fac) tgt = nearestEnemy(e.x, e.y, Math.min(e.aggro, 6), q => q.fac && q.fac !== e.fac && !G.ENEMIES[q.type].static);
     e.target = tgt ? tgt.id : null;
@@ -3999,12 +4029,12 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
         }
         if (b.prog >= 1 && G.race === 'bears' && b.type === 'outpost' && layerOf(b.x, b.y) === 'sky') { addPortal([b.x + 1, b.y + 2.5], 'ground', 'ground', { bridge: true, src: b.id }); G.notify('Радужный мост опустился на землю: мишки могут спускаться', { kind: 'good' }); }
         if (b.prog >= 1 && G.race === 'vampires' && b.type === 'house' && layerOf(b.x, b.y) === 'ground') cryptBelow(b);
-        if (b.prog >= 1 && G.race === 'fungi') { if (b.type === 'outpost') G.mycSeed(b.x + 1, b.y + 1, 4.2, 1); else if (b.type === 'beacon') G.mycSeed(b.x + 0.5, b.y + 0.5, 1.8, 1); else if (b.type === 'tesla') G.mycSeed(b.x + 0.5, b.y + 1.5, 1.2, 3); }
+        if (b.prog >= 1 && G.race === 'fungi') { if (b.type === 'outpost') G.mycSeed(b.x + 1, b.y + 1, 4.2, 1); else if (b.type === 'beacon') G.mycSeed(b.x + 0.5, b.y + 0.5, 1.8, 1); else if (b.type === 'tesla') moldSeedFrom(b); }
         if (b.prog >= 1) { b.prog = 1; G.sfx('build'); G.notify(`Построено: ${D.name}`, { x: b.x + b.w / 2, y: b.y + b.h / 2 }); G.fxBurst(b.x + b.w / 2, b.y + b.h / 2, '#ffd080', 16); if (D.cap) {} }
         continue;
       }
       const eff = D.power || (G.RC().aiPower && b.type !== 'citadel' && b.type !== 'farm') ? S.powerEff : 1;
-      const ATK = b.guardian ? G.BUILDINGS.tower.attack : D.attack;
+      const ATK = b.guardian ? G.BUILDINGS.tower.attack : (G.race === 'fungi' && b.type === 'tesla') ? null : D.attack; // плесневой узел не стреляет — он растит плесень
       if (ATK) {
         b.cd -= dt * eff;
         if (b.cd <= 0) {
@@ -4984,6 +5014,14 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     W.obj[i] = 0; W.block[i] = 0; W.reach[i] = 1;
     (S.removedObj = S.removedObj || []).push(i);
     if (W.nodeAt[i] >= 0) { W.nodes[W.nodeAt[i]].amount = 0; W.nodeAt[i] = -1; }
+    // открылись соседние камни и деревья — теперь и до них можно добраться
+    const OD = { [G.O.TREE]: ['tree', 40], [G.O.ROCK]: ['rock', 150], [G.O.CRYSTAL]: ['crystal', 70], [G.O.WRECK]: ['wreck', 150] };
+    for (const d of [1, -1, N, -N]) {
+      const j = i + d, od = OD[W.obj[j]]; if (!od || W.nodeAt[j] >= 0) continue;
+      const n = { id: W.nodes.length, dep: od[0], kind: null, x: j % N, y: (j / N) | 0, amount: od[1], max: od[1], obj: true };
+      const E = G.econ(); n.kind = G.race === 'others' ? 'aether' : (E.obj && E.obj[n.dep]) || null;
+      W.nodes.push(n); W.nodeAt[j] = n.id;
+    }
     S.flowDirty = true;
     G.fxDeath(x + 0.5, y + 0.5, '#6a5a48', 6);
   }
@@ -5165,7 +5203,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
   }
   // ---------- Грибы: заражение кордицепсом — уровень сохраняется
   function tryInfect(e) {
-    const chance = G.ascended() ? 1 : Math.min(0.75, 0.25 + 0.12 * S.upg.tower);
+    const chance = G.ascended() ? 1 : Math.min(0.85, 0.3 + 0.12 * S.upg.tower);
     if (R() > chance || G.people().length >= G.unitCap() + 6) return;
     const lvl = Math.min(20, 1 + Math.floor((e.tier || 1) * 1.5));
     const u = convertEnemy(e, 'infected'); if (!u) return;
@@ -5230,8 +5268,10 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     const paint = (x, y, r, v) => { for (let yy = Math.max(0, Math.floor(y - r)); yy <= Math.min(N - 1, y + r); yy++) for (let xx = Math.max(0, Math.floor(x - r)); xx <= Math.min(N - 1, x + r); xx++) if (hyp(xx - x, yy - y) <= r) mycReach[yy * N + xx] |= v; };
     if (G.RC().myc) for (const b of S.buildings) if (!b.ruin) paint(b.x + b.w / 2, b.y + b.h / 2, b.type === 'beacon' ? 16 : b.type === 'citadel' ? 20 : 12, 1);
     if (G.RC().myc) for (const u of S.units) if (u.cls === 'mech3' && u.hp > 0) paint(u.x, u.y, 10, 1);
+    // корни Сердца уходят в подземелья: там мицелий тоже растёт
+    if (G.RC().myc) for (const pt of W.portals || []) if (pt.roots) paint(pt.b[0], pt.b[1], 14, 1);
     let m = 0; if (S.myc) for (let i = 0; i < N * N; i++) if (S.myc[i] === 3) m++;
-    S.moldN = m; S.moldCap = 70 * S.buildings.filter(b => b.type === 'tesla' && b.prog >= 1).length;
+    S.moldN = m; S.moldCap = 260 * S.buildings.filter(b => b.type === 'tesla' && b.prog >= 1).length;
     for (const p of W.pois) if (p.faction === 'fungi' && p.guarded && (p.type === 'lair' || p.type === 'capital' || p.type === 'boss')) paint(p.x + 0.5, p.y + 0.5, p.type === 'capital' ? 16 : 10, 2);
   }
   function growOnce(v) {
@@ -5243,11 +5283,24 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     for (const d of NB) { const j = i + d; if (j >= 0 && j < N * N && !S.myc[j] && mycOK(j) && (v === 3 || mycReach[j] & rb)) c.push(j); }
     if (!c.length) { F[k] = F[F.length - 1]; F.pop(); return; }
     let j = c[Math.floor(Math.random() * c.length)];
-    if (v === 3 && moldTarget && Math.random() < 0.7) { // плесень тянется к цели
+    if (v === 3 && moldTarget && Math.random() < 0.85) { // плесень тянется к цели
       let bd = 1e9; for (const q of c) { const d = hyp(q % N - moldTarget[0], ((q / N) | 0) - moldTarget[1]); if (d < bd) { bd = d; j = q; } }
     }
     S.myc[j] = v; F.push(j);
     if (v !== 2) W.explored[j] = 1;
+  }
+  // плесень выходит из узла на край грибницы — в сторону цели
+  function moldSeedFrom(b) {
+    ensureMyc();
+    const c = G.cit(), sx = b.x + b.w / 2, sy = b.y + b.h / 2;
+    const tg = moldTarget || (c ? [sx * 2 - c.x, sy * 2 - c.y] : [sx + 10, sy]);
+    const dx = tg[0] - sx, dy = tg[1] - sy, d = hyp(dx, dy) || 1;
+    for (let r = 1; r < 40; r += 0.5) {
+      const x = Math.floor(sx + dx / d * r), y = Math.floor(sy + dy / d * r), i = y * N + x;
+      if (i < 0 || i >= N * N) break;
+      if (!S.myc[i] && mycOK(i)) { mycSeed(x + 0.5, y + 0.5, 1.6, 3); return true; }
+    }
+    return false;
   }
   function updMycelium(dt) {
     const fungiPlayer = !!G.RC().myc;
@@ -5262,17 +5315,23 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
       const c = G.cit();
       if (c && fungiPlayer) {
         let bd = 1e9;
-        for (const p of W.pois) { if (!p.discovered || p.state === 'held' || !(G.SITE[p.type] || p.type === 'lair')) continue; const d = hyp(p.x - c.x, p.y - c.y); if (d < bd) { bd = d; moldTarget = [p.x, p.y]; } }
+        // плесень ползёт к ближайшему вражескому логову или столице, а если их не видно — к чужому месту
+        for (const p of W.pois) { if (!p.discovered || p.state === 'held' || !p.guarded || !(p.type === 'lair' || p.type === 'capital')) continue; const d = hyp(p.x - c.x, p.y - c.y); if (d < bd) { bd = d; moldTarget = [p.x, p.y]; } }
+        if (!moldTarget) for (const p of W.pois) { if (!p.discovered || p.state === 'held' || !(G.SITE[p.type] || p.type === 'lair')) continue; const d = hyp(p.x - c.x, p.y - c.y); if (d < bd) { bd = d; moldTarget = [p.x, p.y]; } }
       }
     }
-    if (!mycReach || S.t > reachT) { reachT = S.t + 4; buildReach(); }
+    if (!mycReach || S.t > reachT) {
+      reachT = S.t + 4; buildReach();
+      // плесень иссякла или её срезали — узлы пускают новую
+      if (fungiPlayer && !front[3].length && (S.moldN || 0) < (S.moldCap || 0)) for (const b of S.buildings) if (b.type === 'tesla' && b.prog >= 1 && moldSeedFrom(b)) break;
+    }
     const pillars = fungiPlayer ? S.buildings.filter(b => b.type === 'beacon' && b.prog >= 1) : [];
     const mult = G.ascended() && fungiPlayer ? 3 : 1;
     for (const v of [1, 2, 3]) {
       if (v !== 2 && !fungiPlayer) continue;
       if (v === 2 && !foeFungi) continue;
       if (v === 3 && (S.moldN || 0) >= (S.moldCap || 0)) continue; // у каждой плесневой ямы — свой запас плесени
-      const want = front[v].length * MYC_Q[v] * (v === 1 ? mult : 1);
+      const want = front[v].length * MYC_Q[v] * (v === 1 ? mult : 1) * (v !== 2 ? 1 + 0.25 * (S.upg.speed || 0) : 1);
       let n = Math.floor(want) + (Math.random() < want % 1 ? 1 : 0);
       for (let k = 0; k < Math.min(n, 400); k++) growOnce(v);
     }
@@ -5290,11 +5349,13 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     if (S.mycSec > 0) return;
     S.mycSec = 1;
     if (fungiPlayer) {
+      // Сердце само растит немного древесины — чтобы в начале было на что строиться
+      { const c = G.cit(); if (c) { S.res.fuel += 1.6; inc('fuel', 1.6); } }
       for (const n of W.nodes) {
         if (n.amount <= 0 || !n.kind) continue;
         const i = n.y * N + n.x;
         if (S.myc[i] !== 1 && !NB.some(d => S.myc[i + d] === 1)) continue;
-        const a = Math.min(n.amount, n.dep === 'aether' ? 0.08 : 0.14);
+        const a = Math.min(n.amount, 0.22 * (1 + 0.3 * (S.upg.carry || 0)));
         if (!n.inf) n.amount -= a;
         S.res[n.kind] += a; inc(n.kind, a);
         // видно, как грибница сосёт жилу: раз в несколько секунд — циферка над ней
@@ -5996,7 +6057,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     c.fillStyle = `rgba(${OWN},.16)`; c.fill();
     c.strokeStyle = `rgba(${OWN},.9)`; c.lineWidth = C.mech ? 2 : 1.6; c.stroke();
     if (G.ui && G.ui.selId === u.id) { c.strokeStyle = '#ffe08a'; c.lineWidth = 1.5; c.beginPath(); c.ellipse(px, sy0, bw * (sr + 0.08) + 2, bw * (sr + 0.08) * 0.4 + 2, 0, 0, Math.PI * 2); c.stroke(); }
-    const a = G.sprAnim(u.walk, u.moving, atk, u.face);
+    const a = G.sprAnim(u.walk, u.moving, atk, u.face, G.isRigid(sh, sk));
     const lift = (lv >= 20 ? -3 - Math.sin(t * 2 + u.id) * 1.5 : 0) + (u.flying ? -18 - Math.sin(t * 1.4 + u.id) * 3 : 0);
     if (u.anchored) { c.strokeStyle = `rgba(${OWN},.7)`; c.lineWidth = 1.5; c.setLineDash([5, 4]); c.beginPath(); c.ellipse(px, sy0, bw * 0.55, bw * 0.22, 0, 0, Math.PI * 2); c.stroke(); c.setLineDash([]); }
     if (u.pass && u.pass.length && !u.flying) for (let q = 0; q < u.pass.length; q++) ellipse(c, px - u.pass.length * 3 + q * 6 + 3, sy0 + bw * 0.16, 2, 2, `rgba(${OWN},.95)`);
@@ -6034,7 +6095,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     ellipse(c, px, sy0, bw * 0.32, bw * 0.13, 'rgba(0,0,0,.42)');
     c.fillStyle = 'rgba(255,60,40,.14)'; c.beginPath(); c.ellipse(px, sy0, bw * 0.32 + 1, bw * 0.13 + 1, 0, 0, Math.PI * 2); c.fill();
     c.strokeStyle = 'rgba(255,70,50,.85)'; c.lineWidth = 1.5; c.beginPath(); c.ellipse(px, sy0, bw * 0.32 + 1, bw * 0.13 + 1, 0, 0, Math.PI * 2); c.stroke();
-    const atk = e.atkT > 0.15, a = G.sprAnim(e.walk, !atk, atk, e.face);
+    const atk = e.atkT > 0.15, a = G.sprAnim(e.walk, !atk, atk, e.face, G.isRigid(SP[0], SP[1]));
     const hov = SP[0] === 'others' && (SP[1] === 'flamer' || SP[1] === 'scout' || SP[1] === 'mech3') ? -3 - Math.sin(t * 2 + e.id) * 2 : 0;
     if (e.charmT > G.S.t) { c.fillStyle = '#ff80c0'; c.font = '700 11px sans-serif'; c.textAlign = 'center'; c.fillText('♥', px, py - bh - 6); }
     if (e.stunT > G.S.t) { c.fillStyle = '#b0b0ff'; c.font = '700 10px sans-serif'; c.textAlign = 'center'; c.fillText('Zzz', px + 8, py - bh - 4); }
@@ -6229,6 +6290,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
       else if (o) objs.push([x + y + 1, 0, x, y, o]);
       const ni = W.nodeAt[i];
       if (ni >= 0 && W.nodes[ni].amount > 0 && !W.nodes[ni].obj) objs.push([x + y + 1, 1, W.nodes[ni]]);
+      else if (ni >= 0 && W.nodes[ni].amount > 0 && !o) hit('n', W.nodes[ni], ix - 26, iy - 14, ix + 26, iy + 14); // залежь без предмета (кислотное болото) — тап по самой клетке
       const pi = W.poiAt[i];
       if (pi >= 0) objs.push([x + y + 1.4, 2, W.pois[pi]]);
     }
@@ -6886,17 +6948,9 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
       let h = `<p class="p muted" style="margin-bottom:6px">Мест: <b>${ppl + q}${want ? ' + ' + want : ''}</b> из ${G.unitCap()}${q ? ` · в очереди ${q}` : ''}. Тапай по плитке, чтобы добавить в заказ.</p>`;
       if (G.race === 'fungi') {
         const inf = s.infectedList || [];
+        h += `<p class="desc-note">Споры с изученной ДНК: растим с нуля тех, в кого кордицепс уже пророс, — в порядке заражения. Новые виды появляются, когда кордицепс заражает незнакомого врага.</p>`;
         if (!inf.length) h += `<p class="desc-note">Своих бойцов у грибницы нет. ${G.BUILDINGS.tower.name} заражает убитых врагов, и они встают за нас. Растить можно только тех, в кого кордицепс уже пророс, — по порядку заражения.</p>`;
         else { h += `<div class="sub">Проросшие</div>`; h += orderTilesInf(inf); }
-        const fl = s.fallenInf || [];
-        if (fl.length) {
-          h += `<div class="sub">Капсула перерождения</div><p class="desc-note">Павшие заражённые встают с прежним уровнем. Чем выше уровень — тем дороже.</p><div class="tiles">`;
-          fl.forEach((f, i) => {
-            const c = G.rebornCost(f), ok = G.canAfford(c), im = G.UI_SPR ? G.UI_SPR(f.srace, f.cls) : '';
-            h += `<button class="tile ${ok ? '' : 'dis'}" data-act="reborn" data-i="${i}">${im ? `<img src="${im}" alt="">` : ''}<span class="nm">${esc(f.name || G.className(f.cls, f.srace))}</span><span class="sd">${esc(G.className(f.cls, f.srace))}, ${f.lvl} ур.</span>${costHtml(c)}</button>`;
-          });
-          h += '</div>';
-        }
       } else h += orderTiles(Object.keys(G.CLASSES).filter(k => G.CLASSES[k].role !== 'vehicle' && !G.CLASSES[k].hidden && G.classForRace(k)), 'u');
       const par = G.prodSlots().length;
       h += `<p class="desc-note">Готовятся одновременно: <b>${par}</b> — ${G.race === 'mutants' ? `Улей и каждое ${G.BUILDINGS.outpost.name.toLowerCase()} или мутировавший аванпост (новые бойцы вылупляются там)` : `по уровню: ${G.BUILDINGS.citadel.name}`}.</p>`;
@@ -6906,6 +6960,22 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     },
     vehicles() {
       const s = S();
+      if (G.race === 'fungi') { // у грибницы вместо техники — капсула перерождения павших
+        let h = `<p class="p muted" style="margin-bottom:6px">Павшие заражённые: <b>${(s.fallenInf || []).length}</b>. Встают с прежним уровнем и именем — чем выше уровень, тем дороже.</p>`;
+        if (!(s.fallenInf || []).length) h += `<p class="desc-note">Пока никто из заражённых не пал.</p>`;
+        { const fl = s.fallenInf || [];
+        if (fl.length) {
+          h += `<div class="sub">Капсула перерождения</div><p class="desc-note">Павшие заражённые встают с прежним уровнем. Чем выше уровень — тем дороже.</p><div class="tiles">`;
+          fl.forEach((f, i) => {
+            const c = G.rebornCost(f), ok = G.canAfford(c), im = G.UI_SPR ? G.UI_SPR(f.srace, f.cls) : '';
+            h += `<button class="tile ${ok ? '' : 'dis'}" data-act="reborn" data-i="${i}">${im ? `<img src="${im}" alt="">` : ''}<span class="nm">${esc(f.name || G.className(f.cls, f.srace))}</span><span class="sd">${esc(G.className(f.cls, f.srace))}, ${f.lvl} ур.</span>${costHtml(c)}</button>`;
+          });
+          h += '</div>';
+        }
+        }
+        if (!G.hasBld('barracks')) h += `<p class="desc-note">Нужно: ${G.BUILDINGS.barracks.name}.</p>`;
+        return { title: G.RC().dock[2], html: h, keepScroll: true };
+      }
       const vs = s.units.filter(u => G.isVeh(u) && !G.CLASSES[u.cls].mech);
       const hasFuel = (G.RC().res || []).includes('fuel');
       let h = `<p class="p muted" style="margin-bottom:6px">${G.RC().dock[2]}: <b>${vs.length}</b> из ${G.vehCap()} (по 3 на ${G.BUILDINGS.garage.name.toLowerCase()})${hasFuel ? ` · ${G.RES.fuel.name.toLowerCase()}: <b>${fmt(s.res.fuel)}</b>` : ''}. Сами подвозят бойцов к заданиям и к набегу.${G.race === 'survivors' ? ' Скорая мчится к раненым.' : ''}${hasFuel ? ` Без ресурса «${G.RES.fuel.name}» ползут вдвое медленнее.` : ''}</p>`;
@@ -7062,7 +7132,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
       }
       if (b.type === 'forge' && b.prog >= 1) {
         h += `<div class="sub">Улучшения</div><div class="list">`;
-        for (const k in G.UPGRADES) {
+        for (const k of ((G.skinOf(G.race) || {}).upgOrder || Object.keys(G.UPGRADES))) {
           const U = G.UPGRADES[k], l = s.upg[k];
           if (l >= U.max) { h += `<div class="row dis"><div class="grow"><div class="t">${U.name} · максимум</div><div class="d">${U.desc}</div></div></div>`; continue; }
           const c = U.cost(l);
@@ -7156,6 +7226,9 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
         plant: G.RC().power ? 'Электростанция, захваченная пустошью. Отбей и займи — получишь 25 электричества.' : `Мёртвая электростанция под охраной. Отбей и займи — будет давать ${G.RES.aether.name.toLowerCase()}.`,
         npp: G.RC().power ? 'АЭС «Рассвет». Огромная охрана, но если занять — 120 электричества: хватит на целую армию тесла-башен.' : `АЭС «Рассвет». Огромная охрана. Если занять — много: ${G.RES.aether.name.toLowerCase()}.`,
         cache: 'Тайник, найденный эфирным маяком. Кто-нибудь откопает сам.',
+        windfarm: G.RC().power ? 'Брошенные ветряки на земле людей. Займи их — получишь +10 электричества без топлива. ИИ-агенты тоже за ними охотятся.' : 'Брошенные ветряки на земле людей. Электричество тебе не нужно — но если занять, место даст немного ' + G.RES[G.econ().order[0]].name.toLowerCase() + '.',
+        genset: G.RC().power ? 'Дизель-генератор у заброшенной базы. Займи — получишь +20 электричества. ИИ-агенты тоже за ним охотятся.' : 'Дизель-генератор у заброшенной базы. Электричество тебе не нужно — но место можно занять ради ресурсов.',
+        cave: 'Спуск в подземелья. Через него можно пройти вниз и обратно.',
         capital: `Столица противника — ${G.FC(p.faction).name}. Она растёт вместе с тобой, шлёт набеги и заново занимает свои логова. Снеси обе вражеские столицы — и это победа. Уровень: ${G.foeLvl(p.faction)}.`,
       }[p.type];
       h += `<p class="p">${desc}${p.type === 'radio' && p.reveals ? ` Эта вышка отметит: <b>${({ gas: 'заправки', plant: 'электростанции', bunker: 'бункеры', cage: 'клетки', scrapyard: 'кладбища техники', monolith: 'монолиты', lair: 'логова', pylon: 'пилоны', ruin: 'руины', npp: 'АЭС' })[p.reveals]}</b>.` : ''}</p><p class="p">${tier}</p>`;
@@ -7404,11 +7477,16 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
   G.gotoLayer = function (k) {
     const L = G.LAYERS[k], cur = G.layerAt(...G.screenToTile(G.view()[0] / 2, G.view()[1] / 2).map(Math.floor));
     ui.layerPos[cur] = [G.cam.x, G.cam.y];
-    if (ui.layerPos[k]) { G.cam.x = ui.layerPos[k][0]; G.cam.y = ui.layerPos[k][1]; G.cam.tx = null; }
+    const lp = ui.layerPos[k], lpt = lp && G.screenToTile ? (() => { const ox = G.cam.x, oy = G.cam.y; G.cam.x = lp[0]; G.cam.y = lp[1]; const t = G.screenToTile(G.view()[0] / 2, G.view()[1] / 2).map(Math.floor); G.cam.x = ox; G.cam.y = oy; return t; })() : null;
+    if (lp && lpt && G.layerAt(lpt[0], lpt[1]) === k && G.W.explored[lpt[1] * N + lpt[0]]) { G.cam.x = lp[0]; G.cam.y = lp[1]; G.cam.tx = null; }
     else {
       // сначала — к своему в этом слое, иначе к ближайшему входу, иначе в центр
       const mine = S().buildings.concat(S().units).find(o => G.layerAt(Math.floor(o.x), Math.floor(o.y)) === k);
-      const pt = (G.W.portals || []).map(p => [p.a, p.b]).flat().find(e => G.layerAt(Math.floor(e[0]), Math.floor(e[1])) === k);
+      // иначе — к своему разведанному входу, ближайшему к месту под (над) цитаделью
+      const c = G.cit(), [qx, qy] = k === 'ground' ? [c.x, c.y] : G.toLayer(k, c.x + 1.5, c.y + 1.5);
+      const ends = (G.W.portals || []).map(p => [p.a, p.b]).flat().filter(e => G.layerAt(Math.floor(e[0]), Math.floor(e[1])) === k && G.W.explored[Math.floor(e[1]) * N + Math.floor(e[0])]);
+      ends.sort((a, b) => Math.hypot(a[0] - qx, a[1] - qy) - Math.hypot(b[0] - qx, b[1] - qy));
+      const pt = ends[0];
       const tg = mine ? [mine.x, mine.y] : pt || [L.x0 + L.w / 2, L.y0 + L.h / 2];
       G.lookAt(tg[0], tg[1], true);
     }
@@ -7440,9 +7518,8 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
       aether: 'Эфир: из кристаллов. Нужен для продвинутых построек, Провидцев и мутаций.',
       fuel: 'Древесина: её рубят с деревьев. Нужна ездовым тварям и гигантам.' },
     fungi: {
-      fuel: 'Древесина: мицелий высасывает её из деревьев, до которых дорос. Стройка грибницы.',
-      aether: 'Эфир: мицелий тянет его из кристаллов, растят Плодовые тела.',
-      water: 'Вода: мицелий пьёт родники. Нужна для роста и перерождения.' },
+      fuel: 'Древесина: мицелий высасывает её из деревьев, до которых дорос, растят Плодовые тела и само Сердце. Стройка грибницы.',
+      water: 'Вода: мицелий пьёт родники, копит Гифа-хранилище. Нужна для заражённых и перерождения.' },
     ai: {
       scrap: 'Лом: металл из груд хлама и остовов машин. Из него собирается всё.',
       aether: 'Данные: из серверных стоек и с каждого удара по чужим машинам. Нужны для продвинутых модулей и взлома.' },
@@ -7715,12 +7792,14 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     const FW = Math.min(MW, MH * 2), FH = FW / 2;
     MR.w = FW; MR.h = FH; MR.x = (MW - FW) / 2; MR.y = (MH - FH) / 2;
     const fr = mfBox.querySelector('.mapframe');
-    if (fr) Object.assign(fr.style, { left: MR.x + 'px', top: MR.y + 'px', width: FW + 'px', height: FH + 'px' });
-    const inner = FW * 0.8, LL = G.LAYERS[mv.layer || 'ground'];
+    // рамка чуть шире окна — ромб карты почти во всю ширину, а узор рамки ложится по краю
+    const FK = 1.12;
+    if (fr) Object.assign(fr.style, { left: (MW - FW * FK) / 2 + 'px', top: (MH - FH * FK) / 2 + 'px', width: FW * FK + 'px', height: FH * FK + 'px' });
+    const inner = FW * 0.93, LL = G.LAYERS[mv.layer || 'ground'];
     mv.k = inner / (LL.w + LL.h); mv.a = (LL.x0 + LL.w / 2) - (LL.y0 + LL.h / 2); mv.b = (LL.x0 + LL.w / 2) + (LL.y0 + LL.h / 2);
   }
   function clipRhombus(c) {
-    const cx = MW / 2, cy = MH / 2, hw = MR.w * 0.41, hh = MR.h * 0.41;
+    const cx = MW / 2, cy = MH / 2, hw = MR.w * 0.475, hh = MR.h * 0.475;
     c.beginPath(); c.moveTo(cx, cy - hh); c.lineTo(cx + hw, cy); c.lineTo(cx, cy + hh); c.lineTo(cx - hw, cy); c.closePath();
   }
   const m2 = (x, y) => [(x - y - mv.a) * mv.k + MW / 2, (x + y - mv.b) * mv.k / 2 + MH / 2];
@@ -7932,7 +8011,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
   };
   function plural(n, a, b, c) { const m = n % 10, h = n % 100; return m === 1 && h !== 11 ? a : m >= 2 && m <= 4 && (h < 10 || h >= 20) ? b : c; }
 
-  ui.reset = function () { closeSheet(); ui.place = null; renderBanner(); feed.innerHTML = ''; modal.hidden = true; ui.followId = null; };
+  ui.reset = function () { closeSheet(); ui.place = null; renderBanner(); feed.innerHTML = ''; modal.hidden = true; ui.followId = null; ui.layerPos = {}; };
 })();
 
 </script>
@@ -7977,7 +8056,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
   for (const b of document.querySelectorAll('.cmd-grid button[data-dock]')) {
     const k = CMD[b.dataset.dock]; if (!k) continue;
     const svg = b.querySelector('svg'); if (svg) svg.remove();
-    const img = document.createElement('img'); img.alt = ''; img.className = 'cmd-ico'; img.dataset.k = k;
+    const img = document.createElement('img'); img.alt = ''; img.className = 'cmd-ico'; img.dataset.k = k; img.src = U['c_' + k];
     b.prepend(img);
   }
   // служебные кнопки: медальоны с нарисованными значками
@@ -7992,7 +8071,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
   };
   G.skinRace = function () {
     const p = PRE[G.race] || 'c_';
-    for (const img of document.querySelectorAll('.cmd-ico')) { const src = U[p + img.dataset.k] || U['c_' + img.dataset.k]; if (img.getAttribute('src') !== src) img.src = src; }
+    for (const img of document.querySelectorAll('.cmd-ico')) { const fk = G.race === 'fungi' ? { recruit: 'p_fungi', veh: 'fu_recruit' }[img.dataset.k] : null; const src = (fk && U[fk]) || U[p + img.dataset.k] || U['c_' + img.dataset.k]; if (img.getAttribute('src') !== src) img.src = src; }
     if (lastRace === G.race) return; lastRace = G.race;
     root.setProperty('--ui-i_pop', 'url(' + U[POP[G.race] || 'i_pop'] + ')');
     // фильтры мини-карты с ресурсами — значками этой расы
