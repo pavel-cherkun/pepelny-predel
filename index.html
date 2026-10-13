@@ -6784,13 +6784,18 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
       const have = s.units.filter(u => u.cls === k).length;
       h += `<button class="tile ${un ? '' : 'dis'} ${n ? 'sel' : ''}" data-act="ord" data-cls="${k}" ${un ? '' : 'disabled'} title="${esc(C.desc)}">
         ${have ? `<span class="have">${have}</span>` : ''}${n ? `<span class="badge">+${n}</span>` : ''}
-        ${tileImg('u', k)}<span class="nm">${C.name}</span><span class="sd">${esc(shortOf(C.desc))}</span>${un ? costHtml(C.cost) : `<span class="lock">нужно: ${G.BUILDINGS[C.req].name}</span>`}
+        ${tileImg('u', k)}<span class="nm">${C.name}</span><span class="sd">${esc(shortOf(C.desc))}</span>${un ? costHtml(C.cost) : `<span class="lock">${lockWhy(C)}</span>`}
         ${n ? `<span class="minus" data-act="unord" data-cls="${k}">−</span>` : ''}</button>`;
     }
     h += '</div>';
-    return h + refList(list.map(k => [G.CLASSES[k].name, G.CLASSES[k].desc + (G.CLASSES[k].req && !G.classUnlocked(k) ? ` Нужно: ${G.BUILDINGS[G.CLASSES[k].req].name}.` : '')]));
+    return h + refList(list.map(k => [G.CLASSES[k].name, G.CLASSES[k].desc + (!G.classUnlocked(k) ? ` ${lockWhy(G.CLASSES[k])}.` : '')]));
   }
   // плитки бойцов чужой расы (для грибницы): ключ «раса|класс»
+  // почему боец закрыт: нужно здание или захват (хакер — узел ИИ, охотник — усадьба вампиров)
+  function lockWhy(C) {
+    if (C.unlock && !((S().unlock || {})[C.unlock])) return { hacker: 'захвати узел сети ИИ', hunter: 'захвати усадьбу вампиров' }[C.unlock] || 'нужен захват';
+    return C.req && G.BUILDINGS[C.req] ? 'нужно: ' + G.BUILDINGS[C.req].name : 'закрыто';
+  }
   // плитки заражённых (для грибницы): только те, в кого уже пророс кордицепс, ключ «раса|класс», в порядке заражения
   function orderTilesInf(keys) {
     const s = S();
@@ -7370,6 +7375,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     };
   }
   ui.openChoices = openChoices;
+  ui.openSheet = (k, d) => openSheet(k, d || {});
 
   // ---------- Док и HUD
   function dock(k) {
@@ -8024,12 +8030,17 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
       G.cam.zoom = window.innerWidth < 700 ? 0.9 : 1.05;
       G.lookAt(c.x + 1.5, c.y + 1.5, true);
       G.ui.intro();
+    } else if (G.S.intro) {
+      const c = G.cit(); G.lookAt(c.x + 1.5, c.y + 1.5, true);
+      G.ui.intro();
     } else if (!data || !data.save) {
       G.notify(`С возвращением. День ${G.day()}, жителей: ${G.S.units.length}`);
     }
     if (!running) { running = true; requestAnimationFrame(frame); }
   };
 
+  const seenErr = {};
+  function logErr(e) { const k = String(e && e.message); if (!seenErr[k]) { seenErr[k] = 1; console.error(e); } }
   let last = performance.now(), acc = 0;
   const STEP = 1 / 30;
   function frame(now) {
@@ -8038,12 +8049,13 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     if (G.S && !G.S.over && G.speed > 0 && !G.S.intro) {
       acc += dt * G.speed;
       let n = 0;
-      while (acc >= STEP && n < 10) { G.update(STEP); acc -= STEP; n++; }
+      try { while (acc >= STEP && n < 10) { G.update(STEP); acc -= STEP; n++; } } catch (e) { acc = 0; logErr(e); }
       if (n >= 10) acc = 0;
     }
-    G.updateFx(G.speed > 0 ? dt : 0);
-    try { G.render(dt); } catch (e) { console.error(e); }
-    G.ui.tick(dt);
+    // ошибка в одном месте не должна останавливать всю игру
+    try { G.updateFx(G.speed > 0 ? dt : 0); } catch (e) { logErr(e); }
+    try { G.render(dt); } catch (e) { logErr(e); }
+    try { G.ui.tick(dt); } catch (e) { logErr(e); }
     requestAnimationFrame(frame);
   }
 
