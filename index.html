@@ -672,14 +672,20 @@ G.GOALS = [
 
 // ---------- Великий путь: финал игровой сессии
 G.BOSSES = {
-  matriarch: { art: 'matcrown', bonus: 'Все жители получают +10% здоровья', mods: { hp: 1.1 } },
-  warlord:   { art: 'warhorn',  bonus: 'Рейдеры приходят вдвое реже, +0.3 лома в секунду', mods: {} },
-  leviathan: { art: 'scale',    bonus: 'Все жители наносят +10% урона', mods: { dmg: 1.1 } },
-  lich:      { art: 'phylact',  bonus: 'Все жители лечатся на 1% в секунду быстрее', mods: {} },
-  hammer:    { art: 'matcrown', bonus: 'Все мутанты получают +10% здоровья', mods: { hp: 1.1 } },
-  general:   { art: 'warhorn',  bonus: 'Налётчики приходят вдвое реже, +0.3 камня в секунду', mods: {} },
-  ironark:   { art: 'scale',    bonus: 'Все мутанты наносят +10% урона', mods: { dmg: 1.1 } },
-  inquisitor:{ art: 'phylact',  bonus: 'Все мутанты лечатся на 1% в секунду быстрее', mods: {} },
+  matriarch: { art: 'matcrown', bonus: 'Все ваши бойцы получают +10% здоровья', mods: { hp: 1.1 } },
+  warlord:   { art: 'warhorn',  bonus: 'Набеги приходят реже, +0.3 основного ресурса в секунду', mods: { income: 0.3, raidCut: true } },
+  leviathan: { art: 'scale',    bonus: 'Все ваши бойцы наносят +10% урона', mods: { dmg: 1.1 } },
+  lich:      { art: 'phylact',  bonus: 'Все ваши бойцы лечатся на 1% в секунду быстрее', mods: { regen: 0.01 } },
+  hammer:    { art: 'matcrown', bonus: 'Все ваши бойцы получают +10% здоровья', mods: { hp: 1.1 } },
+  general:   { art: 'warhorn',  bonus: 'Набеги приходят реже, +0.3 основного ресурса в секунду', mods: { income: 0.3, raidCut: true } },
+  ironark:   { art: 'scale',    bonus: 'Все ваши бойцы наносят +10% урона', mods: { dmg: 1.1 } },
+  inquisitor:{ art: 'phylact',  bonus: 'Все ваши бойцы лечатся на 1% в секунду быстрее', mods: { regen: 0.01 } },
+};
+// награды за поверженных владык — одна таблица, читается везде
+G.bossMods = function (done) {
+  const m = { hp: 1, dmg: 1, regen: 0, income: 0, raidCut: false };
+  for (const b of done || []) { const M = (G.BOSSES[b] || {}).mods || {}; m.hp *= M.hp || 1; m.dmg *= M.dmg || 1; m.regen += M.regen || 0; m.income += M.income || 0; m.raidCut = m.raidCut || !!M.raidCut; }
+  return m;
 };
 G.QUEST = [
   { t: 'Реликвии противника', p: S => [0, 1], hint: '' },
@@ -798,6 +804,7 @@ G.FACTIONS = {
 };
 // Шкура Иных: облик — нынешние твари Разлома
 G.OTHERS_SKIN = {
+  prod: { workshop: { aether: 0.3 } },
   // страж-монолит дорог в постройке — дешевле занять дикий монолит (он сам станет стражем)
   bcosts: { tower: { scrap: 380, aether: 90 } },
   costs: { scav: { food: 40 } },
@@ -833,8 +840,8 @@ G.OTHERS_SKIN = {
     garage: ['Врата теней', 'Призывают скакунов. Каждые врата — место для трёх.'],
     outpost: ['Малый разлом', 'Опора вдали от Разлома: сюда несут добычу и здесь восстанавливаются.'],
     site: ['Осквернённое место', 'Занятая локация: сюда несут добычу.'],
-    mechf1: ['Призыв: Хранитель', 'Проявится через 45 с: +4 к лимиту, несёт четверых.'],
-    mechf2: ['Призыв: Костяной исполин', 'Проявится через 75 с: несёт девятерых, принимает добычу.'],
+    mechf1: ['Призыв: Хранитель', 'Проявится через 45 с: +4 к лимиту, держит точку как опора.'],
+    mechf2: ['Призыв: Костяной исполин', 'Проявится через 75 с: принимает добычу и становится опорой.'],
     mechf3: ['Призыв: Аватар', 'Проявится через 120 с. Пока Аватар цел, Разлом не закроется навсегда.'],
     wonder: ['Великое Затмение', 'Нужны реликвии двух вражеских рас. Пока растёт — Последний поход. Когда свершится: вечная ночь, Иные бьют на 30% сильнее, из Разлома сами приходят Призраки.'],
   },
@@ -886,8 +893,8 @@ G.MUTANT_SKIN = {
     garage: ['Стойло', 'Растит ездовых тварей. Каждое стойло — место для трёх.'],
     outpost: ['Гнездо', 'Опора вдали от Улья: сюда тащат добычу и здесь лечатся.'],
     site: ['Захваченное место', 'Занятая локация: сюда тащат добычу и здесь лечатся.'],
-    mechf1: ['Кокон «Ходячая Нора»', 'Вылупится через 45 с: +4 к лимиту, несёт четверых.'],
-    mechf2: ['Кокон «Левиафан-гнездо»', 'Вылупится через 75 с: несёт девятерых, принимает добычу и лечит.'],
+    mechf1: ['Кокон «Ходячая Нора»', 'Вылупится через 45 с: +4 к лимиту, держит точку как опора.'],
+    mechf2: ['Кокон «Левиафан-гнездо»', 'Вылупится через 75 с: принимает добычу и лечит, становится опорой.'],
     mechf3: ['Кокон «Праматерь»', 'Вылупится через 120 с. Пока Праматерь жива, род не погибнет.'],
     wonder: ['Сердце Матери', 'Нужны реликвии двух вражеских рас. Пока растёт — Последний поход. Когда забьётся: павшие ветераны перерождаются в Улье, все мутанты получают +25% здоровья.'],
   },
@@ -1111,10 +1118,10 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
       house: ['Споровый мешок', '+4 к лимиту заражённых.'], farm: ['Плодовые тела', 'Растят древесину: +0.3 в секунду.'],
       workshop: ['Гифа-хранилище', 'Копит воду из почвы: +0.25 в секунду.'], barracks: ['Капсула перерождения', 'Растит заново тех, кого кордицепс уже заразил, и возвращает павших заражённых с их уровнем — тем дороже, чем выше уровень.'],
       forge: ['Ферментный чан', 'Усиления: споры злее, шанс заражения выше.'], memorial: ['Мавзолей', 'Нужен заражённый выживший: кордицепс должен обратить хотя бы одного человека. Мавзолей открывает Пробуждение Вождя.'],
-      spire: ['Дождевики', 'Видят на 24 клетки вокруг.'], tower: ['Грибница кордицепса', 'Стреляет спорами. Убитый враг с шансом 25–75% встаёт заражённым бойцом.'],
-      cannon: ['Мухомор-отравитель', 'Отравляет всех врагов рядом.'], tesla: ['Плесневой узел', 'Не стреляет: пускает чёрную плесень к ближайшей вражеской базе (до 260 клеток). Плесень растёт быстро, не лезет на мицелий, жжёт врагов на ней и высасывает вражеские постройки. На ней можно ставить Грибной узел и мухоморы.'],
+      spire: ['Дождевики', 'Видят на 24 клетки вокруг.'], tower: ['Грибница кордицепса', 'Стреляет спорами. Задетый спорами враг, погибнув в течение 8 с, с шансом 30–85% встаёт заражённым тем же бойцом.'],
+      cannon: ['Мухомор-отравитель', 'Плюётся ядовитыми спорами: бьёт по площади в радиусе 8.'], tesla: ['Плесневой узел', 'Не стреляет: пускает чёрную плесень к ближайшей вражеской базе (до 260 клеток). Плесень растёт быстро, не лезет на мицелий, жжёт врагов на ней и высасывает вражеские постройки. На ней можно ставить Грибной узел и мухоморы.'],
       beacon: ['Споровый столб', 'Мицелий вокруг него (радиус 10) растёт втрое быстрее.'], outpost: ['Грибной узел', 'Ставится и на плесень: превращает плесень вокруг в мицелий и отстреливается спорами. Так плесень прокладывает мицелию дорогу.'],
-      wonder: ['Великая Грибница', 'Нужны реликвии всех соседей. Когда вырастет — мицелий растёт втрое быстрее, а заражение срабатывает всегда.'],
+      wonder: ['Великая Грибница', 'Нужны реликвии двух соседей. Когда вырастет — мицелий растёт втрое быстрее, а заражение срабатывает всегда.'],
       mechf3: ['Пробуждение Вождя', 'Мавзолей открывает путь: через 120 с встанет Вождь.'], site: ['Проросшее место', 'Мицелий забрал это место себе.'],
       lamp: ['Светящийся гриб', 'Светится ночью.'], garage: ['—', ''], drill: ['—', ''], infirmary: ['—', ''], mechf1: ['—', ''], mechf2: ['—', ''],
     },
@@ -1147,7 +1154,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
       memorial: ['Архив данных', 'Каждая потерянная машина даёт +2% урона (до +30%).'], spire: ['Квантовый вычислитель', 'Открывает хакеров и считает данные: +0.12 в секунду.'],
       tower: ['Лазерная турель', 'Бьёт лучом в радиусе 7.'], cannon: ['Рельсотрон', 'Пробивает толпу в радиусе 8.'], tesla: ['ЭМИ-излучатель', 'Разряд перескакивает до 4 целей.'],
       lamp: ['Прожекторный пост', 'Светит ночью, бойцы рядом сильнее.'], beacon: ['Ретранслятор', 'Видит на 26 клеток и слышит набеги заранее.'],
-      outpost: ['Узел сети', 'Опора вдали от Ядра.'], wonder: ['Сингулярность', 'Нужны реликвии всех соседей. После: любая вражеская машина взламывается с одного удара.'],
+      outpost: ['Узел сети', 'Опора вдали от Ядра.'], wonder: ['Сингулярность', 'Нужны реликвии двух соседей. После: любая вражеская машина взламывается с одного удара.'],
       mechf1: ['Рама экзоскелета', 'Через 45 с встанет экзоскелет.'], mechf2: ['Рама танк-платформы', 'Через 75 с.'], mechf3: ['Сборка крепости', 'Через 120 с встанет Серверная крепость.'],
       site: ['Взломанный узел', 'Занятое место.'], mushfarm: ['—', ''], pump: ['—', ''], distill: ['—', ''], windmill: ['—', ''], generator: ['—', ''],
     },
@@ -1164,11 +1171,11 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
   G.SKINS.clowns = {
     res: { scrap: ['Лом', '#c99a6a'], food: ['Сладкая вата', '#ff9ad0'], water: ['—', '#888'], aether: ['Страх', '#ff4060'], fuel: ['—', '#888'] },
     classes: {
-      scav: ['Подсобник', 'Тащит хлам в шапито.', 'ghoul'], scout: ['Акробат', 'Перепрыгивает стены и завалы.', 'hound'],
+      scav: ['Подсобник', 'Тащит хлам в шапито.', 'ghoul'], scout: ['Акробат', 'Быстрый и глазастый: первым видит, где зрители.', 'hound'],
       guard: ['Громила с кувалдой', 'Бьёт так, что в ушах звенит.', 'brute'], gunner: ['Клоун-ковбой', 'Огромный револьвер-хлопушка.', 'raider'],
       flamer: ['Жонглёр бомбами', 'Бросает горящие бомбы в толпу.', 'bloater'], mystic: ['Чревовещатель', 'Его кукла шепчет врагу — и тот на время дерётся за цирк.', 'seer'],
       car: ['Моноцикл с шипами', 'Быстрый, на 4 седока.', 'buggy'], bus: ['Клоунская машинка', 'В неё влезает 9 клоунов. Как — не спрашивай.', 'buggy'],
-      mech1: ['Безумный слон', 'Таранит всё на пути.', 'colossus'], mech2: ['Паровая каллиопа', 'Танк с органными трубами: оглушает музыкой.', 'hammer'],
+      mech1: ['Безумный слон', 'Таранит врага: удар с шансом оглушает.', 'colossus'], mech2: ['Паровая каллиопа', 'Танк с органными трубами: оглушает музыкой.', 'hammer'],
       mech3: ['Шапито на ногах', 'Ходячий шатёр. Пока цел — цирк возродится.', 'ironark'],
     },
     buildings: {
@@ -1176,10 +1183,10 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
       farm: ['Лавка сладкой ваты', 'Сладкая вата: +0.45 в секунду.'], workshop: ['Свалка реквизита', '+0.3 хлама в секунду.'],
       barracks: ['Манеж', 'Открывает громил и ковбоев.'], forge: ['Мастерская розыгрышей', 'Усиления: кувалды, хлопушки, грим.'],
       garage: ['Гараж клоунмобилей', 'Место для трёх машин.'], drill: ['Карусель', 'Кто катается рядом — растёт.'], infirmary: ['Комната смеха', 'Лечит клоунов в радиусе 7.'],
-      memorial: ['Кладбище клоунов', 'Каждый павший ветеран: +2% урона (до +30%).'], spire: ['Особняк страха', 'Копит Страх: +0.15 в секунду. Враги рядом в ужасе бегут прочь.'],
-      tower: ['Тир-вышка', 'Стреляет в радиусе 7.'], cannon: ['Пушка-с-человеком', 'Клоун-ядро бьёт по толпе в радиусе 8.'], tesla: ['Зеркальный лабиринт', 'Враги рядом путаются и блуждают.'],
+      memorial: ['Кладбище клоунов', 'Каждый павший ветеран: +2% урона (до +30%).'], spire: ['Особняк страха', 'Копит Страх: +0.15 в секунду. Враги рядом в ужасе бегут прочь — и каждый напуганный даёт Страх.'],
+      tower: ['Тир-вышка', 'Стреляет в радиусе 7.'], cannon: ['Пушка-с-человеком', 'Клоун-ядро бьёт по толпе в радиусе 8.'], tesla: ['Зеркальный лабиринт', 'Не стреляет: враги рядом теряются в зеркалах, бродят и не нападают.'],
       lamp: ['Колесо обозрения', 'Видит далеко и светится ночью.'], beacon: ['Канализационный люк', 'Клоуны мгновенно переходят между люками.'],
-      outpost: ['Балаган', 'Передвижной цирк вдали от шапито.'], wonder: ['Великий Карнавал', 'Нужны реликвии всех соседей. После — весь мир смеётся: враги рядом с базой цепенеют от страха.'],
+      outpost: ['Балаган', 'Передвижной цирк вдали от шапито.'], wonder: ['Великий Карнавал', 'Нужны реликвии двух соседей. После — Особняк страха и Зеркальный лабиринт бьют вдвое дальше, а Страха с каждого зрителя вдвое больше.'],
       mechf1: ['Клетка слона', 'Через 45 с выпустят слона.'], mechf2: ['Сборка каллиопы', 'Через 75 с.'], mechf3: ['Клетка шапито', 'Через 120 с шатёр встанет на ноги.'],
       site: ['Цирковая точка', 'Занятое место.'],
     },
@@ -1210,7 +1217,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
       infirmary: ['Купель крови', 'Лечит вампиров в радиусе 7.'], memorial: ['Фамильный склеп', 'Каждый павший ветеран: +2% урона (до +30%).'],
       spire: ['Колокольня тьмы', 'Открывает Графиню и копит Тьму.'], tower: ['Башня гаргулий', 'Бьёт в радиусе 7.'], cannon: ['Кровавый шпиль', 'Бьёт по толпе в радиусе 8.'],
       tesla: ['Колокол ужаса', 'Звон оглушает до 4 врагов.'], lamp: ['Лунное зеркало', 'Ночью бойцы рядом сильнее.'], beacon: ['Башня нетопырей', 'Видит на 26 клеток.'],
-      outpost: ['Усадьба', 'Опора вдали от замка.'], wonder: ['Кровавая Луна', 'Нужны реликвии всех соседей. После — вечная ночь: солнце больше не жжёт.'],
+      outpost: ['Усадьба', 'Опора вдали от замка.'], wonder: ['Кровавая Луна', 'Нужны реликвии двух соседей. После — вечная ночь: солнце больше не жжёт.'],
       mechf1: ['Саркофаг кровопийцы', 'Через 45 с.'], mechf2: ['Саркофаг демона', 'Через 75 с.'], mechf3: ['Саркофаг замка', 'Через 120 с.'], site: ['Тёмное место', 'Занятое место.'],
     },
     upgrades: { dmg: ['Длинные клыки', '+10% урона всем'], hp: ['Мраморная кожа', '+10% здоровья всем'], speed: ['Кожистые крылья', '+6% скорости всем'], carry: ['Глубокие карманы', '+30% переноса'], tower: ['Проклятые камни', '+25% урона зданий'] },
@@ -1239,7 +1246,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
       infirmary: ['Источник сока', 'Лечит в радиусе 7.'], memorial: ['Священная роща', 'Каждый павший ветеран: +2% урона (до +30%).'],
       spire: ['Цветок-маяк', 'Открывает шаманов. Днём ловит солнце: +0.1 хлорофилла в секунду.'], tower: ['Колючий куст', 'Стреляет шипами в радиусе 7.'], cannon: ['Тыква-катапульта', 'Бьёт по толпе в радиусе 8.'],
       tesla: ['Гигантская росянка', 'Хватает до 4 врагов.'], lamp: ['Светлячковое дерево', 'Светится ночью, бойцы рядом сильнее.'], beacon: ['Смотровая крона', 'Видит на 26 клеток.'],
-      outpost: ['Почка-аванпост', 'Опора вдали от Древа.'], wonder: ['Дерево до небес', 'Нужны реликвии всех соседей. Вырастает до облаков: по нему можно подняться на Небеса.'],
+      outpost: ['Почка-аванпост', 'Опора вдали от Древа.'], wonder: ['Дерево до небес', 'Нужны реликвии двух соседей. Вырастает до облаков: по нему можно подняться на Небеса.'],
       mechf1: ['Семенная коробочка', 'Через 45 с.'], mechf2: ['Коробочка конга', 'Через 75 с.'], mechf3: ['Семя баобаба', 'Через 120 с.'], site: ['Проросшее место', 'Занятое место.'],
     },
     upgrades: { dmg: ['Тяжёлые семена', '+10% урона всем'], hp: ['Толстая кора', '+10% здоровья всем'], speed: ['Длинные лианы', '+6% скорости всем'], carry: ['Большие листья', '+30% переноса'], tower: ['Острые шипы', '+25% урона зданий'] },
@@ -1268,7 +1275,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
       infirmary: ['Пуховая подушка', 'Лечит в радиусе 7.'], memorial: ['Разбитое сердце', 'Каждый павший ветеран: +2% урона (до +30%).'],
       spire: ['Радужный шпиль', 'Открывает Мишку-Сон и копит радугу.'], tower: ['Метатель звёзд', 'Бьёт в радиусе 7.'], cannon: ['Радужная пушка', 'Бьёт по толпе в радиусе 8.'],
       tesla: ['Грозовая туча', 'Молния бьёт до 4 врагов.'], lamp: ['Звёздный фонарь', 'Ночью мишки рядом сильнее.'], beacon: ['Лунный наблюдатель', 'Видит на 26 клеток.'],
-      outpost: ['Радужный мост', 'Опора и спуск с небес на землю: мишки ходят по радуге вниз и обратно.'], wonder: ['Сердце Злобы', 'Нужны реликвии всех соседей. После — Ярость всегда на пределе.'],
+      outpost: ['Радужный мост', 'Опора и спуск с небес на землю: мишки ходят по радуге вниз и обратно.'], wonder: ['Сердце Злобы', 'Нужны реликвии двух соседей. После — Ярость не гаснет: мишки всегда бьют вдвое сильнее.'],
       mechf1: ['Облачный кокон', 'Через 45 с.'], mechf2: ['Грозовой кокон', 'Через 75 с.'], mechf3: ['Кокон замка', 'Через 120 с.'], site: ['Облачная точка', 'Занятое место.'],
     },
     upgrades: { dmg: ['Острые коготки', '+10% урона всем'], hp: ['Плотная вата', '+10% здоровья всем'], speed: ['Крылышки', '+6% скорости всем'], carry: ['Мешки побольше', '+30% переноса'], tower: ['Колючие звёзды', '+25% урона зданий'] },
@@ -1282,7 +1289,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
   // ---------- Экономика рас: какие ресурсы, откуда берутся на карте, чем рисуются
   // nodes: какие залежи появляются на земле (ключ слота → вид на карте); obj: что даёт вырубка объектов
   G.ECON = {
-    survivors: { order: ['scrap', 'food', 'water', 'aether', 'fuel'], icons: { scrap: 'i_scrap', food: 'i_mush', water: 'i_water', aether: 'i_aether', fuel: 'i_fuel' }, take: { junk: 'scrap', mush: 'food', water: 'water', aether: 'aether', fuel: 'fuel' } },
+    survivors: { order: ['scrap', 'food', 'water', 'aether', 'fuel'], icons: { scrap: 'i_scrap', food: 'i_mush', water: 'i_water', aether: 'i_aether', fuel: 'i_fuel' }, take: { junk: 'scrap', mush: 'food', water: 'water', aether: 'aether', fuel: 'fuel' }, obj: { wreck: 'scrap' } },
     mutants: { order: ['scrap', 'food', 'water', 'aether', 'fuel'], icons: { scrap: 'i_stone', food: 'i_mush', water: 'i_acid', aether: 'i_aether', fuel: 'r_wood' }, take: { mush: 'food', aether: 'aether', acid: 'water' }, obj: { tree: 'fuel', rock: 'scrap', crystal: 'aether', acid: 'water' } },
     others: { order: ['aether'], icons: { aether: 'i_essence', scrap: 'i_essence', food: 'i_essence', water: 'i_essence', fuel: 'i_essence' }, take: {} },
     fungi: { order: ['fuel', 'water'], icons: { fuel: 'r_wood', water: 'i_water' }, take: { water: 'water' }, obj: { tree: 'fuel' } },
@@ -1323,7 +1330,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
       dock: ['Цирк', 'Труппа', 'Машинки', 'Номера'], res: ['scrap', 'food', 'aether'] },
     vampires: { name: 'Вампиры', desc: 'Днём прячутся в замке, склепах или в подземельях — солнце жжёт. Ночью хозяева мира. Сами не заживают: лечит только кровь. Злато — из жил под землёй, Тьма — из чёрных кристаллов. Боятся священников и часовен.', power: false, harvestObjects: false, sun: true, noRegen: true,
       dock: ['Замок', 'Свита', 'Кареты', 'Исчадия'], res: ['scrap', 'food', 'aether'] },
-    primates: { name: 'Растения-приматы', desc: 'Обезьяны с ДНК растений. Древесина — из деревьев, плоды — с кустов, хлорофилл — от солнца. Растут только на земле, постройки пьют воду, днём бойцы сами заживают. Размножаются почками.', power: false, harvestObjects: true, soil: true, photo: true,
+    primates: { name: 'Растения-приматы', desc: 'Обезьяны с ДНК растений. Древесина — из деревьев, плоды — из Банановых рощ, хлорофилл — от солнца. Растут только на земле, постройки пьют воду, днём бойцы сами заживают. Размножаются почками.', power: false, harvestObjects: true, soil: true, photo: true,
       dock: ['Роща', 'Питомник', 'Ездовые', 'Энты'], res: ['scrap', 'food', 'water', 'aether'] },
     bears: { name: 'Злые медвежата', desc: 'Разочаровавшиеся плюшевые мишки на облачных островах. Пух — с облаков, мёд — из облачных ульев, радуга — из радужных родников. Ярость копится в бою, у каждого мишки своя сверхсила. Спускаются по радужным мостам.', power: false, harvestObjects: false, sky: true, rage: true,
       dock: ['Облака', 'Питомник', 'Ангар', 'Великаны'], res: ['scrap', 'food', 'aether'] },
@@ -1401,7 +1408,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
   Object.assign(G.CLASSES, {
     hacker: { name: 'Хакер', hp: 70, dmg: 8, range: 4.5, rate: 1.2, speed: 1.6, vision: 6, armor: 0, cost: { scrap: 60, food: 30, aether: 25 }, time: 12, req: null, unlock: 'hacker', role: 'fighter', accent: '#5ae0ff', ranged: true, races: ['survivors'], desc: 'Взламывает роботов ИИ: подбитая машина переходит на нашу сторону. Открывается после захвата узла сети ИИ.' },
     hunter: { name: 'Ван Хельсинг', hp: 150, dmg: 16, range: 4.5, rate: 1.4, speed: 1.6, vision: 6, armor: 0.1, cost: { scrap: 90, food: 40, aether: 30 }, time: 14, req: null, unlock: 'hunter', role: 'fighter', accent: '#e0d0a0', ranged: true, races: ['survivors'], desc: 'Охотник на вампиров: по ним бьёт втрое сильнее, рядом с ним они слабеют. Открывается после захвата усадьбы вампиров.' },
-    mime: { name: 'Мим', hp: 90, dmg: 9, range: 1.2, rate: 1.0, speed: 1.8, vision: 6, armor: 0.1, cost: { scrap: 50, food: 40 }, time: 10, req: 'barracks', role: 'fighter', accent: '#f0f0f0', races: ['clowns'], desc: 'Невидимые стены: ставит поперёк пути врага стену на 8 секунд. Враги его почти не замечают.' },
+    mime: { name: 'Мим', hp: 90, dmg: 9, range: 1.2, rate: 1.0, speed: 1.8, vision: 6, armor: 0.1, cost: { scrap: 50, food: 40, aether: 10 }, time: 10, req: 'barracks', role: 'fighter', accent: '#f0f0f0', races: ['clowns'], desc: 'Невидимые стены: ставит поперёк пути врага стену на 8 секунд. Враги его почти не замечают.' },
     sewer: { name: 'Клоун из люка', hp: 120, dmg: 16, range: 1.2, rate: 1.1, speed: 2.0, vision: 6, armor: 0.1, cost: { scrap: 70, food: 60, aether: 20 }, time: 12, req: 'beacon', role: 'fighter', accent: '#ff3040', races: ['clowns'], desc: 'Нападает из канализации: бьёт по рабочим врага и уходит в люк. Мгновенно ходит между люками.' },
   });
   G.SPR_EXTRA = { hacker: ['survivors', 'hacker'], hunter: ['survivors', 'vanhelsing'], mime: ['clowns', 'mime'], sewer: ['clowns', 'sewer'] };
@@ -1907,12 +1914,13 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
   };
   // что раса берёт из какой залежи (остальное ей не нужно)
   const ALL_TAKE = { junk: 'scrap', mush: 'food', water: 'water', aether: 'aether', fuel: 'fuel', gold: 'scrap', dark: 'aether', data: 'aether', acid: 'water', fluff: 'scrap', honey: 'food', rainbow: 'aether', tree: 'fuel', rock: 'scrap', crystal: 'aether', wreck: 'scrap' };
-  G.assignKinds = function (W) {
+  // какой ресурс залежь даёт текущей расе (null — не нужна)
+  G.kindFor = function (n) {
     const E = G.econ();
-    for (const n of W.nodes) {
-      if (!n.dep) n.dep = n.kind || 'junk';
-      n.kind = G.race === 'others' ? ALL_TAKE[n.dep] : n.obj ? ((E.obj && E.obj[n.dep]) || (n.dep === 'acid' && E.take.acid) || null) : (E.take[n.dep] || null);
-    }
+    return G.race === 'others' ? ALL_TAKE[n.dep] : n.obj ? ((E.obj && E.obj[n.dep]) || (n.dep === 'acid' && E.take.acid) || null) : (E.take[n.dep] || null);
+  };
+  G.assignKinds = function (W) {
+    for (const n of W.nodes) { if (!n.dep) n.dep = n.kind || 'junk'; n.kind = G.kindFor(n); }
   };
   // ---------- Проходимость
   G.walk = function (x, y) {
@@ -2362,7 +2370,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     };
     // у грибницы своих нет: любой житель, что к ней пришёл, — заражённый человек
     if (o.srace) u.srace = o.srace;
-    else if (G.RC().noUnits) { u.srace = 'survivors'; u.infected = true; }
+    else if (G.RC().noUnits && cls !== 'mech3') { u.srace = 'survivors'; u.infected = true; }
     G.recalc(u); u.hp = u.st.hp;
     S.units.push(u); G.ents.set(u.id, u);
     if (o.lvl) { for (let l = 1; l < o.lvl; l++) { u.lvl++; } G.recalc(u); u.hp = u.st.hp; if (u.lvl >= 5 && !u.spec) { const L = G.SPECS[u.cls]; if (L) { u.spec = pick(L).id; G.recalc(u); u.hp = u.st.hp; } } }
@@ -2409,10 +2417,9 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     if (lv >= 20) { hp *= 1.25; dmg *= 1.25; armor += 0.1; }
     if (G.race === 'mutants' && C.role !== 'vehicle') regenAdd += 0.006; // мутанты зарастают на ходу
     if (G.race === 'mutants' && S.buildings && G.ascended()) hp *= 1.25;
-    const bd = S.bossesDone || [];
-    if (bd.includes('matriarch')) hp *= 1.1;
-    if (bd.includes('leviathan')) dmg *= 1.1;
-    if (bd.includes('lich')) regenAdd += 0.01;
+    { const BM = G.bossMods(S.bossesDone); hp *= BM.hp; dmg *= BM.dmg; regenAdd += BM.regen; }
+    if (u.cls === 'mime') dodge += 0.35;
+    if (G.race === 'others' && u.cls === 'flamer') dodge += 0.25; // Призрак: удары проходят сквозь
     dmg *= 1 + 0.1 * S.upg.dmg; hp *= 1 + 0.1 * S.upg.hp; speed *= 1 + 0.06 * S.upg.speed; carry *= 1 + 0.3 * S.upg.carry;
     const old = u.st ? u.st.hp : 0;
     u.st = { hp, dmg, range, rate, speed, vision, armor: Math.min(armor, 0.6), carry, gather, dodge: Math.min(dodge, 0.5), xp, lifesteal, regen, regenAdd, thorns, splash, flee, night };
@@ -2630,7 +2637,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     G.ents.delete(b.id);
     G.fxBurst(b.x + b.w / 2, b.y + b.h / 2, '#ff8a3a', 40, 1.5);
     G.shake = 8;
-    if (b.type === 'citadel') { if (!arkRebuild()) gameOver(); return; }
+    if (b.type === 'citadel') { S.lastCitLvl = b.lvl || 1; if (!arkRebuild()) gameOver(); return; }
     if (b.type === 'wonder' && b.prog >= 1) { G.recalcAll(); G.notify(`${G.BUILDINGS.wonder.name} разрушено — сила расы утрачена. Отстрой заново`, { kind: 'bad' }); }
     if (b.site) {
       const p = poiById(b.site);
@@ -2665,7 +2672,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
       for (let yy = y; ok && yy < y + 3; yy++) for (let xx = x; xx < x + 3; xx++) { const i = yy * N + xx; if (W.block[i] || G.bldAt[i] >= 0 || W.poiAt[i] >= 0) { ok = false; break; } }
       if (!ok) continue;
       const nb = G.placeBuilding('citadel', x, y, true);
-      nb.prog = 0.05; nb.btime = 60; nb.hp = nb.maxHp * 0.2;
+      nb.prog = 0.05; nb.btime = 60; nb.hp = nb.maxHp * 0.2; nb.lvl = Math.max(1, (S.lastCitLvl || 1) - 1); // уровень почти сохраняется
       S.citadelId = nb.id;
       ark.hp = Math.max(1, ark.hp * 0.6);
       G.computeFlow();
@@ -2705,7 +2712,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     const c = G.cit();
     let cap = G.BUILDINGS.citadel.cap + 2 * ((c && c.lvl || 1) - 1);
     for (const b of S.buildings) if (b.type === 'house' && b.prog >= 1) cap += 4;
-    for (const u of S.units) if (u.hp > 0 && G.CLASSES[u.cls].capAdd) cap += G.CLASSES[u.cls].capAdd;
+    for (const u of S.units) if (u.hp > 0 && !u.hacked && !u.infected && G.CLASSES[u.cls].capAdd) cap += G.CLASSES[u.cls].capAdd;
     return cap;
   };
   G.isVeh = u => G.CLASSES[u.cls].role === 'vehicle';
@@ -2797,7 +2804,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     const fighters = S.units.filter(isFighter);
     const freeFighters = fighters.filter(u => !u.task).length;
     const keep = Math.ceil(fighters.length * keepRatio);
-    let cands = S.units.filter(u => !u.task && !G.isVeh(u) && !u.inVeh && u.hp > u.st.hp * 0.5 && !(u.goal && u.goal.type === 'retreat'));
+    let cands = S.units.filter(u => !u.task && !G.isVeh(u) && !u.inVeh && !u.inBld && u.hp > u.st.hp * 0.5 && !(u.goal && u.goal.type === 'retreat') && !(G.vampDay() && !sunSafe(u)));
     const tx = task.type === 'clear' ? task.sx : task.x + 0.5, ty = task.type === 'clear' ? task.sy : task.y + 0.5;
     let score;
     if (task.type === 'gather') { cands = cands.filter(u => u.cls === 'scav'); }
@@ -3123,7 +3130,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     if (G.isVeh(u)) return null;
     if (G.race === 'survivors') return { gunner: ['scrap', 0.15, 1.25], flamer: ['fuel', 0.2, 1.3], mystic: ['aether', 0.5, 1.4] }[u.cls] || null;
     if (G.race === 'others' && isFighter(u)) return ['aether', u.cls === 'mystic' ? 0.5 : 0.12, u.cls === 'mystic' ? 1.4 : 1.25];
-    if (G.race === 'mutants') return { gunner: ['water', 0.2, 1.3], flamer: ['water', 0.35, 1.3], mystic: ['aether', 0.4, 1.35] }[u.cls] || null;
+    if (G.race === 'mutants') return { gunner: ['water', 0.1, 1.3], flamer: ['water', 0.18, 1.3], mystic: ['aether', 0.4, 1.35] }[u.cls] || null;
     return null;
   }
   G.attackCost = attackCost;
@@ -3138,7 +3145,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
       const machine = t.type === 'buggy' || t.type === 'raidmech' || t.type === 'hammer' || (t.type.startsWith('ai:')) || /:(car|bus|mech1|mech2)$/.test(t.type) && (t.type.startsWith('survivors') || t.type.startsWith('ai'));
       // хакер-модуль ИИ взламывает машины; хакер выживших — роботов ИИ
       const canHack = (G.race === 'ai' && u.cls === 'mystic' && machine) || (u.cls === 'hacker' && t.fac === 'ai');
-      if (canHack && !TT.boss && !TT.static && t.type !== 'ironark' && !/mech3/.test(t.type) && R() < (G.ascended() && G.race === 'ai' ? 1 : 0.3 + 0.5 * (1 - t.hp / t.maxHp))) {
+      if (canHack && G.people().length < G.unitCap() + 4 && !TT.boss && !TT.static && t.type !== 'ironark' && !/mech3/.test(t.type) && R() < (G.ascended() && G.race === 'ai' ? 1 : 0.3 + 0.5 * (1 - t.hp / t.maxHp))) {
         const nu = convertEnemy(t, 'hacked');
         if (nu) { G.fxBurst(nu.x, nu.y, '#5ae0ff', 20); G.notify(`Взлом: ${G.className(nu.cls, nu.srace)} теперь наш`, { ent: nu.id, kind: 'good' }); return; }
       }
@@ -3154,7 +3161,15 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
       if (G.race === 'bears' && u.cls === 'mech1' && R() < 0.3) { for (const o of S.enemies) if (o.hp > 0 && !G.ENEMIES[o.type].boss && hyp(o.x - u.x, o.y - u.y) < 2.8) o.stunT = S.t + 2; G.floatText(u.x, u.y, 'РРРАР!', '#ff6040'); G.shake = 3; }
       if (G.race === 'bears' && u.cls === 'mech2') { let cur = t; const hit = [t]; for (let k = 0; k < 5; k++) { const n2 = nearestEnemy(cur.x, cur.y, 4, o => !hit.includes(o)); if (!n2) break; hit.push(n2); G.damage(n2, dmg * 0.5, u); G.bolts.push({ pts: [[cur.x, cur.y], [n2.x, n2.y]], t: 0.2 }); cur = n2; } }
       if (G.race === 'ai' && machine) { S.res.aether += 0.5; inc('aether', 0.5); } // разбор чужой техники даёт данные
-      if (G.race === 'bears' && u.cls === 'guard') for (const o of S.enemies) if (o !== t && o.hp > 0 && hyp(o.x - u.x, o.y - u.y) < 1.8) G.damage(o, dmg * 0.4, u);
+      if (G.race === 'bears' && u.cls === 'guard') for (const o of S.enemies) if (o.hp > 0 && hyp(o.x - u.x, o.y - u.y) < 1.8) {
+        if (o !== t) G.damage(o, dmg * 0.4, u);
+        if (!G.ENEMIES[o.type].boss && !G.ENEMIES[o.type].static) { const dx = o.x - u.x, dy = o.y - u.y, d = hyp(dx, dy) || 1, nx = o.x + dx / d * 1.2, ny = o.y + dy / d * 1.2; if (G.walk(Math.floor(nx), Math.floor(ny))) { o.x = nx; o.y = ny; } } // топ — и враги отлетают
+      }
+      // клоуны: слон таранит и оглушает, каллиопа оглушает музыкой всех вокруг
+      if (G.race === 'clowns' && u.cls === 'mech1' && !TT.boss && R() < 0.3) { t.stunT = S.t + 1.5; G.floatText(t.x, t.y, 'ТАРАН!', '#ff80c0'); }
+      if (G.race === 'clowns' && u.cls === 'mech2' && R() < 0.25) { for (const o of S.enemies) if (o.hp > 0 && !G.ENEMIES[o.type].boss && hyp(o.x - t.x, o.y - t.y) < 2.6) o.stunT = S.t + 1.5; G.floatText(t.x, t.y, '♪♫♪', '#ffd060'); }
+      // кровавый туман пьёт кровь из толпы
+      if (G.race === 'vampires' && u.cls === 'flamer') { const h = dmg * 0.3; u.hp = Math.min(u.st.hp, u.hp + h); }
     }
     if (u.pass && u.pass.length) for (const id of u.pass) { const p = G.ents.get(id); if (p && p.hp > 0 && isFighter(p)) dmg += p.st.dmg / Math.max(0.4, p.st.rate) * u.st.rate * 0.6; }
     if (u.spec === 'ghost') u.revealT = 3;
@@ -3169,7 +3184,9 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
   function enemyAttack(e, t) {
     e.cd = e.rate; e.atkT = 0.3;
     const c = center(t); e.face = (c[0] - c[1]) - (e.x - e.y) >= 0 ? 1 : -1;
-    const dmg = e.dmg * (G.isNight() ? 1.1 : 1);
+    let dmg = e.dmg * (G.isNight() ? 1.1 : 1);
+    // рядом с Ван Хельсингом или священником вампиры слабеют
+    if (e.fac === 'vampires' && S.units.some(o => (o.cls === 'hunter' || o.cls === 'priest') && o.hp > 0 && hyp(o.x - e.x, o.y - e.y) < 5)) dmg *= 0.7;
     const T = G.ENEMIES[e.type];
     if (e.ranged) { spawnProj(e, t, dmg, { kind: e.type === 'raider' ? 'bullet' : e.type === 'spitter' ? 'acid' : 'bolt', splash: T.splash || 0 }); G.sfx(e.type === 'raider' ? 'shot' : 'bolt', e.x, e.y); }
     else { G.damage(t, dmg, e); G.fxHit(c[0], c[1], '#ff6040'); G.sfx('hit', e.x, e.y); }
@@ -3272,7 +3289,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     }
     u.hp = 0; u.dead = true;
     if (S.raid.active) S.raid.lost = (S.raid.lost || 0) + 1;
-    if (G.race === 'fungi' && u.srace) { (S.fallenInf = S.fallenInf || []).push({ srace: u.srace, cls: u.cls, lvl: u.lvl, name: u.name }); if (S.fallenInf.length > 30) S.fallenInf.shift(); }
+    if (G.race === 'fungi' && u.srace && !G.isVeh(u) && !G.CLASSES[u.cls].mech) { (S.fallenInf = S.fallenInf || []).push({ srace: u.srace, cls: u.cls, lvl: u.lvl, name: u.name }); if (S.fallenInf.length > 30) S.fallenInf.shift(); }
     if (u.cls === 'priest') { S.priestT = S.t + 90; G.notify(`${u.name} пал. Через 90 с вернётся в часовню, если она ещё наша`, { x: u.x, y: u.y, kind: 'bad' }); }
     G.fxDeath(u.x, u.y, '#c33', 16);
     const killerName = src && src.kind === 'e' ? G.ENEMIES[src.type].name : 'неизвестно';
@@ -3452,18 +3469,22 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
       if (!vehAccepting(v)) { u.ride = null; u.shelter = false; }
       else { u.goal = { type: 'board', v: v.id }; return; }
     }
+    // вампиры днём: в гроб, замок или усадьбу — раньше всего остального, задания ждут ночи
+    if (G.vampDay() && !sunSafe(u) && !u.inVeh && layerOf(u.x, u.y) !== 'under') {
+      const coffin = S.buildings.filter(b => ((b.type === 'house' || b.type === 'outpost') && (b.inside || []).length < 4 || b.type === 'citadel') && b.prog >= 1 && layerOf(b.x, b.y) === layerOf(u.x, u.y)).sort((a, b) => distTo(u.x, u.y, a) - distTo(u.x, u.y, b))[0];
+      if (u.task) { const t = G.taskById(u.task); if (t) t.assigned = t.assigned.filter(id => id !== u.id); u.task = null; }
+      if (coffin) { if (!g || g.type !== 'hide' || g.b !== coffin.id) u.goal = { type: 'hide', b: coffin.id }; return; }
+    }
     if (S.shelterT > 0 && dDrop > 2.5) { u.goal = { type: 'retreat' }; return; }
     if (g && g.type === 'retreat') {
+      // кто сам не заживает, отступает до укрытия, а не до полного здоровья
       const hs = healSpot(u);
-      if ((dDrop <= 2.5 || (hs && distTo(u.x, u.y, hs) < 2.5)) && u.hp >= st.hp * 0.85 && S.shelterT <= 0) u.goal = null; else return;
+      if (G.RC().noRegen && dDrop <= 2.5 && S.shelterT <= 0) u.goal = null;
+      else if ((dDrop <= 2.5 || (hs && distTo(u.x, u.y, hs) < 2.5)) && u.hp >= st.hp * 0.85 && S.shelterT <= 0) u.goal = null; else return;
     }
     // раненый без дела сам идёт к лечебной постройке
     if (fighter && !u.task && u.hp < st.hp * 0.7 && !nearestEnemy(u.x, u.y, 7)) { const hs = healSpot(u); if (hs && distTo(u.x, u.y, hs) > 2.5) { u.goal = { type: 'retreat' }; return; } }
     if (g && g.type === 'evade' && S.t < g.until) return;
-    if (G.vampDay() && u.cls !== 'scav' && u.cls !== 'guard' && !u.inVeh && layerOf(u.x, u.y) !== 'under') {
-      const coffin = S.buildings.filter(b => (b.type === 'house' && (b.inside || []).length < 4 || b.type === 'citadel') && b.prog >= 1 && layerOf(b.x, b.y) === layerOf(u.x, u.y)).sort((a, b) => distTo(u.x, u.y, a) - distTo(u.x, u.y, b))[0];
-      if (coffin) { if (!g || g.type !== 'hide' || g.b !== coffin.id) u.goal = { type: 'hide', b: coffin.id }; return; }
-    }
     const ctask = u.task ? G.taskById(u.task) : null;
     if (ctask && ctask.type === 'clear' && ctask.stage === 'attack' && ctask.deadly) { /* насмерть */ }
     else if (u.hp < st.hp * flee && dDrop > 2.5) {
@@ -3647,7 +3668,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
       if (n.kind === 'water' && S.res.water > 140) continue; // воды достаточно — носим другое
       if (n.kind === 'fuel' && S.res.fuel > 120) continue;
       const amt = n.kind === 'aether' ? S.res.aether * 3 : n.kind === 'water' ? S.res.water * 2 : n.kind === 'fuel' ? S.res.fuel * 3 + 80 : S.res[n.kind];
-      const need = amt / total * 25;
+      const need = G.race === 'others' ? -12 * (G.ESSENCE_RATE[n.kind] || 1) : amt / total * 25;
       cands.push([hyp(n.x - u.x, n.y - u.y) + dd * 0.6 + need + workers * 4 - (u.carryKind === n.kind ? 8 : 0), n]);
     }
     cands.sort((a, b) => a[0] - b[0]);
@@ -3937,6 +3958,10 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     const t = e.target ? G.ents.get(e.target) : null;
     if (T.static) { if (t && t.hp > 0 && distTo(e.x, e.y, t) <= e.range && e.cd <= 0) enemyAttack(e, t); return; }
     if (e.stunT > S.t) { e.lx = e.x; e.ly = e.y; return; }
+    if (e.confT > S.t) { // заблудился в зеркалах: бредёт куда глаза глядят
+      if (!e.wp || hyp(e.x - e.wp[0], e.y - e.wp[1]) < 0.4) e.wp = [e.x + rnd(-3, 3), e.y + rnd(-3, 3)];
+      stepToward(e, e.wp[0], e.wp[1], dt, e.speed * 0.6); e.walk += dt * e.speed * 4; e.lx = e.x; e.ly = e.y; return;
+    }
     if (e.fearT > S.t && e.fearFrom) { // в ужасе бежит прочь
       const dx = e.x - e.fearFrom[0], dy = e.y - e.fearFrom[1], d = hyp(dx, dy) || 1;
       stepToward(e, e.x + dx / d * 2, e.y + dy / d * 2, dt, e.speed * 1.1); e.walk += dt * e.speed * 6; e.lx = e.x; e.ly = e.y; return;
@@ -4034,7 +4059,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
         continue;
       }
       const eff = D.power || (G.RC().aiPower && b.type !== 'citadel' && b.type !== 'farm') ? S.powerEff : 1;
-      const ATK = b.guardian ? G.BUILDINGS.tower.attack : (G.race === 'fungi' && b.type === 'tesla') ? null : D.attack; // плесневой узел не стреляет — он растит плесень
+      const ATK = b.guardian ? G.BUILDINGS.tower.attack : ((G.race === 'fungi' || G.race === 'clowns') && b.type === 'tesla') ? null : D.attack; // плесневой узел не стреляет — он растит плесень
       if (ATK) {
         b.cd -= dt * eff;
         if (b.cd <= 0) {
@@ -4055,7 +4080,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
           } else if (e) {
             let dmg = (ATK.dmg + (b.type === 'citadel' ? 4 * (b.lvl - 1) : 0)) * (1 + 0.25 * S.upg.tower) * (S.mode === 'defense' ? 1.2 : 1);
             // эфирная пушка тратит эфир и бьёт сильнее; мусорщики внутри опор стреляют из окон
-            if (b.type === 'cannon' && S.res.aether >= 1) { S.res.aether -= 1; use('aether', 1); dmg *= 1.5; }
+            if (b.type === 'cannon' && G.race === 'survivors' && S.res.aether >= 1) { S.res.aether -= 1; use('aether', 1); dmg *= 1.5; }
             if (b.inside && b.inside.length) dmg += 4 * b.inside.length;
             spawnProj(b, e, dmg, { kind: ATK.splash ? 'aether' : 'bullet', splash: ATK.splash || 0 }); if (ATK.splash) G.sfx('aether', b.x, b.y);
             b.cd = ATK.rate;
@@ -4080,7 +4105,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
       if (!ov && D.distill && S.res.food > 80 && S.res.water > 50) { S.res.food -= 0.3 * eff * dt; S.res.water -= 0.2 * eff * dt; S.res.fuel += 0.18 * pk; use('food', 0.3 * eff * dt); use('water', 0.2 * eff * dt); inc('fuel', 0.18 * pk); }
       if (b.site) {
         const p = poiById(b.site), SB = G.siteBonus(p), sg = (k, a) => { S.res[k] += a; inc(k, a); };
-        if (SB.priest && !S.units.some(u => u.cls === 'priest' && u.hp > 0) && (S.priestT || 0) <= S.t) {
+        if (SB.priest && G.race === 'survivors' && !S.units.some(u => u.cls === 'priest' && u.hp > 0) && (S.priestT || 0) <= S.t) {
           const w = G.nearestWalkable(b.x, b.y + 1, 3) || [b.x, b.y + 1];
           const pr = G.makeUnit('priest', w[0] + 0.5, w[1] + 0.5, { lvl: 3 }); pr.home = b.id;
           G.fxBurst(pr.x, pr.y, '#ffe090', 30);
@@ -4096,8 +4121,13 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
         if (b.cacheT <= 0) { b.cacheT = rnd(45, 80); spawnCache(b); }
       }
       if (G.race === 'clowns' && (b.type === 'spire' || b.type === 'tesla')) for (const e of S.enemies) {
-        if (e.hp <= 0 || G.ENEMIES[e.type].boss || G.ENEMIES[e.type].static || distTo(e.x, e.y, b) > (b.type === 'spire' ? 6 : 5)) continue;
-        if (b.type === 'spire') { e.fearT = S.t + 2.5; e.fearFrom = [b.x + 1, b.y + 1]; } else if (R() < dt) e.wp = [e.x + rnd(-3, 3), e.y + rnd(-3, 3)];
+        const big = G.ascended() ? 2 : 1; // Великий Карнавал — вдвое шире
+        if (e.hp <= 0 || G.ENEMIES[e.type].boss || G.ENEMIES[e.type].static || distTo(e.x, e.y, b) > (b.type === 'spire' ? 6 : 5) * big) continue;
+        if (b.type === 'spire') {
+          // напуганный зритель — это Страх в копилку
+          if (!(e.fearT > S.t)) { S.res.aether += 0.6 * big; inc('aether', 0.6 * big); if (R() < 0.3) G.floatText(e.x, e.y, '+Страх', '#d070ff'); }
+          e.fearT = S.t + 2.5; e.fearFrom = [b.x + 1, b.y + 1];
+        } else if (!(e.confT > S.t)) { e.confT = S.t + 2.5; e.wp = [e.x + rnd(-3, 3), e.y + rnd(-3, 3)]; } // зеркальный лабиринт: блуждает
       }
       if (b.type === 'drill') for (const u of S.units) if (isFighter(u) && !u.task && (!u.goal || u.goal.type === 'patrol') && distTo(u.x, u.y, b) < 7) { gainXp(u, 0.5 * dt); if (R() < dt * 0.5) G.fxSpark(u.x, u.y, '#ffd080'); }
       if (!ov && D.aether) { S.res.aether += D.aether * dt; inc('aether', D.aether * dt); }
@@ -4137,15 +4167,21 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     }
     const c = G.cit();
     let sup = 6 + 2 * ((c && c.lvl) || 1), dem = 0;
+    const gens = [];
     for (const b of S.buildings) {
       if (b.prog < 1) continue;
       const D = G.BUILDINGS[b.type];
       if (D.powerGen) {
-        if (D.fuelBurn) { if (S.res.fuel > 0) { S.res.fuel = Math.max(0, S.res.fuel - D.fuelBurn * dt); use('fuel', D.fuelBurn * dt); sup += D.powerGen; b.idle = false; } else b.idle = true; }
+        if (D.fuelBurn) gens.push(b); // дизель запускается, только если без него не хватает
         else sup += D.powerGen;
       }
       if (D.power) dem += D.power;
       if (b.site) { const SB = G.siteBonus(poiById(b.site)); if (SB.power) sup += SB.power; }
+    }
+    for (const b of gens) {
+      const D = G.BUILDINGS[b.type];
+      if (sup < dem && S.res.fuel > 0) { S.res.fuel = Math.max(0, S.res.fuel - D.fuelBurn * dt); use('fuel', D.fuelBurn * dt); sup += D.powerGen; b.idle = false; }
+      else b.idle = sup < dem; // хватает и так — стоит в резерве; нет топлива — простаивает
     }
     S.power = { sup, dem };
     S.powerEff = dem > 0 ? Math.min(1, sup / dem) : 1;
@@ -4174,12 +4210,14 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     return null;
   };
   // ---------- Машины
+  // топливо жгут только те, у кого оно есть как ресурс (выжившие, мутанты — древесину)
+  const usesFuel = () => G.race !== 'others' && (G.RC().res || []).includes('fuel') && !G.RC().noUnits;
   function updVehicle(v, dt) {
     v.cd -= dt; v.hitT -= dt; v.atkT -= dt;
     const C = G.CLASSES[v.cls];
-    v.slow = G.race === 'others' || S.res.fuel > 0 ? 1 : 0.45;
+    v.slow = !usesFuel() || S.res.fuel > 0 ? 1 : 0.45;
     const drop = nearestDrop(v.x, v.y);
-    if (drop && drop !== v && distTo(v.x, v.y, drop) < 4 && v.hp < v.st.hp) v.hp = Math.min(v.st.hp, v.hp + v.st.hp * 0.02 * dt);
+    if (drop && drop !== v && !G.RC().noRegen && distTo(v.x, v.y, drop) < 4 && v.hp < v.st.hp) v.hp = Math.min(v.st.hp, v.hp + v.st.hp * 0.02 * dt);
     if (C.heal) for (const o of S.units) if (o !== v && o.hp > 0 && !o.inVeh && o.hp < o.st.hp && hyp(o.x - v.x, o.y - v.y) < 5) o.hp = Math.min(o.st.hp, o.hp + o.st.hp * C.heal * dt);
     if (v.cd <= 0 && !C.medic) { const e = nearestEnemy(v.x, v.y, v.st.range); if (e) unitAttack(v, e); }
     v.thinkT -= dt;
@@ -4187,7 +4225,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     const g = v.goal; let moving = false;
     if (g && g.type === 'move') { if (moveTo(v, g.x, g.y, dt) > 0.4) moving = true; else v.goal = null; }
     v.moving = moving;
-    if (moving) { v.walk += dt * 8; if (G.race !== 'others' && C.fuelUse) { S.res.fuel = Math.max(0, S.res.fuel - C.fuelUse * dt); use('fuel', C.fuelUse * dt); } }
+    if (moving) { v.walk += dt * 8; if (usesFuel() && C.fuelUse) { S.res.fuel = Math.max(0, S.res.fuel - C.fuelUse * dt); use('fuel', C.fuelUse * dt); } }
     v.lx = v.x; v.ly = v.y;
   }
   function vehAccepting(v) {
@@ -4295,6 +4333,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
       }
     }
     if (v.pass.length && !v.keep && !v.pass.some(id => { const u = G.ents.get(id); return u && u.shelter; })) unload(v);
+    if (C.medic && v.hp < v.st.hp * 0.35 && drop && drop !== v) { const dc = center(drop); v.goal = { type: 'move', x: dc[0] + 2, y: dc[1] + 2 }; return; } // сама подбита — домой
     if (C.medic) {
       // скорая сама едет к самому тяжёлому раненому
       let best = null, bs = 0;
@@ -4328,7 +4367,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
   function dispatchVehicles() {
     for (const v of S.units) {
       // мехи медленнее пехоты: никого не возят сами, только укрывают
-      if (!G.isVeh(v) || G.CLASSES[v.cls].mech || G.CLASSES[v.cls].medic || v.order || v.job || v.pass.length || v.hp < v.st.hp * 0.5 || (G.race !== 'others' && S.res.fuel <= 0)) continue;
+      if (!G.isVeh(v) || G.CLASSES[v.cls].mech || G.CLASSES[v.cls].medic || v.order || v.job || v.pass.length || v.hp < v.st.hp * 0.5 || (usesFuel() && S.res.fuel <= 0)) continue;
       const seats = G.seatsOf(v.cls);
       // набег: срочно подвозим дальних бойцов к месту нападения
       if (S.threats && S.threats.length) {
@@ -4393,7 +4432,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     let a = Math.atan2(sx, -sy); if (a < 0) a += Math.PI * 2;
     return DIRS[Math.round(a / (Math.PI / 4)) % 8];
   }
-  function raidInterval() { return Math.max(120, 175 - S.raid.wave * 3.5); }
+  function raidInterval() { return Math.max(120, 175 - S.raid.wave * 3.5) * (G.bossMods(S.bossesDone).raidCut ? 1.3 : 1); }
   // «давление» подстраивается под исход: разгромили — враг тоже обескровлен и даёт передышку; отбились чисто — злится
   const pressure = () => S.raid.press || 1;
   function armyPower() {
@@ -4728,7 +4767,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     }
     for (const b of S.buildings) {
       const D = G.BUILDINGS[b.type];
-      let vis = (D.vision || 3) + (b.type === 'citadel' ? b.lvl : 0);
+      let vis = (G.race === 'fungi' && b.type === 'spire' ? 24 : (D.vision || 3)) + (b.type === 'citadel' ? b.lvl : 0);
       if (b.site && b.prog >= 1) { const SB = G.siteBonus(poiById(b.site)); if (SB.vision) vis = SB.vision; }
       if (b.type === 'tower' && G.race === 'others' && b.prog >= 1) vis = Math.max(vis, 24); // страж-монолит видит, как монолит
       G.reveal(b.x + b.w / 2, b.y + b.h / 2, vis);
@@ -4787,7 +4826,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     if (G.RC().drink) { const well = 0.2; S.res.water = (S.res.water || 0) - drink * dt + well * dt; use('water', drink * dt); inc('water', well * dt); }
     if (S.res.fuel === undefined) S.res.fuel = 0;
     if (!G.RC().drink) S.thirst = false;
-    else if (S.res.water <= 0) { S.res.water = 0; if (!S.thirst) { S.thirst = true; G.notify(`Нет: ${G.RES.water.name.toLowerCase()}! Без неё не лечатся и стоят «${G.BUILDINGS.farm.name}». ${G.race === 'mutants' ? 'Трутни черпают её из кислотных болот' : `Ставь «${G.BUILDINGS.pump.name}» или носи из родников`}`, { kind: 'bad' }); } }
+    else if (S.res.water <= 0) { S.res.water = 0; if (!S.thirst) { S.thirst = true; G.notify(`Нет: ${G.RES.water.name.toLowerCase()}! Без неё не лечатся и стоят «${G.BUILDINGS.farm.name}». ${G.race === 'mutants' ? 'Трутни черпают её из кислотных болот' : G.canBuildType('pump') ? `Ставь «${G.BUILDINGS.pump.name}» или носи из родников` : 'Носи её из родников'}`, { kind: 'bad' }); } }
     else if (S.res.water > 5) S.thirst = false;
     updPower(dt);
     if (!G.RC().eat) { S.starving = false; if (!G.RC().drink) S.thirst = false; }
@@ -4795,7 +4834,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     else if (S.res.food > 5) S.starving = false;
     S.shelterT -= dt; S.rainT -= dt;
     if (S.bonusFood) { S.res.food += S.bonusFood * dt; inc('food', S.bonusFood * dt); }
-    if ((S.bossesDone || []).includes('warlord')) { S.res.scrap += 0.3 * dt; inc('scrap', 0.3 * dt); }
+    { const inc0 = G.bossMods(S.bossesDone).income; if (inc0) { const k = G.econ().order[0]; S.res[k] += inc0 * dt; inc(k, inc0 * dt); } }
     updFinale(dt); updMiniRaids(dt);
     if (S.citHitT) S.citHitT = Math.max(0, S.citHitT - dt);
     // найм
@@ -4835,9 +4874,14 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
       if (u.hp <= 0 || S.over) continue;
       if (u.inBld) {
         const b = G.ents.get(u.inBld), c = b && center(b);
-        const stay = b && G.race === 'vampires' && (b.type === 'house' || b.type === 'citadel') ? G.vampDay() : b && nearestEnemy(c[0], c[1], 9);
+        const stay = b && G.race === 'vampires' && !sunSafe(u) && (b.type === 'house' || b.type === 'citadel' || b.type === 'outpost') ? G.vampDay() : b && nearestEnemy(c[0], c[1], 9);
         if (!b || b.hp <= 0 || b.ruin || !stay) { if (b) b.inside = (b.inside || []).filter(id => id !== u.id); u.inBld = null; u.goal = null; }
-        else { u.x = c[0]; u.y = c[1]; if (u.hp < u.st.hp) u.hp = Math.min(u.st.hp, u.hp + u.st.hp * 0.01 * dt); continue; }
+        else {
+          u.x = c[0]; u.y = c[1];
+          // в укрытии лечатся; вампиры — только пока есть кровь (её и пьют)
+          if (u.hp < u.st.hp && !(G.race === 'vampires' && S.res.food <= 0)) { u.hp = Math.min(u.st.hp, u.hp + u.st.hp * 0.01 * dt); if (G.race === 'vampires') { S.res.food = Math.max(0, S.res.food - 0.04 * dt); use('food', 0.04 * dt); } }
+          continue;
+        }
       }
       if (u.inVeh) {
         const v = G.ents.get(u.inVeh);
@@ -4870,7 +4914,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
   // ---------- Группа врагов из бюджета (для финала и мини-набегов)
   function racePool(w, fac) {
     const F = G.FC(fac || G.foes()[0]);
-    const tamed = (S.bossesDone || []).some(b => b === 'warlord' || b === 'general');
+    const tamed = G.bossMods(S.bossesDone).raidCut;
     const pool = F.raidPool.filter(p => w >= p[3] && (!p[4] || G.isNight())).map(p => [p[0], p[1], p[0] === 'raider' && tamed ? p[2] / 2 : p[2]]);
     return pool.length ? pool : [F.raidPool[0]];
   }
@@ -5019,7 +5063,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     for (const d of [1, -1, N, -N]) {
       const j = i + d, od = OD[W.obj[j]]; if (!od || W.nodeAt[j] >= 0) continue;
       const n = { id: W.nodes.length, dep: od[0], kind: null, x: j % N, y: (j / N) | 0, amount: od[1], max: od[1], obj: true };
-      const E = G.econ(); n.kind = G.race === 'others' ? 'aether' : (E.obj && E.obj[n.dep]) || null;
+      n.kind = G.kindFor(n);
       W.nodes.push(n); W.nodeAt[j] = n.id;
     }
     S.flowDirty = true;
@@ -5097,7 +5141,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     S.nodeT = live.length < 14 ? rnd(14, 22) : rnd(40, 60);
     if (live.length >= 30) return;
     // новая залежь — того типа, что нужен этой расе и которого рядом меньше всего
-    const E = G.econ(), deps = Object.keys(E.take || {}).filter(d => d !== 'acid');
+    const E = G.econ(), deps = G.race === 'others' ? ['junk', 'mush', 'water', 'aether', 'fuel'] : Object.keys(E.take || {}).filter(d => d !== 'acid'); // Иным годится любая залежь
     if (!deps.length) return;
     const cnt = {}; for (const d of deps) cnt[d] = 0; for (const n of live) if (cnt[n.dep] !== undefined) cnt[n.dep]++;
     const dep = deps.sort((a, b) => cnt[a] - cnt[b])[0];
@@ -5151,6 +5195,9 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
   }
 
   G.activity = function (u) {
+    if (u.inBld) return G.race === 'vampires' && G.vampDay() ? 'Спит в гробу до заката' : 'Укрылся в постройке';
+    if (u.stone) return 'Окаменел до заката';
+    if (u.goal && u.goal.type === 'hide') return 'Спешит укрыться от солнца';
     if (u.inVeh) { const v = G.ents.get(u.inVeh); return u.shelter ? 'Укрывается и лечится внутри' : 'Внутри: ' + (v ? v.name : 'транспорт'); }
     if (G.isVeh(u)) {
       const o = u.order;
@@ -5210,7 +5257,8 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     for (let l = 1; l < lvl; l++) u.lvl++;
     G.recalc(u); u.hp = u.st.hp * 0.7;
     S.infectedList = S.infectedList || [];
-    const key = u.srace + '|' + u.cls, first = !S.infectedList.includes(key);
+    const once = G.isVeh(u) || G.CLASSES[u.cls].mech; // технику и гигантов споры не повторят
+    const key = u.srace + '|' + u.cls, first = !once && !S.infectedList.includes(key);
     if (first) S.infectedList.push(key);
     (S.infected = S.infected || {})[u.srace] = true;
     G.fxBurst(u.x, u.y, '#d8f0a0', 24);
@@ -5218,14 +5266,14 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     if (u.srace === 'survivors') S.mausoleumOpen = true;
   }
   // перерождение павшего заражённого: тем дороже, чем выше уровень
-  G.rebornCost = f => { const C = G.CLASSES[f.cls], m = 1 + 0.3 * f.lvl, c = {}; for (const k in C.cost) c[k] = Math.ceil(C.cost[k] * m); return c; };
+  G.rebornCost = f => { const C = G.CLASSES[f.cls], m = 1 + 0.3 * f.lvl, c = {}; for (const k in (C.cost || { scrap: 200 })) c[k] = Math.ceil((C.cost || { scrap: 200 })[k] * m); return c; };
   G.reborn = function (i) {
     const f = (S.fallenInf || [])[i]; if (!f) return 'Нет такого';
     if (!G.hasBld('barracks')) return 'Нужно: ' + G.BUILDINGS.barracks.name;
     if (G.people().length + S.queue.length >= G.unitCap()) return 'Нет мест';
     const c = G.rebornCost(f); if (!G.canAfford(c)) return 'Не хватает ресурсов';
     G.pay(c); S.fallenInf.splice(i, 1);
-    S.queue.push({ cls: f.cls, srace: f.srace, lvl: f.lvl, name: f.name, t: 0, total: G.CLASSES[f.cls].time * 1.5 });
+    S.queue.push({ cls: f.cls, srace: f.srace, lvl: f.lvl, name: f.name, t: 0, total: (G.CLASSES[f.cls].time || 20) * 1.5 });
     return null;
   };
   // ---------- Мицелий: растёт по клетке от края — медленно и постепенно; плесень — быстрее и к цели
@@ -5463,20 +5511,25 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
   }
   // ---------- Вампиры: солнце, гробы, кровь, страх перед священником
   const isDay = () => !G.isNight() && !(G.race === 'vampires' && G.ascended());
-  G.vampDay = () => G.race === 'vampires' && isDay();
+  // за 15 с до рассвета вампиры уже идут прятаться
+  const dawnSoon = () => { if (!G.isNight()) return false; const p = G.phase(); return p > 0.96 - 15 / DAY && p < 0.97; };
+  const sunSafe = u => u.cls === 'scav' || u.cls === 'guard' || G.isVeh(u) || G.CLASSES[u.cls].mech;
+  G.vampDay = () => G.race === 'vampires' && !G.ascended() && (isDay() || dawnSoon());
+  G.sunSafe = u => sunSafe(u);
   function nearHoly(x, y) {
     if (S.units.some(o => o.cls === 'priest' && o.hp > 0 && hyp(o.x - x, o.y - y) < 7)) return true;
-    return W.pois.some(p => p.type === 'ruin' && /Часовн/.test(p.name || '') && hyp(p.x - x, p.y - y) < 8);
+    return W.pois.some(p => p.type === 'ruin' && p.state !== 'held' && /Часовн/.test(p.name || '') && hyp(p.x - x, p.y - y) < 8);
   }
   // ---------- Медвежата: Ярость
   function updRage(dt) {
     if (!G.RC().rage) return;
-    if (G.ascended()) { S.rage = 100; return; }
+    if (G.ascended()) { S.rage = 100; S.rageT = S.t + 1; return; } // Сердце Злобы: ярость не гаснет
     if (S.rageT > S.t) return;
-    S.rage = Math.max(0, (S.rage || 0) - 1.2 * dt);
-    if (S.rage >= 100) { S.rageT = S.t + 12; S.rage = 100; G.notify('ЯРОСТЬ! Все мишки бьют в полтора раза сильнее 12 секунд', { kind: 'legend' }); G.sfx('horn'); setTimeout(() => { if (S.rage >= 100) S.rage = 30; }, 0); }
+    if ((S.rage || 0) < 100) S.rage = Math.max(0, (S.rage || 0) - 1.2 * dt);
+    if (S.rage >= 100) { S.rageT = S.t + 12; S.rage = 0; G.notify('ЯРОСТЬ! 12 секунд все мишки бьют вдвое сильнее', { kind: 'legend' }); G.sfx('horn'); }
   }
-  G.rageMul = () => !G.RC().rage ? 1 : S.rageT > S.t ? 1.6 : 1 + (S.rage || 0) / 150;
+  // копится — понемногу сильнее (до +50%), вспышка — вдвое
+  G.rageMul = () => !G.RC().rage ? 1 : S.rageT > S.t ? 2 : 1 + (S.rage || 0) / 200;
   // ---------- Клоуны: невидимые стены мима
   function updWalls() {
     if (!S.walls || !S.walls.length) return;
@@ -5503,9 +5556,19 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
       b.budT = (b.budT === undefined ? 120 : b.budT) - dt;
       if (b.budT <= 0) { b.budT = 120; if (G.people().length < G.unitCap()) { const w = G.nearestWalkable(b.x, b.y + b.h, 3); if (w) { const u = G.makeUnit('scav', w[0] + 0.5, w[1] + 0.5); G.fxBurst(u.x, u.y, '#8ad850', 12); } } }
     }
+    // вампиры: предупреждение о рассвете и закате
+    if (G.race === 'vampires' && !G.ascended()) {
+      const st = isDay() ? 'day' : dawnSoon() ? 'dawn' : 'night';
+      if (st !== S.vampSt) {
+        if (st === 'dawn') G.notify('Рассвет через 15 секунд. Все — в гробы, в замок или в усадьбы. Слуги и гаргульи остаются', { kind: 'bad' });
+        else if (st === 'day' && S.vampSt) G.notify('Солнце взошло. Кто снаружи — горит. Гаргульи окаменели', { kind: 'bad' });
+        else if (st === 'night' && S.vampSt) G.notify('Закат. Ночь наша — вставайте из гробов', { kind: 'good' });
+        S.vampSt = st;
+      }
+    }
     // вампиры днём: солнце жжёт всех, кроме слуг, гаргулий (каменеют) и тех, кто в тени
     if (G.race === 'vampires' && isDay()) for (const u of S.units) {
-      if (u.hp <= 0 || u.inVeh || u.inBld || u.cls === 'scav' || layerOf(u.x, u.y) === 'under') continue;
+      if (u.hp <= 0 || u.inVeh || u.inBld || u.cls === 'scav' || G.isVeh(u) || G.CLASSES[u.cls].mech || layerOf(u.x, u.y) === 'under') continue;
       if (u.cls === 'guard') { u.stone = true; continue; }
       u.hp -= u.st.hp * 0.012 * dt; if (R() < dt * 2) G.fxSmoke(u.x, u.y, 14);
       if (u.hp <= 0) killUnit(u, null);
@@ -6992,7 +7055,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
       const s = S();
       const ms = s.units.filter(u => G.CLASSES[u.cls].mech);
       let h = `<p class="p muted" style="margin-bottom:6px">${{ mutants: 'Огромные твари-постройки: вылупляются из кокона и дерутся. Прикажи «Держать точку» — станут опорой Улья: рядом можно строить и сдавать добычу. Возят только ездовые.',
-        others: 'Аватары — призванные исполины: проявляются в круге призыва и сражаются. На точке становятся опорой Разлома. Возят только Тени.',
+        others: 'Аватары — призванные исполины: проявляются в круге призыва и сражаются. На точке становятся опорой Разлома. Возят только Тень-скакун и Ладья мёртвых.',
         fungi: 'Вождь — ходячее Сердце грибницы. Встаёт из Мавзолея, растит мицелий там, где идёт. Пока Вождь жив, грибница не умрёт.',
         ai: 'Боевые платформы собираются на месте и встают в строй. Взламывать их нельзя — только крепость. Чинятся ремонтом.',
         clowns: 'Цирковые номера: слон, каллиопа и шатёр на ногах. Растут из клеток и пугают всех вокруг.',
@@ -7140,7 +7203,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
         }
         h += '</div>';
       }
-      if (G.isOutpost(b) && b.prog >= 1) {
+      if (G.isOutpost(b) && b.prog >= 1 && G.race !== 'others') { // у Иных гарнизона нет: перед набегом бойцы сами шагают в разлом
         const g = b.garrison === undefined ? (b.type === 'site' ? 1 : 2) : b.garrison;
         h += `<div class="sub">Гарнизон</div><p class="p">Бойцов на постоянной охране: <b>${g}</b>. Следующий набег на аванпост через ${Math.max(0, Math.ceil(b.miniT || 0))} с.</p>
           <div class="btns"><button class="btn" data-act="garr" data-id="${b.id}" data-d="-1">Меньше</button><button class="btn" data-act="garr" data-id="${b.id}" data-d="1">Больше</button></div>
@@ -7567,7 +7630,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     for (const k of ['scrap', 'food', 'water', 'aether', 'fuel']) { const el = $('#r-' + k); const on = (RC.res || []).includes(k); if (el.hidden === on) el.hidden = !on; }
     const pwEl = $('#r-power'), showPw = !!(RC.power || RC.rage); if (pwEl.hidden === showPw) pwEl.hidden = !showPw;
     if (RC.rage) {
-      const r = Math.round(s.rage || 0);
+      const r = s.rageT > s.t ? 100 : Math.round(s.rage || 0);
       hud.power.textContent = r + '%'; $('#r-power small').textContent = s.rageT > s.t ? 'ЯРОСТЬ' : 'ярость';
       pwEl.title = 'Ярость медвежат: растёт от ударов и убийств, усиливает всех; на 100% — взрыв ярости';
     } else {
@@ -7978,6 +8041,12 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRmwlBwBXRUJQVlA4WAoA
     const txt = {
       survivors: 'Маяк Зари горит. Вся карта видна, а раз в 25 секунд Луч Зари выжигает самую большую толпу врагов. Пока Маяк стоит — сила с тобой.',
       mutants: 'Сердце Матери бьётся. Все мутанты крепче на четверть, а павшие ветераны через 45 секунд перерождаются в Улье, потеряв лишь два уровня.',
+      fungi: 'Великая Грибница проросла. Мицелий растёт втрое быстрее, а кордицепс заражает каждого, кого убил.',
+      ai: 'Сингулярность достигнута. Любая вражеская машина взламывается с первого удара.',
+      clowns: 'Великий Карнавал начался. Особняк страха и Зеркальный лабиринт бьют вдвое дальше, а Страха с каждого зрителя — вдвое больше.',
+      vampires: 'Кровавая Луна взошла. Над миром вечная ночь — солнце больше не жжёт, вампиры свободны.',
+      primates: 'Дерево до небес выросло. По его стволу роща поднимается на Небеса — к облачным островам мишек.',
+      bears: 'Сердце Злобы бьётся. Ярость больше не гаснет: все мишки всегда бьют вдвое сильнее.',
       others: 'Великое Затмение свершилось. Над пустошью вечная ночь, Иные бьют на 30% сильнее, а из Разлома сами приходят Призраки.',
     }[G.race];
     modalCard.innerHTML = `<div class="intro"><div class="kicker" style="color:var(--gold)">Великий путь пройден</div><h1>${esc(G.BUILDINGS.wonder.name)}</h1>
