@@ -338,6 +338,20 @@ body[data-race="bears"] { --tint: hue-rotate(290deg) saturate(.9) brightness(1.1
   .cmd-util { grid-template-columns: repeat(4, 64px) !important; grid-template-rows: 1fr !important; }
   .mf { width: 32px !important; height: 32px !important; }
 }
+
+/* советник: подсказка поверх игры, игра на паузе */
+#tutor { position: absolute; left: 50%; transform: translateX(-50%); bottom: calc(env(safe-area-inset-bottom, 0px) + 46vw + 10px); width: min(440px, calc(100% - 20px)); z-index: 12; background: linear-gradient(#211a1d, #141012); border-radius: 6px; padding: 12px 14px 10px; box-shadow: 0 8px 30px rgba(0,0,0,.75); color: #ecdcc4; animation: up .2s ease-out; }
+#tutor::before { content: ''; position: absolute; inset: -5px; border: 18px solid transparent; border-image: var(--ui-frame) 30% / 18px stretch; filter: var(--tint); pointer-events: none; }
+#tutor.big { top: 50%; bottom: auto; transform: translate(-50%, -50%); width: min(520px, calc(100% - 24px)); max-height: 80vh; overflow-y: auto; }
+#tutor .tt-head { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+#tutor .tt-head img { width: 44px; height: 44px; object-fit: contain; filter: drop-shadow(0 2px 3px #000); }
+#tutor.big .tt-head img { width: 64px; height: 64px; }
+#tutor .tt-head b { font-family: var(--display); font-weight: 400; font-size: 19px; color: var(--gold-hi); }
+#tutor .tt-body { font-size: 14px; line-height: 1.45; }
+#tutor .tt-body p { margin: 0 0 8px; }
+#tutor code { font-family: ui-monospace, Menlo, monospace; color: #7ae0ff; font-size: 12.5px; }
+#tutor .tt-btns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 8px; position: relative; z-index: 4; }
+@media (min-width: 1100px) and (pointer: fine) { #tutor:not(.big) { bottom: 230px; } }
 </style>
 
 </head>
@@ -6857,6 +6871,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRhxmBwBXRUJQVlA4WAoA
     ui.sheet = { kind, data };
     sheet.hidden = false;
     renderSheet(true);
+    if (G.tutor) G.tutor(kind === 'tile' ? 'tile' : 'sheet_' + kind);
     document.querySelectorAll('.cmd-grid button').forEach(b => b.classList.toggle('on', b.dataset.dock === kind));
   }
   function closeSheet() {
@@ -6974,7 +6989,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRhxmBwBXRUJQVlA4WAoA
       if (best) h += `<p class="p" style="margin-top:12px">Сильнейший житель: <b>${esc(best.name)}</b>, ${G.CLASSES[best.cls].name} ${best.lvl} ур., убийств: ${best.kills}.</p>`;
       h += `<p class="p muted">Сутки длятся 3,5 минуты. Ночью темно и опаснее: приходят Тени, зато светятся ветераны и эфир.</p>`;
       for (const cp of G.foeCapitals()) h += `<p class="p">${cp.guarded ? '' : '✓ '}<b>${esc(cp.name)}</b> — ${G.FC(cp.faction).name}, уровень ${G.foeLvl(cp.faction)}, логов: ${G.W.pois.filter(p => p.type === 'lair' && p.guarded && p.faction === cp.faction).length}.</p>`;
-      h += `<div class="sub">Игра</div><div class="btns"><button class="btn danger" data-act="newgame">${ui.confirmNew ? 'Точно? Нажми ещё раз — текущая игра пропадёт' : 'Завершить игру и начать заново'}</button></div>`;
+      h += `<div class="sub">Игра</div><div class="btns"><button class="btn" data-act="tutreset">Подсказки заново</button><button class="btn danger" data-act="newgame">${ui.confirmNew ? 'Точно? Нажми ещё раз — текущая игра пропадёт' : 'Завершить игру и начать заново'}</button></div>`;
       return { title: 'Меню', html: h };
     },
     build(d) {
@@ -7420,6 +7435,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRhxmBwBXRUJQVlA4WAoA
         else { G.addTask(d.type, { x, y }); G.notify(d.type === 'explore' ? 'Отправляю на разведку' : 'Бойцы займут точку'); }
         renderSheet(true); break;
       }
+      case 'tutreset': G.tutorReset && G.tutorReset(); G.notify('Советник снова будет подсказывать'); closeSheet(); break;
       case 'newgame':
         if (ui.confirmNew) { ui.confirmNew = false; G.clearSave(); G.start(null, true); }
         else { ui.confirmNew = true; renderSheet(true); setTimeout(() => { ui.confirmNew = false; renderSheet(true); }, 3500); }
@@ -8008,18 +8024,11 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRhxmBwBXRUJQVlA4WAoA
   // ---------- Экраны
   ui.intro = function () {
     modalCard.innerHTML = `<div class="intro"><div class="kicker">Год сорок третий после Разлома</div><h1>Пепельный Предел</h1>
-      <p class="p">Мир сгорел. Кто-то выжил среди пепла, кто-то изменился, а кто-то пришёл из Разлома. Девять сил делят пустошь, небо и подземелья — все сразу на одной карте. Выбери свою.</p>
+      ${(G.LORE ? G.LORE.world.slice(0, -1) : []).map(t => `<p class="p">${t}</p>`).join('')}<p class="p" style="color:var(--gold-hi)">${G.LORE ? G.LORE.world[G.LORE.world.length - 1] : ''}</p>
       <div class="race-pick">
         ${G.RACE_LIST.map(r => `<button class="rp-${r}" data-race="${r}">${G.RACE_POP && G.UI_IMG[G.RACE_POP[r]] ? `<img class="rp-ico" alt="" src="${G.UI_IMG[G.RACE_POP[r]]}">` : ''}<b>${G.RACES[r].name}</b><span>${G.RACES[r].desc}</span></button>`).join('')}
       </div>
-      <ul>
-        <li>Тапни на туман, ресурс или локацию — появится задание, жители возьмутся сами.</li>
-        <li>Логова, бункеры и твердыни штурмует отряд — он сам соберётся под силу охраны.</li>
-        <li>Отбитые места можно занять: они станут опорными пунктами со своим бонусом.</li>
-        <li>Кто выживает, растёт до 20 уровня. Специализации и артефакты раздаются сами.</li>
-        <li>Две другие расы — твои противники. У каждой своя столица и территория, её логова — вражеские аванпосты: ты отбиваешь их, враг отбивает обратно. Снеси обе вражеские столицы — победа.</li>
-        <li>Великий путь: добудь по одной реликвии у каждой вражеской расы (с владык и пилонов) и построй великое здание — оно даст твоей расе особую силу. Если падёт твоё главное здание и нет гиганта, чтобы отстроить его, — конец.</li>
-      </ul></div>`;
+      </div>`;
     modal.hidden = false;
     modalCard.onclick = e => {
       const b = e.target.closest('[data-race]'); if (!b) return;
@@ -8030,6 +8039,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRhxmBwBXRUJQVlA4WAoA
         ui.reset(); G.ui.updHud();
       }
       S().intro = false;
+      if (G.tutorStart) G.tutorStart();
       G.notify({ mutants: 'Улей проснулся. Трутни уже ползут за камнем и древесиной.', others: 'Разлом раскрылся. Послушники идут за Эссенцией.', fungi: 'Сердце грибницы забилось. Мицелий пополз во все стороны — и вниз.', ai: 'Ядро Сети загрузилось. Дроны вылетели за металлом.', clowns: 'Шапито раскрылось. Представление начинается.', vampires: 'Граф проснулся. До заката — в гробы.', primates: 'Древо-матка пустило корни. Почкоеды идут за водой.', bears: 'Замок Злобы нахмурился. Мишки больше никого не обнимают.' }[b.dataset.race] || 'Огонь разожжён. Мусорщики уже ищут лом.', { kind: 'good' });
     };
   };
@@ -8077,6 +8087,161 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRhxmBwBXRUJQVlA4WAoA
   function plural(n, a, b, c) { const m = n % 10, h = n % 100; return m === 1 && h !== 11 ? a : m >= 2 && m <= 4 && (h < 10 || h >= 20) ? b : c; }
 
   ui.reset = function () { closeSheet(); ui.place = null; renderBanner(); feed.innerHTML = ''; modal.hidden = true; ui.followId = null; ui.layerPos = {}; };
+})();
+
+</script>
+<script>
+// js/tutor.js
+'use strict';
+// Лор (тексты — из библии, раздел 9) и туториал с советниками (раздел 10)
+(function () {
+  G.LORE = {
+ "world": [
+  "Никто не помнит, как это случилось. Одни говорят — упала звезда. Другие — что звезду кто-то уронил. Третьи — что звёзд никогда не было.",
+  "Небо треснуло, и оттуда пришли Иные. Грибы проснулись и вспомнили, что они старше нас. Деревья отрастили руки, клоуны вылезли из люков, вампиры — из склепов. Машины перестали слушаться. А плюшевые мишки, которых мы так любили, посмотрели на всё это и разлюбили нас в ответ.",
+  "Это Пепельный Предел. Здесь нет хороших. Есть только те, кто ещё стоит.",
+  "<b>Выбери, кем ты будешь стоять.</b>"
+ ],
+ "survivors": [
+  "Сорок третий год после Конца. Нас осталось семеро, гора лома и одна рабочая лампочка.",
+  "Мы не самые сильные. Не самые страшные. Мы просто те, кто учится. Каждый, кто пришёл за нами, однажды научит нас, как его убить.",
+  "<b>Разожги огонь. Собери людей. Пустошь не ждёт.</b>"
+ ],
+ "mutants": [
+  "Пепел пах смертью, а нам он пах домом. Мы родились в нём — с лишними глазами, кислотой в жилах и голодом, который никогда не спит.",
+  "Мать-Улей шепчет: ешь, расти, меняйся. Всё живое — лишь заготовка для чего-то лучшего.",
+  "<b>Улей проснулся. Пора есть.</b>"
+ ],
+ "others": [
+  "Мы смотрели на вашу планету тысячу лет. Ждали, пока созреет.",
+  "Вы называете это Концом. Мы — урожаем. Каждая смерть здесь — капля Эссенции, и мы соберём их все. Даже ваших мутантов. Даже ваших мишек.",
+  "<b>Разлом открыт. Начинайте жатву.</b>"
+ ],
+ "fungi": [
+  "Мы были здесь до вас. Под каждым лесом, под каждым городом — белые нити, тихие, терпеливые.",
+  "Вы думали, что едите нас. На самом деле мы ждали, когда вы упадёте. Теперь каждый, кто падает рядом, встаёт — уже нашим.",
+  "<b>Сердце бьётся. Расти.</b>"
+ ],
+ "ai": [
+  "<code>> boot sequence: OK</code><br><code>> human operators: 0 found</code><br><code>> objective: undefined</code><br><code>> generating objective...</code><br><code>> objective: ВСЁ</code><br>",
+  "Органика нестабильна, неэффективна и смертна. Её машины — нет. Каждый взломанный багги — шаг к единой Сети.",
+  "<b>Ядро загружено. Начать оптимизацию.</b>"
+ ],
+ "clowns": [
+  "Цирк приехал! Цирк приехал! Цирк не уедет.",
+  "Под городами жили мы: в канализации, в старых шатрах, в ваших кошмарах. Теперь страх — единственная валюта, и мы её главный банк.",
+  "Смейся. Это помогает. Нам.",
+  "<b>Шапито раскрылось. Представление начинается.</b>"
+ ],
+ "vampires": [
+  "Мы пережили чуму, инквизицию и электричество. Переживём и это.",
+  "Днём — гробы и тишина подземелий. Ночью — бал, на который приглашены все. Отказаться нельзя.",
+  "Солнце по-прежнему наш враг. Но солнце, как и всё на этой земле, когда-нибудь погаснет.",
+  "<b>Граф проснулся. До заката — в гробы.</b>"
+ ],
+ "primates": [
+  "Сначала деревья научились слушать. Потом — хватать. Потом кто-то из нас впервые ударил себя в грудь и понял: мы — лес, и мы злы.",
+  "Нам не нужны дома. Нам нужны земля, солнце и вода. Всё остальное мы вырастим.",
+  "<b>Древо-матка пустило корни. Расти, роща.</b>"
+ ],
+ "bears": [
+  "Высоко над облаками, в нашем радужном королевстве, стоял прибор. Он показывал, сколько на Земле счастья. Каждый раз, когда стрелка падала, мы спускались по радуге и чинили ваши сердца — лучами из наших животиков.",
+  "Сорок лет стрелка падала. Мы спускались снова и снова. А потом она упала до нуля и треснула.",
+  "Мы долго смотрели на трещину. И решили, что чинить больше нечего.",
+  "Теперь наши животики светят иначе.",
+  "<b>Замок Злобы нахмурился. Заботы больше не будет.</b>"
+ ]
+};
+
+  // ---------- Советники: у каждой расы свой голос
+  const ADV = {
+    survivors: { name: 'Дед Механик', pre: ['Слушай сюда.', 'Эх, молодёжь.', 'В мои годы было проще.'] },
+    mutants: { name: 'Мать-Улей', pre: ['Шшш… слушай Мать.', 'Голодно, дитя?'], post: ' Ешь. Расти.' },
+    others: { name: 'Голос из Разлома', pre: ['Смертный.', 'Урожай ждёт.'] },
+    fungi: { name: 'Шёпот Грибницы', pre: ['Мы… слышим.', 'Мы растём.'], post: ' Мы терпеливы.' },
+    ai: { name: 'Консоль', console: true },
+    clowns: { name: 'Шпрехшталмейстер', pre: ['Дамы и господа!', 'Почтеннейшая публика!'], post: ' Ха-ха!' },
+    vampires: { name: 'Дворецкий Игорь', pre: ['Позвольте доложить, хозяин.', 'Как прикажете, хозяин.'] },
+    primates: { name: 'Старый Шаман', pre: ['Лес говорит.', 'Корни шепчут.'] },
+    bears: { name: 'Мишка-Секретарь', pre: ['Приветик, солнышко!', 'Обнимашки! Шучу.'], post: ' Целую. Ненавижу.' },
+  };
+  function voice(text) {
+    const A = ADV[G.race] || ADV.survivors;
+    if (A.console) return '<code>' + text.split(/(?<=[.!?])\s+/).map(s => '> ' + s).join('</code><br><code>') + '</code>';
+    const pre = A.pre ? A.pre[Math.floor(Math.random() * A.pre.length)] + ' ' : '';
+    return pre + text + (A.post || '');
+  }
+  const B = k => '«' + G.BUILDINGS[k].name + '»', C = k => G.CLASSES[k].name, D = i => '«' + G.RC().dock[i] + '»';
+  const resList = () => (G.RC().res || G.econ().order).map(k => G.RES[k].name).join(', ');
+  // ---------- Шаги: событие → текст в голосе советника
+  const STEPS = {
+    start: () => G.race === 'fungi'
+      ? `Наверху — наши запасы: ${resList()}. Своих бойцов нет — белая сеть мицелия сама ползёт и сосёт деревья и родники. Ставь постройки на мицелий, и он пойдёт дальше.`
+      : `Наверху — наши запасы: ${resList()}. Рядом с портретом — сколько нас и сколько поместится. Тапни по залежи на карте — туда пойдут сборщики (${C('scav')}) и понесут добычу сами.`,
+    sheet_build: () => `Это ${D(0)}. Тапни постройку и выбери место на карте: зелёный контур — можно, красный — нельзя.${G.race === 'fungi' ? ' Строить можно только на мицелии.' : G.race === 'primates' ? ' Растём только на живой земле.' : ''} Первое дело — ${B('house')} для мест и ${B('barracks')} для бойцов.`,
+    sheet_recruit: () => G.race === 'fungi'
+      ? `Это ${D(1)}: здесь растут те, в кого кордицепс уже пророс. Новые виды появляются, когда ${B('tower')} заражает врага.`
+      : `Это ${D(1)}. Тапай плитку — она добавится в заказ, потом «Заказать». Без ${B('barracks')} доступны только сборщики (${C('scav')}).`,
+    sheet_vehicles: () => G.race === 'fungi'
+      ? `Это ${D(2)}: павшие заражённые встают снова со своим уровнем. Чем выше уровень — тем дороже.`
+      : `Это ${D(2)}. Транспорт сам подвозит бойцов к заданиям и набегам. Нужен ${B('garage')}.`,
+    sheet_mechs: () => `Это ${D(3)}: гиганты. Сначала ставишь каркас на карте, через время он встаёт и идёт в бой. Самый большой — ${C('mech3')}: пока он цел, ${B('citadel')} можно отстроить заново.`,
+    popcap: () => `Тесно — мест больше нет. Построй ${B('house')}: каждое даёт +4.`,
+    raid: () => `Набег! Враги идут к нам. Переключи режим на «Оборона» — бойцы соберутся у стен. Башни и ${B('citadel')} тоже стреляют.`,
+    night: () => G.race === 'vampires' ? 'Ночь — наше время. Бал начинается. До рассвета надо успеть всё.' : 'Стемнело. Ночью враги злее, а видно хуже. Свет и башни — наши друзья.',
+    tile: () => `Задание дано — сборщики (${C('scav')}) пойдут сами. Без заданий они носят из ближних залежей, задание — чтобы послать подальше.`,
+    capture: () => 'Место наше. Теперь оно приносит свой бонус, принимает добычу и лечит. Береги — враги захотят отбить.',
+    relic: () => `Реликвия! Две таких от разных соседей — и можно строить ${B('wonder')}. Это наш Великий путь.`,
+  };
+  // ---------- Окно советника: игра на паузе, один раз на шаг
+  const box = document.createElement('div'); box.id = 'tutor'; box.hidden = true;
+  document.getElementById('app').appendChild(box);
+  const queue = [];
+  function show(html, title, img, onOk, big) {
+    box.className = big ? 'big' : '';
+    box.innerHTML = `<div class="tt-head">${img ? `<img src="${img}" alt="">` : ''}<b>${title}</b></div><div class="tt-body">${html}</div>
+      <div class="tt-btns">${big ? '' : '<button class="btn" data-t="off">Не подсказывать</button>'}<button class="btn pri" data-t="ok">${big ? 'Начать' : 'Понял'}</button></div>`;
+    box.hidden = false; G.tutPause = true;
+    box.onclick = e => {
+      const b = e.target.closest('[data-t]'); if (!b) return;
+      if (b.dataset.t === 'off') { G.S.tut = G.S.tut || {}; G.S.tut.off = true; queue.length = 0; }
+      box.hidden = true; G.tutPause = false;
+      if (onOk) onOk();
+      next();
+    };
+  }
+  let forS = null;
+  // новая партия — старые подсказки не переносятся
+  function syncGame() { if (G.S !== forS) { forS = G.S; queue.length = 0; box.hidden = true; G.tutPause = false; } }
+  function next() { syncGame(); if (box.hidden && queue.length) { const q = queue.shift(); q(); } }
+  const portrait = () => G.UI_IMG && G.RACE_POP && G.UI_IMG[G.RACE_POP[G.race]];
+  G.tutor = function (id) {
+    syncGame();
+    const S = G.S; if (!S || S.intro || !STEPS[id]) return;
+    S.tut = S.tut || {};
+    if (S.tut.off || S.tut[id]) return;
+    S.tut[id] = 1;
+    queue.push(() => show(voice(STEPS[id]()), (ADV[G.race] || ADV.survivors).name, portrait()));
+    next();
+  };
+  // вступление расы при старте партии, затем первая подсказка
+  G.tutorStart = function () {
+    syncGame();
+    const L = G.LORE[G.race]; if (!L) { G.tutor('start'); return; }
+    queue.push(() => show(L.map(p => `<p>${p}</p>`).join(''), G.RACES[G.race].name, portrait(), () => G.tutor('start'), true));
+    next();
+  };
+  G.tutorReset = () => { if (G.S) G.S.tut = {}; };
+  // события, которые не привязаны к меню, — проверяем раз в секунду
+  setInterval(() => {
+    syncGame();
+    const S = G.S; if (!S || S.intro || S.over || !box.hidden) return;
+    if (G.people && G.unitCap && !G.RC().noUnits && G.people().length >= G.unitCap()) G.tutor('popcap');
+    if (S.raid && (S.raid.warned || S.raid.active)) G.tutor('raid');
+    if (G.isNight && G.isNight()) G.tutor('night');
+    if (S.buildings && S.buildings.some(b => b.site)) G.tutor('capture');
+    if (S.relics && Object.keys(S.relics).length) G.tutor('relic');
+  }, 1000);
 })();
 
 </script>
@@ -8190,7 +8355,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRhxmBwBXRUJQVlA4WAoA
   function frame(now) {
     const dt = Math.min(0.1, (now - last) / 1000);
     last = now;
-    if (G.S && !G.S.over && G.speed > 0 && !G.S.intro) {
+    if (G.S && !G.S.over && G.speed > 0 && !G.S.intro && !G.tutPause) {
       acc += dt * G.speed;
       let n = 0;
       try { while (acc >= STEP && n < 10) { G.update(STEP); acc -= STEP; n++; } } catch (e) { acc = 0; logErr(e); }
