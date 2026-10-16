@@ -767,6 +767,29 @@ body.ux2 .st.goal::before, body.ux2 .st.raid::before, body.ux2 .trial-fab .tf-ic
 .trial-fab b { animation: hintPulse 1.4s ease-in-out infinite; }
 #seal .se-pat.rays { animation-duration: 40s !important; }
 @media (prefers-reduced-motion: reduce) { #splash .sp-rays, #seal .se-pat, .trial-fab::before { animation: none !important; } }
+
+/* ===== UX2, десктоп: крупная мини-карта слева внизу, команды — узкой полосой справа ===== */
+@media (min-width: 1100px) and (pointer: fine) {
+  body.ux2 .cmd { padding: 12px 16px !important; justify-content: stretch !important; }
+  body.ux2 .cmd-main { background: transparent !important; border: 0 !important; padding: 0 !important; max-width: none !important; margin: 0 !important; gap: 14px !important; align-items: flex-end !important; pointer-events: none; }
+  body.ux2 .cmd-main::before, body.ux2 .cmd-main::after { display: none !important; }
+  body.ux2 .mini-box { pointer-events: auto; width: 340px !important; flex: 0 0 340px !important; background: #050506 !important; box-shadow: inset 0 0 0 1px var(--ux-line2), 0 0 0 6px var(--ux-bg) !important; }
+  body.ux2 .cmd-side { pointer-events: auto; flex: 0 1 auto !important; margin-left: auto; height: auto; align-self: flex-end; flex-direction: row !important; align-items: center !important; gap: 10px !important; padding: 6px 8px; background: var(--ux-bg); border: 1px solid var(--ux-line); }
+  body.ux2 .cmd-side .cmd-grid { display: flex !important; gap: 6px !important; }
+  body.ux2 .cmd-side .cmd-grid button { flex-direction: row !important; height: 48px; padding: 0 14px 0 10px !important; gap: 8px !important; min-width: 0; }
+  body.ux2 .cmd-side .cmd-grid button .cmd-ico { width: 26px !important; height: 26px !important; }
+  body.ux2 .cmd-side .cmd-grid button span { font-size: 12px !important; white-space: nowrap !important; }
+  body.ux2 .cmd-side .cmd-grid button::after { position: absolute; right: 3px; top: 1px; }
+  body.ux2 .cmd-side .cmd-util { display: flex !important; gap: 4px !important; padding: 0 0 0 10px !important; border-left: 1px solid var(--ux-line) !important; border-bottom: 0 !important; }
+  body.ux2 .cmd-side .cmd-util button { width: 46px; height: 48px !important; padding: 0 !important; gap: 1px !important; justify-content: center !important; position: relative; }
+  body.ux2 .cmd-side .cmd-util .util-ico { width: 22px !important; height: 22px !important; }
+  body.ux2 .cmd-side .cmd-util button span { font-size: 8.5px !important; }
+  body.ux2 .cmd-util button::after { position: absolute; right: 2px; top: 0; }
+  body.ux2 #sheet { bottom: 86px !important; }
+  body.ux2 #banner { bottom: 90px !important; left: calc(50% + 180px) !important; }
+  body.ux2 #tutor:not(.top) { bottom: 92px; }
+  body.ux2 .mf-pop { left: auto !important; right: -8px !important; bottom: auto !important; top: 0 !important; transform: translateX(100%); }
+}
 </style>
 
 </head>
@@ -9083,7 +9106,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     // рамка экрана
     const [VW, VH] = G.view();
     // видимое поле — между нижним краем табло и верхом нижней панели
-    const hb = document.querySelector('.hud').getBoundingClientRect().bottom, ct = document.querySelector('.cmd-main').getBoundingClientRect().top;
+    const hb = document.querySelector('.hud').getBoundingClientRect().bottom, ct = document.querySelector(FINE && innerWidth >= 1100 && document.body.classList.contains('ux2') ? '.cmd-side' : '.cmd-main').getBoundingClientRect().top;
     const cs = [G.screenToTile(0, hb), G.screenToTile(VW, hb), G.screenToTile(VW, ct), G.screenToTile(0, ct)].map(([x, y]) => m2(x, y));
     mctx.strokeStyle = 'rgba(255,236,200,.85)'; mctx.lineWidth = 1; mctx.beginPath();
     cs.forEach(([a, b], i) => i ? mctx.lineTo(a, b) : mctx.moveTo(a, b)); mctx.closePath(); mctx.stroke();
