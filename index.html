@@ -7698,7 +7698,8 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     { // уровень неба: открытое небо — дальним слоем, движется медленнее камеры
       const lc0 = G.layerAt(...G.screenToTile(VW / 2, VH / 2).map(Math.floor));
       const LPs = lc0 === 'sky' && G.layerPats(ctx);
-      if (LPs) { const pt = LPs[7], k = 0.45, sc0 = 0.9; pt.setTransform(new DOMMatrix([sc0, 0, 0, sc0, -cam.x * k * z % (256 * sc0), -cam.y * k * z % (256 * sc0)]));
+      if (LPs) { const pt = LPs[7], k = 0.45, bz = 0.55 + 0.45 * z, sc0 = 0.9 * bz; // дальний слой: приближается слабее карты, вокруг центра экрана
+        pt.setTransform(new DOMMatrix([sc0, 0, 0, sc0, VW / 2 - cam.x * k * bz, VH / 2 - cam.y * k * bz]));
         ctx.fillStyle = pt; ctx.fillRect(0, 0, VW, VH); const g = ctx.createLinearGradient(0, 0, 0, VH); g.addColorStop(0, 'rgba(6,14,50,.25)'); g.addColorStop(1, 'rgba(2,6,26,.6)'); ctx.fillStyle = g; ctx.fillRect(0, 0, VW, VH); }
     }
     ctx.setTransform(z * dpr, 0, 0, z * dpr, (VW / 2 - cam.x * z + shx) * dpr, (VH / 2 - cam.y * z + shy) * dpr);
@@ -8099,6 +8100,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
   let muted = false;
   try { muted = localStorage.getItem('pepel_mute') === '1'; } catch (e) { }
   G.audio = { get muted() { return muted; } };
+  G._audio = () => (ac ? { ac, master } : null); // для музыки (js/music.js)
 
   function init() {
     if (ac) return;
@@ -8185,6 +8187,233 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
   G.audioTick = function () {
     if (!windGain || muted) return;
     windGain.gain.value = 0.08 + 0.06 * (1 - G.nightF()) + (G.S && G.S.rainT > 0 ? 0.15 : 0);
+  };
+})();
+
+</script>
+<script>
+// js/music.js
+'use strict';
+// Генеративная музыка: без файлов, на WebAudio. У меню и каждой расы — своя тема (лад, темп, инструменты).
+// Музыка следит за игрой: спокойно → тревога перед набегом → бой. Темы сменяются плавно.
+(function () {
+  let on = true;
+  try { on = localStorage.getItem('pepel_music') !== '0'; } catch (e) { }
+  let ac = null, bus = null, rev = null, dly = null, cur = null, nextT = 0, step = 0, bar = 0, motif = null, intensity = 0, want = 'menu';
+  const VOL = 0.34;
+  const mtof = m => 440 * Math.pow(2, (m - 69) / 12);
+  const R = Math.random;
+
+  // ---------- Шина: компрессор, реверберация (сгенерированный отклик), эхо
+  function setup() {
+    const A = G._audio && G._audio(); if (!A) return false;
+    ac = A.ac;
+    const comp = ac.createDynamicsCompressor(); comp.threshold.value = -18; comp.ratio.value = 3; comp.connect(A.master);
+    bus = ac.createGain(); bus.gain.value = 0; bus.connect(comp);
+    // отклик зала: шум с затуханием 2.8 с
+    const len = Math.floor(ac.sampleRate * 2.8), ir = ac.createBuffer(2, len, ac.sampleRate);
+    for (let ch = 0; ch < 2; ch++) { const d = ir.getChannelData(ch); for (let i = 0; i < len; i++) d[i] = (R() * 2 - 1) * Math.pow(1 - i / len, 2.6); }
+    const conv = ac.createConvolver(); conv.buffer = ir; rev = ac.createGain(); rev.gain.value = 0.55; rev.connect(conv); conv.connect(bus);
+    const d = ac.createDelay(1.5); d.delayTime.value = 0.42; const fb = ac.createGain(); fb.gain.value = 0.32; const lp = ac.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 2200;
+    dly = ac.createGain(); dly.gain.value = 0.5; dly.connect(d); d.connect(lp); lp.connect(fb); fb.connect(d); lp.connect(bus);
+    return true;
+  }
+  // выход голоса: сухой + в зал + в эхо
+  function out(node, wet = 0.3, echo = 0) {
+    node.connect(bus);
+    if (wet) { const g = ac.createGain(); g.gain.value = wet; node.connect(g); g.connect(rev); }
+    if (echo) { const g = ac.createGain(); g.gain.value = echo; node.connect(g); g.connect(dly); }
+  }
+  function envGain(t, a, peak, hold, rel) {
+    const g = ac.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(Math.max(0.0002, peak), t + a);
+    g.gain.setValueAtTime(Math.max(0.0002, peak), t + a + hold); g.gain.exponentialRampToValueAtTime(0.0001, t + a + hold + rel); return g;
+  }
+  function osc(type, f, t, end, detune = 0) { const o = ac.createOscillator(); o.type = type; o.frequency.setValueAtTime(f, t); o.detune.value = detune; o.start(t); o.stop(end + 0.05); return o; }
+  function noiseSrc(t, dur) {
+    const len = Math.max(1, Math.floor(ac.sampleRate * dur)), b = ac.createBuffer(1, len, ac.sampleRate), d = b.getChannelData(0);
+    for (let i = 0; i < len; i++) d[i] = R() * 2 - 1; const s = ac.createBufferSource(); s.buffer = b; s.start(t); return s;
+  }
+  function vib(o, t, end, rate, cents) { const l = ac.createOscillator(), g = ac.createGain(); l.frequency.value = rate; g.gain.value = cents; l.connect(g); g.connect(o.detune); l.start(t); l.stop(end + 0.05); }
+
+  // ---------- Инструменты: (t, частота, длительность, громкость)
+  const I = {
+    pluck(t, f, d, v, wet = 0.25, echo = 0.2) { // щипковая «гитара»
+      const o = osc('sawtooth', f, t, t + d + 0.4), fl = ac.createBiquadFilter(); fl.type = 'lowpass'; fl.Q.value = 2;
+      fl.frequency.setValueAtTime(3200, t); fl.frequency.exponentialRampToValueAtTime(380, t + Math.min(0.5, d + 0.2));
+      const g = envGain(t, 0.004, v, 0, d + 0.35); o.connect(fl); fl.connect(g); out(g, wet, echo);
+    },
+    pad(t, f, d, v, cut = 900, wet = 0.6) {
+      const end = t + d + 1.2, fl = ac.createBiquadFilter(); fl.type = 'lowpass'; fl.frequency.value = cut;
+      const g = envGain(t, Math.min(0.9, d * 0.4), v, Math.max(0, d * 0.5), 1.1);
+      for (const dt of [-8, 7]) osc('sawtooth', f, t, end, dt).connect(fl);
+      osc('triangle', f / 2, t, end).connect(fl); fl.connect(g); out(g, wet);
+    },
+    choir(t, f, d, v) {
+      const end = t + d + 1.6, g = envGain(t, 1.0, v, d * 0.5, 1.5);
+      const b1 = ac.createBiquadFilter(); b1.type = 'bandpass'; b1.frequency.value = 650; b1.Q.value = 2.5;
+      const b2 = ac.createBiquadFilter(); b2.type = 'bandpass'; b2.frequency.value = 1150; b2.Q.value = 3;
+      for (const dt of [-11, 0, 13]) { const o = osc('sawtooth', f, t, end, dt); vib(o, t, end, 4.5 + R(), 12); o.connect(b1); o.connect(b2); }
+      b1.connect(g); b2.connect(g); out(g, 0.8);
+    },
+    sub(t, f, d, v) { const g = envGain(t, 0.02, v, d * 0.6, 0.3); osc('sine', f, t, t + d + 0.4).connect(g); out(g, 0.05); },
+    bass(t, f, d, v, cut = 700) { const fl = ac.createBiquadFilter(); fl.type = 'lowpass'; fl.frequency.value = cut; fl.Q.value = 4; const g = envGain(t, 0.006, v, d * 0.5, 0.18); osc('square', f, t, t + d + 0.3).connect(fl); fl.connect(g); out(g, 0.05); },
+    wob(t, f, d, v) { // мутантский бас: фильтр «дышит»
+      const fl = ac.createBiquadFilter(); fl.type = 'lowpass'; fl.Q.value = 9; fl.frequency.setValueAtTime(180, t);
+      fl.frequency.linearRampToValueAtTime(900 + R() * 600, t + d * 0.5); fl.frequency.linearRampToValueAtTime(200, t + d);
+      const g = envGain(t, 0.01, v, d * 0.7, 0.15); osc('sawtooth', f, t, t + d + 0.2).connect(fl); fl.connect(g); out(g, 0.1);
+    },
+    saw(t, f, d, v, cut = 1800) { const fl = ac.createBiquadFilter(); fl.type = 'lowpass'; fl.frequency.value = cut; const g = envGain(t, 0.005, v, d * 0.4, 0.12); osc('sawtooth', f, t, t + d + 0.2).connect(fl); fl.connect(g); out(g, 0.15, 0.25); },
+    sq(t, f, d, v) { const fl = ac.createBiquadFilter(); fl.type = 'lowpass'; fl.frequency.value = 2600; const g = envGain(t, 0.003, v, 0, d + 0.12); osc('square', f, t, t + d + 0.2).connect(fl); fl.connect(g); out(g, 0.2, 0.35); },
+    bell(t, f, d, v, wet = 0.6) { const g = envGain(t, 0.003, v, 0, 1.6), g2 = envGain(t, 0.002, v * 0.35, 0, 0.6); osc('sine', f, t, t + 1.8).connect(g); osc('sine', f * 2.76, t, t + 0.8).connect(g2); out(g, wet, 0.25); out(g2, wet); },
+    box(t, f, d, v) { // музыкальная шкатулка: высоко, звонко, чуть фальшиво
+      const g = envGain(t, 0.002, v, 0, 1.1), g2 = envGain(t, 0.002, v * 0.3, 0, 0.35);
+      const o = osc('sine', f, t, t + 1.3, (R() - 0.5) * 18); o.connect(g); osc('triangle', f * 4, t, t + 0.4).connect(g2); out(g, 0.5, 0.3); out(g2, 0.4);
+    },
+    organ(t, f, d, v) { const end = t + d + 0.5, g = envGain(t, 0.05, v, d * 0.8, 0.35); [[1, 0.5], [2, 0.3], [3, 0.16], [4, 0.1]].forEach(([h, w]) => { const gg = ac.createGain(); gg.gain.value = w; osc('sine', f * h, t, end).connect(gg); gg.connect(g); }); out(g, 0.7); },
+    harpsi(t, f, d, v) { const hp = ac.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 280; const g = envGain(t, 0.002, v, 0, 0.42); osc('sawtooth', f, t, t + 0.5).connect(hp); osc('square', f * 2, t, t + 0.3, 4).connect(hp); hp.connect(g); out(g, 0.4); },
+    calliope(t, f, d, v) { const end = t + d + 0.2, fl = ac.createBiquadFilter(); fl.type = 'lowpass'; fl.frequency.value = 2400; const g = envGain(t, 0.02, v, d * 0.6, 0.12);
+      for (const [ty, dt] of [['square', 9], ['triangle', -6]]) { const o = osc(ty, f, t, end, dt); vib(o, t, end, 6.2, 14); o.connect(fl); } fl.connect(g); out(g, 0.35); },
+    flute(t, f, d, v) { const end = t + d + 0.3, o = osc('triangle', f, t, end); vib(o, t, end, 5, 10); const g = envGain(t, 0.08, v, d * 0.6, 0.25); o.connect(g); out(g, 0.5, 0.3); },
+    marimba(t, f, d, v) { const g = envGain(t, 0.002, v, 0, 0.5), g2 = envGain(t, 0.002, v * 0.4, 0, 0.12); osc('sine', f, t, t + 0.6).connect(g); osc('sine', f * 4, t, t + 0.2).connect(g2); out(g, 0.3); out(g2, 0.2); },
+    // ударные
+    kick(t, v) { const o = osc('sine', 130, t, t + 0.35); o.frequency.exponentialRampToValueAtTime(42, t + 0.22); const g = envGain(t, 0.003, v, 0, 0.3); o.connect(g); out(g, 0.05); },
+    snare(t, v) { const n = noiseSrc(t, 0.22), f = ac.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 1900; const g = envGain(t, 0.002, v, 0, 0.18); n.connect(f); f.connect(g); out(g, 0.25); I.sub(t, 190, 0.05, v * 0.4); },
+    hat(t, v) { const n = noiseSrc(t, 0.06), f = ac.createBiquadFilter(); f.type = 'highpass'; f.frequency.value = 7200; const g = envGain(t, 0.001, v, 0, 0.045); n.connect(f); f.connect(g); out(g, 0.1); },
+    brush(t, v) { const n = noiseSrc(t, 0.2), f = ac.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 4200; const g = envGain(t, 0.03, v, 0, 0.14); n.connect(f); f.connect(g); out(g, 0.2); },
+    tom(t, f, v) { const o = osc('sine', f * 1.6, t, t + 0.4); o.frequency.exponentialRampToValueAtTime(f, t + 0.18); const g = envGain(t, 0.003, v, 0, 0.32); o.connect(g); out(g, 0.3); },
+    drip(t, f, v) { const o = osc('sine', f * 2.2, t, t + 0.15); o.frequency.exponentialRampToValueAtTime(f, t + 0.08); const g = envGain(t, 0.002, v, 0, 0.1); o.connect(g); out(g, 0.6, 0.3); },
+  };
+
+  // ---------- Лады и аккорды
+  const MODES = { aeolian: [0, 2, 3, 5, 7, 8, 10], dorian: [0, 2, 3, 5, 7, 9, 10], phrygian: [0, 1, 3, 5, 7, 8, 10], lydian: [0, 2, 4, 6, 7, 9, 11], harmonic: [0, 2, 3, 5, 7, 8, 11], major: [0, 2, 4, 5, 7, 9, 11], penta: [0, 3, 5, 7, 10], locrian: [0, 1, 3, 5, 6, 8, 10] };
+  const deg = (th, d, oct = 0) => { const sc = MODES[th.mode], n = sc.length, k = ((d % n) + n) % n; return th.root + 12 * (oct + Math.floor(d / n)) + sc[k]; };
+  const chord = (th, d, oct = 0) => [deg(th, d, oct), deg(th, d + 2, oct), deg(th, d + 4, oct)];
+  // мотив: случайное блуждание по ладу, с паузами; держится 4 такта, потом чуть меняется
+  function newMotif(th, len) { const m = []; let p = Math.floor(R() * 5); for (let i = 0; i < len; i++) { p += [-2, -1, -1, 0, 1, 1, 2][Math.floor(R() * 7)]; p = Math.max(-2, Math.min(9, p)); m.push(R() < th.rest ? null : p); } return m; }
+  function mutate(m) { const c = m.slice(); const i = Math.floor(R() * c.length); c[i] = c[i] === null ? Math.floor(R() * 7) : c[i] + (R() < 0.5 ? 1 : -1); return c; }
+
+  // ---------- Темы. play(t, s — шаг в такте, b — такт, ch — ступень аккорда, x — накал 0..2, sd — длительность шага)
+  const THEMES = {
+    menu: { bpm: 68, meter: 4, root: 50, mode: 'aeolian', prog: [0, 5, 3, 4], rest: 0.55, play(t, s, b, ch, x, sd, th) {
+      if (s === 0) { I.pad(t, mtof(chord(th, ch, 0)[0]), sd * 16, 0.05, 700); I.pad(t, mtof(chord(th, ch, 0)[2]), sd * 16, 0.035, 700); I.sub(t, mtof(deg(th, ch, -1)), sd * 15, 0.12); }
+      if (s % 4 === 0 && motif[s / 4 + (b % 2) * 4] != null && R() < 0.75) I.bell(t, mtof(deg(th, motif[s / 4 + (b % 2) * 4], 1)), sd * 4, 0.06);
+      if (s === 0 && b % 2 === 0) I.kick(t, 0.12);
+    } },
+    survivors: { bpm: 86, meter: 4, root: 50, mode: 'dorian', prog: [0, 0, 6, 4], rest: 0.4, play(t, s, b, ch, x, sd, th) {
+      const c = chord(th, ch, 0);
+      if (s === 0) I.pad(t, mtof(c[0] - 12), sd * 16, 0.035, 500);
+      if ([0, 3, 6, 8, 11, 14].includes(s)) I.pluck(t, mtof(c[[0, 1, 2, 1, 2, 0][[0, 3, 6, 8, 11, 14].indexOf(s)]] + (s >= 8 ? 12 : 0)), sd * 2, 0.07);
+      if (s % 2 === 0) I.brush(t, s % 4 === 2 ? 0.05 : 0.025);
+      if (x >= 1 && (s === 0 || s === 8)) I.kick(t, 0.22); if (x >= 1 && (s === 4 || s === 12)) I.snare(t, 0.1 + x * 0.04);
+      if (x >= 2 && s % 2 === 1) I.hat(t, 0.04);
+      if (s % 4 === 0 && motif[s / 4] != null && b % 4 >= 2) I.flute(t, mtof(deg(th, motif[s / 4] + 0, 1)), sd * 3, 0.035);
+    } },
+    mutants: { bpm: 94, meter: 4, root: 40, mode: 'phrygian', prog: [0, 1, 0, 6], rest: 0.5, play(t, s, b, ch, x, sd, th) {
+      if (s === 0 || s === 6 || s === 10) I.wob(t, mtof(deg(th, ch, 0)), sd * (s === 0 ? 5 : 3), 0.09);
+      if (s === 0 || s === 2) I.kick(t, s === 0 ? 0.26 : 0.16); // сердцебиение
+      if (R() < 0.12) I.drip(t, mtof(deg(th, Math.floor(R() * 7), 2)), 0.05);
+      if (s === 0) I.pad(t, mtof(deg(th, ch + 4, 0)), sd * 16, 0.03, 600);
+      if (x >= 1 && (s === 8)) I.snare(t, 0.11); if (x >= 2 && s % 4 === 2) I.tom(t, 90, 0.12);
+      if (s % 4 === 0 && motif[s / 4] != null && x >= 1) I.saw(t, mtof(deg(th, motif[s / 4], 1)), sd * 2, 0.035, 1100);
+    } },
+    others: { bpm: 58, meter: 4, root: 47, mode: 'locrian', prog: [0, 1, 5, 4], rest: 0.6, play(t, s, b, ch, x, sd, th) {
+      if (s === 0) { const c = chord(th, ch, 0); I.choir(t, mtof(c[0]), sd * 15, 0.035); I.choir(t, mtof(c[1] + 12), sd * 15, 0.022); I.sub(t, mtof(deg(th, ch, -2)), sd * 16, 0.14); }
+      if (s === 8 && R() < 0.5) I.bell(t, mtof(deg(th, Math.floor(R() * 7), 1)), sd * 8, 0.04, 0.9);
+      if (x >= 1 && s % 8 === 0) I.tom(t, 55, 0.18); if (x >= 2 && s % 4 === 2) I.drip(t, 400, 0.06);
+      if (s % 4 === 0 && motif[s / 4] != null && b % 4 === 3) I.saw(t, mtof(deg(th, motif[s / 4], 1)), sd * 4, 0.02, 700);
+    } },
+    fungi: { bpm: 64, meter: 4, root: 53, mode: 'lydian', prog: [0, 1, 0, 4], rest: 0.5, play(t, s, b, ch, x, sd, th) {
+      if (s === 0) { I.pad(t, mtof(deg(th, ch, -1)), sd * 16, 0.045, 450); I.sub(t, mtof(deg(th, ch, -2)), sd * 16, 0.09); }
+      if (s % 2 === 0 && R() < 0.35) I.marimba(t, mtof(deg(th, ch + [0, 2, 4, 7][Math.floor(R() * 4)], 1)), sd, 0.06);
+      if (R() < 0.08) I.drip(t, mtof(deg(th, Math.floor(R() * 7), 1)), 0.05); // бульканье
+      if (s % 4 === 0 && motif[s / 4] != null) I.bell(t, mtof(deg(th, motif[s / 4], 2)), sd * 4, 0.025);
+      if (x >= 1 && s % 8 === 0) I.kick(t, 0.14); if (x >= 2 && s % 4 === 2) I.brush(t, 0.05);
+    } },
+    ai: { bpm: 108, meter: 4, root: 45, mode: 'aeolian', prog: [0, 5, 2, 6], rest: 0.25, play(t, s, b, ch, x, sd, th) {
+      const c = chord(th, ch, 1); I.sq(t, mtof(c[[0, 1, 2, 1][s % 4]] + (s % 8 >= 4 ? 12 : 0)), sd * 0.8, 0.032);
+      if (s % 2 === 0) I.saw(t, mtof(deg(th, ch, -1)), sd * 1.6, 0.06, 900);
+      if (s === 0) I.pad(t, mtof(c[0]), sd * 16, 0.03, 1400);
+      if (s % 4 === 0) I.kick(t, 0.2); if (x >= 1 && (s === 4 || s === 12)) I.snare(t, 0.12); if (s % 2 === 1) I.hat(t, 0.018 + x * 0.012);
+      if (s % 2 === 0 && motif[s / 2] != null && b % 4 >= 2) I.saw(t, mtof(deg(th, motif[s / 2], 2)), sd * 1.5, 0.025, 2600);
+    } },
+    // цирковой вальс: 3 доли по 4 шага
+    clowns: { bpm: 132, meter: 3, root: 48, mode: 'harmonic', prog: [0, 3, 4, 0], rest: 0.25, play(t, s, b, ch, x, sd, th) {
+      const c = chord(th, ch, 0);
+      if (s === 0) I.calliope(t, mtof(deg(th, ch, -1)), sd * 3, 0.07); // умпа
+      if (s === 4 || s === 8) { I.calliope(t, mtof(c[1]), sd * 2, 0.04); I.calliope(t, mtof(c[2]), sd * 2, 0.035); } // па-па
+      if (s % 2 === 0 && motif[s / 2] != null) I.calliope(t, mtof(deg(th, motif[s / 2], 1)) * (1 + (R() - 0.5) * 0.012), sd * 1.8, 0.035); // фальшиво
+      if (s === 0 && R() < 0.4) I.box(t, mtof(deg(th, ch + 7, 2)), sd, 0.03);
+      if (x >= 1 && s === 0) I.kick(t, 0.2); if (x >= 1 && (s === 4 || s === 8)) I.hat(t, 0.05); if (x >= 2 && s === 8) I.snare(t, 0.1);
+    } },
+    vampires: { bpm: 72, meter: 4, root: 50, mode: 'harmonic', prog: [0, 5, 3, 4], rest: 0.35, play(t, s, b, ch, x, sd, th) {
+      const c = chord(th, ch, 0);
+      if (s === 0) { I.organ(t, mtof(c[0] - 12), sd * 15, 0.045); I.organ(t, mtof(c[2] - 12), sd * 15, 0.03); }
+      if (s % 2 === 0) I.harpsi(t, mtof(c[[0, 1, 2, 1, 0, 2, 1, 2][s / 2]] + 12), sd, 0.045);
+      if (s === 0 && b % 2 === 0) I.bell(t, mtof(deg(th, ch, -1)), sd * 8, 0.05, 0.8);
+      if (x >= 1 && (s === 0 || s === 10)) I.tom(t, 70, 0.24); // литавры
+      if (x >= 2 && s % 4 === 2) I.tom(t, 95, 0.12);
+      if (s % 4 === 0 && motif[s / 4] != null && b % 4 >= 2) I.organ(t, mtof(deg(th, motif[s / 4], 1)), sd * 3, 0.03);
+    } },
+    primates: { bpm: 100, meter: 4, root: 45, mode: 'penta', prog: [0, 3, 0, 4], rest: 0.35, play(t, s, b, ch, x, sd, th) {
+      if ([0, 3, 6, 10, 12].includes(s)) I.tom(t, [80, 120, 95, 140, 80][[0, 3, 6, 10, 12].indexOf(s)], 0.1 + x * 0.05);
+      if (s % 2 === 1) I.brush(t, 0.025); // шейкер
+      if (s % 2 === 0 && R() < 0.55) I.marimba(t, mtof(deg(th, ch + [0, 1, 2, 3, 4][Math.floor(R() * 5)], 1)), sd, 0.06);
+      if (s === 0) I.sub(t, mtof(deg(th, ch, -1)), sd * 14, 0.1);
+      if (s % 4 === 0 && motif[s / 4] != null) I.flute(t, mtof(deg(th, motif[s / 4], 1)), sd * 3.5, 0.04);
+      if (x >= 2 && s % 4 === 0) I.kick(t, 0.2);
+    } },
+    // колыбельная шкатулки, которая иногда фальшивит
+    bears: { bpm: 84, meter: 3, root: 60, mode: 'major', prog: [0, 3, 4, 0], rest: 0.2, play(t, s, b, ch, x, sd, th) {
+      const c = chord(th, ch, 0), sour = R() < 0.08;
+      if (s === 0) I.pad(t, mtof(c[0] - 12), sd * 12, 0.03, 1200);
+      if (s % 2 === 0 && motif[s / 2] != null) I.box(t, mtof(deg(th, motif[s / 2], 1) + (sour ? 1 : 0)), sd * 2, 0.05);
+      if (s === 0 || s === 4 || s === 8) I.box(t, mtof(c[s / 4] - 12), sd, 0.03);
+      if (x >= 1 && s === 0) I.tom(t, 160, 0.12); if (x >= 1 && s === 8) I.snare(t, 0.06); if (x >= 2 && s % 2 === 0) I.hat(t, 0.03); // игрушечный марш
+    } },
+  };
+
+  // ---------- Планировщик: на 0.25 с вперёд, шагами по шестнадцатой
+  function pick() {
+    const S = G.S, story = document.getElementById('story');
+    if (!S || S.intro || (story && !story.hidden) || document.getElementById('splash')) return 'menu';
+    return THEMES[G.race] ? G.race : 'menu';
+  }
+  function heat() {
+    const S = G.S; if (!S || S.intro) return 0;
+    if (S.raid && S.raid.active) return 2;
+    if (S.raid && S.raid.warned) return 1;
+    let n = 0; for (const e of S.enemies) { if (e.hp > 0 && e.target && G.isVis && G.isVis(e.x, e.y)) { n++; if (n > 4) return 2; } }
+    return n > 0 ? 1 : 0;
+  }
+  function tick() {
+    if (!ac) { if (!G._audio || !G._audio() || !setup()) return; }
+    if (ac.state !== 'running') return;
+    const target = on && !(G.audio && G.audio.muted) ? VOL : 0;
+    want = pick();
+    const now = ac.currentTime;
+    // смена темы: увести громкость, переключить, вернуть
+    if (!cur || cur.id !== want) {
+      if (cur && bus.gain.value > 0.02) { bus.gain.cancelScheduledValues(now); bus.gain.setTargetAtTime(0, now, 0.4); if (!cur.fading) { cur.fading = now; } if (now - cur.fading < 1.6) return; }
+      cur = Object.assign({ id: want }, THEMES[want]); step = 0; bar = 0; nextT = now + 0.1; motif = newMotif(cur, 8);
+      bus.gain.cancelScheduledValues(now); bus.gain.setTargetAtTime(target, now, 1.2);
+    } else bus.gain.setTargetAtTime(target, now, 0.5);
+    if (!target) { nextT = now + 0.1; return; }
+    const x = heat(); intensity = x;
+    const sd = 60 / (cur.bpm * (1 + x * 0.06)) / 4, per = cur.meter * 4;
+    while (nextT < now + 0.25) {
+      const s = step % per; if (s === 0 && step > 0) { bar++; if (bar % 4 === 0) motif = R() < 0.6 ? mutate(motif) : newMotif(cur, 8); }
+      const ch = cur.prog[bar % cur.prog.length];
+      try { cur.play(nextT, s, bar, ch, x, sd, cur); } catch (e) { }
+      nextT += sd; step++;
+    }
+  }
+  setInterval(tick, 60);
+  G.music = {
+    get on() { return on; },
+    toggle() { on = !on; try { localStorage.setItem('pepel_music', on ? '1' : '0'); } catch (e) { } return on; },
+    get theme() { return cur && cur.id; }, get heat() { return intensity; },
+    // проверка: проиграть такт каждой темы без звука, вернуть ошибки
+    test() { if (!ac) return 'no audio'; const errs = {}; const g0 = bus.gain.value; for (const id in THEMES) { const th = Object.assign({ id }, THEMES[id]); motif = newMotif(th, 8); const sd = 60 / th.bpm / 4; for (let x = 0; x <= 2; x++) for (let st = 0; st < th.meter * 4 * 2; st++) { try { th.play(ac.currentTime + 5 + st * sd, st % (th.meter * 4), Math.floor(st / (th.meter * 4)), th.prog[0], x, sd, th); } catch (e) { errs[id] = e.message; } } } return errs; },
   };
 })();
 
@@ -8402,7 +8631,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
       const best = s.units.slice().sort((a, b) => b.lvl - a.lvl || b.kills - a.kills)[0];
       const caps = G.foeCapitals(), down = caps.filter(c => !c.guarded).length;
       // меню — коротко: игра, итоги, без справочника по расам (он в «Целях»)
-      let h = `<div class="btns"><button class="btn danger" data-act="newgame">${ui.confirmNew ? 'Точно? Нажми ещё раз — партия пропадёт' : 'Завершить партию'}</button><button class="btn" data-act="tutreset">Подсказки заново</button></div>`;
+      let h = `<div class="btns"><button class="btn danger" data-act="newgame">${ui.confirmNew ? 'Точно? Нажми ещё раз — партия пропадёт' : 'Завершить партию'}</button><button class="btn" data-act="tutreset">Подсказки заново</button><button class="btn" data-act="music">Музыка: ${G.music && G.music.on ? 'вкл' : 'выкл'}</button></div>`;
       h += `<div class="sub">Партия</div><div class="stats">
         <div class="stat"><b>${G.day()}</b><span>день</span></div>
         <div class="stat"><b>${s.stats.raids}</b><span>набегов отбито</span></div>
@@ -8856,6 +9085,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
       case 'unit': { const u = G.ents.get(+d.id); if (u) { G.lookAt(u.x, u.y); openUnit(u); } break; }
       case 'goto': G.lookAt(+d.x + 0.5, +d.y + 0.5); break;
       case 'pathgo': pathGo(d.go); break;
+      case 'music': if (G.music) G.music.toggle(); renderSheet(true); break;
       case 'cancelTask': { const t = G.taskById(+d.id); if (t) G.cancelTask(t); renderSheet(true); break; }
       case 'equip': { const u = G.ents.get(+d.id); if (u) G.equip(u, d.art); renderSheet(true); break; }
       case 'unequip': { const u = G.ents.get(+d.id); if (u) G.unequip(u); renderSheet(true); break; }
