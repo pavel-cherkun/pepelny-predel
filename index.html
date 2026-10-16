@@ -790,6 +790,30 @@ body.ux2 .st.goal::before, body.ux2 .st.raid::before, body.ux2 .trial-fab .tf-ic
   body.ux2 #tutor:not(.top) { bottom: 92px; }
   body.ux2 .mf-pop { left: auto !important; right: -8px !important; bottom: auto !important; top: 0 !important; transform: translateX(100%); }
 }
+
+/* ===== Цели — круглая кнопка «!» в левом верхнем углу поля ===== */
+.goal-fab { position: absolute; z-index: 6; left: 10px; top: 64px; width: 44px; height: 44px; padding: 0; border-radius: 50%; border: 2px solid var(--ux-ac, var(--th-acc)); background: rgba(6,6,8,.88); color: var(--ux-ac, var(--th-acc)); cursor: pointer; display: grid; place-items: center; box-shadow: 0 4px 14px rgba(0,0,0,.6); }
+.goal-fab b { font: 900 24px/1 Tektur, system-ui, sans-serif; }
+.goal-fab i { position: absolute; right: -6px; bottom: -6px; min-width: 22px; padding: 1px 4px; font: 700 10px/14px 'JetBrains Mono', ui-monospace, monospace; font-style: normal; color: #000; background: var(--ux-ac, var(--th-acc)); border-radius: 8px; white-space: nowrap; }
+.goal-fab i:empty { display: none; }
+.goal-fab:hover { background: var(--ux-ac, var(--th-acc)); color: #000; }
+#feed { left: 64px !important; width: min(300px, calc(100% - 72px)) !important; }
+
+/* ===== К цитадели — прицел в правом нижнем углу поля ===== */
+.home-fab { position: absolute; z-index: 6; right: 12px; bottom: 200px; width: 48px; height: 48px; padding: 0; border-radius: 50%; border: 2px solid var(--ux-ac, var(--th-acc)); background: rgba(6,6,8,.88); color: var(--ux-ac, var(--th-acc)); cursor: pointer; display: grid; place-items: center; box-shadow: 0 4px 14px rgba(0,0,0,.6); }
+.home-fab svg { width: 30px; height: 30px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+.home-fab:hover { background: var(--ux-ac, var(--th-acc)); color: #000; }
+/* Во весь экран — на заставке */
+#splash .sp-fs { position: relative; margin-top: 12px; font: 600 12px/1 'JetBrains Mono', ui-monospace, monospace; letter-spacing: .16em; text-transform: uppercase; color: var(--ve-orange); background: transparent; border: 1px solid var(--ve-orange); padding: 8px 14px; cursor: pointer; }
+#splash .sp-fs:hover { background: var(--ve-orange); color: #000; }
+
+/* ===== Десктоп: все окна — по центру поля; награды справа; подсказки — сбоку от окна ===== */
+@media (min-width: 1100px) and (pointer: fine) {
+  body.ux2 #sheet { left: 50% !important; right: auto !important; top: 62px !important; bottom: auto !important; translate: -50% 0; width: clamp(460px, calc(100vw - 820px), 600px) !important; max-height: calc(100% - 162px) !important; }
+  body.ux2 #rewards { top: 130px !important; right: 16px !important; left: auto !important; transform: none !important; width: 360px !important; }
+  body.ux2 #tutor { width: 390px !important; }
+  body.ux2 #tutor .tt-face { width: 60px; height: 60px; }
+}
 </style>
 
 </head>
@@ -809,19 +833,19 @@ body.ux2 .st.goal::before, body.ux2 .st.raid::before, body.ux2 .trial-fab .tf-ic
       <button class="r" id="r-pop" title="Жители и бойцы"><i class="ico ico-pop"></i><b>0/0</b><small></small></button>
       <button class="st" id="dayPill">День 1</button>
       <button class="st raid" id="raidPill">Набег</button>
-      <button class="st goal" id="goalPill">Цели</button>
       <button class="st" id="menuBtn" title="Меню">☰</button>
     </div>
   </header>
   <div id="feed"></div>
+  <button id="goalPill" class="goal-fab" title="Цели"><b>!</b><i></i></button>
   <div id="banner" hidden></div>
+  <button id="homeFab" class="home-fab" title="К цитадели (H)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></button>
   <nav class="cmd">
     <div class="cmd-main">
       <div class="mini-box"><canvas id="mini" aria-label="Мини-карта"></canvas></div>
       <div class="cmd-side">
         <div class="cmd-util">
           <button data-dock="mode" id="modeBtn" data-key="E" title="Режим поселения (E)"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3.2 8.3-7 10-3.8-1.7-7-5-7-10V6z"/></svg><span>Эко</span></button>
-          <button data-dock="home" data-key="H" title="К цитадели (H)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg><span>База</span></button>
           <button id="speedPill" data-key="␣" title="Скорость (1–3, пробел — пауза)"><svg viewBox="0 0 24 24"><path d="M5 5l7 7-7 7zM13 5l7 7-7 7z"/></svg><span>×1</span></button>
           <button id="soundPill" title="Звук"><svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4zM16 9c1.5 1.5 1.5 4.5 0 6M18.5 6.5c3 3 3 8 0 11"/></svg><span>Звук</span></button>
         </div>
@@ -8620,6 +8644,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     openSheet(k, {});
   }
   document.querySelectorAll('.cmd [data-dock]').forEach(b => b.addEventListener('click', () => dock(b.dataset.dock)));
+  $('#homeFab').addEventListener('click', () => dock('home'));
   $('#raidPill').addEventListener('click', () => { const r = S().raid; if (r.warned || r.active) G.lookAt(r.sx, r.sy); });
   $('#r-pop').addEventListener('click', () => { if (ui.sheet && ui.sheet.kind === 'roster') closeSheet(); else openSheet('roster', {}); });
   $('#soundPill').addEventListener('click', () => { G.setMuted(!G.audio.muted); updHud(); });
@@ -8650,7 +8675,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
   };
   { const lp = document.createElement('button'); lp.className = 'st'; lp.id = 'layerPill'; lp.title = 'Слой карты: Земля, Подземелья, Небеса';
     lp.addEventListener('click', () => { const order = ['ground', 'under', 'sky']; const cur = G.layerAt(...G.screenToTile(G.view()[0] / 2, G.view()[1] / 2).map(Math.floor)); G.gotoLayer(order[(order.indexOf(cur) + 1) % 3]); });
-    const st = document.querySelector('.hud-st'); if (st) st.insertBefore(lp, document.getElementById('goalPill')); }
+    const st = document.querySelector('.hud-st'); if (st) st.insertBefore(lp, document.getElementById('menuBtn')); }
   $('#speedPill').addEventListener('click', () => {
     G.speed = G.speed === 1 ? 2 : G.speed === 2 ? 0 : 1;
     updHud();
@@ -8691,6 +8716,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
       aether: 'Радуга: из радужных родников. Для великанов, мостов и сверхсил.' } }[G.race] || {};
     return I[k] || '';
   }
+  const homeFab = $('#homeFab');
   const hud = { scrap: $('#r-scrap b'), food: $('#r-food b'), foodS: $('#r-food small'), water: $('#r-water b'), waterS: $('#r-water small'), aether: $('#r-aether b'), fuel: $('#r-fuel b'), power: $('#r-power b'), pop: $('#r-pop b'), popS: $('#r-pop small'), day: $('#dayPill'), raid: $('#raidPill'), speed: $('#speedPill span'), mode: $('#modeBtn span'), goal: $('#goalPill'), sound: $('#soundPill') };
   const short = n => n >= 10000 ? (n / 1000).toFixed(0) + 'к' : n >= 1000 ? (n / 1000).toFixed(1) + 'к' : String(Math.floor(n));
   function updHud() {
@@ -8751,9 +8777,10 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     hud.mode.textContent = { eco: 'Эко', defense: 'Оборона', expand: 'Экспанс.' }[s.mode];
     const vb = document.querySelector('[data-dock="vehicles"]'); if (vb) vb.style.visibility = G.RC().dock[2] === '—' ? 'hidden' : '';
     const ag = G.activeGoals()[0];
-    if (ag) { const [c, m] = ag.p(s); hud.goal.textContent = `★ ${G.goalText(ag.t)} · ${Math.min(c, m)}/${m}`; }
+    if (ag) { const [c, m] = ag.p(s); const gt = `Цель: ${G.goalText(ag.t)} · ${Math.min(c, m)}/${m}`, gi = `${Math.min(c, m)}/${m}`; if (hud.goal.title !== gt) { hud.goal.title = gt; hud.goal.lastChild.textContent = gi; } }
     hud.sound.classList.toggle('off', G.audio.muted);
-    feed.style.top = (document.querySelector('.hud').getBoundingClientRect().bottom + 4) + 'px';
+    { const hb = document.querySelector('.hud').getBoundingClientRect().bottom; feed.style.top = (hb + 4) + 'px'; hud.goal.style.top = (hb + 10) + 'px';
+      const cb = document.querySelector(FINE && innerWidth >= 1100 && document.body.classList.contains('ux2') ? '.cmd-side' : '.cmd-main').getBoundingClientRect().top; homeFab.style.bottom = Math.round(innerHeight - cb + 12) + 'px'; }
     G.audioTick && G.audioTick();
   }
   ui.updHud = updHud;
@@ -9354,7 +9381,14 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     const H = box.offsetHeight, Wd = box.offsetWidth, vh = ar.height;
     const hb = document.querySelector('.hud').getBoundingClientRect().bottom - ar.top + 6;
     let top = null;
-    if (r && innerWidth >= 900 && r.left > innerWidth * 0.55 && r.left > 500) {
+    const sh = document.getElementById('sheet'), inSheet = r && el && innerWidth >= 1100 && sh && !sh.hidden && sh.contains(el);
+    if (inSheet) {
+      // на десктопе окно стоит по центру — подсказку ставим рядом с ним, а не поверх
+      const sr = sh.getBoundingClientRect(), right = innerWidth - sr.right >= Wd + 28;
+      box.style.left = (right ? sr.right - ar.left + 18 : Math.max(10, sr.left - ar.left - Wd - 18)) + 'px'; box.style.transform = 'none';
+      if (!right) box.classList.add('side');
+      top = r.top - ar.top - 10;
+    } else if (r && innerWidth >= 900 && r.left > innerWidth * 0.55 && r.left > 500) {
       box.style.left = Math.max(10, r.left - ar.left - Wd - 18) + 'px'; box.style.transform = 'none';
       top = r.top - ar.top;
     } else if (r) {
@@ -9456,14 +9490,24 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     setTimeout(() => { sh.hidden = true; sh.className = ''; sh.innerHTML = ''; if (cb) cb(); }, 520);
   };
 
+  // ---------- Во весь экран: на заставке и по клавише F
+  const de = document.documentElement;
+  G.canFull = () => !!(de.requestFullscreen || de.webkitRequestFullscreen);
+  G.fullscreen = on => {
+    const cur = document.fullscreenElement || document.webkitFullscreenElement;
+    if (on === undefined) on = !cur;
+    try { if (on && !cur) (de.requestFullscreen || de.webkitRequestFullscreen).call(de); else if (!on && cur) (document.exitFullscreen || document.webkitExitFullscreen).call(document); } catch (e) {}
+  };
+  addEventListener('keydown', e => { if ((e.key === 'f' || e.key === 'F' || e.key === 'а' || e.key === 'А') && !e.ctrlKey && !e.metaKey && !e.altKey && !/INPUT|TEXTAREA/.test(document.activeElement && document.activeElement.tagName)) G.fullscreen(); });
+
   // ---------- Заставка: знак и название до истории мира
   G.brandSplash = function (next) {
     const sp = document.createElement('div'); sp.id = 'splash';
-    sp.innerHTML = `<div class="sp-rays"></div><div class="sp-emblem"></div><h1>Война<br>с энтропией</h1><p>Истины нет. Есть то, что ты удержишь.</p><span class="sp-go">Нажми, чтобы начать</span>`;
+    sp.innerHTML = `<div class="sp-rays"></div><div class="sp-emblem"></div><h1>Война<br>с энтропией</h1><p>Истины нет. Есть то, что ты удержишь.</p><span class="sp-go">Нажми, чтобы начать</span>${G.canFull() ? '<button class="sp-fs">⛶ Во весь экран</button>' : ''}`;
     app.appendChild(sp);
     let done = false;
     const go = () => { if (done) return; done = true; G.shatter('var(--ve-orange)', null, () => { sp.remove(); next && next(); }); };
-    sp.addEventListener('click', go);
+    sp.addEventListener('click', e => { if (e.target.closest('.sp-fs')) G.fullscreen(true); go(); });
     const k = e => { if (e.key === 'Enter' || e.key === ' ') { removeEventListener('keydown', k); go(); } }; addEventListener('keydown', k);
   };
 
