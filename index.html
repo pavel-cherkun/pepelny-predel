@@ -514,7 +514,11 @@ body[data-theme="mutants"] .toast.bad { border-left-color: #c8ff40; }
 @media (min-width: 1100px) and (pointer: fine) { #bark { top: 64px; } }
 
 /* ===== Мини-игры («Испытание») — окно в раме расы ===== */
-.st.trial { color: #fff; animation: pulse 1s infinite; background: none !important; text-shadow: 0 0 8px var(--th-acc); }
+.trial-fab { position: absolute; z-index: 7; right: 10px; display: grid; grid-template-columns: 44px auto; grid-template-rows: auto auto; column-gap: 8px; align-items: center; padding: 8px 14px 8px 8px; text-align: left; border: 2px solid var(--th-acc); background: linear-gradient(var(--th-bg1), var(--th-bg2)); color: var(--th-text); box-shadow: 0 0 18px var(--th-acc), 0 8px 20px rgba(0,0,0,.7); animation: tfPulse 1.4s ease-in-out infinite; cursor: pointer; }
+.trial-fab .tf-ico { grid-row: 1 / 3; width: 44px; height: 44px; background: var(--ui-c_goal) center / contain no-repeat; filter: drop-shadow(0 0 6px var(--th-acc)); }
+.trial-fab b { font-family: var(--th-fd), var(--display); font-weight: 400; font-size: calc(18px * var(--th-fs)); color: var(--th-title); line-height: 1.05; }
+.trial-fab span { font-size: 12px; color: var(--th-acc2); white-space: nowrap; }
+@keyframes tfPulse { 50% { box-shadow: 0 0 32px var(--th-acc), 0 8px 20px rgba(0,0,0,.7); transform: scale(1.04); } }
 #mg { position: absolute; inset: 0; z-index: 25; background: rgba(4,3,5,.72); display: grid; place-items: center; padding: 14px; touch-action: none; }
 #mg .mg-panel { position: relative; width: min(440px, 100%); background: linear-gradient(var(--th-bg1), var(--th-bg2)); padding: 18px 18px 14px; color: var(--th-text); box-shadow: 0 20px 60px rgba(0,0,0,.8); }
 #mg .mg-panel::before { content: ''; position: absolute; inset: -6px; border: 24px solid transparent; border-image: var(--th-panel) 24% / 24px stretch; pointer-events: none; }
@@ -9405,8 +9409,9 @@ if (G.ui) G.ui.intro = () => G.story.open();
 // Раз в 4 минуты в табло загорается «Испытание» — нажал, сыграл, получил награду. Провал не наказывает.
 (function () {
   const box = document.createElement('div'); box.id = 'mg'; box.hidden = true; document.getElementById('app').appendChild(box);
-  const pill = document.createElement('button'); pill.id = 'trialPill'; pill.className = 'st trial'; pill.hidden = true;
-  const hudSt = document.querySelector('.hud-st'); hudSt.insertBefore(pill, document.getElementById('goalPill'));
+  // кнопка испытания — отдельно на карте, справа под табло: её нельзя не заметить
+  const pill = document.createElement('button'); pill.id = 'trialPill'; pill.className = 'trial-fab'; pill.hidden = true;
+  document.getElementById('app').appendChild(pill);
   const R = () => Math.random();
   const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(R() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
   let timers = [];
@@ -9543,10 +9548,10 @@ if (G.ui) G.ui.intro = () => G.story.open();
   pill.addEventListener('click', () => { pill.hidden = true; G.S.trialUntil = 0; open(G.race); });
   setInterval(() => {
     const S = G.S; if (!S || S.intro || S.over) { pill.hidden = true; return; }
-    if (S.trialAt === undefined) S.trialAt = 150;
+    if (S.trialAt === undefined) S.trialAt = Math.max(S.t, 0) + 75;
     if (S.t > S.trialAt) { S.trialAt = S.t + 240; S.trialUntil = S.t + 75; if (G.tutor) G.tutor('trial'); }
     const on = (S.trialUntil || 0) > S.t;
-    if (on) pill.innerHTML = `⚡ Испытание · ${Math.ceil(S.trialUntil - S.t)}`;
+    if (on) { pill.innerHTML = `<i class="tf-ico"></i><b>Испытание</b><span>${(GAMES[G.race] || GAMES.survivors).name} · ${Math.ceil(S.trialUntil - S.t)} с</span>`; const hb = document.querySelector('.hud').getBoundingClientRect().bottom; pill.style.top = hb + 10 + 'px'; }
     pill.hidden = !on;
   }, 500);
 })();
