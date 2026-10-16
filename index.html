@@ -809,8 +809,10 @@ body.ux2 .st.goal::before, body.ux2 .st.raid::before, body.ux2 .trial-fab .tf-ic
 
 /* ===== Десктоп: все окна — по центру поля; награды справа; подсказки — сбоку от окна ===== */
 @media (min-width: 1100px) and (pointer: fine) {
-  body.ux2 #sheet { left: 50% !important; right: auto !important; top: 62px !important; bottom: auto !important; translate: -50% 0; width: clamp(460px, calc(100vw - 820px), 600px) !important; max-height: calc(100% - 162px) !important; }
-  body.ux2 #rewards { top: 130px !important; right: 16px !important; left: auto !important; transform: none !important; width: 360px !important; }
+  body.ux2 #sheet { left: auto !important; right: 16px !important; top: 62px !important; bottom: 86px !important; translate: none; width: var(--strip-w, 600px) !important; max-height: none !important; }
+  body.ux2 #sheetBody .sh-art { position: relative; margin: -10px -18px 10px; height: 210px; display: grid; place-items: end center; background: radial-gradient(60% 70% at 50% 85%, color-mix(in srgb, var(--ux-ac) 22%, transparent), transparent 70%), repeating-linear-gradient(90deg, transparent 0 23px, rgba(255,255,255,.035) 23px 24px), repeating-linear-gradient(0deg, transparent 0 23px, rgba(255,255,255,.035) 23px 24px); border-bottom: 1px solid var(--ux-line); }
+  body.ux2 #sheetBody .sh-art img { height: 200px; width: auto; max-width: 100%; object-fit: contain; filter: drop-shadow(0 6px 10px rgba(0,0,0,.7)); }
+  body.ux2 #rewards { top: 70px !important; left: 50% !important; right: auto !important; transform: translateX(-50%) !important; width: 380px !important; }
   body.ux2 #tutor { width: 390px !important; }
   body.ux2 #tutor .tt-face { width: 60px; height: 60px; }
 }
@@ -7247,6 +7249,24 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     if (spr) { G.sprDraw(c, sheet, sk, 56, 97, { bw: 106, bh: 94 }); return (iconCache[key] = cvs.toDataURL()); }
     return (iconCache[key] = cvs.toDataURL());
   }
+  // ---------- Портрет выбранного: тот же спрайт, что на карте, крупно — для окна справа на десктопе
+  const portCache = {};
+  G.portrait = function (kind, o) {
+    let src = null;
+    if (kind === 'unit') {
+      if (o.type === 'capital' || o.type === 'etower') { const poi = o.poiId && G.poiById(o.poiId); src = [(poi && poi.faction) || G.foes()[0], o.type === 'capital' ? 'citadel' : 'tower']; }
+      else if (G.S.enemies.includes(o)) { const SP = G.ENEMY_SPR[o.type] || (o.type === 'forager' ? (o.fac === 'fungi' ? ['survivors', 'scav', 1] : [o.fac || G.foes()[0], 'scav', 1]) : null); if (SP) src = [SP[0], SP[1]]; }
+      else src = unitSpr(o);
+    } else if (kind === 'building') {
+      let bk = BLD_ALIAS[o.type] || o.type; if (!G.sprHas(G.race, bk) && o.type === 'mechf2') bk = 'mechf1'; src = [G.race, bk];
+    } else if (kind === 'poi') { if (o.type === 'capital') src = [o.faction || G.foes()[0], 'citadel']; else { const S = poiSprite(o); if (S) src = [S[0], S[1]]; } }
+    if (!src || !G.sprHas(src[0], src[1])) return '';
+    const key = src[0] + ':' + src[1];
+    if (portCache[key]) return portCache[key];
+    const cv = document.createElement('canvas'); cv.width = 320; cv.height = 240;
+    noHits = true; try { G.sprDraw(cv.getContext('2d'), src[0], src[1], 160, 234, { bw: 300, bh: 228 }); } finally { noHits = false; }
+    return (portCache[key] = cv.toDataURL());
+  };
   // ---------- Главный кадр
   G.time = 0;
   // ---------- Кэш земли кусками
@@ -7957,6 +7977,14 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     if (!ui.sheet) return;
     const r = RENDER[ui.sheet.kind](ui.sheet.data);
     if (!r) { closeSheet(); return; }
+    // десктоп: в окне справа — крупный портрет того, на что нажали
+    if (FINE && innerWidth >= 1100 && document.body.classList.contains('ux2') && !r.art && (ui.sheet.kind === 'unit' || ui.sheet.kind === 'building' || ui.sheet.kind === 'poi' || ui.sheet.kind === 'tile')) {
+      let k = ui.sheet.kind, d = ui.sheet.data, o = null;
+      if (k === 'tile') { const pi = G.W.poiAt[d.y * G.N + d.x]; if (pi >= 0 && G.W.pois[pi].discovered) { o = G.W.pois[pi]; k = 'poi'; } }
+      else o = k === 'poi' ? G.poiById(d.id) : G.ents.get(d.id);
+      const im = o && G.portrait && G.portrait(k, o);
+      if (im) { r.html = `<div class="sh-art"><img alt="" src="${im}"></div>` + r.html; r.art = 1; }
+    }
     if (sheetTitle.textContent !== r.title) sheetTitle.textContent = r.title;
     if (force || r.html !== lastHtml) {
       if (!force && performance.now() - ui.lastDown < 700) return;
@@ -8780,7 +8808,9 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     if (ag) { const [c, m] = ag.p(s); const gt = `Цель: ${G.goalText(ag.t)} · ${Math.min(c, m)}/${m}`, gi = `${Math.min(c, m)}/${m}`; if (hud.goal.title !== gt) { hud.goal.title = gt; hud.goal.lastChild.textContent = gi; } }
     hud.sound.classList.toggle('off', G.audio.muted);
     { const hb = document.querySelector('.hud').getBoundingClientRect().bottom; feed.style.top = (hb + 4) + 'px'; hud.goal.style.top = (hb + 10) + 'px';
-      const cb = document.querySelector(FINE && innerWidth >= 1100 && document.body.classList.contains('ux2') ? '.cmd-side' : '.cmd-main').getBoundingClientRect().top; homeFab.style.bottom = Math.round(innerHeight - cb + 12) + 'px'; }
+      const cb = document.querySelector(FINE && innerWidth >= 1100 && document.body.classList.contains('ux2') ? '.cmd-side' : '.cmd-main').getBoundingClientRect().top; if (FINE && innerWidth >= 1100 && document.body.classList.contains('ux2')) { const sr = document.querySelector('.cmd-side').getBoundingClientRect(); homeFab.style.bottom = Math.round(innerHeight - sr.bottom + (sr.height - 48) / 2) + 'px'; homeFab.style.right = Math.round(innerWidth - sr.left + 12) + 'px'; }
+      else { homeFab.style.bottom = Math.round(innerHeight - cb + 12) + 'px'; homeFab.style.right = ''; }
+      const sw = document.querySelector('.cmd-side').offsetWidth; if (sw && sw !== ui._sw) { ui._sw = sw; document.documentElement.style.setProperty('--strip-w', sw + 'px'); } }
     G.audioTick && G.audioTick();
   }
   ui.updHud = updHud;
