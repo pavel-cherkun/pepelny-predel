@@ -565,6 +565,22 @@ body[data-theme="mutants"] .toast.bad { border-left-color: #c8ff40; }
 #celebrate.out { opacity: 0; transition: opacity .5s; }
 @keyframes celIn { from { transform: translate(-50%, -40%) scale(.7); opacity: 0; } }
 @keyframes spark { 0% { opacity: 1; transform: rotate(var(--a)) translateY(0); } 100% { opacity: 0; transform: rotate(var(--a)) translateY(calc(-1 * var(--d))); } }
+
+/* ===== Окно награды ===== */
+#rewards { position: absolute; z-index: 10; left: 50%; transform: translateX(-50%); top: calc(env(safe-area-inset-top, 0px) + 168px); width: min(400px, calc(100% - 20px)); display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.rw-card { position: relative; pointer-events: auto; cursor: pointer; padding: 9px 14px 9px; background: linear-gradient(var(--th-bg1), var(--th-bg2)); color: var(--th-text); box-shadow: 0 10px 30px rgba(0,0,0,.75); animation: rwIn .4s cubic-bezier(.2,1.3,.4,1); transition: opacity .45s, transform .45s; }
+.rw-card::before { content: ''; position: absolute; inset: -5px; border: 18px solid transparent; border-image: var(--th-panel) 24% / 18px stretch; pointer-events: none; }
+.rw-card.out { opacity: 0; transform: translateY(-10px); }
+@keyframes rwIn { from { opacity: 0; transform: translateY(-16px) scale(.92); } }
+.rw-k { font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: var(--th-acc); font-weight: 700; }
+.rw-t { font-family: var(--th-fd), var(--display); font-size: calc(16px * var(--th-fs)); color: var(--th-title); line-height: 1.15; margin: 1px 0 5px; }
+.rw-row { display: flex; flex-wrap: wrap; gap: 8px 14px; }
+.rw-i { display: inline-flex; align-items: center; gap: 5px; } .rw-i .ico { width: 24px; height: 24px; }
+.rw-i b { font-size: 16px; color: var(--th-acc2); font-variant-numeric: tabular-nums; text-shadow: 0 0 8px var(--th-acc); } .rw-i small { font-size: 12px; color: var(--th-muted); }
+.rw-art { font-style: normal; font-size: 24px; color: #ffd36a; text-shadow: 0 0 10px #ffb040; } .rw-i.art b { font-size: 14px; }
+.rw-d { margin-top: 5px; font-size: 12.5px; line-height: 1.4; color: var(--th-text); opacity: .85; }
+@media (max-width: 700px) { #rewards .rw-card:nth-child(n+3) { display: none; } }
+@media (min-width: 1100px) and (pointer: fine) { #rewards { top: 64px; left: auto; right: 470px; transform: none; } }
 </style>
 
 </head>
@@ -1736,7 +1752,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRoAxBwBXRUJQVlA4WAoA
     scientist: PRO('Учёный', { key: 'scientist', hp: 80, dmg: 7, range: 4, ranged: true, accent: '#9ad8ff' }, 'НИИ', 'Чинит машины и мехов рядом. Пока жив, улучшения в кузнице на четверть дешевле.'),
     teacher: PRO('Учительница', { key: 'teacher', hp: 90, dmg: 6, accent: '#ffd8a0' }, 'Школа', 'Рядом с ней бойцы растут в полтора раза быстрее.'),
     digger: PRO('Диггер', { key: 'digger', hp: 120, dmg: 10, speed: 1.8, accent: '#c8a070' }, 'Метро', 'Роется в завалах и раз в минуту приносит тайник: лом и эфир.'),
-    signal: PRO('Связист', { key: 'signal', hp: 80, dmg: 7, range: 4.5, ranged: true, vision: 14, accent: '#a0ffa0' }, 'Радиовышка', 'Видит на 14 клеток и раскрывает карту вокруг себя.'),
+    signal: PRO('Связист', { key: 'signal', hp: 80, dmg: 7, range: 4.5, ranged: true, vision: 14, accent: '#a0ffa0' }, 'Радиовышка', 'Видит на 14 клеток и раскрывает карту вокруг. Во время набега раз в 3 минуты вызывает по радио двух бойцов.'),
     exterm: PRO('Дезинсектор', { key: 'exterm', hp: 130, dmg: 12, range: 2.5, ranged: true, splash: 1.2, accent: '#c8ff60', vs: ['fungi', 2] }, 'опорник грибницы', 'Выжигает мицелий и плесень вокруг. По грибнице бьёт вдвое.'),
     lumber: PRO('Лесоруб', { key: 'lumber', hp: 160, dmg: 18, armor: 0.1, accent: '#d89050', vs: ['primates', 3] }, 'опорник приматов', 'Бензопила: по приматам — втрое.'),
     comic: PRO('Стендап-комик', { key: 'comic', hp: 90, dmg: 6, range: 3, ranged: true, accent: '#ffe060', vs: ['clowns', 1.5], weaken: 'clowns' }, 'опорник клоунов', 'Шутит хуже клоунов — и им становится не смешно: клоуны рядом бьют на 30% слабее.'),
@@ -2209,18 +2225,38 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRoAxBwBXRUJQVlA4WAoA
     const U = L.under, Sk = L.sky;
     // подземелья: сплошная порода, в ней залы и тоннели
     for (let y = U.y0; y < U.y0 + U.h; y++) for (let x = U.x0; x < U.x0 + U.w; x++) { const i = y * N + x; W.type[i] = T.CAVE; W.obj[i] = O.CWALL; W.objH[i] = 26 + Math.floor(hash2(x, y, seed + 70) * 18); }
-    const rooms = [];
-    for (let k = 0; k < 26; k++) {
-      const r = 3 + R() * 7, x = U.x0 + 8 + R() * (U.w - 16), y = U.y0 + 8 + R() * (U.h - 16);
-      rooms.push([x, y, r]);
+    // радиально: большой зал под цитаделью, от него лучами — тоннели к залам-карманам; между ними — редкие пещеры
+    const rooms = [], ucx = U.x0 + U.w / 2, ucy = U.y0 + U.h / 2, uR = Math.min(U.w, U.h) / 2 - 10, nRay = 8, ua0 = R() * Math.PI * 2;
+    rooms.push([ucx, ucy, 12]);
+    const rayRooms = [];
+    for (let k = 0; k < nRay; k++) {
+      const a = ua0 + k * Math.PI * 2 / nRay + (R() - 0.5) * 0.25;
+      for (const f of [0.5, 0.92]) rayRooms.push([ucx + Math.cos(a) * uR * f, ucy + Math.sin(a) * uR * f, f > 0.9 ? 6 + R() * 3 : 4 + R() * 3, k]);
     }
+    for (const r of rayRooms) rooms.push([r[0], r[1], r[2]]);
+    for (let k = 0; k < 8; k++) { const a = R() * Math.PI * 2, d = uR * (0.3 + R() * 0.6); rooms.push([ucx + Math.cos(a) * d, ucy + Math.sin(a) * d, 3 + R() * 3]); }
+    W.underRays = { cx: ucx, cy: ucy, rooms: rayRooms };
     const carve = (x, y) => { if (x <= U.x0 || y <= U.y0 || x >= U.x0 + U.w - 1 || y >= U.y0 + U.h - 1) return; const i = y * N + x; W.obj[i] = O.NONE; };
     for (const [rx, ry, r] of rooms) for (let y = Math.floor(ry - r - 2); y <= ry + r + 2; y++) for (let x = Math.floor(rx - r - 2); x <= rx + r + 2; x++) {
       const d = Math.hypot(x - rx, y - ry) + (fbm(x / 5, y / 5, seed + 71) - 0.5) * 4;
       if (d < r) carve(x, y);
     }
-    // тоннели: каждый зал соединяется с ближайшим уже соединённым
-    const done = [rooms[0]];
+    // широкие лучевые тоннели: центр → средний карман → дальний карман
+    const dig = (x0, y0, x1, y1, w) => { const n = Math.ceil(Math.hypot(x1 - x0, y1 - y0)); for (let k = 0; k <= n; k++) { const x = x0 + (x1 - x0) * k / n, y = y0 + (y1 - y0) * k / n, wob = Math.sin(k / 6) * 1.2; for (let dy = -w; dy <= w; dy++) for (let dx = -w; dx <= w; dx++) if (Math.hypot(dx, dy) <= w) carve(Math.round(x + dx + wob), Math.round(y + dy)); } };
+    for (let k = 0; k < nRay; k++) { const [m, f] = rayRooms.filter(r => r[3] === k); dig(ucx, ucy, m[0], m[1], 1.6); dig(m[0], m[1], f[0], f[1], 1.4); }
+    // остальные пещеры — тоннелем к ближайшему уже соединённому
+    const done = rooms.slice(0, 1 + rayRooms.length);
+    for (const rm of rooms.slice(1 + rayRooms.length)) {
+      let best = done[0], bd = 1e9;
+      for (const o of done) { const d = Math.hypot(o[0] - rm[0], o[1] - rm[1]); if (d < bd) { bd = d; best = o; } }
+      let x = Math.floor(rm[0]), y = Math.floor(rm[1]); const tx = Math.floor(best[0]), ty = Math.floor(best[1]);
+      while (x !== tx || y !== ty) {
+        if (x !== tx && (R() < 0.6 || y === ty)) x += Math.sign(tx - x); else y += Math.sign(ty - y);
+        carve(x, y); carve(x + 1, y); carve(x, y + 1);
+      }
+      done.push(rm);
+    }
+    if (false) {
     for (const rm of rooms.slice(1)) {
       let best = done[0], bd = 1e9;
       for (const o of done) { const d = Math.hypot(o[0] - rm[0], o[1] - rm[1]); if (d < bd) { bd = d; best = o; } }
@@ -2231,6 +2267,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRoAxBwBXRUJQVlA4WAoA
       }
       done.push(rm);
     }
+    }
     for (let y = U.y0; y < U.y0 + U.h; y++) for (let x = U.x0; x < U.x0 + U.w; x++) {
       const i = y * N + x; if (W.obj[i]) continue;
       if (fbm(x / 7, y / 7, seed + 72) > 0.62) W.type[i] = T.CAVEC;
@@ -2238,26 +2275,20 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRoAxBwBXRUJQVlA4WAoA
     for (const [x, y] of rooms) seeds.push([Math.floor(x), Math.floor(y)]);
     // небеса: пустота с облачными островами и мостами
     for (let y = Sk.y0; y < Sk.y0 + Sk.h; y++) for (let x = Sk.x0; x < Sk.x0 + Sk.w; x++) W.type[y * N + x] = T.SKY;
-    const isles = [];
-    for (let k = 0; k < 11; k++) {
-      const r = k === 0 ? 13 : 6 + R() * 6;
-      let x = 0, y = 0;
-      for (let t = 0; t < 60; t++) { x = Sk.x0 + 14 + R() * (Sk.w - 28); y = Sk.y0 + 14 + R() * (Sk.h - 28); if (isles.every(o => Math.hypot(o.x - x, o.y - y) > o.r + r + 4)) break; }
-      if (k === 0) { x = Sk.x0 + Sk.w / 2; y = Sk.y0 + Sk.h / 2; }
-      isles.push({ x: Math.floor(x), y: Math.floor(y), r });
-    }
+    // радиально: центральный остров, вокруг — кольцо островов, мосты по кольцу и к центру
+    const isles = [], scx = Sk.x0 + Sk.w / 2, scy = Sk.y0 + Sk.h / 2, sR = Math.min(Sk.w, Sk.h) / 2 - 18, sa0 = R() * Math.PI * 2;
+    isles.push({ x: Math.floor(scx), y: Math.floor(scy), r: 13 });
+    for (let k = 0; k < 8; k++) { const a = sa0 + k * Math.PI / 4 + (R() - 0.5) * 0.2, d = sR * (0.62 + R() * 0.08); isles.push({ x: Math.floor(scx + Math.cos(a) * d), y: Math.floor(scy + Math.sin(a) * d), r: 6 + R() * 4, ring: k }); }
+    for (let k = 0; k < 4; k++) { const a = sa0 + (k * 2 + 1) * Math.PI / 4, d = sR * 0.97; isles.push({ x: Math.floor(scx + Math.cos(a) * d), y: Math.floor(scy + Math.sin(a) * d), r: 5 + R() * 2, outer: true }); }
     for (const is of isles) for (let y = Math.floor(is.y - is.r - 3); y <= is.y + is.r + 3; y++) for (let x = Math.floor(is.x - is.r - 3); x <= is.x + is.r + 3; x++) {
       const d = Math.hypot(x - is.x, y - is.y) + (fbm(x / 4, y / 4, seed + 73) - 0.5) * 5;
       if (d < is.r) W.type[y * N + x] = d < is.r - 2.5 ? T.ISLE : T.CLOUD;
     }
-    const linked = [isles[0]];
-    for (const is of isles.slice(1)) {
-      let best = linked[0], bd = 1e9;
-      for (const o of linked) { const d = Math.hypot(o.x - is.x, o.y - is.y); if (d < bd) { bd = d; best = o; } }
-      const n = Math.ceil(bd);
-      for (let k = 0; k <= n; k++) { const x = Math.round(is.x + (best.x - is.x) * k / n), y = Math.round(is.y + (best.y - is.y) * k / n); for (const [dx, dy] of [[0, 0], [1, 0], [0, 1]]) if (W.type[(y + dy) * N + x + dx] === T.SKY) W.type[(y + dy) * N + x + dx] = T.CLOUD; }
-      linked.push(is);
-    }
+    const bridge = (a, b) => { const n = Math.ceil(Math.hypot(a.x - b.x, a.y - b.y)); for (let k = 0; k <= n; k++) { const x = Math.round(a.x + (b.x - a.x) * k / n), y = Math.round(a.y + (b.y - a.y) * k / n); for (const [dx, dy] of [[0, 0], [1, 0], [0, 1]]) if (W.type[(y + dy) * N + x + dx] === T.SKY) W.type[(y + dy) * N + x + dx] = T.CLOUD; } };
+    const ring = isles.filter(i => i.ring !== undefined);
+    ring.forEach((is, k) => bridge(is, ring[(k + 1) % ring.length]));        // кольцо
+    for (let k = 0; k < ring.length; k += 2) bridge(isles[0], ring[k]);        // четыре моста к центру
+    for (const o of isles.filter(i => i.outer)) { let b = ring[0], bd = 1e9; for (const r of ring) { const d = Math.hypot(r.x - o.x, r.y - o.y); if (d < bd) { bd = d; b = r; } } bridge(o, b); }
     W.isles = isles;
     for (const is of isles) seeds.push([is.x, is.y]);
     return seeds;
@@ -2495,8 +2526,33 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRoAxBwBXRUJQVlA4WAoA
   const center = e => e.kind === 'b' ? [e.x + e.w / 2, e.y + e.h / 2] : [e.x, e.y];
 
   // ---------- Уведомления
+  // награды: всё, что выдано не добычей и не зданиями, показывается окном с иконками и объяснением
+  G.pendingGain = null;
+  function addPend(l, parts) {
+    const P = G.pendingGain || (G.pendingGain = { gain: {}, arts: [], parts: [] });
+    for (const k of ['scrap', 'food', 'water', 'aether', 'fuel']) if (l[k]) P.gain[k] = (P.gain[k] || 0) + l[k];
+    if (l.art) P.arts.push(l.art);
+    if (parts) P.parts.push(parts);
+  }
+  G.flushReward = function (title, text, o) {
+    const P = G.pendingGain; G.pendingGain = null;
+    if (!P || (!Object.keys(P.gain).length && !P.arts.length)) return false;
+    if (G.ui && G.ui.reward) G.ui.reward(P, title, text, o || {}); return true;
+  };
+  // трофеи с убитых копятся и выдаются одним окном: после набега, штурма или раз в минуту
+  G.trophy = function (k, v) { if (!(v > 0)) return; const M = G.RESMAP[G.race]; if (G.race === 'others' && k !== 'aether') { v *= G.ESSENCE_RATE[k] || 0; k = 'aether'; } else if (M && M[k]) k = M[k]; S.trophy = S.trophy || {}; S.trophy[k] = (S.trophy[k] || 0) + v; };
+  function takeTrophy() { const t = S.trophy; S.trophy = null; if (!t) return; const l = {}; for (const k in t) if (t[k] >= 1) l[k] = Math.round(t[k]); if (Object.keys(l).length) addPend(l); }
+  G.takeTrophy = takeTrophy;
   G.notify = function (text, o) {
     o = o || {};
+    if (G.pendingGain) {
+      // сообщение о награде — окном: заголовок — первая фраза, перечень ресурсов — иконками
+      let t = String(text);
+      for (const pt of G.pendingGain.parts) t = t.replace(pt, '');
+      t = t.replace(/(Награда|Добыча|В ящике|Сделка)\s*:\s*$/i, '').replace(/[\s:,.—-]+$/, '').trim();
+      const m = t.match(/^(.+?[.!:])\s+(.*)$/);
+      if (G.flushReward(m ? m[1].replace(/[:.]$/, '') : t, m ? m[2] : '', o)) return;
+    }
     if (G.ui && G.ui.toast) G.ui.toast(text, o);
   };
 
@@ -3049,7 +3105,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRoAxBwBXRUJQVlA4WAoA
   }
   G.demolish = function (b) {
     const D = G.BUILDINGS[b.type];
-    { const rc = G.raceCost(D.cost); for (const k in rc) S.res[k] += Math.floor(rc[k] * 0.5); }
+    { const rc = G.raceCost(D.cost), back = {}; for (const k in rc) back[k] = Math.floor(rc[k] * 0.5); const t = grant(back); if (t) G.notify(`Разобрали «${D.name}». Вернулась половина материалов`, { x: b.x, y: b.y }); }
     b.demolished = true; // снос своими руками: место не достаётся врагу
     destroyBuilding(b);
   };
@@ -3315,6 +3371,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRoAxBwBXRUJQVlA4WAoA
     }
     for (const k of ['scrap', 'food', 'water', 'aether', 'fuel']) if (l[k]) { S.res[k] = (S.res[k] || 0) + l[k]; parts.push(`+${l[k]} ${G.RES[k].name.toLowerCase()}`); }
     if (l.art) { S.inv.push(l.art); parts.push(`артефакт «${G.ARTIFACTS[l.art].name}»`); }
+    addPend(l, parts.join(', '));
     return parts.join(', ');
   }
 
@@ -3327,6 +3384,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRoAxBwBXRUJQVlA4WAoA
 
   function clearPoi(p) {
     p.guarded = false;
+    takeTrophy();
     if (p.type === 'lair' && p.faction && G.bark) G.bark(p.faction, 'lair');
     const t = p.tier;
     const party = S.units.filter(u => { const k = u.task && G.taskById(u.task); return k && k.poi === p.id; });
@@ -3390,10 +3448,10 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRoAxBwBXRUJQVlA4WAoA
     // Иные развоплощают отработанное место: материя уходит в Эссенцию, место исчезает с карты
     if (p.unmake) {
       const gain = 40 + t * 25 + (p.type === 'ruin' || p.type === 'bunker' ? 40 : 0);
-      S.res.aether += gain; inc('aether', gain); p.unmake = false; p.state = 'gone';
+      p.unmake = false; p.state = 'gone'; const gtxt = grant({ aether: gain });
       removePoi(p);
       G.fxBurst(p.x + 0.5, p.y + 0.5, '#b48cff', 40, 1.4); G.floatText(p.x + 0.5, p.y + 0.5, '+' + gain + ' ' + G.RES.aether.name.toLowerCase(), '#c890ff');
-      G.notify(`${u.name} развоплощает «${p.name}»: +${gain} ${G.RES.aether.name.toLowerCase()}. Этого места больше нет`, { x: p.x, y: p.y, kind: 'good' });
+      G.notify(`${u.name} развоплощает «${p.name}». Этого места больше нет`, { x: p.x, y: p.y, kind: 'good' });
       return;
     }
     if (p.type === 'ruin') {
@@ -3540,7 +3598,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRoAxBwBXRUJQVlA4WAoA
       }
       if (ur === 'bears' && u.cls === 'mech1' && R() < 0.3) { for (const o of S.enemies) if (o.hp > 0 && !G.ENEMIES[o.type].boss && hyp(o.x - u.x, o.y - u.y) < 2.8) o.stunT = S.t + 2; G.floatText(u.x, u.y, 'РРРАР!', '#ff6040'); G.shake = 3; }
       if (ur === 'bears' && u.cls === 'mech2') { let cur = t; const hit = [t]; for (let k = 0; k < 5; k++) { const n2 = nearestEnemy(cur.x, cur.y, 4, o => !hit.includes(o)); if (!n2) break; hit.push(n2); G.damage(n2, dmg * 0.5, u); G.bolts.push({ pts: [[cur.x, cur.y], [n2.x, n2.y]], t: 0.2 }); cur = n2; } }
-      if (G.race === 'ai' && machine) { S.res.aether += 0.5; inc('aether', 0.5); } // разбор чужой техники даёт данные
+      if (G.race === 'ai' && machine) { S.res.aether += 0.5; inc('aether', 0.5); G.trophy('aether', 0.5); } // разбор чужой техники даёт данные
       if (ur === 'bears' && u.cls === 'guard') for (const o of S.enemies) if (o.hp > 0 && hyp(o.x - u.x, o.y - u.y) < 1.8) {
         if (o !== t) G.damage(o, dmg * 0.4, u);
         if (!G.ENEMIES[o.type].boss && !G.ENEMIES[o.type].static) { const dx = o.x - u.x, dy = o.y - u.y, d = hyp(dx, dy) || 1, nx = o.x + dx / d * 1.2, ny = o.y + dy / d * 1.2; if (G.walk(Math.floor(nx), Math.floor(ny))) { o.x = nx; o.y = ny; } } // топ — и враги отлетают
@@ -3693,12 +3751,12 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRoAxBwBXRUJQVlA4WAoA
     if (!G.isMachineEnemy(e) && !T.static && !/shade|ghost|wisp/.test(e.type)) addRemains(e.x, e.y, T.boss ? 60 : 8 + Math.min(20, (T.hp || 50) / 15));
     S.stats.kills++;
     const byUs = !src || src.kind !== 'e';
-    if (byUs) { const l = Math.round(T.loot * (1 + (e.tier - 1) * 0.2)); S.res.scrap += l; inc('scrap', l); }
+    if (byUs) { const l = Math.round(T.loot * (1 + (e.tier - 1) * 0.2)); S.res.scrap += l; inc('scrap', l); G.trophy('scrap', l); }
     // грибы съедобны: с грибницы выжившим и мутантам падает еда; клоунам за каждого — Страх
-    if (byUs && e.fac === 'fungi' && (G.race === 'survivors' || G.race === 'mutants')) { S.res.food += 6; inc('food', 6); }
-    if (byUs && G.race === 'clowns') { S.res.aether += 2; inc('aether', 2); }
-    if (byUs && G.race === 'others' && !T.static) { S.res.aether += 2; inc('aether', 2); } // павший развоплощается
-    if (byUs && G.race === 'vampires' && !T.static) { S.res.food += 3; inc('food', 3); } // каждый поверженный — глоток крови
+    if (byUs && e.fac === 'fungi' && (G.race === 'survivors' || G.race === 'mutants')) { S.res.food += 6; inc('food', 6); G.trophy('food', 6); }
+    if (byUs && G.race === 'clowns') { S.res.aether += 2; inc('aether', 2); G.trophy('aether', 2); }
+    if (byUs && G.race === 'others' && !T.static) { S.res.aether += 2; inc('aether', 2); G.trophy('aether', 2); } // павший развоплощается
+    if (byUs && G.race === 'vampires' && !T.static) { S.res.food += 3; inc('food', 3); G.trophy('food', 3); } // каждый поверженный — глоток крови
     if (byUs && G.race === 'bears') S.rage = Math.min(100, (S.rage || 0) + 6);
     if (byUs && src && src.kind === 'u' && G.race === 'vampires' && (HUMANS[e.type] || e.fac === 'survivors') && src.cls !== 'scav') { src.fedT = S.t + 30; src.hp = Math.min(src.st.hp, src.hp + src.st.hp * 0.3); G.floatText(src.x, src.y, 'кровь!', '#ff3040'); }
     if (G.race === 'fungi' && !T.boss && !T.static && ((src && src.kind === 'b' && src.type === 'tower') || e.cordT > S.t)) tryInfect(e);
@@ -4197,10 +4255,18 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRoAxBwBXRUJQVlA4WAoA
       if (u.cls === 'genetic') for (const o of near(4)) if (!G.isVeh(o)) o.hp = Math.min(o.st.hp, o.hp + o.st.hp * 0.003);
       if (u.cls === 'scientist') for (const o of near(5)) if (G.isVeh(o) || G.CLASSES[o.cls].mech) o.hp = Math.min(o.st.hp, o.hp + o.st.hp * 0.01);
       if (u.cls === 'teacher') for (const o of near(6)) o.teachT = S.t + 1.5;
-      if (u.cls === 'signal') G.reveal(u.x, u.y, 16);
+      if (u.cls === 'signal') {
+        G.reveal(u.x, u.y, 16);
+        // во время набега связист раз в 3 минуты вызывает подкрепление по радио: двое бойцов выходят у цитадели
+        if (S.raid.active && (S.signalT || 0) < S.t) {
+          S.signalT = S.t + 180; const c = G.cit();
+          if (c) for (let k = 0; k < 2; k++) { const w = G.nearestWalkable(Math.floor(c.x + 1 + k), Math.floor(c.y + c.h + 1), 4); if (w) { const nu = G.makeUnit(k ? 'gunner' : 'guard', w[0] + 0.5, w[1] + 0.5, { lvl: Math.max(1, Math.round((S.avgLvl || 1))) }); G.fxBurst(nu.x, nu.y, '#a0ffa0', 14); } }
+          G.notify(`${u.name} вызвал подкрепление по радио: двое бойцов уже у цитадели`, { ent: u.id, kind: 'good' });
+        }
+      }
       if (u.cls === 'exterm' && S.myc) mycClear(u.x, u.y, 2.5, [2, 3]);
     }
-    if (u.cls === 'digger') { u.digT = (u.digT === undefined ? 60 : u.digT) - dt; if (u.digT <= 0) { u.digT = 60; S.res.scrap += 30; inc('scrap', 30); S.res.aether += 10; inc('aether', 10); G.floatText(u.x, u.y, 'тайник!', '#ffd890'); } }
+    if (u.cls === 'digger') { u.digT = (u.digT === undefined ? 60 : u.digT) - dt; if (u.digT <= 0) { u.digT = 60; G.floatText(u.x, u.y, 'тайник!', '#ffd890'); G.notify(`Диггер ${u.name} откопал тайник в завалах. ${grant({ scrap: 30, aether: 10 })}`, { ent: u.id }); } }
     // искры у ветеранов
     if (u.lvl >= 7 && R() < dt * (u.lvl >= 10 ? 3 : 1.5)) G.fxSpark(u.x, u.y, u.lvl >= 10 ? '#ffd36a' : G.CLASSES[u.cls].accent);
     // целитель
@@ -5046,6 +5112,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRoAxBwBXRUJQVlA4WAoA
     if (lostRaid) return;
     let n = 0;
     for (const u of S.units) if (distTo(u.x, u.y, c) < G.zoneR() + 10) { gainXp(u, 10 + r.wave * 2); u.raidsSurvived++; n++; }
+    takeTrophy(); // трофеи набега — в то же окно
     const loot = grant({ scrap: 20 + r.wave * 8 });
     G.notify(`Набег №${r.wave} отбит. Опыт получили ${n} защитников. ${loot}`, { kind: 'good' });
   }
@@ -5167,7 +5234,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRoAxBwBXRUJQVlA4WAoA
       { t: 'Послать к чёрту', fx: () => { const c = G.cit(); const a = R() * Math.PI * 2; const n = 3 + Math.floor(S.raid.wave / 2); for (let i = 0; i < n; i++) G.makeEnemy('raider', c.x + 1.5 + Math.cos(a) * 16 + R() * 2, c.y + 1.5 + Math.sin(a) * 16 + R() * 2, { mode: 'raid', mul: 1 + 0.08 * S.raid.wave }); G.notify(`Рейдеры возвращаются: ${n} стволов`, { kind: 'bad' }); } }] },
     beast: { races: ['survivors'], title: 'Раненый зверь', text: 'Следопыты нашли в овраге мутировавшего пса с перебитой лапой. Он рычит, но не кусает.', opts: [
       { t: 'Выходить (−20 еды)', cost: { food: 20 }, fx: () => { const u = someUnit(u => G.CLASSES[u.cls].role === 'fighter' && !u.art); if (u) { S.inv.push('collar'); G.notify('Пёс ушёл в пустошь, но оставил свой ошейник. В сумке: «Шипастый ошейник»', { kind: 'good' }); } else G.notify('Пёс окреп и ушёл, оглядываясь'); } },
-      { t: 'Пустить на мясо (+40 еды)', fx: () => { S.res.food += 40; } }] },
+      { t: 'Пустить на мясо (+40 еды)', fx: () => { G.notify('Пустили на мясо. ' + grant({ food: 40 })); } }] },
     wanderer: { races: ['survivors'], title: 'Путник у ворот', text: 'Из пепельной бури вышел исхудавший путник. Просит еды и крова.', opts: [
       { t: 'Принять', cost: { food: 25 }, fx: () => { const sp = spawnPoint(); const u = G.makeUnit(pick(['scav', 'scout', 'guard']), sp[0], sp[1]); G.notify(`${u.name} теперь с нами (${G.CLASSES[u.cls].name})`, { ent: u.id, kind: 'good' }); } },
       { t: 'Прогнать', fx: () => {} }] },
@@ -5193,14 +5260,14 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRoAxBwBXRUJQVlA4WAoA
       { t: 'Запомнить координаты', fx: () => revealNearest('cage', 'Сигнал идёт отсюда') },
       { t: 'Выключить приёмник', fx: () => {} }] },
     harvest: { races: ['survivors'], title: 'Странный урожай', text: 'На грядках выросли светящиеся клубни. Пахнут мясом.', opts: [
-      { t: 'Съесть', fx: () => { S.res.food += 90; const u = someUnit(u => !u.traits.includes('mutant')); if (u && R() < 0.6) { u.traits.push('mutant'); G.recalc(u); G.notify(`${u.name} мутирует: +30% здоровья, −10% скорости`, { ent: u.id }); } else G.notify('+90 еды. Вроде все целы'); } },
+      { t: 'Съесть', fx: () => { G.notify('Съели находку. ' + grant({ food: 90 })); const u = someUnit(u => !u.traits.includes('mutant')); if (u && R() < 0.6) { u.traits.push('mutant'); G.recalc(u); G.notify(`${u.name} мутирует: +30% здоровья, −10% скорости`, { ent: u.id }); } else G.notify('+90 еды. Вроде все целы'); } },
       { t: 'Сжечь', fx: () => {} }] },
     molt: { races: ['mutants'], title: 'Линька', need: () => someUnit(), text: '{a} сбрасывает старый панцирь. Под ним — что-то новое.', opts: [
       { t: 'Дать отлежаться', cost: { food: 30 }, fx: (d) => { const u = G.ents.get(d.a); if (u) { gainXp(u, 60); G.notify(`${u.name} выходит из линьки окрепшим: +опыт`, { ent: u.id, kind: 'good' }); } } },
       { t: 'Гнать работать', fx: (d) => { const u = G.ents.get(d.a); if (u) { u.hp = Math.max(1, u.hp * 0.5); G.notify(`${u.name} работает в мягком панцире и ранится`, { ent: u.id }); } } }] },
     clutch: { races: ['mutants'], title: 'Кладка', text: 'В Улье отложены яйца. Можно согреть их — или съесть.', opts: [
       { t: 'Согреть (−40 грибов)', cost: { food: 40 }, fx: () => { for (let k = 0; k < 2; k++) { const sp = spawnPoint(); G.makeUnit('scav', sp[0], sp[1]); } G.notify(`Вылупились два новых: ${G.CLASSES.scav.name}`, { kind: 'good' }); } },
-      { t: 'Съесть', fx: () => { S.res.food += 60; } }] },
+      { t: 'Съесть', fx: () => { G.notify('Съели. ' + grant({ food: 60 })); } }] },
     whisper: { races: ['others'], title: 'Шёпот Пустоты', text: 'Разлом шепчет: он отдаст силу, если ему отдадут кого-то из слабых.', opts: [
       { t: 'Отдать слабейшего', fx: () => { const l = S.units.filter(u => !G.isVeh(u)).sort((a, b) => a.lvl - b.lvl); const u = l[0]; if (u && S.units.length > 3) { u.hp = 0; u.dead = true; G.notify(`${u.name} уходит в Разлом. ${grant({ aether: 160 })}`, { kind: 'event' }); } } },
       { t: 'Отказать', fx: () => {} }] },
@@ -5497,6 +5564,9 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRoAxBwBXRUJQVlA4WAoA
     if (S.units.some(u => u.dead)) { for (const u of S.units) if (u.dead) G.ents.delete(u.id); S.units = S.units.filter(u => !u.dead); }
     if (S.enemies.some(e => e.dead)) { for (const e of S.enemies) if (e.dead) G.ents.delete(e.id); S.enemies = S.enemies.filter(e => !e.dead); }
     foldRes(); // и в конце кадра — чтобы в табло никогда не было чужого
+    // трофеи вне набега — одним окном раз в минуту; невыданная награда без сообщения — общим окном
+    if (S.trophy && !S.raid.active && (S.trophyT || 0) < S.t) { S.trophyT = S.t + 60; takeTrophy(); G.flushReward('Трофеи с поверженных', 'Добыча с врагов, убитых за последнюю минуту.'); }
+    if (G.pendingGain) G.flushReward('Награда', '');
   };
   // ---------- Группа врагов из бюджета (для финала и мини-набегов)
   function racePool(w, fac) {
@@ -7504,6 +7574,21 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRoAxBwBXRUJQVlA4WAoA
   }
   function meter(f, cls) { return `<div class="meter ${cls || ''}"><i style="width:${Math.max(0, Math.min(100, f * 100)).toFixed(1)}%"></i></div>`; }
 
+  // ---------- Окно награды: иконки ресурсов, за что получили; не останавливает игру, закрывается само
+  const rwBox = document.createElement('div'); rwBox.id = 'rewards'; document.getElementById('app').appendChild(rwBox);
+  ui.reward = function (P, title, text, o) {
+    const fmtN = v => v >= 10 ? Math.round(v) : Math.round(v * 10) / 10;
+    const items = Object.keys(P.gain).filter(k => P.gain[k] > 0).map(k => `<span class="rw-i"><i class="ico ico-${k}"></i><b>+${fmtN(P.gain[k])}</b><small>${G.RES[k].name}</small></span>`)
+      .concat(P.arts.map(a => `<span class="rw-i art"><i class="rw-art">✦</i><b>${esc(G.ARTIFACTS[a].name)}</b><small>артефакт</small></span>`));
+    if (!items.length) return;
+    const el = document.createElement('div'); el.className = 'rw-card';
+    el.innerHTML = `<div class="rw-k">Награда</div><div class="rw-t">${esc(title || 'Награда')}</div><div class="rw-row">${items.join('')}</div>${text ? `<div class="rw-d">${esc(text)}</div>` : ''}`;
+    el.addEventListener('click', () => { if (o.ent) { const e = G.ents.get(o.ent); if (e) G.lookAt(e.x, e.y); } else if (o.x !== undefined) G.lookAt(o.x + 0.5, o.y + 0.5); el.remove(); });
+    rwBox.prepend(el);
+    while (rwBox.children.length > 3) rwBox.lastChild.remove();
+    if (G.sfx) G.sfx('goal');
+    setTimeout(() => { el.classList.add('out'); setTimeout(() => el.remove(), 450); }, 6500);
+  };
   // ---------- Уведомления
   let foundEl = null, foundT = 0;
   ui.toast = function (text, o) {
