@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kelly+Slab&family=Fira+Sans+Condensed:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Rubik+Glitch&family=Rubik+Wet+Paint&family=Rubik+Microbe&family=Oranienbaum&family=Cormorant+SC:wght@600;700&family=Amatic+SC:wght@700&family=Comfortaa:wght@700&family=Nunito:wght@600;700;800&family=Lobster&family=Tektur:wght@400;600;800&family=Golos+Text:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tektur:wght@400;600;700;800&family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap">
 <style>
 /* Раскладка: карта на весь экран, тонкий HUD сверху, док снизу, лист-панель снизу на телефоне и справа на десктопе */
 :root {
@@ -608,7 +608,7 @@ body[data-theme="mutants"] .toast.bad { border-left-color: #c8ff40; }
 #splash { position: absolute; inset: 0; z-index: 35; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; color: var(--ve-orange); cursor: pointer; overflow: hidden; text-align: center; padding: 20px; }
 #splash .sp-rays { position: absolute; inset: -50%; color: rgba(255,123,35,.08); background: var(--ve-rays); animation: spSpin 60s linear infinite; }
 #splash .sp-emblem { position: relative; width: min(64vw, 46vh, 420px); aspect-ratio: 1; background: var(--ve-orange); -webkit-mask: var(--ve-emblem) center / contain no-repeat; mask: var(--ve-emblem) center / contain no-repeat; animation: spIn 1s cubic-bezier(.2,1.3,.4,1), spBreath 4s ease-in-out 1s infinite; filter: drop-shadow(0 0 30px rgba(255,123,35,.45)); }
-#splash h1 { position: relative; margin: 6px 0 0; font-family: 'Kelly Slab', var(--display); font-weight: 400; font-size: clamp(34px, 8vw, 64px); line-height: .95; letter-spacing: .02em; text-transform: uppercase; color: var(--ve-orange); }
+#splash h1 { position: relative; margin: 6px 0 0; font-family: 'Tektur', var(--display); font-weight: 800; font-size: clamp(34px, 8vw, 64px); line-height: .95; letter-spacing: .02em; text-transform: uppercase; color: var(--ve-orange); }
 #splash p { position: relative; margin: 0; color: #fff; font-size: 15px; letter-spacing: .04em; opacity: .85; }
 #splash .sp-go { position: relative; margin-top: 18px; font-size: 13px; letter-spacing: .2em; text-transform: uppercase; color: #000; background: var(--ve-orange); padding: 8px 16px; animation: hintPulse 1.6s infinite; }
 @keyframes spSpin { to { transform: rotate(360deg); } }
@@ -635,9 +635,9 @@ body[data-theme="mutants"] .toast.bad { border-left-color: #c8ff40; }
 #seal .se-pat.checker { background: var(--ve-checker); transform: rotate(18deg) scale(1.2); }
 #seal .se-pat.diamonds { background: var(--ve-diamonds); }
 #seal .se-pat.shards { background: linear-gradient(115deg, transparent 30%, currentColor 30% 34%, transparent 34% 58%, currentColor 58% 61%, transparent 61%), linear-gradient(35deg, transparent 40%, currentColor 40% 45%, transparent 45%), var(--ve-checker); }
-#seal .se-ring b { position: relative; min-width: 46%; aspect-ratio: 1; display: grid; place-items: center; border-radius: 50%; background: #000; border: 8px solid var(--c); font-family: 'Kelly Slab', var(--display); font-weight: 400; font-size: clamp(40px, 12vw, 74px); color: var(--c); }
+#seal .se-ring b { position: relative; min-width: 46%; aspect-ratio: 1; display: grid; place-items: center; border-radius: 50%; background: #000; border: 8px solid var(--c); font-family: 'Tektur', var(--display); font-weight: 400; font-size: clamp(40px, 12vw, 74px); color: var(--c); }
 #seal .se-t { text-align: center; } #seal .se-t span { display: block; font-size: 12px; letter-spacing: .3em; text-transform: uppercase; color: #fff; opacity: .8; }
-#seal h2 { margin: 4px 0 0; font-family: 'Kelly Slab', var(--display); font-weight: 400; font-size: clamp(30px, 7vw, 52px); text-transform: uppercase; color: var(--c); }
+#seal h2 { margin: 4px 0 0; font-family: 'Tektur', var(--display); font-weight: 800; font-size: clamp(30px, 7vw, 52px); text-transform: uppercase; color: var(--c); }
 /* лайм — награды, праздник, испытание */
 .rw-k { color: var(--ve-lime) !important; }
 .rw-row { position: relative; }
@@ -756,7 +756,7 @@ body.ux2 .trial-fab { border-radius: 0 !important; clip-path: var(--ux-cut); bac
 body.ux2 .trial-fab b { font-family: var(--ux-hd) !important; font-weight: 800; text-transform: uppercase; }
 body.ux2 #mg .mg-panel { background: var(--ux-bg) !important; background-image: var(--ux-dots) !important; border: 1px solid var(--ux-line2); clip-path: var(--ux-cut); }
 body.ux2 #mg h3 { font-family: var(--ux-hd) !important; font-weight: 800; text-transform: uppercase; color: var(--ux-tx) !important; text-shadow: none !important; }
-body.ux2 #celebrate .cel-txt { background: var(--ux-bg) !important; clip-path: var(--ux-cut); }
+body.ux2 #celebrate .cel-txt { background: var(--ux-bg) !important; clip-path: var(--ux-cut); margin-top: 8px !important; }
 body.ux2 #celebrate .cel-txt b { font-family: var(--ux-hd) !important; font-weight: 800; text-transform: uppercase; }
 body.ux2 #celebrate .cel-face { border-radius: 0 !important; clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); border: 0 !important; }
 
@@ -891,6 +891,61 @@ body.ux2 .mf-pop { top: 0 !important; }
 /* фильтр мини-карты — воронка */
 .mf-toggle svg { display: block; width: 100%; height: 100%; fill: var(--ux-ac, var(--th-acc)); }
 body.ux2 .mf-toggle { padding: 5px !important; }
+
+/* ===== Единый шрифт во всей игре: заголовки — Tektur, текст — Golos Text, подписи — JetBrains Mono ===== */
+body.ux2 { --th-fd: var(--ux-hd); --th-fb: var(--ux-bd); --th-fs: 1; --display: var(--ux-hd); --body: var(--ux-bd); }
+body.ux2 button, body.ux2 input, body.ux2 select { font-family: var(--ux-bd); }
+
+/* ===== Пролог и выбор расы — в языке интерфейса ===== */
+body.ux2 #story { background: #060608; }
+body.ux2 #story .st-bg { filter: blur(22px) brightness(.28) saturate(1.1) !important; }
+body.ux2 #story .st-art { box-shadow: 0 0 0 1px var(--ux-line2), 0 30px 80px rgba(0,0,0,.7) !important; border-radius: 0 !important; }
+body.ux2 #story .st-art::after { border: 0 !important; border-image: none !important; inset: -7px !important;
+  background: linear-gradient(var(--ux-ac), var(--ux-ac)) 0 0 / 22px 2px, linear-gradient(var(--ux-ac), var(--ux-ac)) 0 0 / 2px 22px,
+    linear-gradient(var(--ux-ac), var(--ux-ac)) 100% 0 / 22px 2px, linear-gradient(var(--ux-ac), var(--ux-ac)) 100% 0 / 2px 22px,
+    linear-gradient(var(--ux-ac), var(--ux-ac)) 0 100% / 22px 2px, linear-gradient(var(--ux-ac), var(--ux-ac)) 0 100% / 2px 22px,
+    linear-gradient(var(--ux-ac), var(--ux-ac)) 100% 100% / 22px 2px, linear-gradient(var(--ux-ac), var(--ux-ac)) 100% 100% / 2px 22px !important;
+  background-repeat: no-repeat !important; filter: none !important; }
+body.ux2 #story.hero .st-art { box-shadow: none !important; }
+body.ux2 #story h1 { font-family: var(--ux-hd) !important; font-weight: 800 !important; text-transform: uppercase; letter-spacing: .01em; color: var(--ux-tx) !important; text-shadow: none !important; font-size: clamp(28px, 4.6vw, 58px) !important; line-height: .98 !important; }
+body.ux2 #story .st-kicker { font-family: var(--ux-mono) !important; font-weight: 600; font-size: 11px !important; letter-spacing: .2em; color: var(--ux-ac) !important; text-shadow: none !important; }
+body.ux2 #story .st-kicker::before { content: '■ '; }
+body.ux2 #story .st-slogan { font-family: var(--ux-bd) !important; font-weight: 600; font-style: normal !important; font-size: 18px !important; color: var(--ux-tx) !important; text-shadow: none !important; border-left: 3px solid var(--ux-ac) !important; padding-left: 10px; }
+body.ux2 #story .st-truth { font-family: var(--ux-bd) !important; font-style: normal !important; color: var(--ux-mu) !important; }
+body.ux2 #story .st-truth span { font-family: var(--ux-mono); letter-spacing: .16em; text-transform: uppercase; color: var(--ux-mu); }
+body.ux2 #story .st-cap { background: rgba(10,10,11,.92) !important; border: 1px solid var(--ux-line) !important; border-left: 3px solid var(--ux-ac) !important; border-radius: 0 !important; box-shadow: none !important; font-family: var(--ux-bd) !important; font-size: 16px; line-height: 1.5; color: var(--ux-tx) !important; padding: 12px 16px !important; }
+body.ux2 #story .st-cap::before, body.ux2 #story .st-cap::after { display: none !important; }
+body.ux2 #story .st-cap.old { color: var(--ux-mu) !important; border-left-color: var(--ux-line2) !important; }
+body.ux2 #story .st-go, body.ux2 #story .st-pick { font-family: var(--ux-hd) !important; font-weight: 700; font-style: normal !important; text-transform: uppercase; letter-spacing: .04em; font-size: 15px !important; color: #000 !important; background: var(--ux-ac) !important; border: 0 !important; border-image: none !important; border-radius: 0 !important; clip-path: var(--ux-cut); padding: 11px 18px !important; text-shadow: none !important; box-shadow: none !important; }
+body.ux2 #story .st-go::before, body.ux2 #story .st-pick::before, body.ux2 #story .st-go::after, body.ux2 #story .st-pick::after { display: none !important; }
+body.ux2 #story .st-hint { font-family: var(--ux-mono); font-size: 11px; text-transform: uppercase; letter-spacing: .16em; color: var(--ux-mu) !important; }
+body.ux2 #story .st-hint::after { color: var(--ux-ac) !important; }
+body.ux2 #story .st-dots i { width: 8px !important; height: 8px !important; transform: none !important; border-radius: 0 !important; background: rgba(255,255,255,.18) !important; box-shadow: none !important; }
+body.ux2 #story .st-dots i.on { background: var(--ux-ac) !important; width: 22px !important; }
+body.ux2 #story .st-arrow { border-radius: 0 !important; background: rgba(10,10,11,.9) !important; border: 1px solid var(--ux-line2) !important; box-shadow: none !important; }
+body.ux2 #story .st-arrow::before, body.ux2 #story .st-arrow::after { display: none !important; }
+body.ux2 #story .st-arrow svg { stroke: var(--ux-ac) !important; filter: none !important; }
+body.ux2 #story .st-arrow:hover { background: var(--ux-ac) !important; } body.ux2 #story .st-arrow:hover svg { stroke: #000 !important; }
+body.ux2 #story .st-who { border-radius: 0 !important; border: 1px solid var(--ux-line2) !important; box-shadow: none !important; }
+body.ux2 #story .st-whoname { font-family: var(--ux-hd) !important; font-weight: 700; text-transform: uppercase; color: var(--ux-ac) !important; text-shadow: none !important; font-size: 16px !important; }
+body.ux2 #story[data-r] .st-cap, body.ux2 #story[data-r] .st-cap.new { font-family: var(--ux-bd) !important; font-size: 16px !important; }
+
+/* выбор расы в окне новой партии */
+body.ux2 .race-pick { gap: 6px; }
+body.ux2 .race-pick button { background: var(--ux-bg2) !important; border: 1px solid var(--ux-line) !important; border-image: none !important; border-radius: 0 !important; padding: 10px 12px !important; box-shadow: none !important; position: relative; }
+body.ux2 .race-pick button::before, body.ux2 .race-pick button::after { display: none !important; }
+body.ux2 .race-pick button:hover { border-color: var(--ux-ac) !important; background: #18181b !important; }
+body.ux2 .race-pick button b { font-family: var(--ux-hd) !important; font-weight: 700 !important; text-transform: uppercase; font-size: 15px !important; color: var(--ux-tx) !important; text-shadow: none !important; }
+body.ux2 .race-pick button span { font-family: var(--ux-bd) !important; color: var(--ux-mu) !important; font-size: 12.5px !important; }
+
+/* ===== Портреты капитанов целиком: квадрат рядом с текстом, без обрезки ===== */
+body.ux2 #tutor .tt-bubble > .tt-face, #tutor .tt-bubble > .tt-face { float: left; display: block; width: 128px !important; height: 128px !important; margin: 2px 14px 8px 0 !important; background-size: cover !important; background-position: center !important; border: 1px solid var(--ux-line2) !important; border-radius: 0 !important; clip-path: none !important; box-shadow: none !important; outline: 0 !important; }
+#tutor .tt-bubble { overflow: hidden; }
+#tutor .tt-btns { clear: both; }
+@media (max-width: 700px) { body.ux2 #tutor .tt-bubble > .tt-face, #tutor .tt-bubble > .tt-face { width: 92px !important; height: 92px !important; } }
+body.ux2 #celebrate .cel-face { clip-path: none !important; border-radius: 0 !important; border: 2px solid var(--ux-ac, var(--th-acc)) !important; background-position: center !important; }
+body.ux2 #bark .bk-face { background-position: center !important; }
+body.ux2 #story .st-who { background-position: center !important; width: 72px !important; height: 72px !important; }
 </style>
 
 </head>
@@ -7463,7 +7518,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
   const SKYL = G.LAYERS.sky;
   const isSkyChunk = (X0, Y0) => X0 + CH > SKYL.x0 && Y0 + CH > SKYL.y0 && X0 < SKYL.x0 + SKYL.w && Y0 < SKYL.y0 + SKYL.h;
   function chunkBox(X0, Y0) {
-    const sky = isSkyChunk(X0, Y0), ps = sky ? 24 : CPAD, pb = sky ? 90 : CPAD;
+    const sky = isSkyChunk(X0, Y0), ps = sky ? 48 : CPAD, pb = sky ? 96 : CPAD;
     return [(X0 - Y0 - CH) * HW - ps, (X0 + Y0) * HH - ps, 2 * CH * HW + 2 * ps, 2 * CH * HH + ps + pb];
   }
   function chunkSig(W, S, X0, Y0) {
@@ -7493,7 +7548,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     c.setTransform(sc, 0, 0, sc, -minx * sc, -miny * sc);
     const GP = G.texOn === false ? null : G.groundPats(ctx), gl = GP ? groundLayer(W) : null;
     const gpaths = GP ? Array.from({ length: 32 }, () => new Path2D()) : null, rim = new Path2D(), shore = new Path2D();
-    const LP = G.layerPats(ctx), mycP = new Path2D(), moldP = new Path2D(), foeMycP = new Path2D(), mycRim = new Path2D(); const cur = new Path2D(), curEdge = new Path2D(), curBot = new Path2D(), skyTop = new Path2D(); let curN = 0;
+    const LP = G.layerPats(ctx), mycP = new Path2D(), moldP = new Path2D(), foeMycP = new Path2D(), mycRim = new Path2D(); const puffs = []; let curN = 0, s_puffs = null;
     const MY = S.myc || null;
     const paths = [];
     if (!GP) for (let i = 0; i < PAL.length * 3; i++) paths.push(new Path2D());
@@ -7506,13 +7561,16 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
       const t = W.type[i];
       if (t === T.VOID) continue;
       const v = MY ? MY[i] : 0;
-      if (t === T.SKY && x > 0 && y > 0 && x < N - 1 && y < N - 1) {
-        // облако заходит в клетку неба плавным языком; если облако позади (−x или −y) — это его передний край: оттуда свисает бок
+      if ((t === T.CLOUD || t === T.ISLE) && x > 0 && y > 0 && x < N - 1 && y < N - 1) {
+        // край острова: клуб облака, вынесенный наружу — к небу
+        let ox = 0, oy = 0, front = false;
         for (let k = 0; k < 4; k++) {
-          const dx = k === 0 ? 1 : k === 1 ? -1 : 0, dy = k === 2 ? 1 : k === 3 ? -1 : 0, j = i + dx + dy * N, tn = W.type[j];
-          if ((tn !== T.CLOUD && tn !== T.ISLE) || !W.explored[j]) continue;
-          tongue(gpaths ? gpaths[TEX_OF[tn]] : skyTop, null, x, y, dx, dy);
-          if (dx === -1 || dy === -1) { hang(cur, curBot, lastTongue); curN++; }
+          const dx = k === 0 ? 1 : k === 1 ? -1 : 0, dy = k === 2 ? 1 : k === 3 ? -1 : 0, tn = W.type[i + dx + dy * N];
+          if (tn === T.SKY || tn === T.VOID) { ox += (dx - dy) * HW; oy += (dx + dy) * HH; if (dx > 0 || dy > 0) front = true; }
+        }
+        if (ox || oy || front) {
+          const d = Math.hypot(ox, oy) || 1, h = G.hash2(x, y, 951);
+          puffs.push({ x: ix + ox / d * 14, y: iy + oy / d * 9, r: 22 + 12 * h, L: TEX_OF[t], front });
         }
       }
       if (v) { if (v === 1) diamond(mycP, ix, iy); else if (v === 2) diamond(foeMycP, ix, iy); else if (v === 3) diamond(moldP, ix, iy); }
@@ -7546,17 +7604,16 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
       const pi = W.poiAt[i];
       if (pi >= 0) objs.push([x + y + 1.4, 2, W.pois[pi], pi]);
     }
-    if (curN) {
-      // бока облачных островов — до верхушек: острова впереди их перекрывают
-      const cp = LP && LP[15];
-      c.save(); c.translate(10, 34); c.fillStyle = 'rgba(2,6,30,.3)'; c.fill(cur); c.restore();
-      c.fillStyle = '#c9d7f2'; c.fill(cur);
-      if (cp) { cp.setTransform(new DOMMatrix([0.6, 0, 0, 0.6, 0, 0])); c.fillStyle = cp; c.globalAlpha = 0.75; c.fill(cur); c.globalAlpha = 1; }
-      c.fillStyle = 'rgba(70,110,210,.26)'; c.fill(cur);
-      c.lineJoin = c.lineCap = 'round';
-      c.strokeStyle = 'rgba(60,90,190,.55)'; c.lineWidth = 7; c.stroke(curBot);
-      c.strokeStyle = '#0a0d1e'; c.lineWidth = 2.5; c.stroke(curBot);
-    }
+    if (puffs.length) {
+      const circ = (path, dx, dy, k, onlyFront) => { for (const q of puffs) { if (onlyFront && !q.front) continue; path.moveTo(q.x + dx + q.r * k, q.y + dy); path.arc(q.x + dx, q.y + dy, q.r * k, 0, Math.PI * 2); } };
+      const sh = new Path2D(), ink = new Path2D(), belly = new Path2D(), belly2 = new Path2D();
+      circ(sh, 14, 58, 1.05, true); circ(ink, 0, 26, 1, true); circ(belly, 0, 26, 1, true); circ(belly2, 0, 15, 0.86, true);
+      c.fillStyle = 'rgba(2,6,30,.32)'; c.fill(sh);
+      c.lineJoin = 'round'; c.strokeStyle = '#0b0e22'; c.lineWidth = 5; c.stroke(ink);
+      c.fillStyle = '#7d8fc8'; c.fill(belly);
+      c.fillStyle = '#a9b8e6'; c.fill(belly2);
+      s_puffs = puffs;
+    } else s_puffs = null;
     if (GP) {
       for (const L of GORDER) {
         const pt = GP[L]; pt.setTransform(isoMat(TEX_K[L] || 3));
@@ -7565,6 +7622,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
       }
       for (let L = 16; L < 32; L++) {
         if (L === 23) continue; // открытое небо — дальним фоном с параллаксом
+        if (s_puffs && (L === 20 || L === 21)) { const pp = new Path2D(); for (const q of s_puffs) if (q.L === L) { pp.moveTo(q.x + q.r, q.y); pp.arc(q.x, q.y, q.r, 0, Math.PI * 2); } gpaths[L].addPath(pp); }
         if (LP) { const pt = LP[L - 16]; pt.setTransform(isoMat(L === 23 || L === 20 || L === 21 ? 5 : 3)); c.fillStyle = pt; }
         else c.fillStyle = LAYER_COL[L] || '#333';
         c.fill(gpaths[L]);
@@ -7597,7 +7655,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     c.fillStyle = '#0b0a0e'; c.fill(fog);
     c.fillStyle = 'rgba(10,9,14,.55)'; c.fill(edge);
     const ch = old || {};
-    Object.assign(ch, { cv, s: sc, sig: chunkSig(W, S, X0, Y0), objs, hits, dirty: false, chk: performance.now(), used: performance.now(), cur: curN ? cur : null, curEdge: curN ? curEdge : null, curBot: curN ? curBot : null });
+    Object.assign(ch, { cv, s: sc, sig: chunkSig(W, S, X0, Y0), objs, hits, dirty: false, chk: performance.now(), used: performance.now(), cur: null });
     CK.map.set(cy * 1000 + cx, ch);
     return ch;
   }
@@ -7931,7 +7989,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
       const sel = ui.selId === u.id;
       if (u.hp < u.st.hp || sel) bar(ctx, ax, ay - 38, 16 * k, 2.2 * k, u.hp / u.st.hp, '#7ad060');
       if (u.lvl >= 10 || sel || (z > 1.3 && u.lvl >= 5)) {
-        ctx.font = `600 ${9 * k}px "Fira Sans Condensed", sans-serif`; ctx.textAlign = 'center';
+        ctx.font = `600 ${9 * k}px "Golos Text", sans-serif`; ctx.textAlign = 'center';
         ctx.fillStyle = 'rgba(0,0,0,.6)'; ctx.fillText(u.name + ' · ' + u.lvl, ax + 0.6, ay - 42 - 2 * k + 0.6);
         ctx.fillStyle = u.lvl >= 10 ? '#ffd36a' : sel ? '#ffe8b0' : '#e8dccb'; ctx.fillText(u.name + ' · ' + u.lvl, ax, ay - 42 - 2 * k);
       }
@@ -7953,14 +8011,14 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     for (const f of G.FT) {
       const [ax, ay] = iso(f.x, f.y);
       ctx.globalAlpha = Math.min(1, f.life * 2);
-      ctx.font = `700 ${10 * k}px "Fira Sans Condensed", sans-serif`;
+      ctx.font = `700 ${10 * k}px "Golos Text", sans-serif`;
       ctx.fillStyle = 'rgba(0,0,0,.7)'; ctx.fillText(f.text, ax + 0.8, ay - f.z + 0.8);
       ctx.fillStyle = f.col; ctx.fillText(f.text, ax, ay - f.z);
     }
     ctx.globalAlpha = 1;
     // подписи локаций
     if (z > 0.7) {
-      ctx.font = `600 ${9 * k}px "Fira Sans Condensed", sans-serif`;
+      ctx.font = `600 ${9 * k}px "Golos Text", sans-serif`;
       for (const p of W.pois) {
         if (!p.discovered || !W.explored[p.y * N + p.x]) continue;
         const [ax, ay] = iso(p.x + 0.5, p.y + 0.5);
@@ -8003,7 +8061,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
         ctx.fillStyle = `rgba(255,70,40,${pulse})`;
         ctx.beginPath(); ctx.moveTo(16, 0); ctx.lineTo(-8, -11); ctx.lineTo(-3, 0); ctx.lineTo(-8, 11); ctx.closePath(); ctx.fill();
         ctx.restore();
-        ctx.font = '700 11px "Fira Sans Condensed", sans-serif'; ctx.textAlign = 'center';
+        ctx.font = '700 11px "Golos Text", sans-serif'; ctx.textAlign = 'center';
         ctx.fillStyle = '#ff8a6a'; ctx.fillText(r.active ? 'НАБЕГ' : Math.ceil(Math.max(0, r.timer)) + ' с', ax - Math.cos(a) * 26, ay - Math.sin(a) * 26 + 4);
       } else if (!r.active) {
         ctx.strokeStyle = `rgba(255,70,40,${0.5 + 0.4 * Math.sin(G.time * 6)})`; ctx.lineWidth = 2;
@@ -8021,7 +8079,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     c.beginPath(); c.moveTo(ax, ay); c.lineTo(ax, ay - 30); c.stroke();
     c.fillStyle = col;
     c.beginPath(); c.moveTo(ax, ay - 30); c.lineTo(ax + 13, ay - 26 + Math.sin(G.time * 5) * 1.5); c.lineTo(ax, ay - 21); c.closePath(); c.fill();
-    c.font = '700 8px "Fira Sans Condensed", sans-serif'; c.textAlign = 'center';
+    c.font = '700 8px "Golos Text", sans-serif'; c.textAlign = 'center';
     c.fillStyle = '#fff'; c.fillText(t.assigned.length, ax + 5, ay - 23.5);
   }
   function bar(c, x, y, w, h, f, col) {
