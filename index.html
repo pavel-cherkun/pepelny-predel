@@ -862,6 +862,10 @@ body.ux2 .st.goal::before, body.ux2 .st.raid::before, body.ux2 .trial-fab .tf-ic
 #mg.playing .mg-panel { width: min(680px, 100%); }
 #mg.playing .mg-how { display: none; }
 #mg .mg-result b { font-family: var(--ux-hd, Tektur), system-ui, sans-serif; text-transform: uppercase; }
+
+/* фильтр мини-карты — внутри рамки, с отступом от угла */
+body.ux2 .mf-toggle { right: 8px !important; top: 8px !important; width: 26px !important; height: 26px !important; padding: 6px 5px !important; }
+body.ux2 .mf-pop { top: 0 !important; }
 </style>
 
 </head>
@@ -1475,12 +1479,20 @@ G.MUTANT_SKIN = {
 
 // Применить расу: подменяет имена и облик, механики остаются общими
 G.race = 'survivors';
+// Размер основания по расе: то, что по смыслу — тележка, тотем, обелиск или тонкий шпиль, занимает одну клетку
+G.BSIZE = {
+  survivors: { spire: [1, 1] },
+  mutants: { memorial: [1, 1] },
+  others: { workshop: [1, 1], spire: [1, 1] },
+  clowns: { farm: [1, 1], workshop: [1, 1] },
+  bears: { spire: [1, 1] },
+};
 G.applyRace = function (race) {
   if (!G._orig) {
     const O = G._orig = { res: {}, classes: {}, buildings: {}, upgrades: {}, quest: G.QUEST.map(q => [q.t, q.hint]), names: G.NAMES.slice(), titles: G.TITLES.slice() };
     for (const k in G.RES) O.res[k] = [G.RES[k].name, G.RES[k].color];
     for (const k in G.CLASSES) O.classes[k] = [G.CLASSES[k].name, G.CLASSES[k].desc, null, G.CLASSES[k].cost];
-    for (const k in G.BUILDINGS) O.buildings[k] = [G.BUILDINGS[k].name, G.BUILDINGS[k].desc, G.BUILDINGS[k].cost, G.BUILDINGS[k].req, G.BUILDINGS[k].citLvl];
+    for (const k in G.BUILDINGS) O.buildings[k] = [G.BUILDINGS[k].name, G.BUILDINGS[k].desc, G.BUILDINGS[k].cost, G.BUILDINGS[k].req, G.BUILDINGS[k].citLvl, G.BUILDINGS[k].w, G.BUILDINGS[k].h];
     for (const k in G.UPGRADES) O.upgrades[k] = [G.UPGRADES[k].name, G.UPGRADES[k].desc];
   }
   const O = G._orig, M = (G.SKINS && G.SKINS[race]) || (race === 'mutants' ? G.MUTANT_SKIN : race === 'others' ? G.OTHERS_SKIN : null);
@@ -1491,6 +1503,7 @@ G.applyRace = function (race) {
   for (const k in G.BUILDINGS) { const v = (M && M.buildings[k]) || O.buildings[k]; G.BUILDINGS[k].name = v[0]; G.BUILDINGS[k].desc = v[1]; G.BUILDINGS[k].cost = (M && M.bcosts && M.bcosts[k]) || O.buildings[k][2];
     // свои требования у расы (например, Вождю грибницы нужен только Мавзолей)
     const rq = M && M.breq && M.breq[k]; G.BUILDINGS[k].req = rq ? rq.req : O.buildings[k][3]; G.BUILDINGS[k].citLvl = rq ? rq.citLvl : O.buildings[k][4]; }
+  { const BS = G.BSIZE[race] || {}; for (const k in G.BUILDINGS) { const z = BS[k]; G.BUILDINGS[k].w = z ? z[0] : O.buildings[k][5]; G.BUILDINGS[k].h = z ? z[1] : O.buildings[k][6]; } }
   for (const k in G.UPGRADES) { const v = (M && M.upgrades[k]) || O.upgrades[k]; G.UPGRADES[k].name = v[0]; G.UPGRADES[k].desc = v[1]; }
   G.QUEST.forEach((q, i) => { const v = M ? M.quest[i] : O.quest[i]; q.t = v[0]; q.hint = v[1]; });
   if (!O.specs) { O.specs = {}; for (const c in G.SPECS) for (const sp of G.SPECS[c]) O.specs[c + ':' + sp.id] = sp.name; }
@@ -5082,7 +5095,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     else if (S.powerEff >= 0.99) S.blackout = false;
   }
   // ---------- Захват мест
-  G.canCapture = p => p && p.discovered && !p.guarded && G.SITE[p.type] && p.state !== 'held' && (p.state !== 'new' || p.retake) && (G.race !== 'fungi' || G.mycAt(p.x + 0.5, p.y + 0.5) === 1);
+  G.canCapture = p => p && p.discovered && !p.guarded && G.SITE[p.type] && p.state !== 'held' && (p.state !== 'new' || p.retake) && (G.race !== 'fungi' || G.mycAt(p.x + 0.5, p.y + 0.5) === 1 || G.mycAt(p.x + 0.5, p.y + 0.5) === 3);
   G.capture = function (p) {
     if (!G.canCapture(p)) return 'Это место нельзя занять';
     if (!G.canAfford(G.CAPTURE_COST)) return 'Не хватает ресурсов';
@@ -6281,7 +6294,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
   };
   // ---------- Мицелий: растёт по клетке от края — медленно и постепенно; плесень — быстрее и к цели
   // S.myc: 0 — пусто, 1 — наш мицелий, 2 — чужая грибница, 3 — наша плесень
-  const MYC_Q = { 1: 0.009, 2: 0.006, 3: 0.05 };
+  const MYC_Q = { 1: 0.009, 2: 0.006, 3: 0.02 };
   let front = { 1: [], 2: [], 3: [] }, frontBuilt = false;
   const mycOK = i => { const t = W.type[i]; return t !== G.T.ACID && t !== G.T.VOID && t !== G.T.SKY && t !== G.T.CLOUD && t !== G.T.ISLE && !(W.obj[i] && W.obj[i] !== G.O.BONES); };
   function ensureMyc() {
@@ -6311,7 +6324,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
   G.mycClear = mycClear;
   G.mycAt = (x, y) => S.myc ? S.myc[Math.floor(y) * N + Math.floor(x)] : 0;
   const NB = [1, -1, N, -N];
-  let moldTarget = null, moldT = -1;
+  let moldTarget = null, moldT = -1, moldBranch = [];
   // докуда грибнице хватает сил: наша — вокруг своих построек, чужая — вокруг своих логов
   let mycReach = null, reachT = -1;
   function buildReach() {
@@ -6328,10 +6341,12 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
   function growOnce(v) {
     const F = front[v]; if (!F.length) return;
     let k = Math.floor(Math.random() * F.length);
-    // плесень растёт не пятном, а щупальцем: почти всегда — с кончика, ближайшего к цели
-    if (v === 3 && moldTarget && Math.random() < 0.9) {
+    // плесень — щупальце с отростками: чаще тянется к главной цели, иногда — к ближнему месту вбок, иногда просто толстеет
+    let tg = null;
+    if (v === 3) { const q = Math.random(); tg = q < 0.4 ? moldTarget : q < 0.72 && moldBranch.length ? moldBranch[Math.floor(Math.random() * moldBranch.length)] : null; }
+    if (v === 3 && tg) {
       let bd = 1e9;
-      for (let t = 0; t < Math.min(24, F.length); t++) { const q = Math.floor(Math.random() * F.length), c = F[q]; const d = hyp(c % N - moldTarget[0], ((c / N) | 0) - moldTarget[1]); if (d < bd) { bd = d; k = q; } }
+      for (let t = 0; t < Math.min(24, F.length); t++) { const q = Math.floor(Math.random() * F.length), c = F[q]; const d = hyp(c % N - tg[0], ((c / N) | 0) - tg[1]); if (d < bd) { bd = d; k = q; } }
     }
     const i = F[k];
     if (S.myc[i] !== v) { F[k] = F[F.length - 1]; F.pop(); return; }
@@ -6340,12 +6355,15 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     for (const d of NB) { const j = i + d; if (j >= 0 && j < N * N && !S.myc[j] && mycOK(j) && (v === 3 || mycReach[j] & rb)) c.push(j); }
     if (!c.length) { F[k] = F[F.length - 1]; F.pop(); return; }
     let j = c[Math.floor(Math.random() * c.length)];
-    if (v === 3 && moldTarget) { // плесень тянется к цели: вперёд или вбок, но не назад
-      const di = hyp(i % N - moldTarget[0], ((i / N) | 0) - moldTarget[1]);
-      const fwd = c.filter(q => hyp(q % N - moldTarget[0], ((q / N) | 0) - moldTarget[1]) <= di + 0.01);
-      if (!fwd.length) { F[k] = F[F.length - 1]; F.pop(); return; }
+    if (v === 3 && tg) { // к цели: вперёд или вбок, но не назад
+      const di = hyp(i % N - tg[0], ((i / N) | 0) - tg[1]);
+      const fwd = c.filter(q => hyp(q % N - tg[0], ((q / N) | 0) - tg[1]) <= di + 0.01);
+      if (!fwd.length) return; // кончик упёрся — клетка остаётся краем: отсюда ещё растёт вширь
       j = fwd[Math.floor(Math.random() * fwd.length)];
-      if (Math.random() < 0.7) { let bd = 1e9; for (const q of fwd) { const d = hyp(q % N - moldTarget[0], ((q / N) | 0) - moldTarget[1]); if (d < bd) { bd = d; j = q; } } }
+      if (Math.random() < 0.5) { let bd = 1e9; for (const q of fwd) { const d = hyp(q % N - tg[0], ((q / N) | 0) - tg[1]); if (d < bd) { bd = d; j = q; } } }
+    } else if (v === 3) { // вширь: только рядом с уже плотной плесенью, чтобы не расползалась пятнами
+      const dense = q => NB.reduce((a, d) => a + (S.myc[q + d] === 3 ? 1 : 0), 0) >= 2;
+      const side = c.filter(dense); if (side.length) j = side[Math.floor(Math.random() * side.length)];
     }
     S.myc[j] = v; F.push(j);
     if (v !== 2) W.explored[j] = 1;
@@ -6380,6 +6398,19 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
         for (const p of W.pois) { if (p.state === 'held' || !p.guarded || p.type !== 'capital' || G.layerAt(p.x, p.y) !== G.layerAt(c.x, c.y)) continue; const d = hyp(p.x - c.x, p.y - c.y); if (d < bd) { bd = d; moldTarget = [p.x, p.y]; } }
         if (!moldTarget) for (const p of W.pois) { if (!p.discovered || p.state === 'held' || !p.guarded || p.type !== 'lair') continue; const d = hyp(p.x - c.x, p.y - c.y); if (d < bd) { bd = d; moldTarget = [p.x, p.y]; } }
         if (!moldTarget) for (const p of W.pois) { if (!p.discovered || p.state === 'held' || !(G.SITE[p.type] || p.type === 'lair')) continue; const d = hyp(p.x - c.x, p.y - c.y); if (d < bd) { bd = d; moldTarget = [p.x, p.y]; } }
+        // отростки: до трёх ближних мест в стороне от главного щупальца — их плесень захватывает по пути
+        moldBranch = [];
+        const tips = front[3].length ? front[3] : [];
+        if (tips.length) {
+          const cand = [];
+          for (const p of W.pois) {
+            if (!p.discovered || p.state === 'held' || !(G.SITE[p.type] || p.type === 'lair') || (moldTarget && p.x === moldTarget[0] && p.y === moldTarget[1])) continue;
+            if (S.myc[p.y * N + p.x] === 3 || G.layerAt(p.x, p.y) !== G.layerAt(c.x, c.y)) continue;
+            let bd2 = 1e9; for (let t = 0; t < Math.min(40, tips.length); t++) { const q = tips[Math.floor(Math.random() * tips.length)]; bd2 = Math.min(bd2, hyp(q % N - p.x, ((q / N) | 0) - p.y)); }
+            if (bd2 < 26) cand.push([bd2, p]);
+          }
+          cand.sort((a, b) => a[0] - b[0]); moldBranch = cand.slice(0, 3).map(e => [e[1].x, e[1].y]);
+        }
       }
     }
     if (!mycReach || S.t > reachT) {
@@ -6395,6 +6426,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
       if (v === 3 && (S.moldN || 0) >= (S.moldCap || 0)) continue; // у каждой плесневой ямы — свой запас плесени
       const want = front[v].length * MYC_Q[v] * (v === 1 ? mult : 1) * (v !== 2 ? 1 + 0.25 * (S.upg.speed || 0) : 1);
       let n = Math.floor(want) + (Math.random() < want % 1 ? 1 : 0);
+      if (v === 3) n = Math.min(n, 1);
       for (let k = 0; k < Math.min(n, 400); k++) growOnce(v);
     }
     // споровые столбы: вокруг них растёт втрое быстрее
@@ -6428,7 +6460,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
       for (const e of S.enemies) {
         if (e.hp <= 0) continue;
         const v = S.myc[Math.floor(e.y) * N + Math.floor(e.x)];
-        if (v === 3) G.damage(e, e.maxHp * (G.ENEMIES[e.type].static ? 0.012 : 0.008) + 1, null);
+        if (v === 3) G.damage(e, e.maxHp * (G.ENEMIES[e.type].static ? 0.004 : 0.008) + 1, null);
       }
     } else {
       for (const b of S.buildings) if (b.prog >= 1 && !b.ruin && S.myc[Math.floor(b.y + b.h / 2) * N + Math.floor(b.x + b.w / 2)] === 2) { b.hp -= b.maxHp * 0.0015; b.hitT = 0.1; if (b.hp <= 0) destroyBuilding(b); }
@@ -7034,6 +7066,13 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
   // ---------- Здания
   const BLD_ALIAS = {}; // подмены облика, пока у здания нет своего арта
   const BLD_SCALE = { citadel: 0.95 };
+  // высота цитадели расы на экране (в масштабе 1) — мерка для остальных построек
+  const CIT_H = {};
+  function citH(r) {
+    if (CIT_H[r] !== undefined) return CIT_H[r];
+    const f = G.SPRITE_META[r] && G.SPRITE_META[r].f.citadel; if (!f) return (CIT_H[r] = 0);
+    const w = 6 * 32 * 0.88 * 0.95; return (CIT_H[r] = f[3] * Math.min(w / f[2], w * 2.6 / f[3]));
+  }
   // над зданием — что ему мешает работать
   function debuffs(c, b, D, x, y) {
     if (b.prog < 1 || b.ruin) return;
@@ -7096,7 +7135,11 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     const lvk = b.type === 'citadel' ? 0.9 + Math.min(b.lvl || 1, 8) * 0.0125 : 1;
     // привязка: ширина картинки — ширина ромба основания, низ — на нижнем углу ромба; верх может уходить выше
     const [, by0] = iso(b.x + b.w, b.y + b.h), by = by0 - 2;
-    const ks = (BLD_SCALE[bk] || 1) * lvk * (G.race === 'primates' && b.stage !== undefined && !b.enemyFac ? [0.72, 1, 1.12][b.stage] : 1), bw = span * 0.94 * ks, bh = bw * 2.6; // роща растёт
+    let ks = (BLD_SCALE[bk] || 1) * lvk * (G.race === 'primates' && b.stage !== undefined && !b.enemyFac ? [0.72, 1, 1.12][b.stage] : 1); // роща растёт
+    // цитадель — главное здание базы: остальные не выше 90% её высоты (великое здание и Ковчег — до 115%)
+    if (b.type !== 'citadel') { const f0 = G.SPRITE_META[G.race] && G.SPRITE_META[G.race].f[bk], ch = citH(G.race);
+      if (f0 && ch) { const w0 = span * 0.88 * ks, d0 = f0[3] * Math.min(w0 / f0[2], w0 * 2.6 / f0[3]), cap = ch * (b.type === 'wonder' || b.type === 'mechf3' ? 1.15 : 0.9); if (d0 > cap) ks *= cap / d0; } }
+    const bw = span * 0.88 * ks, bh = bw * 2.6;
     // юнит за зданием — здание полупрозрачное, чтобы его было видно
     const f = G.SPRITE_META[G.race] && G.SPRITE_META[G.race].f[bk], sc = f ? Math.min(bw / f[2], bh / f[3]) : 1, eh = f ? f[3] * sc : bh * 0.5, ew = f ? f[2] * sc : bw;
     const depth = b.x + b.y + (b.w + b.h) / 2;
@@ -8901,7 +8944,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
   };
   { // уровни карты — сегментами на мини-карте
     const box = document.createElement('div'); box.className = 'mini-layers'; box.id = 'layerPill';
-    box.innerHTML = [['ground', 'Земля'], ['under', 'Подземелье'], ['sky', 'Небо']].map(([k, n]) => `<button data-l="${k}">${n}</button>`).join('');
+    box.innerHTML = [['under', 'Подземелье'], ['ground', 'Земля'], ['sky', 'Небо']].map(([k, n]) => `<button data-l="${k}">${n}</button>`).join('');
     box.addEventListener('pointerdown', e => e.stopPropagation());
     box.addEventListener('click', e => { const b = e.target.closest('[data-l]'); if (b) { e.stopPropagation(); G.gotoLayer(b.dataset.l); baseT = 0; } });
     document.querySelector('.mini-box').appendChild(box); }
@@ -9022,7 +9065,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     }
     hud.sound.classList.toggle('off', G.audio.muted);
     { const hb = document.querySelector('.hud').getBoundingClientRect().bottom; feed.style.top = (hb + 4) + 'px'; hud.goal.style.top = (hb + 10) + 'px'; goalTrack.style.top = (hb + 10) + 'px'; feed.style.top = (hb + 64) + 'px';
-      const cb = document.querySelector(FINE && innerWidth >= 1100 && document.body.classList.contains('ux2') ? '.cmd-side' : '.cmd-main').getBoundingClientRect().top; if (FINE && innerWidth >= 1100 && document.body.classList.contains('ux2')) { const sr = document.querySelector('.cmd-side').getBoundingClientRect(); homeFab.style.bottom = Math.round(innerHeight - sr.bottom + (sr.height - 48) / 2) + 'px'; homeFab.style.right = Math.round(innerWidth - sr.left + 12) + 'px'; }
+      const cb = document.querySelector(FINE && innerWidth >= 1100 && document.body.classList.contains('ux2') ? '.cmd-side' : '.cmd-main').getBoundingClientRect().top; if (FINE && innerWidth >= 1100 && document.body.classList.contains('ux2')) { const sr = document.querySelector('.cmd-side').getBoundingClientRect(); homeFab.style.bottom = Math.round(innerHeight - sr.top + 14) + 'px'; homeFab.style.right = '16px'; }
       else { homeFab.style.bottom = Math.round(innerHeight - cb + 12) + 'px'; homeFab.style.right = ''; }
       const sw = document.querySelector('.cmd-side').offsetWidth; if (sw && sw !== ui._sw) { ui._sw = sw; document.documentElement.style.setProperty('--strip-w', sw + 'px'); } }
     G.audioTick && G.audioTick();
@@ -9207,7 +9250,8 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
   let palRgb = null;
   // акцент расы для мини-карты (CSS --ux-ac), пересчитывается при смене расы
   let acK = '', acV = [255, 123, 35];
-  function acRgb() { if (acK !== G.race) { acK = G.race; const v = getComputedStyle(document.body).getPropertyValue('--ux-ac').trim(); if (/^#[0-9a-f]{6}$/i.test(v)) acV = hexRgb(v); } return acV; }
+  let acT = 0;
+  function acRgb() { const now = performance.now(); if (now - acT > 700) { acT = now; const v = getComputedStyle(document.documentElement).getPropertyValue('--ux-ac').trim() || getComputedStyle(document.body).getPropertyValue('--ux-ac').trim(); if (v !== acK && /^#[0-9a-f]{6}$/i.test(v)) { acK = v; acV = hexRgb(v); baseT = 0; } } return acV; }
   function rebuildBase() {
     const W = G.W, d = img.data, vs = G.S.visStamp - 1;
     let a0 = 1e9, a1 = -1e9, b0 = 1e9, b1 = -1e9;
