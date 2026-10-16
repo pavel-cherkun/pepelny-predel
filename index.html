@@ -606,6 +606,8 @@ body[data-theme="mutants"] .toast.bad { border-left-color: #c8ff40; }
 #shatter .sh-flash { position: absolute; inset: 0; background: #000; opacity: 0; }
 #shatter i { position: absolute; inset: 0; background: var(--sc); transform: scale(1.05); opacity: 0; }
 #shatter i:nth-child(odd) { background: #000; }
+#shatter .sh-crack { position: absolute; inset: 0; background: var(--sc); clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 62%, 18% 55%, 31% 66%, 47% 49%, 63% 61%, 79% 44%, 100% 52%, 100% 48%, 81% 40%, 63% 57%, 47% 45%, 31% 62%, 18% 51%, 0 58%); opacity: 0; }
+#shatter.in .sh-crack { animation: fadeIn .18s forwards; opacity: 1; } #shatter.out .sh-crack { opacity: 0; transition: opacity .34s; }
 #shatter.in i { animation: shIn .26s ease-out forwards; animation-delay: calc(var(--d) * .5); }
 #shatter.break i { opacity: 1; animation: shOut .85s cubic-bezier(.5,0,.8,.4) forwards; animation-delay: var(--d); }
 @keyframes shIn { from { opacity: 0; transform: scale(1.4); } to { opacity: 1; transform: scale(1.05); } }
@@ -667,9 +669,10 @@ body.ux2 .r small { font-family: var(--ux-mono); font-size: 10px; color: var(--u
 body.ux2 .r small.up { color: var(--ux-ac); }
 body.ux2 .st { border-image: none !important; border: 1px solid var(--ux-line2) !important; background: transparent !important; font-family: var(--ux-mono); font-size: 11px !important; text-transform: uppercase; letter-spacing: .06em; color: var(--ux-tx) !important; padding: 3px 8px !important; text-shadow: none !important; }
 body.ux2 .st.goal { color: var(--ux-ac) !important; border-color: var(--ux-ac) !important; }
-body.ux2 .st.raid.hot { background: var(--ux-hazard) !important; color: #000 !important; border-color: var(--ux-ac) !important; text-shadow: 0 0 2px var(--ux-ac) !important; }
+body.ux2 .st.raid.hot { background: linear-gradient(90deg, transparent 0 12px, #000 12px) , var(--ux-hazard) !important; color: var(--ux-ac) !important; border-color: var(--ux-ac) !important; text-shadow: none !important; padding-left: 18px !important; animation: none !important; }
 /* --- нижняя панель --- */
-body.ux2 .cmd-main { background: var(--ux-bg) !important; border: 1px solid var(--ux-line) !important; border-radius: 0 !important; clip-path: var(--ux-cut); box-shadow: none !important; }
+body.ux2 .cmd-main { background: var(--ux-bg) !important; border: 1px solid var(--ux-line) !important; border-radius: 0 !important; box-shadow: none !important; }
+body.ux2 .cmd-main::before { content: '' !important; display: block !important; position: absolute; inset: auto !important; right: -1px !important; top: -1px !important; width: 14px; height: 14px; border: 0 !important; border-image: none !important; filter: none !important; background: linear-gradient(225deg, #000 50%, var(--ux-line) 50% calc(50% + 1px), transparent calc(50% + 1px)); z-index: 3; }
 body.ux2 .cmd-main::after { content: 'CTRL // ' attr(data-race) !important; position: absolute !important; inset: auto !important; right: 14px !important; top: 3px !important; width: auto !important; height: auto !important; font-family: var(--ux-mono); font-size: 8px; letter-spacing: .2em; color: var(--ux-mu); text-transform: uppercase; z-index: 2; }
 body.ux2 .cmd-grid button { border: 1px solid var(--ux-line) !important; border-image: none !important; background: var(--ux-bg2) !important; border-radius: 0 !important; clip-path: var(--ux-cut-s); color: var(--ux-tx) !important; text-shadow: none !important; font-family: var(--ux-hd) !important; text-transform: uppercase; letter-spacing: .04em; }
 body.ux2 .cmd-grid button span { font-family: var(--ux-hd) !important; font-weight: 600; }
@@ -687,7 +690,7 @@ body.ux2 .mini-box::before { content: ''; position: absolute; inset: -5px; point
     linear-gradient(var(--ux-ac), var(--ux-ac)) 100% 100% / 14px 2px, linear-gradient(var(--ux-ac), var(--ux-ac)) 100% 100% / 2px 14px; background-repeat: no-repeat; }
 body.ux2 .mf-toggle { border-radius: 0 !important; background: var(--ux-bg) !important; border: 1px solid var(--ux-ac) !important; box-shadow: none !important; }
 body.ux2 .mf-toggle i { background: var(--ux-ac) !important; }
-body.ux2 .mf-pop { background: var(--ux-bg) !important; border: 1px solid var(--ux-line2); clip-path: var(--ux-cut); }
+body.ux2 .mf-pop { background: var(--ux-bg) !important; border: 1px solid var(--ux-line2); z-index: 20 !important; }
 body.ux2 .mf { font-family: var(--ux-mono) !important; font-size: 11px !important; text-transform: uppercase; }
 /* --- лист (стройка, найм и т. д.) --- */
 body.ux2 #sheet { background: var(--ux-bg) !important; background-image: var(--ux-dots) !important; border: 1px solid var(--ux-line) !important; border-radius: 0 !important; clip-path: var(--ux-cut); box-shadow: 0 0 0 1px #000 !important; }
@@ -712,7 +715,7 @@ body.ux2 .stat span { font-family: var(--ux-mono); text-transform: uppercase; fo
 body.ux2 .btn { border: 1px solid var(--ux-line2) !important; border-image: none !important; background: transparent !important; border-radius: 0 !important; padding: 8px 12px !important; font-family: var(--ux-hd) !important; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; font-size: 12.5px !important; color: var(--ux-tx) !important; text-shadow: none !important; filter: none !important; clip-path: var(--ux-cut-s); }
 body.ux2 .btn::before, body.ux2 .btn::after { content: none !important; }
 body.ux2 .btn.pri { background: var(--ux-ac) !important; color: #000 !important; border-color: var(--ux-ac) !important; }
-body.ux2 .btn.danger { color: #000 !important; background: var(--ux-hazard) !important; border-color: var(--ux-ac) !important; text-shadow: 0 0 3px var(--ux-ac) !important; }
+body.ux2 .btn.danger { color: #fff !important; background: linear-gradient(90deg, transparent 0 14px, #120a0a 14px), var(--ux-hazard) !important; border-color: var(--ux-ac) !important; text-shadow: none !important; padding-left: 24px !important; }
 body.ux2 .btn:hover { background: var(--ux-tx) !important; color: #000 !important; }
 body.ux2 .tabs { background: transparent !important; border: 1px solid var(--ux-line); border-radius: 0 !important; } body.ux2 .tabs button { border-radius: 0 !important; font-family: var(--ux-mono); text-transform: uppercase; font-size: 11px; }
 body.ux2 .tabs button.on { background: var(--ux-ac) !important; color: #000 !important; box-shadow: none !important; }
@@ -747,10 +750,23 @@ body.ux2 #celebrate .cel-face { border-radius: 0 !important; clip-path: polygon(
 /* UX2: иконки — плоские силуэты (белые; на активной кнопке — чёрные) */
 body.ux2 .cmd-ico, body.ux2 .util-ico { filter: brightness(0) invert(.92) !important; }
 body.ux2 .cmd-grid button.on .cmd-ico { filter: brightness(0) !important; }
-body.ux2 .hud .ico, body.ux2 .rw-i .ico, body.ux2 .cost .ico { filter: brightness(0) invert(.9) !important; }
 body.ux2 .cmd-util button.hot .util-ico, body.ux2 #soundPill:not(.off) .util-ico { filter: brightness(0) invert(.92) drop-shadow(0 0 4px var(--ux-ac)) !important; }
 body.ux2 .mf-toggle i { border-radius: 0 !important; }
 body.ux2 .st.goal::before, body.ux2 .st.raid::before, body.ux2 .trial-fab .tf-ico { filter: brightness(0) invert(.9); }
+
+/* ===== Производительность: меньше движения, дешёвые анимации (только opacity) ===== */
+#story .st-art { transition: none !important; }
+#story .st-col { transition: none !important; }
+#story .st-art.in-r, #story .st-art.in-l, #story .st-text.in-r, #story .st-text.in-l { animation: fadeIn .25s ease-out !important; }
+#story .st-cap.new { animation: fadeIn .3s ease-out !important; }
+#story .st-go, #story .st-pick { animation: none !important; }
+#story .st-bg { filter: blur(18px) brightness(.35) !important; transition: none !important; }
+#tut-spot { animation: none !important; box-shadow: 0 0 0 9999px rgba(6,4,6,.55) !important; }
+#tut-spot::after { content: ''; position: absolute; inset: -3px; border: 3px solid var(--adv, #ffcf8a); border-radius: 8px; animation: hintPulse 1.2s ease-in-out infinite; }
+.trial-fab { animation: none !important; }
+.trial-fab b { animation: hintPulse 1.4s ease-in-out infinite; }
+#seal .se-pat.rays { animation-duration: 40s !important; }
+@media (prefers-reduced-motion: reduce) { #splash .sp-rays, #seal .se-pat, .trial-fab::before { animation: none !important; } }
 </style>
 
 </head>
@@ -3867,11 +3883,12 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
   // ---------- Останки: на месте гибели живого остаётся куча, мутантские трутни носят её в Улей как еду; со временем истлевает
   function addRemains(x, y, amt) {
     const fx = Math.floor(x), fy = Math.floor(y);
-    for (const n of W.nodes) if (n.corpse && n.amount > 0 && Math.abs(n.x - fx) <= 1 && Math.abs(n.y - fy) <= 1) { n.amount = Math.min(120, n.amount + amt); n.max = Math.max(n.max, n.amount); n.rotT = S.t + 300; return n; }
+    // рядом уже есть куча — докладываем в неё (смотрим только 3×3 клетки, а не все залежи карты)
+    for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { const j = (fy + dy) * N + fx + dx, ni = j >= 0 && j < N * N ? W.nodeAt[j] : -1, n = ni >= 0 ? W.nodes[ni] : null; if (n && n.corpse && n.amount > 0) { n.amount = Math.min(120, n.amount + amt); n.max = Math.max(n.max, n.amount); n.rotT = S.t + 300; return n; } }
     const w = G.nearestWalkable(fx, fy, 2); if (!w) return null;
     const i = w[1] * N + w[0]; if (W.nodeAt[i] >= 0 || W.poiAt[i] >= 0 || W.type[i] === G.T.ACID) return null;
     const n = { id: W.nodes.length, dep: 'corpse', corpse: true, kind: null, x: w[0], y: w[1], amount: amt, max: Math.max(amt, 40), rotT: S.t + 300 };
-    n.kind = G.kindFor(n); W.nodes.push(n); W.nodeAt[i] = n.id;
+    n.kind = G.kindFor(n); W.nodes.push(n); W.nodeAt[i] = n.id; if (G._corpses && G._corpsesW === W) G._corpses.push(n);
     return n;
   }
   G.addRemains = addRemains;
@@ -3910,7 +3927,8 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
   function rotRemains() {
     if ((S.rotChk || 0) > S.t) return; S.rotChk = S.t + 5;
     for (const p of W.pois.slice()) if (p.expire && S.t > p.expire && p.state === 'new' && !S.tasks.some(t => t.poi === p.id)) { removePoi(p); G.notify('Тайник погас — не успели', { x: p.x, y: p.y }); }
-    for (const n of W.nodes) if (n.corpse && n.amount > 0 && S.t > n.rotT) { n.amount = 0; const i = n.y * N + n.x; if (W.nodeAt[i] === n.id) W.nodeAt[i] = -1; }
+    if (!G._corpses || G._corpsesW !== W) { G._corpsesW = W; G._corpses = W.nodes.filter(n => n.corpse); }
+    G._corpses = G._corpses.filter(n => { if (n.amount > 0 && S.t > n.rotT) { n.amount = 0; const i = n.y * N + n.x; if (W.nodeAt[i] === n.id) W.nodeAt[i] = -1; } return n.amount > 0; });
   }
   function killEnemy(e, src) {
     e.hp = 0; e.dead = true;
@@ -5722,13 +5740,18 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
       }
       if (G.isVeh(u)) updVehicle(u, dt); else updUnit(u, dt);
     }
-    for (const e of S.enemies) if (e.hp > 0 && !S.over) updEnemy(e, dt);
+    // стража лагеря без дела обновляется реже (раз в ~0,12 с одним шагом) — на карте их сотни
+    for (const e of S.enemies) {
+      if (e.hp <= 0 || S.over) continue;
+      if (e.mode === 'guard' && !e.target && !e.returning && !(e.provokedT > S.t) && !(e.stunT > S.t) && !(e.confT > S.t)) { e._acc = (e._acc || 0) + dt; if (e._acc < 0.12) continue; updEnemy(e, e._acc); e._acc = 0; }
+      else { e._acc = 0; updEnemy(e, dt); }
+    }
     if (S.over) return;
     // расталкивание
     separate(S.units.filter(u => !u.inVeh)); separate(S.enemies.filter(e => (e.raid || e.mini || e.target || e.returning || e.wp) && !G.ENEMIES[e.type].static));
     // никто не стоит внутри зданий: выталкиваем к ближайшему краю
     for (const u of S.units) if (!u.inVeh && u.hp > 0) pushOut(u);
-    for (const e of S.enemies) if (e.hp > 0 && !G.ENEMIES[e.type].static && !e.flying) pushOut(e);
+    for (const e of S.enemies) if (e.hp > 0 && (e.x !== e._pox || e.y !== e._poy) && !e.flying && !G.ENEMIES[e.type].static) { pushOut(e); e._pox = e.x; e._poy = e.y; } // стоит на месте — не проверяем
     updBuildings(dt);
     updProj(dt);
     fogT -= dt; if (fogT <= 0) { fogT = 0.2; G.tickFog(); }
@@ -7179,7 +7202,137 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
   }
   // ---------- Главный кадр
   G.time = 0;
+  // ---------- Кэш земли кусками
+  const CH = 8, CPAD = 6, CK = { map: new Map(), W: null, tex: null, px: 0 }, CK_BUDGET = 22e6; // ≈ 22 млн пикселей на все куски
+  function chunkSig(W, S, X0, Y0) {
+    let h = 7; const MY = S.myc;
+    for (let y = Y0; y < Y0 + CH && y < N; y++) for (let x = X0; x < X0 + CH && x < N; x++) {
+      const i = y * N + x;
+      h = Math.imul(h, 31) + (W.explored[i] | (W.obj[i] << 1) | ((W.nodeAt[i] >= 0) << 6) | ((W.poiAt[i] + 1) << 7) | ((MY ? MY[i] : 0) << 20)) | 0;
+    }
+    // на краю разведанного видна кайма — соседи тоже в счёт
+    for (let k = -1; k <= CH; k++) for (const [x, y] of [[X0 - 1, Y0 + k], [X0 + CH, Y0 + k], [X0 + k, Y0 - 1], [X0 + k, Y0 + CH]]) if (x >= 0 && y >= 0 && x < N && y < N) h = Math.imul(h, 17) + W.explored[y * N + x] | 0;
+    return h;
+  }
+  function trimChunks(now) {
+    if (CK.px <= CK_BUDGET) return;
+    const list = [...CK.map.entries()].sort((a, b) => a[1].used - b[1].used);
+    for (const [k, c] of list) { if (CK.px <= CK_BUDGET * 0.8) break; if (now - c.used < 50) continue; CK.px -= c.cv.width * c.cv.height; CK.map.delete(k); }
+  }
+  function buildChunk(W, S, cx, cy, sc, old) {
+    const X0 = cx * CH, Y0 = cy * CH;
+    const minx = (X0 - Y0 - CH) * HW - CPAD, miny = (X0 + Y0) * HH - CPAD, bw = 2 * CH * HW + 2 * CPAD, bh = 2 * CH * HH + 2 * CPAD;
+    let cv = old && old.cv;
+    const wpx = Math.ceil(bw * sc), hpx = Math.ceil(bh * sc);
+    if (!cv) { cv = document.createElement('canvas'); }
+    if (cv.width !== wpx || cv.height !== hpx) { if (old && old.cv) CK.px -= old.cv.width * old.cv.height; cv.width = wpx; cv.height = hpx; CK.px += wpx * hpx; }
+    const c = cv.getContext('2d');
+    c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, wpx, hpx);
+    c.setTransform(sc, 0, 0, sc, -minx * sc, -miny * sc);
+    const GP = G.texOn === false ? null : G.groundPats(ctx), gl = GP ? groundLayer(W) : null;
+    const gpaths = GP ? Array.from({ length: 32 }, () => new Path2D()) : null, rim = new Path2D(), shore = new Path2D();
+    const LP = G.layerPats(ctx), mycP = new Path2D(), moldP = new Path2D(), foeMycP = new Path2D();
+    const MY = S.myc || null;
+    const paths = [];
+    if (!GP) for (let i = 0; i < PAL.length * 3; i++) paths.push(new Path2D());
+    const fog = new Path2D(), edge = new Path2D(), acid = new Path2D(), crack = new Path2D(), bones = new Path2D();
+    const objs = [], hits = [];
+    for (let y = Y0; y < Y0 + CH && y < N; y++) for (let x = X0; x < X0 + CH && x < N; x++) {
+      const ix = (x - y) * HW, iy = (x + y + 1) * HH;
+      const i = y * N + x;
+      if (!W.explored[i]) { diamond(fog, ix, iy, 1); continue; }
+      const t = W.type[i];
+      if (t === T.VOID) continue;
+      const v = MY ? MY[i] : 0;
+      if (v) { if (v === 1) diamond(mycP, ix, iy); else if (v === 2) diamond(foeMycP, ix, iy); else if (v === 3) diamond(moldP, ix, iy); }
+      if (GP) {
+        const L = gl[i], pr = PRI[L];
+        diamond(gpaths[L], ix, iy);
+        if (t === T.ACID) diamond(acid, ix, iy);
+        if (L < 16 && x > 0 && x < N - 1 && y > 0 && y < N - 1) {
+          for (let k = 0; k < 4; k++) {
+            const dx = k === 0 ? 1 : k === 1 ? -1 : 0, dy = k === 2 ? 1 : k === 3 ? -1 : 0, j = i + dx + dy * N;
+            const Ln = gl[j];
+            if (Ln < 16 && Ln !== L && PRI[Ln] > pr && W.explored[j]) tongue(gpaths[Ln], t === T.ACID ? shore : rim, x, y, dx, dy);
+          }
+        }
+      } else if (t === T.ACID) diamond(acid, ix, iy);
+      else diamond(paths[t * 3 + W.shade[i]], ix, iy);
+      if ((x > 0 && !W.explored[i - 1]) || (y > 0 && !W.explored[i - N]) || (x < N - 1 && !W.explored[i + 1]) || (y < N - 1 && !W.explored[i + N])) diamond(edge, ix, iy, 0.8);
+      const h = G.hash2(x, y, 31);
+      if (!GP && t !== T.ACID && h < 0.22) { const a = h * 40; crack.moveTo(ix - 10 + a % 8, iy - 3); crack.lineTo(ix - 2, iy + 1); crack.lineTo(ix + 6 - a % 5, iy - 2); }
+      const o = W.obj[i];
+      if (o === O.BONES) { bones.moveTo(ix - 5, iy); bones.lineTo(ix + 4, iy - 2); bones.moveTo(ix - 1, iy + 3); bones.lineTo(ix + 2, iy - 3); }
+      else if (o) objs.push([x + y + 1, 0, x, y, o]);
+      const ni = W.nodeAt[i];
+      if (ni >= 0 && W.nodes[ni].amount > 0 && !W.nodes[ni].obj) objs.push([x + y + 1, 1, W.nodes[ni]]);
+      else if (ni >= 0 && W.nodes[ni].amount > 0 && !o) hits.push(['n', W.nodes[ni], ix - 26, iy - 14, ix + 26, iy + 14]); // залежь без предмета (кислотное болото) — нажатие по самой клетке
+      const pi = W.poiAt[i];
+      if (pi >= 0) objs.push([x + y + 1.4, 2, W.pois[pi], pi]);
+    }
+    if (GP) {
+      for (const L of GORDER) {
+        const pt = GP[L]; pt.setTransform(isoMat(TEX_K[L] || 3));
+        c.fillStyle = pt; c.fill(gpaths[L]);
+        if (L === 4) { c.fillStyle = 'rgba(150,255,70,.1)'; c.fill(acid); }
+      }
+      for (let L = 16; L < 32; L++) {
+        if (LP) { const pt = LP[L - 16]; pt.setTransform(isoMat(L === 23 ? 5 : 3)); c.fillStyle = pt; }
+        else c.fillStyle = LAYER_COL[L] || '#333';
+        c.fill(gpaths[L]);
+      }
+      GP.noise.setTransform(isoMat(10));
+      c.globalAlpha = 0.55; c.fillStyle = GP.noise;
+      for (const L of GORDER) c.fill(gpaths[L]);
+      c.globalAlpha = 1;
+      if (MY) {
+        const mp = LP ? LP[8] : null, mo = LP ? LP[9] : null;
+        if (mp) mp.setTransform(isoMat(2.5));
+        c.globalAlpha = 0.78; c.fillStyle = mp || 'rgba(240,240,230,.5)'; c.fill(mycP);
+        c.globalAlpha = 0.6; c.fill(foeMycP); c.fillStyle = 'rgba(120,40,60,.18)'; c.fill(foeMycP);
+        if (mo) mo.setTransform(isoMat(2.5));
+        c.globalAlpha = 0.85; c.fillStyle = mo || 'rgba(30,60,30,.6)'; c.fill(moldP);
+        c.globalAlpha = 1;
+      }
+      c.lineJoin = 'round';
+      c.strokeStyle = 'rgba(0,0,0,.22)'; c.lineWidth = 2; c.stroke(rim);
+      c.strokeStyle = 'rgba(20,40,10,.55)'; c.lineWidth = 4; c.stroke(shore);
+      c.strokeStyle = 'rgba(220,255,160,.6)'; c.lineWidth = 1.6; c.stroke(shore);
+    } else {
+      for (let i = 0; i < PAL.length * 3; i++) { c.fillStyle = PAL[(i / 3) | 0][i % 3]; c.fill(paths[i]); }
+      c.fillStyle = 'rgb(56,130,40)'; c.fill(acid);
+    }
+    c.strokeStyle = 'rgba(0,0,0,.25)'; c.lineWidth = 1; c.stroke(crack);
+    c.strokeStyle = 'rgba(220,210,190,.45)'; c.lineWidth = 1.4; c.stroke(bones);
+    c.fillStyle = '#0b0a0e'; c.fill(fog);
+    c.fillStyle = 'rgba(10,9,14,.55)'; c.fill(edge);
+    const ch = old || {};
+    Object.assign(ch, { cv, s: sc, sig: chunkSig(W, S, X0, Y0), objs, hits, dirty: false, chk: performance.now(), used: performance.now() });
+    CK.map.set(cy * 1000 + cx, ch);
+    return ch;
+  }
+  // карта видимости: клетка = пиксель; обновляется, только когда сменилась видимость
+  const visCv = document.createElement('canvas'); let visCtx = null, visImg = null, visKey = '';
+  function drawVisShade(W, S, vs, x0, y0, x1, y1, alpha) {
+    if (!visCtx) { visCv.width = N; visCv.height = N; visCtx = visCv.getContext('2d'); visImg = visCtx.createImageData(N, N); const d = visImg.data; for (let k = 0; k < d.length; k += 4) { d[k] = 10; d[k + 1] = 9; d[k + 2] = 16; } }
+    const key = vs + ':' + x0 + ':' + y0 + ':' + x1 + ':' + y1 + ':' + (S.myc ? 1 : 0);
+    if (key !== visKey) {
+      visKey = key;
+      const d = visImg.data, MY = S.myc, fungi = G.race === 'fungi';
+      for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) {
+        const i = y * N + x, v = MY ? MY[i] : 0;
+        d[i * 4 + 3] = W.explored[i] && W.type[i] !== T.VOID && W.vis[i] < vs && !(v === 1 || (v === 3 && fungi)) ? 255 : 0;
+      }
+      visCtx.putImageData(visImg, 0, 0, x0, y0, x1 - x0 + 1, y1 - y0 + 1);
+    }
+    ctx.save();
+    ctx.transform(HW, HH, -HW, HH, 0, 0);
+    ctx.globalAlpha = alpha; ctx.imageSmoothingEnabled = true;
+    ctx.drawImage(visCv, x0, y0, x1 - x0 + 1, y1 - y0 + 1, x0, y0, x1 - x0 + 1, y1 - y0 + 1);
+    ctx.restore();
+  }
   G.render = function (dt) {
+    if (G.prof) G.prof.begin();
     const S = G.S, W = G.W, cam = G.cam;
     G.time += dt;
     lights = [];
@@ -7196,6 +7349,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     ctx.fillStyle = '#09080b'; ctx.fillRect(0, 0, VW, VH);
     ctx.setTransform(z * dpr, 0, 0, z * dpr, (VW / 2 - cam.x * z + shx) * dpr, (VH / 2 - cam.y * z + shy) * dpr);
 
+    if (G.prof) G.prof.mark('start');
     // границы видимости
     const vl = cam.x - VW / 2 / z - 70, vr = cam.x + VW / 2 / z + 70, vt = cam.y - VH / 2 / z - 40, vb = cam.y + VH / 2 / z + 140;
     const corners = [G.screenToTile(0, 0), G.screenToTile(VW, 0), G.screenToTile(0, VH), G.screenToTile(VW, VH)];
@@ -7203,56 +7357,38 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     for (const [a, b] of corners) { x0 = Math.min(x0, a); x1 = Math.max(x1, a); y0 = Math.min(y0, b); y1 = Math.max(y1, b); }
     x0 = Math.max(0, Math.floor(x0) - 3); y0 = Math.max(0, Math.floor(y0) - 3); x1 = Math.min(N - 1, Math.ceil(x1) + 4); y1 = Math.min(N - 1, Math.ceil(y1) + 4);
 
-    const GP = G.texOn === false ? null : G.groundPats(ctx), gl = GP ? groundLayer(W) : null;
-    const gpaths = GP ? Array.from({ length: 32 }, () => new Path2D()) : null, rim = new Path2D(), shore = new Path2D();
-    const LP = G.layerPats(ctx), mycP = new Path2D(), moldP = new Path2D(), foeMycP = new Path2D();
-    const MY = S.myc || null;
-    const paths = [];
-    for (let i = 0; i < PAL.length * 3; i++) paths.push(new Path2D());
-    const fog = new Path2D(), dim = new Path2D(), edge = new Path2D(), acid = new Path2D(), crack = new Path2D(), bones = new Path2D();
+    // ---------- Земля: кусками 8×8 клеток в кэше (рисуются один раз, перерисовываются только при изменениях)
     const objs = [];
     G.hits = [];
     const vs = S.visStamp - 1;
-    for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) {
-      const ix = (x - y) * HW, iy = (x + y + 1) * HH;
-      if (ix < vl || ix > vr || iy < vt || iy > vb) continue;
-      const i = y * N + x;
-      if (!W.explored[i]) { diamond(fog, ix, iy, 1); continue; }
-      const t = W.type[i];
-      if (t === T.VOID) continue;
-      const v = MY ? MY[i] : 0;
-      if (v) {
-        if (v === 1) diamond(mycP, ix, iy); else if (v === 2) diamond(foeMycP, ix, iy); else if (v === 3) diamond(moldP, ix, iy);
+    const sc = z * dpr <= 0.75 ? 0.5 : z * dpr <= 1.5 ? 1 : 2;
+    if (CK.W !== W || CK.tex !== G.texOn) { CK.map.clear(); CK.W = W; CK.tex = G.texOn; CK.px = 0; }
+    const now = performance.now();
+    let builds = 0;
+    const cx0 = Math.max(0, Math.floor(x0 / CH)), cx1 = Math.min(Math.floor((N - 1) / CH), Math.floor(x1 / CH));
+    const cy0 = Math.max(0, Math.floor(y0 / CH)), cy1 = Math.min(Math.floor((N - 1) / CH), Math.floor(y1 / CH));
+    for (let cy = cy0; cy <= cy1; cy++) for (let cx = cx0; cx <= cx1; cx++) {
+      const X0 = cx * CH, Y0 = cy * CH;
+      const minx = (X0 - Y0 - CH) * HW - CPAD, miny = (X0 + Y0) * HH - CPAD, bw = 2 * CH * HW + 2 * CPAD, bh = 2 * CH * HH + 2 * CPAD;
+      if (minx > vr || minx + bw < vl || miny > vb || miny + bh < vt) continue;
+      const key = cy * 1000 + cx;
+      let ch = CK.map.get(key);
+      // раз в полсекунды сверяем подпись куска: разведка, предметы, залежи, места, мицелий
+      if (ch && now - ch.chk > 500) { ch.chk = now + (key % 7) * 20; if (chunkSig(W, S, X0, Y0) !== ch.sig) ch.dirty = true; }
+      if (!ch || ch.dirty || ch.s !== sc) {
+        if (builds < (ch ? 3 : 8)) { builds++; ch = buildChunk(W, S, cx, cy, sc, ch); }
       }
-      if (GP) {
-        const L = gl[i], pr = PRI[L];
-        diamond(gpaths[L], ix, iy);
-        if (t === T.ACID) diamond(acid, ix, iy);
-        if (L < 16 && x > 0 && x < N - 1 && y > 0 && y < N - 1) {
-          for (let k = 0; k < 4; k++) {
-            const dx = k === 0 ? 1 : k === 1 ? -1 : 0, dy = k === 2 ? 1 : k === 3 ? -1 : 0, j = i + dx + dy * N;
-            const Ln = gl[j];
-            if (Ln < 16 && Ln !== L && PRI[Ln] > pr && W.explored[j]) tongue(gpaths[Ln], t === T.ACID ? shore : rim, x, y, dx, dy);
-          }
-        }
-      } else if (t === T.ACID) diamond(acid, ix, iy);
-      else diamond(paths[t * 3 + W.shade[i]], ix, iy);
-      if (W.vis[i] < vs && !(v === 1 || (v === 3 && G.race === 'fungi'))) diamond(dim, ix, iy, 0.8);
-      if ((x > 0 && !W.explored[i - 1]) || (y > 0 && !W.explored[i - N]) || (x < N - 1 && !W.explored[i + 1]) || (y < N - 1 && !W.explored[i + N])) diamond(edge, ix, iy, 0.8);
-      const h = G.hash2(x, y, 31);
-      if (!GP && t !== T.ACID && h < 0.22 && z > 0.5) {
-        const a = h * 40;
-        crack.moveTo(ix - 10 + a % 8, iy - 3); crack.lineTo(ix - 2, iy + 1); crack.lineTo(ix + 6 - a % 5, iy - 2);
+      if (!ch || !ch.cv) continue;
+      ch.used = now;
+      ctx.drawImage(ch.cv, minx, miny, bw, bh);
+      for (const h of ch.hits) G.hits.push(h);
+      for (const e of ch.objs) {
+        if (e[1] === 0) { if (W.obj[e[2] + e[3] * N] === e[4]) objs.push(e); }
+        else if (e[1] === 1) { if (e[2].amount > 0) objs.push(e); }
+        else if (e[1] === 2) { if (W.pois[e[3]] === e[2] && W.poiAt[e[2].y * N + e[2].x] === e[3]) objs.push(e); }
       }
-      const o = W.obj[i];
-      if (o === O.BONES) { bones.moveTo(ix - 5, iy); bones.lineTo(ix + 4, iy - 2); bones.moveTo(ix - 1, iy + 3); bones.lineTo(ix + 2, iy - 3); }
-      else if (o) objs.push([x + y + 1, 0, x, y, o]);
-      const ni = W.nodeAt[i];
-      if (ni >= 0 && W.nodes[ni].amount > 0 && !W.nodes[ni].obj) objs.push([x + y + 1, 1, W.nodes[ni]]);
-      else if (ni >= 0 && W.nodes[ni].amount > 0 && !o) hit('n', W.nodes[ni], ix - 26, iy - 14, ix + 26, iy + 14); // залежь без предмета (кислотное болото) — тап по самой клетке
-      const pi = W.poiAt[i];
-      if (pi >= 0) objs.push([x + y + 1.4, 2, W.pois[pi]]);
     }
+    trimChunks(now);
     for (const pt of (W.portals || [])) for (const [e, o] of [[pt.a, pt.b], [pt.b, pt.a]]) {
       const [ax, ay] = iso(e[0], e[1]); if (ax < vl || ax > vr || ay < vt || ay > vb) continue;
       if (!W.explored[Math.floor(e[1]) * N + Math.floor(e[0])]) continue;
@@ -7260,48 +7396,10 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     }
     const nf = G.nightF();
     const ap = 0.5 + 0.5 * Math.sin(G.time * 1.5);
-    if (GP) {
-      for (const L of GORDER) {
-        const pt = GP[L]; pt.setTransform(isoMat(TEX_K[L] || 3));
-        ctx.fillStyle = pt; ctx.fill(gpaths[L]);
-        if (L === 4) { // кислота: пульсирующее свечение и медленно ползущие блики
-          ctx.fillStyle = `rgba(150,255,70,${0.06 + ap * 0.08 + nf * 0.08})`; ctx.fill(acid);
-          const p2 = GP[4]; p2.setTransform(isoMat(5.3, G.time * 3 % 1000, 0));
-          ctx.globalAlpha = 0.16 + ap * 0.08; ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = p2; ctx.fill(acid);
-          ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
-        }
-      }
-      // подземелья и небеса
-      for (let L = 16; L < 32; L++) {
-        if (LP) { const pt = LP[L - 16]; pt.setTransform(isoMat(L === 23 ? 5 : 3, L === 23 ? G.time * 2 % 1000 : 0, 0)); ctx.fillStyle = pt; }
-        else ctx.fillStyle = LAYER_COL[L] || '#333';
-        ctx.fill(gpaths[L]);
-      }
-      GP.noise.setTransform(isoMat(10));
-      ctx.globalAlpha = 0.55; ctx.fillStyle = GP.noise;
-      for (const L of GORDER) ctx.fill(gpaths[L]);
-      ctx.globalAlpha = 1;
-      // мицелий грибницы и плесень
-      if (MY) {
-        const mp = LP ? LP[8] : null, mo = LP ? LP[9] : null;
-        if (mp) mp.setTransform(isoMat(2.5));
-        ctx.globalAlpha = 0.78; ctx.fillStyle = mp || 'rgba(240,240,230,.5)'; ctx.fill(mycP);
-        ctx.globalAlpha = 0.6; ctx.fill(foeMycP); ctx.fillStyle = 'rgba(120,40,60,.18)'; ctx.fill(foeMycP);
-        if (mo) mo.setTransform(isoMat(2.5));
-        ctx.globalAlpha = 0.85; ctx.fillStyle = mo || 'rgba(30,60,30,.6)'; ctx.fill(moldP);
-        ctx.globalAlpha = 1;
-      }
-      ctx.lineJoin = 'round';
-      ctx.strokeStyle = 'rgba(0,0,0,.22)'; ctx.lineWidth = 2; ctx.stroke(rim);
-      ctx.strokeStyle = 'rgba(20,40,10,.55)'; ctx.lineWidth = 4; ctx.stroke(shore);
-      ctx.strokeStyle = `rgba(220,255,160,${0.45 + ap * 0.3})`; ctx.lineWidth = 1.6; ctx.stroke(shore);
-    } else {
-      for (let i = 0; i < PAL.length * 3; i++) { ctx.fillStyle = PAL[(i / 3) | 0][i % 3]; ctx.fill(paths[i]); }
-      ctx.fillStyle = `rgb(${50 + ap * 12},${120 + ap * 20 + nf * 30},${36 + ap * 10})`; ctx.fill(acid);
-    }
-    ctx.strokeStyle = 'rgba(0,0,0,.25)'; ctx.lineWidth = 1; ctx.stroke(crack);
-    ctx.strokeStyle = 'rgba(220,210,190,.45)'; ctx.lineWidth = 1.4; ctx.stroke(bones);
+    // что сейчас не видно — мягкая тень поверх (маленькая карта видимости, растянутая в изометрию)
+    drawVisShade(W, S, vs, x0, y0, x1, y1, 0.5 + 0.2 * nf);
 
+    if (G.prof) G.prof.mark('ground');
     // зона поселения / размещение
     const ui = G.ui || {};
     const cit = G.cit();
@@ -7340,10 +7438,8 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
       objs.push([tx + ty + 0.5, 6, t, ax, ay, col]);
     }
 
-    ctx.fillStyle = '#0b0a0e'; ctx.fill(fog);
-    ctx.fillStyle = 'rgba(10,9,14,.55)'; ctx.fill(edge);
-    ctx.fillStyle = `rgba(10,9,16,${0.5 + 0.2 * G.nightF()})`; ctx.fill(dim);
 
+    if (G.prof) G.prof.mark('marks');
     // сущности
     for (const b of S.buildings) {
       const [ax, ay] = iso(b.x + b.w / 2, b.y + b.h / 2);
@@ -7380,6 +7476,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
         ctx.fillStyle = `rgba(140,255,60,${0.1 + 0.05 * Math.sin(G.time * 3)})`; ctx.beginPath(); ctx.ellipse(nx, ny, rx, ry, 0, 0, Math.PI * 2); ctx.fill();
       }
     }
+    if (G.prof) G.prof.mark('collect');
     objs.sort((a, b) => a[0] - b[0]);
     for (const o of objs) {
       switch (o[1]) {
@@ -7393,6 +7490,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
         case 6: drawFlag(ctx, o[2], o[3], o[4], o[5]); break;
       }
     }
+    if (G.prof) G.prof.mark('objs');
     // Луч Зари
     // заряд маяка: свет копится на вершине, на цели сжимается прицел
     if (S.beamAim && G.race === 'survivors') {
@@ -7461,6 +7559,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     }
     ctx.globalAlpha = 1;
 
+    if (G.prof) G.prof.mark('fx');
     // ночь
     if (nf > 0.01) {
       lx.setTransform(1, 0, 0, 1, 0, 0);
@@ -7498,6 +7597,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     if (dusk > 0) { ctx.fillStyle = `rgba(200,90,40,${0.12 * Math.min(1, dusk)})`; ctx.fillRect(0, 0, VW, VH); }
     if (S.rainT > 0) { ctx.fillStyle = 'rgba(10,10,14,.25)'; ctx.fillRect(0, 0, VW, VH); ctx.strokeStyle = 'rgba(30,30,40,.6)'; ctx.lineWidth = 1; ctx.beginPath(); for (let i = 0; i < 120; i++) { const x = (i * 97 + G.time * 400) % VW, y = (i * 53 + G.time * 900) % VH; ctx.moveTo(x, y); ctx.lineTo(x - 4, y + 14); } ctx.stroke(); }
 
+    if (G.prof) G.prof.mark('night');
     // полоски здоровья и подписи (в мировых координатах)
     ctx.setTransform(z * dpr, 0, 0, z * dpr, (VW / 2 - cam.x * z + shx) * dpr, (VH / 2 - cam.y * z + shy) * dpr);
     const k = Math.max(1, 1 / z) * 0.9;
@@ -7546,6 +7646,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
       }
     }
 
+    if (G.prof) G.prof.mark('labels');
     // экранный слой
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     // пепел
@@ -9324,22 +9425,12 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
   // ---------- Переход-осколки: экран трескается на треугольники цвета мира и разлетается
   const sh = document.createElement('div'); sh.id = 'shatter'; sh.hidden = true; app.appendChild(sh);
   G.shatter = function (color, cb, mid) {
-    const pieces = [];
-    const cx = 50 + (Math.random() - 0.5) * 20, cy = 45 + (Math.random() - 0.5) * 20, n = 14;
-    let a0 = Math.random() * 6.28;
-    for (let i = 0; i < n; i++) {
-      const a1 = a0 + (Math.PI * 2 / n) * (0.7 + Math.random() * 0.6);
-      const p = (a, r) => `${cx + Math.cos(a) * r}% ${cy + Math.sin(a) * r}%`;
-      const am = (a0 + a1) / 2, dx = Math.cos(am) * (60 + Math.random() * 60), dy = Math.sin(am) * (60 + Math.random() * 60);
-      pieces.push(`<i style="clip-path:polygon(${cx}% ${cy}%, ${p(a0, 150)}, ${p(a1, 150)});--dx:${dx}vw;--dy:${dy}vh;--r:${(Math.random() - 0.5) * 90}deg;--d:${(Math.random() * 0.12).toFixed(2)}s"></i>`);
-      a0 = a1;
-    }
+    // лёгкий вариант: вспышка цвета мира с рваным краем — только прозрачность, без летящих осколков
     sh.style.setProperty('--sc', color || 'var(--ve-orange)');
-    sh.innerHTML = `<div class="sh-flash"></div>${pieces.join('')}`;
+    sh.innerHTML = '<b class="sh-crack"></b>';
     sh.hidden = false; sh.className = 'in';
-    // экран закрыт цветом — меняем то, что под ним, и раскалываем
-    setTimeout(() => { if (mid) mid(); sh.className = 'break'; }, 260);
-    setTimeout(() => { sh.hidden = true; sh.className = ''; sh.innerHTML = ''; if (cb) cb(); }, 1150);
+    setTimeout(() => { if (mid) mid(); sh.className = 'out'; }, 180);
+    setTimeout(() => { sh.hidden = true; sh.className = ''; sh.innerHTML = ''; if (cb) cb(); }, 520);
   };
 
   // ---------- Заставка: знак и название до истории мира
@@ -9437,8 +9528,8 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
   }
   // кадры по тапу, как в визуальной новелле: тап в любом месте — следующая подпись
   function panels(img, title, list, call, done, race) {
-    theme(race); setArt(img); open(true);
-    let i = -1;
+    theme(race); setArt(img); open(false);
+    let i = 0;
     const draw = () => {
       const caps = i < 0 ? '' : list.slice(0, i + 1).map((t, k) => `<div class="st-cap${k === i ? ' new' : ' old'}">${t}</div>`).join('');
       const last = i >= list.length - 1;
@@ -9455,7 +9546,6 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     keyH = e => { if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowRight') { e.preventDefault(); if (i >= list.length - 1) go(); else adv(); } };
     addEventListener('keydown', keyH);
     draw();
-    heroT = setTimeout(() => { if (i < 0) adv(); }, 1800);
   }
   // слайдер выбора расы: свайп (и мышью), стрелки, точки, клавиши ← →
   function picker() {
@@ -10038,7 +10128,9 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
     requestAnimationFrame(frame);
   }
 
-  setInterval(() => G.saveGame(), 15000);
+  // сохранение тяжёлое (весь мир в JSON) — раз в 45 с и в свободную минуту браузера, чтобы не было рывков
+  const idle = window.requestIdleCallback || (f => setTimeout(f, 0));
+  setInterval(() => idle(() => G.saveGame(), { timeout: 4000 }), 45000);
   document.addEventListener('visibilitychange', () => { if (document.hidden) G.saveGame(); last = performance.now(); });
   window.addEventListener('pagehide', () => G.saveGame());
 
