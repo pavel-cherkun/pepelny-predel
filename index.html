@@ -4665,7 +4665,10 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
       if (g && (g.type === 'gather' || g.type === 'deliver')) { if (g.type === 'deliver' || (W.nodes[g.node] && W.nodes[g.node].amount > 0)) return; }
       const n = chooseNode(u);
       if (n) { u.goal = { type: 'gather', node: n.id }; return; }
-      if (!g || g.type !== 'patrol') u.goal = { type: 'patrol', x: cx + rnd(-4, 4), y: cy + rnd(-4, 4), wait: rnd(3, 6) };
+      if (!g || g.type !== 'patrol') { // работы нет — ждут, разойдясь по поселению, а не кучей у цитадели
+        for (let k = 0; k < 6; k++) { const a = R() * Math.PI * 2, rr = 4 + R() * Math.max(4, G.zoneR() * 0.6), x = cx + Math.cos(a) * rr, y = cy + Math.sin(a) * rr; if (G.walk(Math.floor(x), Math.floor(y))) { u.goal = { type: 'patrol', x, y, wait: rnd(5, 10) }; return; } }
+        u.goal = { type: 'patrol', x: cx + rnd(-4, 4), y: cy + rnd(-4, 4), wait: rnd(3, 6) };
+      }
       return;
     }
     if (C.role === 'scout' && u.spec !== 'hunter') {
@@ -4716,6 +4719,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
   function chooseNode(u) {
     const R0 = S.mode === 'eco' ? 26 : S.mode === 'defense' ? 15 : 36;
     const total = S.res.scrap + S.res.food + S.res.aether * 3 + 1;
+    const mainRes = (G.econ().order || []);
     const cands = [];
     const ds = drops();
     for (const n of W.nodes) {
@@ -4729,8 +4733,9 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
       let workers = 0;
       for (const o of S.units) if (o !== u && o.goal && o.goal.type === 'gather' && o.goal.node === n.id) workers++;
       if (workers >= 3) continue;
-      if (n.kind === 'water' && S.res.water > 140) continue; // воды достаточно — носим другое
-      if (n.kind === 'fuel' && S.res.fuel > 120) continue;
+      // воды и топлива «достаточно» — только если это не основной ресурс расы (у приматов и грибов вода — главное)
+      if (n.kind === 'water' && S.res.water > 140 && !mainRes.includes('water')) continue;
+      if (n.kind === 'fuel' && S.res.fuel > 120 && !mainRes.includes('fuel')) continue;
       const amt = n.kind === 'aether' ? S.res.aether * 3 : n.kind === 'water' ? S.res.water * 2 : n.kind === 'fuel' ? S.res.fuel * 3 + 80 : S.res[n.kind];
       const need = G.race === 'others' ? -12 * (G.ESSENCE_RATE[n.kind] || 1) : amt / total * 25;
       cands.push([hyp(n.x - u.x, n.y - u.y) + dd * 0.6 + need + workers * 4 - (u.carryKind === n.kind ? 8 : 0), n]);
