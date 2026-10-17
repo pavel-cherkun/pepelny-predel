@@ -851,10 +851,10 @@ body.ux2 .st.goal::before, body.ux2 .st.raid::before, body.ux2 .trial-fab .tf-ic
 .pth-ch.next { opacity: .38; }
 .pth-steps { list-style: none; margin: 0 0 10px; padding: 0 0 0 20px; border-left: 1px dashed var(--ux-line, #333); margin-left: 19px; }
 .pth-steps li { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; font: 500 13px/1.35 'Golos Text', system-ui, sans-serif; }
-.pth-steps li i { flex: none; width: 22px; height: 22px; margin-left: -32px; display: grid; place-items: center; font: 700 11px/1 'JetBrains Mono', ui-monospace, monospace; font-style: normal; background: #0a0a0c; border: 1px solid var(--ux-line, #333); border-radius: 50%; }
-.pth-steps li.ok { color: var(--ux-mu, #999); } .pth-steps li.ok i { color: #000; background: var(--ux-ac, var(--th-acc)); border-color: transparent; }
+.pth-steps li > i { flex: none; width: 22px; height: 22px; margin-left: -32px; display: grid; place-items: center; font: 700 11px/1 'JetBrains Mono', ui-monospace, monospace; font-style: normal; background: #0a0a0c; border: 1px solid var(--ux-line, #333); border-radius: 50%; }
+.pth-steps li.ok { color: var(--ux-mu, #999); } .pth-steps li.ok > i { color: #000; background: var(--ux-ac, var(--th-acc)); border-color: transparent; }
 .pth-steps li.later { opacity: .45; }
-.pth-steps li.now { padding: 8px 0 10px; } .pth-steps li.now i { color: #000; background: var(--ux-tx, #eee); border-color: transparent; }
+.pth-steps li.now { padding: 8px 0 10px; } .pth-steps li.now > i { color: #000; background: var(--ux-tx, #eee); border-color: transparent; }
 .pth-steps li.now .t { font: 700 15px/1.25 'Golos Text', system-ui, sans-serif; }
 .pth-steps li.now .why { margin: 4px 0 6px; color: var(--ux-mu, #aaa); }
 .pth-steps .pth-pr { display: grid; grid-template-columns: auto 1fr; gap: 8px; align-items: center; font: 700 11px/1 'JetBrains Mono', ui-monospace, monospace; margin-bottom: 6px; }
@@ -1030,9 +1030,9 @@ body.ux2 .mf-pop[hidden] { display: none !important; }
 #hand .hd-info { position: absolute; left: 50%; bottom: 330px; transform: translateX(-50%); text-align: center; pointer-events: none; color: var(--ux-tx, #eee); }
 #hand .hd-info b { display: block; font: 800 26px/1 Tektur, sans-serif; text-transform: uppercase; } #hand .hd-info span { display: block; margin-top: 6px; font: 700 11px/1 'JetBrains Mono', monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--ux-ac, #ff7b23); } #hand .hd-info small { display: block; margin-top: 6px; font: 500 13px/1.3 'Golos Text', sans-serif; color: var(--ux-mu, #aaa); }
 #hand .hd-fan { position: absolute; left: 50%; bottom: 30px; width: 0; height: 0; }
-#hand .fan-c { position: absolute; left: 0; bottom: 0; transform-origin: 50% 100%; transform: translateX(calc(-50% + var(--x))) translateY(var(--y)) rotate(var(--a)); transition: transform .22s cubic-bezier(.2,.9,.3,1.3), filter .2s; cursor: pointer; animation: fanIn .45s cubic-bezier(.2,.9,.3,1.2) backwards; animation-delay: calc(var(--i) * 40ms); }
+#hand .fan-c { position: absolute; left: 0; bottom: 0; transform-origin: 50% 100%; transform: translateX(calc(-50% + var(--x) + var(--dx, 0px))) translateY(var(--y)) rotate(var(--a)); transition: transform .22s cubic-bezier(.2,.9,.3,1.3), filter .2s; cursor: pointer; animation: fanIn .45s cubic-bezier(.2,.9,.3,1.2) backwards; animation-delay: calc(var(--i) * 40ms); }
 #hand .fan-c .gcard { --cw: 170px; }
-#hand .fan-c:hover { transform: translateX(calc(-50% + var(--x))) translateY(-60px) rotate(0deg) scale(1.2); z-index: 99 !important; filter: brightness(1.12); }
+#hand .fan-c:hover { transform: translateX(calc(-50% + var(--x))) translateY(-46px) rotate(0deg) scale(1.1); z-index: 99 !important; filter: brightness(1.12); }
 @keyframes fanIn { from { transform: translateX(-50%) translateY(300px) rotate(0deg); opacity: 0; } }
 /* вынутая карта */
 #hand .hd-look { position: absolute; inset: 0; z-index: 120; display: flex; align-items: center; justify-content: center; gap: 34px; background: rgba(4,4,6,.72); animation: fadeIn .18s; }
@@ -1068,6 +1068,81 @@ body.ux2 .mf-pop[hidden] { display: none !important; }
   #hand .dr-top b { font-size: 24px; } #hand .dr-row { gap: 10px; } #hand .dr-c, #hand .dr-c .gcard { --cw: 108px; width: 108px; } #hand .dr-desc { font-size: 11.5px; } #hand .dr-desc b { font-size: 13px; }
 }
 @media (prefers-reduced-motion: reduce) { #hand .dr-float { animation: none; } }
+
+#hand .lk-nav { display: flex; align-items: center; gap: 12px; margin-top: 18px; font: 700 12px/1 'JetBrains Mono', monospace; color: var(--ux-mu, #999); }
+#hand .lk-nav button { width: 44px; height: 44px; border: 1px solid var(--ux-line2, #555); background: rgba(10,10,12,.9); color: var(--ux-tx, #eee); font-size: 16px; cursor: pointer; }
+#hand .lk-nav button:hover { background: var(--ux-ac, #ff7b23); color: #000; }
+@media (max-width: 700px) { #hand .lk-nav { justify-content: center; } }
+/* ---------- Вождь и режим героя (hero.js) */
+#heroBar { position: absolute; z-index: 7; left: 50%; transform: translateX(-50%); bottom: calc(env(safe-area-inset-bottom, 0px) + 12px); display: flex; gap: 10px; align-items: stretch; padding: 8px; background: rgba(8,6,8,.94); border: 1px solid rgba(255,255,255,.14); border-top: 3px solid var(--th-acc, #ffd36a); box-shadow: 0 8px 24px rgba(0,0,0,.7); max-width: calc(100% - 16px); font-family: 'Golos Text', sans-serif; color: #eee; }
+#heroBar .hb-face { position: relative; flex: none; width: 78px; height: 82px; padding: 0; border: 1px solid rgba(255,255,255,.2); background-color: #1a1418; background-repeat: no-repeat; cursor: pointer; }
+#heroBar .hb-lv { position: absolute; left: -6px; bottom: -6px; min-width: 22px; height: 22px; display: grid; place-items: center; background: var(--th-acc, #ffd36a); color: #000; font: 700 12px 'Tektur', sans-serif; border: 2px solid #000; }
+#heroBar .hb-mid { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+#heroBar .hb-name { display: flex; gap: 8px; align-items: baseline; white-space: nowrap; overflow: hidden; }
+#heroBar .hb-name b { font: 700 15px 'Tektur', sans-serif; color: var(--th-acc, #ffd36a); }
+#heroBar .hb-name span { font-size: 11px; opacity: .6; overflow: hidden; text-overflow: ellipsis; }
+#heroBar .hb-hp { height: 7px; background: #2a1a1a; border: 1px solid #000; }
+#heroBar .hb-hp i { display: block; height: 100%; background: linear-gradient(#8ef070, #4aa83a); transition: width .2s; }
+#heroBar .hb-abs { display: flex; gap: 6px; }
+#heroBar .hb-ab { position: relative; width: 72px; height: 46px; padding: 3px; border: 1px solid rgba(255,255,255,.22); background: linear-gradient(#2a2228, #161216); color: #fff; font: 600 11px/1.1 'Golos Text', sans-serif; cursor: pointer; overflow: hidden; }
+#heroBar .hb-ab.ult { border-color: var(--th-acc, #ffd36a); box-shadow: inset 0 0 12px rgba(255,210,100,.25); }
+#heroBar .hb-ab:hover { filter: brightness(1.25); }
+#heroBar .hb-an { position: relative; z-index: 1; display: block; overflow-wrap: anywhere; hyphens: auto; }
+#heroBar .hb-cd { position: absolute; inset: 0; z-index: 2; display: grid; place-items: center; font: 700 16px 'Tektur', sans-serif; font-style: normal; color: #fff; background: conic-gradient(rgba(0,0,0,.72) var(--p, 0%), transparent 0); pointer-events: none; }
+#heroBar .hb-ab:not(.cool) .hb-cd { background: none; }
+#heroBar kbd { position: absolute; right: 2px; bottom: 1px; z-index: 3; font: 600 9px 'JetBrains Mono', monospace; opacity: .55; }
+#heroBar .hb-util { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; align-content: center; }
+#heroBar .hb-u { padding: 6px 8px; border: 1px solid rgba(255,255,255,.2); background: #1c171b; color: #ddd; font: 600 11px 'Golos Text', sans-serif; cursor: pointer; white-space: nowrap; }
+#heroBar .hb-u.on { border-color: var(--th-acc, #ffd36a); color: var(--th-acc, #ffd36a); }
+#heroBar.down { filter: grayscale(1) brightness(.7); }
+#heroBar.camp { left: 12px; transform: none; padding: 6px; gap: 8px; }
+#heroBar.camp .hb-face { width: 58px; height: 62px; }
+#heroBar.camp .hb-ab { width: 60px; height: 38px; font-size: 10px; }
+#heroBar.camp .hb-name span { display: none; }
+#heroBar.ctl .hb-face { outline: 2px solid #ffe08a; outline-offset: 2px; }
+body.heromode:not(.herobuild) .cmd-side, body.heromode #goalPill, body.heromode #goalTrack, body.heromode #raidPill { display: none !important; }
+body.heromode:not(.herobuild) .cmd-main { flex: 0 0 auto !important; width: auto !important; max-width: none !important; }
+body.heromode.herobuild #heroBar { bottom: auto; top: calc(env(safe-area-inset-top, 0px) + 150px); }
+#heroGoal { position: absolute; z-index: 6; left: 50%; transform: translateX(-50%); top: calc(env(safe-area-inset-top, 0px) + 58px); padding: 5px 14px; background: rgba(8,6,8,.88); border: 1px solid rgba(255,255,255,.12); border-left: 3px solid var(--th-acc, #ffd36a); text-align: center; pointer-events: none; white-space: nowrap; }
+#heroGoal span { display: block; font: 600 10px 'JetBrains Mono', monospace; opacity: .6; letter-spacing: .04em; }
+#heroGoal b { font: 700 14px 'Tektur', sans-serif; color: var(--th-acc, #ffd36a); }
+#heroArrow { position: absolute; z-index: 6; width: 0; height: 0; pointer-events: none; }
+#heroArrow::before { content: ''; position: absolute; left: -14px; top: -14px; width: 28px; height: 28px; background: var(--th-acc, #ffd36a); clip-path: polygon(100% 50%, 0 0, 22% 50%, 0 100%); transform: rotate(var(--a)); filter: drop-shadow(0 0 4px #000); animation: hArrow 1s ease-in-out infinite; }
+#heroArrow::after { content: attr(data-d) ' кл.'; position: absolute; left: -20px; top: 16px; width: 40px; text-align: center; font: 700 10px 'JetBrains Mono', monospace; color: #fff; text-shadow: 0 0 3px #000; }
+@keyframes hArrow { 50% { opacity: .55; } }
+#hdlg { position: absolute; inset: 0; z-index: 30; display: flex; align-items: flex-end; justify-content: center; padding: 0 12px calc(env(safe-area-inset-bottom, 0px) + 24px); background: linear-gradient(transparent 40%, rgba(0,0,0,.75)); cursor: pointer; }
+#hdlg .hd-card { position: relative; width: min(760px, 100%); min-height: 190px; display: flex; align-items: flex-end; }
+#hdlg .hd-face { position: absolute; bottom: 0; width: 200px; height: 210px; background-repeat: no-repeat; transition: filter .25s, transform .25s; }
+#hdlg .hd-l { left: 0; }
+#hdlg .hd-r { right: 0; width: 170px; height: 190px; background-size: cover; background-position: center 20%; border: 2px solid rgba(255,255,255,.2); }
+#hdlg .me .hd-r, #hdlg .them .hd-l { filter: brightness(.35) grayscale(.6); transform: scale(.94); }
+#hdlg .hd-box { position: relative; z-index: 2; margin: 0 150px; width: 100%; padding: 14px 18px; background: rgba(8,6,8,.95); border: 1px solid rgba(255,255,255,.15); border-top: 3px solid var(--th-acc, #ffd36a); animation: capIn .3s ease-out; }
+#hdlg .them .hd-box { border-top-color: #e8303f; }
+#hdlg .hd-box b { font: 700 15px 'Tektur', sans-serif; color: var(--th-acc, #ffd36a); }
+#hdlg .them .hd-box b { color: #ff7a80; }
+#hdlg .hd-box p { margin: 6px 0 4px; font: 500 17px/1.35 'Golos Text', sans-serif; color: #fff; }
+#hdlg .hd-box small { font: 600 10px 'JetBrains Mono', monospace; opacity: .5; }
+body.heromode:not(.herobuild) .hand-fab { bottom: 128px !important; right: 16px !important; }
+body.hdlg-on nav.cmd, body.hdlg-on .hand-fab, body.hdlg-on #feed, body.hdlg-on #heroBar, body.hdlg-on #heroGoal, body.hdlg-on #heroArrow, body.hdlg-on #bark { visibility: hidden; }
+body.heromode #bark { top: calc(env(safe-area-inset-top, 0px) + 108px); }
+#hdlg .hd-box { animation: none; }
+.st-modes { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+@media (max-width: 700px) {
+  #heroBar { gap: 6px; padding: 6px; }
+  #heroBar .hb-face { width: 56px; height: 60px; }
+  #heroBar .hb-ab { width: 58px; height: 42px; font-size: 10px; }
+  #heroBar .hb-util { position: absolute; right: 0; bottom: calc(100% + 6px); display: flex; }
+  body.heromode:not(.herobuild) nav.cmd, body.heromode:not(.herobuild) .hand-fab, #heroBar kbd { display: none !important; }
+  #heroGoal { top: calc(env(safe-area-inset-top, 0px) + 104px); }
+  body.heromode #bark { top: calc(env(safe-area-inset-top, 0px) + 150px); }
+  #heroBar.camp { left: 6px; }
+  #heroBar.camp .hb-ab { width: 50px; height: 34px; font-size: 9px; }
+  #heroBar.camp .hb-face { width: 46px; height: 50px; }
+  #hdlg .hd-face { width: 120px; height: 126px; }
+  #hdlg .hd-r { width: 96px; height: 106px; }
+  #hdlg .hd-box { margin: 0 0 110px; }
+  #hdlg .hd-l { bottom: 0; } #hdlg .hd-r { top: auto; bottom: 0; }
+}
 </style>
 
 </head>
@@ -1145,6 +1220,8 @@ G.RES = {
 
 // ---------- Классы жителей
 G.CLASSES = {
+  // вождь расы: один на партию, не нанимается (hero.js даёт имя, лист и способности)
+  hero:   { name: 'Вождь', hp: 560, dmg: 26, range: 1.4, rate: 0.8, speed: 2.15, vision: 8, armor: 0.2, cost: {}, time: 0, req: null, role: 'fighter', hidden: true, accent: '#ffd36a', desc: 'Вождь расы. Один на партию.' },
   scav:   { name: 'Мусорщик', hp: 45,  dmg: 4,  range: 1.1, rate: 1.0, speed: 1.75, vision: 4.5, armor: 0,    carry: 10, gather: 2.2, cost: { food: 30 },               time: 6,  req: null,       role: 'worker',  accent: '#e0a845', desc: 'Сам находит ресурсы и носит их на базу. В бою бесполезен.' },
   scout:  { name: 'Следопыт', hp: 55,  dmg: 6,  range: 1.1, rate: 0.9, speed: 2.5,  vision: 7.5, armor: 0,    cost: { food: 40, scrap: 20 },     time: 8,  req: null,       role: 'scout',   accent: '#5fd0a8', desc: 'Быстрый. Сам уходит в туман и находит локации.' },
   guard:  { name: 'Страж',    hp: 140, dmg: 12, range: 1.15,rate: 1.1, speed: 1.45, vision: 4.5, armor: 0.15, cost: { food: 40, scrap: 40 },     time: 10, req: 'barracks', role: 'fighter', accent: '#e0603c', desc: 'Держит удар в первой линии.' },
@@ -3035,7 +3112,8 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
   G.FT = [];     // всплывающие цифры
 
   const nid = () => S.nextId++;
-  G.cit = () => G.ents.get(S.citadelId);
+  // в режиме героя без лагеря «база» — там, где стоит вождь: набеги, карты и ИИ врагов смотрят на него
+  G.cit = () => G.ents.get(S.citadelId) || (S.heroMode && G.heroCamp ? G.heroCamp() : undefined);
   G.day = () => Math.floor(S.t / DAY) + 1;
   G.phase = () => (S.t % DAY) / DAY;
   G.nightF = function () {
@@ -3097,8 +3175,8 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
   function inc(k, a) { if (!(a > 0)) return; if (G.race === 'others' && k !== 'aether') { a *= G.ESSENCE_RATE[k] || 0; k = 'aether'; } flowCur.inc[k] = (flowCur.inc[k] || 0) + a; }
   function use(k, a) { if (!(a > 0)) return; if (G.race === 'others' && k !== 'aether') { a *= G.ESSENCE_RATE[k] || 0; k = 'aether'; } flowCur.use[k] = (flowCur.use[k] || 0) + a; }
   G.flowRate = function (k) { const H = G.flowHist || []; if (H.length < 5) return null; let v = 0; for (const h of H) v += (h.inc[k] || 0) - (h.use[k] || 0); return v / H.length * 60; };
-  G.newGame = function (seed, race) {
-    G.speed = 1;
+  G.newGame = function (seed, race, opt) {
+    G.speed = 1; opt = opt || {};
     seed = seed || ((Math.random() * 1e9) | 0);
     race = race || 'survivors';
     G.applyRace(race);
@@ -3122,12 +3200,29 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     let c0 = [G.GN >> 1, G.GN >> 1];
     if (G.RC().sky && W.isles && W.isles[0]) c0 = [W.isles[0].x, W.isles[0].y];
     for (let y = c0[1] - 3; y <= c0[1] + 3; y++) for (let x = c0[0] - 3; x <= c0[0] + 3; x++) { const i = y * N + x; if (W.nodeAt[i] >= 0) { W.nodes[W.nodeAt[i]].amount = 0; W.nodeAt[i] = -1; } }
+    if (opt.hero) {
+      // режим героя: базы нет — вождь и трое из отряда в центре
+      S.heroMode = true; S.citadelId = 0; S.chap = { night: 1, neighbors: 1, relic: 1, capital: 1, finale: 1 };
+      G.computeFlow();
+      const at = (dx, dy) => { const w = G.nearestWalkable(c0[0] + dx, c0[1] + dy, 4) || c0; return [w[0] + 0.5, w[1] + 0.5]; };
+      const h = at(0, 0); G.makeUnit('hero', h[0], h[1], { hero: true });
+      for (const [k, dx, dy] of [['guard', -1, 1], ['gunner', 1, 1], ['scout', 0, 2]]) { const p = at(dx, dy); const u = G.makeUnit(k, p[0], p[1]); u.squad = true; }
+      G.resetMyc(); S.myc = new Uint8Array(N * N);
+      S.foes = {};
+      for (const p of W.pois) setupGuards(p);
+      for (const cp of G.foeCapitals()) { G.reveal(cp.x + 0.5, cp.y + 0.5, 4); cp.discovered = true; }
+      S.res = G.mapRes(S.res);
+      G.tickFog(true);
+      return S;
+    }
     const cit = G.placeBuilding('citadel', c0[0] - 1, c0[1] - 1, true);
     S.citadelId = cit.id;
     G.computeFlow();
     const spawn = (cls) => { const p = spawnPoint(); return G.makeUnit(cls, p[0], p[1]); };
     // у грибов своих юнитов нет — только грибница
     if (!G.RC().noUnits) { spawn('scav'); spawn('scav'); spawn('scav'); spawn('scout'); spawn('guard'); spawn('guard'); spawn('gunner'); }
+    // вождь расы — с первой минуты у цитадели
+    if (G.HEROES && G.HEROES[G.race]) spawn('hero');
     if (G.race === 'fungi' || G.race === 'primates' || G.race === 'vampires') addPortal([cit.x + 1.5, cit.y + 3.5], 'under', 'under', { roots: true, crypt: G.race === 'vampires', src: cit.id });
     if (G.race === 'bears') addPortal([cit.x + 1.5, cit.y + 3.5], 'ground', 'ground', { bridge: true, src: cit.id });
     G.resetMyc(); S.myc = new Uint8Array(N * N);
@@ -3322,7 +3417,9 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
       trips: 0, stuckT: 0, lx: x, ly: y, raidsSurvived: 0,
     };
     // у грибницы своих нет: любой житель, что к ней пришёл, — заражённый человек
+    if (cls === 'hero') { u.hero = true; u.traits = []; const H = G.HEROES && G.HEROES[G.race]; if (H) u.name = H.name; }
     if (o.srace) u.srace = o.srace;
+    else if (cls === 'hero') { /* вождь — всегда своей расы */ }
     else if (G.RC().noUnits && cls !== 'mech3') { u.srace = 'survivors'; u.infected = true; }
     G.recalc(u); u.hp = u.st.hp;
     S.units.push(u); G.ents.set(u.id, u);
@@ -3385,12 +3482,13 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
   G.recalcAll = () => S.units.forEach(G.recalc);
   G.has = (u, t) => u.traits.includes(t);
 
+  G.gainXp = (u, amt) => gainXp(u, amt);
   function gainXp(u, amt) {
     if (!u || u.hp <= 0 || u.lvl >= G.MAXLVL) return;
     // отстающие учатся быстрее, обогнавшие — медленнее
     const avg = S.avgLvl || u.lvl;
     const catchup = clamp(1 + (avg - u.lvl) * 0.15, 0.6, 2);
-    u.xp += amt * u.st.xp * catchup * (u.teachT > S.t ? 1.5 : 1); // учительница рядом — растут быстрее
+    u.xp += amt * u.st.xp * catchup * (u.hero && S.heroMode ? 1.8 : 1) * (u.teachT > S.t ? 1.5 : 1); // учительница рядом — растут быстрее
     while (u.lvl < G.MAXLVL && u.xp >= G.xpNeed(u.lvl)) {
       u.xp -= G.xpNeed(u.lvl); u.lvl++;
       onLevel(u);
@@ -4320,6 +4418,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
 
   function killUnit(u, src) {
     if (G.cardFx && G.cardFx.unitDied(u, src)) return; // карта спасла бойца
+    if (u.hero && G.heroDown) { G.heroDown(u, src); return; } // вождь не умирает насовсем
     if (G.isVeh(u) && u.pass && u.pass.length) {
       for (const id of u.pass) { const p = G.ents.get(id); if (p) { p.inVeh = null; p.ride = null; p.hp *= 0.7; p.x = u.x + rnd(-1, 1); p.y = u.y + rnd(-1, 1); } }
       u.pass = [];
@@ -4506,6 +4605,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     return best;
   }
   function think(u) {
+    if (G.heroThink && G.heroThink(u)) return; // вождь и его отряд думают сами (hero.js)
     const st = u.st, C = G.CLASSES[u.cls];
     const fighter = isFighter(u);
     const drop = nearestDrop(u.x, u.y);
@@ -4858,7 +4958,9 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
         if (u.carry > 0 && u.carryKind && u.carryKind !== n.kind) { if (u.carry >= 1) { u.goal = { type: 'deliver' }; break; } u.carry = 0; u.carryKind = null; }
         const d = hyp(u.x - n.x - 0.5, u.y - n.y - 0.5);
         const cap = st.carry || 6, gr = st.gather || 1.1;
-        if (d > (n.obj ? 1.55 : 0.75)) { moveTo(u, n.x + 0.5, n.y + 0.5, dt); moving = true; }
+        // у залежи каждый встаёт на своё место по кругу, а не все в одну точку
+        const ga = (u.id * 2.39996) % (Math.PI * 2), gr0 = n.obj ? 1.05 : 0.55;
+        if (d > (n.obj ? 1.55 : 0.75)) { moveTo(u, n.x + 0.5 + Math.cos(ga) * gr0, n.y + 0.5 + Math.sin(ga) * gr0, dt); moving = true; }
         else {
           const a = Math.min(gr * dt, n.amount, cap - u.carry);
           u.carryKind = n.kind; u.carry += a; if (!n.inf) n.amount -= a; u.atkT = 0.2; u.working = true;
@@ -4871,7 +4973,12 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
       case 'deliver': {
         const b = drop;
         if (!b) { u.goal = null; break; }
-        if (distTo(u.x, u.y, b) > (b.kind === 'u' ? 1.6 : u.stuckT > 1 ? 2.6 : 0.9)) { const bc = center(b); moveTo(u, bc[0], bc[1], dt); moving = true; }
+        if (distTo(u.x, u.y, b) > (b.kind === 'u' ? 1.6 : u.stuckT > 1 ? 2.6 : 0.9)) {
+          // разгружаются по краю здания — с той стороны, откуда пришли, но каждый в свою точку
+          const bc = center(b), half = b.kind === 'u' ? 0.6 : Math.max(b.w || 1, b.h || 1) / 2 + 0.4;
+          const base = Math.atan2(u.y - bc[1], u.x - bc[0]), ja = ((u.id * 0.618) % 1 - 0.5) * 1.4;
+          moveTo(u, bc[0] + Math.cos(base + ja) * half, bc[1] + Math.sin(base + ja) * half, dt); moving = true;
+        }
         else {
           if (u.carryKind && u.carry > 0) {
             const amt = Math.round(u.carry);
@@ -5911,7 +6018,8 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
   G.isMachineEnemy = e => e.type.startsWith('ai:') || !!G.ENEMIES[e.type].vehicle || /:(car|bus|mech1|mech2|mech3)$/.test(e.type) || ['buggy', 'raidmech', 'hammer', 'ironark'].includes(e.type);
   // юнит без связи замирает и шлёт аварийный сигнал; стрелять по тем, кто рядом, ещё может
   function noSignalHold(u) {
-    if (!netRace() || G.CLASSES[u.cls].mech || u.inVeh || u.inBld) { u.noSignal = false; return false; }
+    // вождь носит свой ретранслятор; в режиме героя отряд держит связь через него
+    if (!netRace() || G.CLASSES[u.cls].mech || u.inVeh || u.inBld || u.hero || (S.heroMode && (u.squad || !G.ents.get(S.citadelId)))) { u.noSignal = false; return false; }
     if (G.inSignal(u.x, u.y)) { if (u.noSignal) G.floatText(u.x, u.y, 'связь есть', '#7ae0ff'); u.noSignal = false; return false; }
     if (!u.noSignal) { u.noSignal = true; G.notify(`${u.name}: нет связи — замер и шлёт аварийный сигнал`, { ent: u.id, kind: 'bad' }); }
     u.moving = false; u.lx = u.x; u.ly = u.y;
@@ -6037,7 +6145,8 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     foldRes();
     // экономика
     let eat = 0, drink = 0;
-    if (G.RC().eat) for (const u of S.units) { if (G.isVeh(u) || u.infected || u.hacked) continue; eat += 0.05 * (G.has(u, 'glutton') ? 2 : 1); if (G.RC().drink) drink += 0.02; }
+    const camp = !S.heroMode || !!G.ents.get(S.citadelId); // у вождя без лагеря отряд кормится сам, набегов и событий нет
+    if (G.RC().eat && camp) for (const u of S.units) { if (G.isVeh(u) || u.infected || u.hacked) continue; eat += 0.05 * (G.has(u, 'glutton') ? 2 : 1); if (G.RC().drink) drink += 0.02; }
     if (G.race === 'others') {
       // Иные всё добытое превращают в Эссенцию; Разлом пульсирует сам
       for (const k of ['scrap', 'food', 'water', 'fuel']) if (S.res[k] > 0) { S.res.aether += S.res[k] * G.ESSENCE_RATE[k]; S.res[k] = 0; }
@@ -6057,7 +6166,8 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     S.shelterT -= dt; S.rainT -= dt;
     if (S.bonusFood) { S.res.food += S.bonusFood * dt; inc('food', S.bonusFood * dt); }
     { const inc0 = G.bossMods(S.bossesDone).income + (G.cardG ? G.cardG('income') : 0); if (inc0) { const k = G.econ().order[0]; S.res[k] += inc0 * dt; inc(k, inc0 * dt); } }
-    updFinale(dt); updMiniRaids(dt);
+    if (camp) { updFinale(dt); updMiniRaids(dt); }
+    if (G.heroTick) G.heroTick(dt);
     if (S.citHitT) S.citHitT = Math.max(0, S.citHitT - dt);
     // найм
     // приматы без воды не растят новых бойцов: жажда останавливает всё производство
@@ -6081,9 +6191,9 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
       }
     }
     const gt = G._gridT || 0; if (S.t >= gt || S.t < gt - 1) { G._gridT = S.t + 0.1; buildGrid(); }
-    updRaid(dt);
+    if (camp) updRaid(dt);
     updRaces(dt);
-    updWanderers(dt);
+    if (camp) updWanderers(dt);
     updForagers(dt);
     updFoe(dt);
     updAscension(dt);
@@ -6091,8 +6201,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     // скорость прихода ресурсов (для табло)
     G._rateT = (G._rateT || 0) - dt;
     if (G._rateT <= 0) { G._rateT = 1; (G.resHist = G.resHist || []).push(Object.assign({ t: S.t }, S.res)); if (G.resHist.length > 16) G.resHist.shift(); (G.flowHist = G.flowHist || []).push(flowCur); flowCur = { inc: {}, use: {} }; if (G.flowHist.length > 60) G.flowHist.shift(); }
-    updEvents(dt);
-    updCaravan(dt);
+    if (camp) { updEvents(dt); updCaravan(dt); }
     for (const u of S.units) {
       if (u.hp <= 0 || S.over) continue;
       if (u.inBld) {
@@ -6133,7 +6242,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     updBuildings(dt);
     updProj(dt);
     fogT -= dt; if (fogT <= 0) { fogT = 0.2; G.tickFog(); }
-    taskT -= dt; if (taskT <= 0) { taskT = 1; manageTasks(); checkGoals(); autoEquip(); }
+    taskT -= dt; if (taskT <= 0) { taskT = 1; manageTasks(); if (!S.heroMode) checkGoals(); autoEquip(); }
     updNodes(dt);
     // уборка
     if (S.units.some(u => u.dead)) { for (const u of S.units) if (u.dead) G.ents.delete(u.id); S.units = S.units.filter(u => !u.dead); }
@@ -6790,7 +6899,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
   const isDay = () => !G.isNight() && !(G.race === 'vampires' && G.ascended());
   // за 15 с до рассвета вампиры уже идут прятаться
   const dawnSoon = () => { if (!G.isNight()) return false; const p = G.phase(); return p > 0.96 - 15 / DAY && p < 0.97; };
-  const sunSafe = u => u.cls === 'scav' || u.cls === 'guard' || G.isVeh(u) || G.CLASSES[u.cls].mech;
+  const sunSafe = u => u.hero || u.cls === 'scav' || u.cls === 'guard' || G.isVeh(u) || G.CLASSES[u.cls].mech;
   G.vampDay = () => G.race === 'vampires' && !G.ascended() && (isDay() || dawnSoon());
   G.sunSafe = u => sunSafe(u);
   function nearHoly(x, y) {
@@ -7521,7 +7630,8 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     else if (G.nightF() > 0.3) addLight(e.x, e.y, 14, SP[0] === 'others' ? '#a060ff' : '#ff3010', 0.3);
   }
   function drawUnit(c, u) {
-    if (u.inVeh) return;
+    if (u.inVeh || u.down) return;
+    if (u.hero && G.heroDraw && G.heroDraw(c, u, iso, hit, ellipse)) return; // вождь — свой лист 4×3
     const CC = G.CLASSES[u.cls];
     { const [sh, sk] = unitSpr(u); if (G.sprHas(sh, sk)) { drawSprUnit(c, u); return; } }
     { const [hx, hy] = iso(u.x, u.y); const k = CC.mech ? 3 : CC.role === 'vehicle' ? 2 : 1; hit('u', u, hx - 11 * k, hy - 30 * k, hx + 11 * k, hy + 3); }
@@ -7942,7 +8052,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     }
     const visK = G.lightOn === false ? 1 : 0.4 + 0.6 * G.nightF();
     for (const u of S.units) {
-      if (u.inVeh || u.inBld) continue;
+      if (u.inVeh || u.inBld || u.down) continue;
       addLight(u.x, u.y, u.st.vision * 46, null, 0.55 * visK); // обзор жителя: ночью ярко, днём — слабый ореол
       const [ax, ay] = iso(u.x, u.y); if (ax < vl || ax > vr || ay < vt || ay > vb) continue; objs.push([u.x + u.y, 4, u]);
     }
@@ -7972,6 +8082,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
       }
     }
     if (G.prof) G.prof.mark('collect');
+    if (G.heroOverlay) G.heroOverlay(ctx, iso); // метка цели истории вождя — под объектами
     objs.sort((a, b) => a[0] - b[0]);
     for (const o of objs) {
       switch (o[1]) {
@@ -8124,7 +8235,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     ctx.setTransform(z * dpr, 0, 0, z * dpr, (VW / 2 - cam.x * z + shx) * dpr, (VH / 2 - cam.y * z + shy) * dpr);
     const k = Math.max(1, 1 / z) * 0.9;
     for (const u of S.units) {
-      if (u.inVeh || u.inBld) continue;
+      if (u.inVeh || u.inBld || u.down) continue;
       const [ax, ay] = iso(u.x, u.y); if (ax < vl || ax > vr || ay < vt || ay > vb) continue;
       const sel = ui.selId === u.id;
       if (u.hp < u.st.hp || sel) bar(ctx, ax, ay - 38, 16 * k, 2.2 * k, u.hp / u.st.hp, '#7ad060');
@@ -9707,6 +9818,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
       if (FINE) commitPlace(); else renderBanner();
       return;
     }
+    if (G.heroTap && G.heroTap(sx, sy, tx, ty)) return; // вождь: идти или бить
     const z = G.cam.zoom;
     // сначала — по тому, что реально нарисовано под пальцем; спереди (ниже на экране) важнее
     {
@@ -10313,7 +10425,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
   const portrait = () => ADV_IMG[G.race] || (G.STORY && G.STORY.races[G.race] && G.STORY.races[G.race].img) || (G.UI_IMG && G.RACE_POP && G.UI_IMG[G.RACE_POP[G.race]]);
   G.tutor = function (id, front) {
     syncGame();
-    const S = G.S; if (!S || S.intro || !STEPS[id]) return;
+    const S = G.S; if (!S || S.intro || !STEPS[id] || S.heroMode) return; // у вождя свой рассказчик
     S.tut = S.tut || {};
     if (S.tut.off || S.tut[id]) return;
     S.tut[id] = 1;
@@ -10495,7 +10607,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
       const r = list[i], R = G.STORY.races[r];
       theme(r); setArt(R.img, dir);
       $('.st-text').innerHTML = `<div class="st-kicker">Раса ${i + 1} из ${list.length}</div><h1>${G.RACES[r].name}</h1><div class="st-slogan">${R.tag}</div><div class="st-truth"><span>Их правда</span>${R.truth}</div><div class="st-cap new">${R.pitch}</div>`;
-      $('.st-foot').innerHTML = `<div class="st-dots">${list.map((q, k) => `<i class="${k === i ? 'on' : ''}" data-i="${k}" title="${G.RACES[q].name}"></i>`).join('')}</div><button class="btn pri st-pick">Играть за них</button>`;
+      $('.st-foot').innerHTML = `<div class="st-dots">${list.map((q, k) => `<i class="${k === i ? 'on' : ''}" data-i="${k}" title="${G.RACES[q].name}"></i>`).join('')}</div><div class="st-modes">${G.HEROES && G.HEROES[r] ? `<button class="btn st-hero" title="Без базы. Один вождь, отряд и история расы в четыре акта">Герой: ${G.HEROES[r].name}</button>` : ''}<button class="btn pri st-pick">Кампания</button></div>`;
       const tx = $('.st-text'); tx.classList.remove('in-l', 'in-r'); if (dir) { void tx.offsetWidth; tx.classList.add(dir > 0 ? 'in-r' : 'in-l'); }
     };
     const go = d => { i = (i + d + list.length) % list.length; draw(d); };
@@ -10507,6 +10619,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
       if (e.target.closest('.st-arrow.l')) return go(-1);
       if (e.target.closest('.st-arrow.r')) return go(1);
       const dot = e.target.closest('.st-dots i'); if (dot) { const k = +dot.dataset.i; if (k !== i) { const d = k > i ? 1 : -1; i = k; draw(d); } return; }
+      if (e.target.closest('.st-hero')) { const r = list[i]; if (G.shatter) G.shatter(null, null, () => { close(); startRace(r, true); }); else { close(); startRace(r, true); } return; }
       if (e.target.closest('.st-pick')) { const r = list[i]; if (G.shatter) G.shatter(null, null, () => { close(); startRace(r); }); else { close(); startRace(r); } }
     };
     if (keyH) removeEventListener('keydown', keyH);
@@ -10514,8 +10627,15 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     addEventListener('keydown', keyH);
     draw(0);
   }
-  function startRace(r) {
-    if (r !== G.S.race) { G.newGame(undefined, r); const c = G.cit(); G.lookAt(c.x + 1.5, c.y + 1.5, true); G.ui.reset(); G.ui.updHud && G.ui.updHud(); }
+  function startRace(r, heroMode) {
+    if (heroMode) {
+      // режим героя: всегда новая партия без базы; вступление — история вождя
+      G.newGame(undefined, r, { hero: true }); const c = G.cit(); G.lookAt(c.x + 1.5, c.y + 1.5, true); G.ui.reset(); G.ui.updHud && G.ui.updHud();
+      const H = G.HEROES[r], T = G.HERO_STORY[r];
+      panels(G.STORY.races[r].img, `${H.name} · ${T.title}`, T.intro, 'В путь', () => { G.S.intro = false; const h = G.heroUnit(); if (h) G.ui.followId = h.id; G.heroBegin(); }, r);
+      return;
+    }
+    if (r !== G.S.race || G.S.heroMode) { G.newGame(undefined, r); const c = G.cit(); G.lookAt(c.x + 1.5, c.y + 1.5, true); G.ui.reset(); G.ui.updHud && G.ui.updHud(); }
     const R = G.STORY.races[r];
     panels(R.img, G.RACES[r].name, R.panels, R.call, () => { G.S.intro = false; if (G.tutor) G.tutor('start'); }, r);
   }
@@ -11029,7 +11149,7 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
   // ---------- Расписание: «Испытание» загорается раз в 4 минуты и ждёт 75 секунд
   pill.addEventListener('click', () => { pill.hidden = true; G.S.trialUntil = 0; open(G.race); });
   setInterval(() => {
-    const S = G.S; if (!S || S.intro || S.over) { pill.hidden = true; return; }
+    const S = G.S; if (!S || S.intro || S.over || S.heroMode) { pill.hidden = true; return; }
     if (S.trialAt === undefined) S.trialAt = Math.max(S.t, 0) + 75;
     if (S.t > S.trialAt) { S.trialAt = S.t + 240; S.trialUntil = S.t + 75; if (G.tutor) G.tutor('trial'); }
     const on = (S.trialUntil || 0) > S.t;
@@ -11237,17 +11357,28 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
       <div class="hd-fan">${all.map((o, i) => { const a = (i - mid) * spread, y = (i - mid) * (i - mid) * (small ? 2.5 : 4.5), x = (i - mid) * step; return `<div class="fan-c" data-i="${i}" style="--a:${a}deg;--y:${y}px;--x:${x}px;--i:${i};z-index:${10 + i}">${cardHTML(o)}</div>`; }).join('')}</div>`;
     box.hidden = false; fab.classList.remove('new');
     box.querySelector('.hd-dim').onclick = closeBox;
-    box.querySelectorAll('.fan-c').forEach(el => el.onclick = e => { e.stopPropagation(); inspect(all[+el.dataset.i]); });
+    const fc = [...box.querySelectorAll('.fan-c')];
+    // соседи расходятся, чтобы наведённая карта их не закрывала
+    fc.forEach((el, i) => {
+      el.onclick = e => { e.stopPropagation(); inspect(i); };
+      el.onmouseenter = () => fc.forEach((o, j) => o.style.setProperty('--dx', j < i ? '-58px' : j > i ? '58px' : '0px'));
+    });
+    const fan = box.querySelector('.hd-fan'); if (fan) fan.onmouseleave = () => fc.forEach(o => o.style.setProperty('--dx', '0px'));
   }
   // карта вынимается из руки и увеличивается — можно прочитать и разыграть
-  function inspect(o) {
+  let lookI = 0;
+  function inspect(i) {
+    lookI = (i + all.length) % all.length; const o = all[lookI];
     const old = box.querySelector('.hd-look'); if (old) old.remove();
     const el = document.createElement('div'); el.className = 'hd-look';
     const isTrick = o.type === 'trick' && hand().includes(o.key);
     el.innerHTML = `<div class="lk-card">${cardHTML(o)}</div><div class="lk-txt"><span class="lk-k">${o.rar === 'legend' ? 'Легендарная' : o.type === 'trick' ? 'Приём — разыгрывается один раз' : 'Закон — действует, пока в руке'}</span><b>${o.name}</b><p>${o.desc}</p>
-      <div class="lk-b">${isTrick ? '<button class="btn pri lk-play">Разыграть</button>' : ''}<button class="btn lk-back">В руку</button></div></div>`;
+      <div class="lk-b">${isTrick ? '<button class="btn pri lk-play">Разыграть</button>' : ''}<button class="btn lk-back">В руку</button></div><div class="lk-nav">${all.length > 1 ? '<button class="lk-prev" aria-label="Предыдущая">◀</button><span>' + (lookI + 1) + ' / ' + all.length + '</span><button class="lk-next" aria-label="Следующая">▶</button>' : ''}</div></div>`;
     box.appendChild(el);
     el.querySelector('.lk-back').onclick = () => el.remove();
+    const pv = el.querySelector('.lk-prev'), nx = el.querySelector('.lk-next'); if (pv) pv.onclick = () => inspect(lookI - 1); if (nx) nx.onclick = () => inspect(lookI + 1);
+    // свайп по карте — листать
+    let sx = null; el.addEventListener('pointerdown', e => { sx = e.clientX; }); el.addEventListener('pointerup', e => { if (sx !== null && Math.abs(e.clientX - sx) > 50 && all.length > 1) inspect(lookI + (e.clientX < sx ? 1 : -1)); sx = null; });
     el.addEventListener('click', e => { if (e.target === el) el.remove(); });
     const pb = el.querySelector('.lk-play'); if (pb) pb.onclick = () => playTrick(o.key);
   }
@@ -11261,6 +11392,7 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
     else if (G.notify) G.notify(`«${c.name}»: не на кого — врагов не видно.`, {});
   }
   box.addEventListener('pointerdown', e => e.stopPropagation());
+  addEventListener('keydown', e => { if (box.hidden || box.dataset.mode !== 'hand') return; const lk = box.querySelector('.hd-look'); if (e.key === 'Escape') { if (lk) lk.remove(); else closeBox(); } else if (lk && (e.key === 'ArrowRight' || e.key === 'ArrowLeft')) { inspect(lookI + (e.key === 'ArrowRight' ? 1 : -1)); e.preventDefault(); } });
 
   // ---------- драфт после набега: беда, сила, случай — карты парят
   function pool(type) {
@@ -11312,6 +11444,658 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
   }
   setInterval(() => { if (!G.S) return; const n = hand().length + legends().length; const b = fab.querySelector('b'); const t = n ? String(n) : ''; if (b.textContent !== t) b.textContent = t; fab.hidden = !!G.S.intro; fab.classList.toggle('trick', tricks().length > 0); }, 600);
   G.openHand = openHand;
+})();
+
+</script>
+<script>
+// js/hero.js
+'use strict';
+// Вождь расы и режим «Герой» (библия, 15.5): лист 4×3, мозг героя и отряда, способности, история в четыре акта, диалоги, панель.
+(function () {
+  const S_ = () => G.S;
+  const hyp = Math.hypot;
+  const R = Math.random;
+
+  // ---------- Вожди
+  // ab: q, w, e, r — способности; squad: как отряд идёт за вождём; foe: чужие на пути в истории
+  const HEROES = {
+    survivors: { name: 'Лампа', title: 'девчонка с фонарём', col: '#ffd36a', squad: 'line', foe: 'mutants',
+      ab: [
+        { k: 'flash', name: 'Вспышка', desc: 'Фонарь на полную: враги вокруг ослеплены на 2 с и получают урон.', cd: 8 },
+        { k: 'tape', name: 'Изолента', desc: 'Лечит себя и отряд рядом на треть здоровья.', cd: 14 },
+        { k: 'turret', name: 'Турель', desc: 'Турель из хлама: стреляет 25 секунд.', cd: 25 },
+        { k: 'lastbulb', name: 'Последняя лампочка', desc: 'Слепящий взрыв света: большой урон и ослепление на 4 с всем вокруг.', cd: 60 }] },
+    mutants: { name: 'Первенец', title: 'серп Матери', col: '#caed59', squad: 'swarm', foe: 'survivors',
+      ab: [
+        { k: 'leap', name: 'Прыжок', desc: 'Врывается к врагу и бьёт с налёта.', cd: 7 },
+        { k: 'molt', name: 'Линька', desc: 'Сбрасывает старую шкуру: лечит половину здоровья.', cd: 16 },
+        { k: 'brood', name: 'Выводок', desc: 'Три трутня вылупляются рядом на 25 секунд.', cd: 25 },
+        { k: 'hunger', name: 'Голод Матери', desc: 'Кровавый вихрь: урон всем вокруг, вождь лечится от каждого удара.', cd: 55 }] },
+    others: { name: 'Жнец Без Лица', title: 'коса Разлома', col: '#9ae8ff', squad: 'blink', foe: 'ai',
+      ab: [
+        { k: 'step', name: 'Шаг сквозь', desc: 'Мгновенно встаёт рядом с врагом и бьёт.', cd: 7 },
+        { k: 'reap', name: 'Жатва', desc: 'Коса по кругу: урон всем рядом.', cd: 9 },
+        { k: 'dread', name: 'Страх пустоты', desc: 'Враги вокруг бегут 4 секунды.', cd: 18 },
+        { k: 'rift', name: 'Разлом', desc: 'Затягивает врагов в точку и рвёт их.', cd: 55 }] },
+    fungi: { name: 'Старый Мицелий', title: 'ходячая грибница', col: '#7fd0ff', squad: 'line', foe: 'primates',
+      ab: [
+        { k: 'spore', name: 'Споровый удар', desc: 'Удар о землю: урон и оглушение на 2 с.', cd: 8 },
+        { k: 'mycel', name: 'Грибница', desc: 'Грибница прорастает вокруг и лечит отряд.', cd: 15 },
+        { k: 'shrooms', name: 'Мухоморы', desc: 'Три споровика прорастают на 25 секунд.', cd: 25 },
+        { k: 'bloom', name: 'Цветение', desc: 'Облако спор: враги вокруг 6 секунд дерутся друг с другом.', cd: 55 }] },
+    ai: { name: 'Модуль Ω', title: 'исполняющий узел', col: '#5ae0ff', squad: 'swarm', foe: 'clowns',
+      ab: [
+        { k: 'dash', name: 'Рывок', desc: 'Разрез по линии до врага.', cd: 7 },
+        { k: 'shield', name: 'Щит', desc: 'Броня отряду на 8 секунд.', cd: 16 },
+        { k: 'drones', name: 'Дроны', desc: 'Два дрона-стрелка на 25 секунд.', cd: 25 },
+        { k: 'overload', name: 'Перегрузка', desc: 'Цепная молния по восьми врагам.', cd: 50 }] },
+    clowns: { name: 'Бим-Бом', title: 'арлекин с молотом', col: '#ff5aa8', squad: 'train', foe: 'vampires',
+      ab: [
+        { k: 'mallet', name: 'Молот', desc: 'Удар с отбросом и оглушением.', cd: 7 },
+        { k: 'mirror', name: 'Кривое зеркало', desc: 'Враги рядом путаются и 5 секунд бьют своих.', cd: 16 },
+        { k: 'parade', name: 'Парад', desc: 'Отряд быстрее и бьёт сильнее 8 секунд.', cd: 20 },
+        { k: 'deadly', name: 'Смертельный номер', desc: 'Все враги вокруг в панике и получают урон.', cd: 55 }] },
+    vampires: { name: 'Граф', title: 'хозяин без приглашения', col: '#ff3a4a', squad: 'blink', foe: 'bears',
+      ab: [
+        { k: 'bite', name: 'Укус', desc: 'Сильный удар; лечит столько же.', cd: 6 },
+        { k: 'bats', name: 'Стая', desc: 'Мыши жалят всех врагов вокруг.', cd: 12 },
+        { k: 'bow', name: 'Поклон', desc: 'Ближайший сильный враг очарован на 8 секунд.', cd: 20 },
+        { k: 'moon', name: 'Кровавая луна', desc: 'Отряд пьёт кровь с ударов и бьёт сильнее 10 секунд.', cd: 55 }] },
+    primates: { name: 'Корнелий', title: 'старая горилла', col: '#9be05a', squad: 'line', foe: 'fungi',
+      ab: [
+        { k: 'log', name: 'Бревно', desc: 'Удар дубиной по площади.', cd: 8 },
+        { k: 'bark', name: 'Кора', desc: 'Броня себе на 8 секунд и лечение.', cd: 15 },
+        { k: 'gibbons', name: 'Лес зовёт', desc: 'Два гиббона приходят на 25 секунд.', cd: 25 },
+        { k: 'quake', name: 'Землетряс', desc: 'Оглушает всех вокруг на 3 с, большой урон.', cd: 55 }] },
+    bears: { name: 'Капитан Пуговка', title: 'обиженный плюш', col: '#ff8fc8', squad: 'line', foe: 'survivors',
+      ab: [
+        { k: 'saber', name: 'Сабля', desc: 'Выпад с тройным уроном.', cd: 6 },
+        { k: 'hugs', name: 'Обнимашки', desc: 'Враги рядом обняты: стоят 3 секунды.', cd: 14 },
+        { k: 'plush', name: 'Плюшевый десант', desc: 'Три мишки падают с неба на 25 секунд.', cd: 25 },
+        { k: 'spite', name: 'Злоба', desc: 'Отряд бьёт в полтора раза сильнее 10 секунд, вокруг — шрапнель ваты.', cd: 55 }] },
+  };
+  G.HEROES = HEROES;
+
+  // ---------- Истории. intro — перед стартом; acts[i].calm — капитан рассказывает, пока тихо; done — по завершении акта.
+  // meet — диалог с вожаком чужих (f — он, h — наш вождь); boss — перед владыкой; win — эпилог.
+  const STORY = {
+    survivors: { title: 'Свет на вышку', leader: 'Загонщик Улья', site: 'радиовышка',
+      intro: ['Лампочка в фонаре — последняя на сто вёрст. Дед берёг её двадцать лет.', 'На старой радиовышке есть маяк. Зажжёшь его — свои увидят, где мы.', 'Иди, Лампа. Мы за тобой.'],
+      acts: [
+        { goal: 'Найти запасной патрон', calm: ['Дед: в бункерах до войны держали патроны под такие лампы. Поищи.', 'Дед: не свети зря. Фонарь видно издалека — и не только нам.'], done: 'Патрон. Ржавый, но держит. Теперь не страшно, если лампа треснет.' },
+        { goal: 'Пройти мимо загонщиков', calm: ['Дед: мутанты чуют свет. Они идут на него, как мотыльки. Только мотыльки не едят людей.', 'Дед: если встретишь их вожака — не спорь. Бей первой.'], done: 'Загонщик лёг. Улей запомнит наш запах.' },
+        { goal: 'Удержать вышку 75 секунд', calm: ['Дед: вышка близко. Чуешь — гудит? Провода ещё живые.', 'Дед: поднимешься — не смотри вниз. Смотри на огонь.'], done: 'Маяк горит. Его видно на сорок вёрст.' },
+        { goal: 'Победить владыку', calm: ['Дед: на свет пришло что-то большое.'], done: '' }],
+      meet: [['f', 'Огонёк. Ты пахнешь железом и страхом.'], ['h', 'Это не страх. Это керосин.'], ['f', 'Мать любит тех, кто светится. Иди к Матери.'], ['h', 'Дед говорил: мутантам не грубить. Я и не буду. Я буду бить.']],
+      boss: [['f', 'Свет — это чтобы мы видели, кого есть.'], ['h', 'Тогда смотри внимательно.']],
+      win: ['Маяк горит третью ночь. С севера пришли двое. Потом ещё пятеро.', 'Дед плачет и говорит, что это дым. Дыма нет.', 'Лампочка одна. Но теперь её видно всем.'] },
+    mutants: { title: 'Первый выводок', leader: 'Сержант Ржавь', site: 'тёплое гнездо',
+      intro: ['Улей стал тесным. Матери нужен второй — дальше, теплее, сытнее.', 'Первенец, ты — серп. Найди место для нового выводка.', 'Ешь по дороге. Расти.'],
+      acts: [
+        { goal: 'Найти тёплое место', calm: ['Мать: под руинами тепло. Там спали люди. Там ещё пахнет ими.', 'Мать: не торопись. Голод — хороший проводник.'], done: 'Тепло. Здесь пахнет старой кровью. Хорошее место для яиц.' },
+        { goal: 'Встретить людей', calm: ['Мать: люди с трубами ходят здесь. Их мясо жёсткое, но их много.', 'Мать: они называют нас ошибкой. Ошибка — это то, что не выжило.'], done: 'Сержант молчит. Люди стали тише.' },
+        { goal: 'Удержать гнездо 75 секунд', calm: ['Мать: здесь будет второй Улей. Охраняй, пока он прорастает.', 'Мать: слышишь, как бьётся? Это сердце гнезда.'], done: 'Гнездо приросло к земле. Его уже не вырвать.' },
+        { goal: 'Победить владыку', calm: ['Мать: идёт железо. Много железа.'], done: '' }],
+      meet: [['f', 'Стой, тварь. Дальше — наша земля.'], ['h', 'Земля не ваша. Земля — тёплая.'], ['f', 'Мы сорок лет вас жжём. Сожжём и тебя.'], ['h', 'Сорок лет вы жжёте. А мы — всё ещё здесь.']],
+      boss: [['f', 'Всё, хватит. Сейчас приедет тяжёлое.'], ['h', 'Тяжёлое — значит, сытное.']],
+      win: ['Второй Улей вздохнул. Потом третий раз. Потом задышал ровно.', 'Мать гладит его мыслями, как гладят спящего ребёнка.', 'Правильной формы нет. Есть та, что выжила. Мы выжили дважды.'] },
+    others: { title: 'Жатва', leader: 'Протокол Страж', site: 'печать',
+      intro: ['Смертные построили машины, а машины — печать. Под ней — город, полный жизни.', 'Жизнь — это материя. Материя — это урожай.', 'Сорви печать, Жнец.'],
+      acts: [
+        { goal: 'Найти первую жилу', calm: ['Голос: здесь мало жизни. Но её запах ведёт дальше.', 'Голос: смертные называют нас злом. Они называют злом и осень.'], done: 'Жила. Тонкая, но тянется к печати.' },
+        { goal: 'Пройти мимо стражей', calm: ['Голос: машины стерегут печать. Они не боятся. Им нечем.', 'Голос: страх пустоты не работает на железо. Работает коса.'], done: 'Страж замолчал. Его голос был ровным до конца.' },
+        { goal: 'Удержать печать 75 секунд', calm: ['Голос: печать трескается. Держи её, пока Разлом пьёт.', 'Голос: слышишь хор? Это жизнь уходит в Разлом.'], done: 'Печать сломана. Урожай течёт.' },
+        { goal: 'Победить владыку', calm: ['Голос: их последний узел идёт к тебе.'], done: '' }],
+      meet: [['f', '> обнаружен объект. класс: не определён'], ['h', 'Я — осень.'], ['f', '> осень не найдена в базе. подавить'], ['h', 'Вас не было в базе Разлома. Но вы — тоже урожай.']],
+      boss: [['f', '> все узлы: защитить печать'], ['h', 'Печать — это всего лишь крышка.']],
+      win: ['Город под печатью был полон жизни. Теперь он полон тишины.', 'Разлом сыт. Он засыпает, как засыпает поле после жатвы.', 'Обе правды верны. Одна — сытее.'] },
+    fungi: { title: 'Сквозь корни', leader: 'Лесник Дуб', site: 'мёртвый пень',
+      intro: ['Приматы сажают лес поверх наших нитей. Лес душит грибницу.', 'Старый Мицелий, иди сквозь корни. Найди Древо-матку.', 'Мы терпеливы. Но не бесконечно.'],
+      acts: [
+        { goal: 'Найти гнилое место', calm: ['Шёпот: где гниль — там мы. Где гниль — там дом.', 'Шёпот: ступай медленно. Нити растут за тобой.'], done: 'Гниль. Мягкая, тёплая. Нити пьют её.' },
+        { goal: 'Встретить лесников', calm: ['Шёпот: обезьяны слышат нас корнями. Они идут.', 'Шёпот: лес и грибница — братья. Братья спорят дольше всех.'], done: 'Лесник лёг в мох. Мох пророс сквозь него.' },
+        { goal: 'Удержать пень 75 секунд', calm: ['Шёпот: здесь стояло старое дерево. Его корни — наши дороги.', 'Шёпот: держи, пока нити не дойдут до Древа.'], done: 'Нити дошли. Древо-матка дрогнуло.' },
+        { goal: 'Победить владыку', calm: ['Шёпот: лес встаёт. Весь лес.'], done: '' }],
+      meet: [['f', 'Гниль. Ходячая гниль.'], ['h', 'Мы — не гниль. Мы — то, что после.'], ['f', 'После нас будет лес.'], ['h', 'После леса будем мы. Мы подождём.']],
+      boss: [['f', 'Лес помнит каждое дерево, что ты съел.'], ['h', 'Мы тоже помним. Каждое было вкусным.']],
+      win: ['Древо-матка стоит. Но внутри оно уже наше.', 'Лес растёт дальше — на наших нитях, нашим соком.', 'Никто не победил. Все проросли друг в друга. Тишина.'] },
+    ai: { title: 'Сбойный узел', leader: 'Ведущий Хохотун', site: 'узел связи',
+      intro: ['<code>&gt; в сети шум. источник: органика с краской на лицах</code>', '<code>&gt; модуль Ω: найти узел и вернуть тишину</code>', '<code>&gt; допуск потерь: в пределах нормы</code>'],
+      acts: [
+        { goal: 'Найти ретранслятор', calm: ['Консоль: <code>&gt; ретранслятор рядом. сигнал искажён смехом</code>', 'Консоль: <code>&gt; смех не несёт информации. зачем органика смеётся?</code>'], done: '<code>&gt; ретранслятор найден. шум идёт с юга</code>' },
+        { goal: 'Встретить клоунов', calm: ['Консоль: <code>&gt; группа органики. маркировка: «цирк»</code>', 'Консоль: <code>&gt; рекомендация: не слушать. юмор заразен</code>'], done: '<code>&gt; ведущий отключён. шум упал на 40%</code>' },
+        { goal: 'Удержать узел 75 секунд', calm: ['Консоль: <code>&gt; перезапуск узла: 60 секунд. защищать</code>', 'Консоль: <code>&gt; ошибка: модуль Ω улыбается. проверить лицевые приводы</code>'], done: '<code>&gt; узел чист. в сети тишина</code>' },
+        { goal: 'Победить владыку', calm: ['Консоль: <code>&gt; приближается источник шума. крупный</code>'], done: '' }],
+      meet: [['f', 'Почтеннейшая публика! Железный дровосек пришёл за сердцем!'], ['h', '<code>&gt; сердце: не требуется</code>'], ['f', 'Вот это и смешно, дружок.'], ['h', '<code>&gt; смешно: не определено. применить клинок</code>']],
+      boss: [['f', 'Последний акт! Машина против цирка!'], ['h', '<code>&gt; акт: завершить</code>']],
+      win: ['<code>&gt; сеть: тишина. порядок: 100%</code>', '<code>&gt; лог: модуль Ω сохранил запись смеха. причина: не определена</code>', '<code>&gt; вопрос отклонён. запись сохранена</code>'] },
+    clowns: { title: 'Гастроли', leader: 'Мажордом Скорбь', site: 'сцена',
+      intro: ['Почтеннейшая публика! Где-то есть замок, где не смеются уже триста лет!', 'Бим-Бом, это вызов. Труппа едет на гастроли.', 'Билеты не нужны. Выход не предусмотрен.'],
+      acts: [
+        { goal: 'Найти площадку', calm: ['Шпрехшталмейстер: каждому шоу нужна сцена! И немного крови на опилках.', 'Шпрехшталмейстер: улыбайся, Бим-Бом. Даже когда больно. Особенно когда больно.'], done: 'Площадка! Ржавая, кривая — идеальная!' },
+        { goal: 'Встретить свиту Графа', calm: ['Шпрехшталмейстер: вампиры не смеются триста лет. Наша задача — рассмешить. Или напугать. Это одно и то же.', 'Шпрехшталмейстер: если гость не смеётся — значит, мы плохо стараемся.'], done: 'Мажордом упал красиво. Почти поклон.' },
+        { goal: 'Дать представление 75 секунд', calm: ['Шпрехшталмейстер: шоу должно продолжаться! Минута — и зал наш!', 'Шпрехшталмейстер: публика пошла! Держите её в креслах!'], done: 'Овации! Ну, крики. Но это почти овации.' },
+        { goal: 'Победить владыку', calm: ['Шпрехшталмейстер: на финал пришёл сам хозяин замка.'], done: '' }],
+      meet: [['f', 'Хозяин не заказывал цирк.'], ['h', 'Цирк не заказывают. Цирк приходит сам.'], ['f', 'Хозяин не смеётся триста лет.'], ['h', 'Значит, у него накопилось. Ха-ха!']],
+      boss: [['f', 'Довольно балагана.'], ['h', 'Балаган только начался. Музыку!']],
+      win: ['Финальный поклон. Занавес из чужих плащей.', 'Где-то в замке кто-то хихикнул. Впервые за триста лет.', 'Смейтесь. Это помогает. Нам.'] },
+    vampires: { title: 'Приглашение', leader: 'Мишка-Привратник', site: 'бальный зал',
+      intro: ['Хозяин, в долине дают бал. Нас не позвали.', 'Плюшевые хозяева говорят, что вампиры — плохие гости.', 'Прикажете навестить без приглашения? Плащ я почистил.'],
+      acts: [
+        { goal: 'Найти дорогу на бал', calm: ['Игорь: в старых усадьбах всегда есть карты, хозяин. И винный погреб.', 'Игорь: солнце вам не страшно, хозяин. Плащ двойной.'], done: 'Карта, хозяин. Бал — за холмами. В бывшем детском саду.' },
+        { goal: 'Встретить привратников', calm: ['Игорь: мишки охраняют вход. Очень мягкие. Очень злые.', 'Игорь: позвольте напомнить — у плюша нет крови. Только вата.'], done: 'Привратник распорот, хозяин. Вата повсюду. Я подмету.' },
+        { goal: 'Удержать зал 75 секунд', calm: ['Игорь: бал начинается, хозяин. Гости… недовольны.', 'Игорь: держитесь центра зала. Так лучше видно ваш плащ.'], done: 'Зал ваш, хозяин. Музыка играет сама.' },
+        { goal: 'Победить владыку', calm: ['Игорь: хозяйка бала идёт к вам, хозяин.'], done: '' }],
+      meet: [['f', 'Приветик! Тебя нет в списке, солнышко.'], ['h', 'Я везде есть в списке. Просто не сверху.'], ['f', 'Кровопийцам вход запрещён. Целую.'], ['h', 'Какая жалость. Тогда войду как гроза.']],
+      boss: [['f', 'Это наш бал! Наш! Обнимашки отменяются!'], ['h', 'Мадам, разрешите вас пригласить. На последний танец.']],
+      win: ['Бал продолжается до рассвета. Гости остались — в каком-то смысле.', 'Хозяин танцевал трижды. Игорь подметал вату до утра.', 'Вечность длинная, хозяин. Хорошо, когда в ней есть балы.'] },
+    primates: { title: 'Семя', leader: 'Споровик-Шептун', site: 'мёртвый город',
+      intro: ['Старое Древо дало последнее семя.', 'Корнелий, отнеси его туда, где земля мёртвая. Пусть там вырастет лес.', 'Грибы будут против. Грибы всегда против.'],
+      acts: [
+        { goal: 'Найти родник', calm: ['Шаман: семени нужна вода. Старые колодцы ещё помнят дождь.', 'Шаман: иди тише, Корнелий. Лес слышит твои шаги — и не только лес.'], done: 'Родник. Семя напилось и стало тяжелее.' },
+        { goal: 'Встретить грибницу', calm: ['Шаман: нити под землёй. Они ждут, когда семя упадёт.', 'Шаман: грибы едят то, что умерло. Не умирай, Корнелий.'], done: 'Шептун замолчал. Нити отползли.' },
+        { goal: 'Удержать город 75 секунд', calm: ['Шаман: здесь была площадь. Сажай в центр.', 'Шаман: держи, пока росток не встанет. Минута — для леса это ничто.'], done: 'Росток встал. Асфальт треснул под ним.' },
+        { goal: 'Победить владыку', calm: ['Шаман: Сердце грибницы проснулось. Оно идёт к ростку.'], done: '' }],
+      meet: [['f', 'Мы… слышим семя. Оно сладкое.'], ['h', 'Оно не для вас.'], ['f', 'Всё, что упало, — наше.'], ['h', 'Тогда я не уроню.']],
+      boss: [['f', 'Мы подождём, пока росток сгниёт.'], ['h', 'Ждите. Я тоже умею ждать. И бить.']],
+      win: ['На месте мёртвого города — молодой лес. Деревья пока по колено.', 'Корнелий сидит под ними, как дед под внуками.', 'Из всего вырастает лес. Даже из конца света.'] },
+    bears: { title: 'Возврат игрушек', leader: 'Бригадир Ключ', site: 'свалка игрушек',
+      intro: ['Приветик, Капитан! Люди выбросили нас сорок лет назад.', 'На свалке за городом лежат наши сёстры и братья. Без глаз. Без лап.', 'Заберём их. Всех. Целую. Ненавижу.'],
+      acts: [
+        { goal: 'Найти первый склад', calm: ['Секретарь: люди хранят старые вещи в бункерах. Как будто стыдно выбросить.', 'Секретарь: не плачь, Капитан. У тебя пуговица отвалится.'], done: 'Коробка с игрушками! Один заяц ещё дышит. Ну, почти.' },
+        { goal: 'Встретить людей', calm: ['Секретарь: люди со свалки не отдадут нас просто так.', 'Секретарь: помнишь, как они нас обнимали? Теперь наша очередь. Крепко.'], done: 'Бригадир лёг. Мы его обняли. Он не встал.' },
+        { goal: 'Удержать свалку 75 секунд', calm: ['Секретарь: свалка! Тут все наши! Держи, пока мы их выкапываем!', 'Секретарь: обнимашки по расписанию. Расписание — сейчас.'], done: 'Всех выкопали. Сто двенадцать мишек. Один без головы, но очень злой.' },
+        { goal: 'Победить владыку', calm: ['Секретарь: люди прислали что-то большое и железное. Как грубо.'], done: '' }],
+      meet: [['f', 'Опять эти плюшевые. Сжечь.'], ['h', 'Вы нас уже выбросили. Сжечь — это новое.'], ['f', 'Вы просто тряпки.'], ['h', 'Тряпки с саблями. Приветик.']],
+      boss: [['f', 'Мы вас создали. Мы вас и закончим.'], ['h', 'Вы нас создали любить. Не получилось.']],
+      win: ['Сто двенадцать мишек пришли домой. Кто-то без лапы, кто-то без глаза.', 'Капитан Пуговка пришил каждому по пуговице. Своих не осталось.', 'Справедливость — это когда больно всем одинаково. Сегодня больно было людям.'] },
+  };
+  G.HERO_STORY = STORY;
+
+  // ---------- Лист 4×3: столбцы — вниз-влево, вниз-вправо, вверх-влево, вверх-вправо; строки — стойка, шаг, удар
+  const CW = 200, CH = 210, PAD = 6, IMG = {};
+  const sheetSrc = r => 'art/heroes/' + r + '.webp';
+  function sheet(r) {
+    if (!IMG[r]) { const im = new Image(); im.src = sheetSrc(r); IMG[r] = im; }
+    const im = IMG[r]; return im.complete && im.naturalWidth > 0 ? im : null;
+  }
+  // направление на экране по смещению в клетках
+  const dirOf = (dx, dy) => { const sx = dx - dy, sy = dx + dy; return sy >= 0 ? (sx < 0 ? 0 : 1) : (sx < 0 ? 2 : 3); };
+  const DIRV = [[0, 1], [1, 0], [-1, 0], [0, -1]]; // куда смотрит в клетках
+  G.heroDraw = function (c, u, iso, hit, ellipse) {
+    const r = G.race, H0 = HEROES[r]; if (!H0) return false;
+    const im = sheet(r), [px, py] = iso(u.x, u.y), t = G.time;
+    const mx = u.x - (u._px === undefined ? u.x : u._px), my = u.y - (u._py === undefined ? u.y : u._py);
+    u._px = u.x; u._py = u.y;
+    if (Math.abs(mx) + Math.abs(my) > 0.002) u._dir = dirOf(mx, my);
+    if (u.atkT > 0 && u.goal && u.goal.type === 'attack') { const tg = G.ents.get(u.goal.t); if (tg) u._dir = dirOf(tg.x - u.x, tg.y - u.y); }
+    const dir = u._dir || 0;
+    let row = 0, bob = 0;
+    if (u.atkT > 0.05) row = 2;
+    else if (u.moving) { const ph = u.walk * 0.55; row = Math.floor(ph) % 2 ? 1 : 0; bob = -Math.abs(Math.sin(ph * Math.PI)) * 2.2; }
+    else bob = Math.sin(t * 2 + u.id) * 0.6;
+    const Hh = 72 * (1 + Math.min(u.lvl, 20) * 0.012), Ww = Hh * CW / CH;
+    const lift = r === 'others' ? -6 - Math.sin(t * 1.6) * 2 : 0;
+    // тень и золотое кольцо вождя
+    ellipse(c, px, py, 17, 7, 'rgba(0,0,0,.45)');
+    c.beginPath(); c.ellipse(px, py, 19, 8, 0, 0, Math.PI * 2); c.strokeStyle = H0.col; c.globalAlpha = 0.55 + 0.25 * Math.sin(t * 3); c.lineWidth = 2; c.stroke(); c.globalAlpha = 1;
+    if (G.ui && G.ui.selId === u.id || u.ctl) { c.beginPath(); c.ellipse(px, py, 23, 10, 0, 0, Math.PI * 2); c.strokeStyle = '#ffe08a'; c.lineWidth = 1.5; c.stroke(); }
+    const y0 = py - Hh + PAD * Hh / CH + bob + lift;
+    if (im) {
+      c.drawImage(im, dir * CW, row * CH, CW, CH, px - Ww / 2, y0, Ww, Hh);
+      if (u.hitT > 0) { c.save(); c.globalCompositeOperation = 'lighter'; c.globalAlpha = 0.5; c.drawImage(im, dir * CW, row * CH, CW, CH, px - Ww / 2, y0, Ww, Hh); c.restore(); }
+    } else if (G.sprHas && G.sprHas(r, 'guard')) G.sprDraw(c, r, 'guard', px, py, { bw: 54, bh: 48, flash: u.hitT > 0 });
+    hit('u', u, px - Ww * 0.26, y0 + Hh * 0.12, px + Ww * 0.26, py + 3);
+    return true;
+  };
+
+  // ---------- Помощники
+  const hero = () => { const S = S_(); if (!S) return null; let h = S.heroId && G.ents.get(S.heroId); if (!h || !h.hero) { h = S.units.find(u => u.hero) || null; if (h) S.heroId = h.id; } return h; };
+  G.heroUnit = hero;
+  const realCamp = () => { const S = S_(); return S && S.citadelId && G.ents.get(S.citadelId); };
+  // без лагеря «база» — у ног вождя (набеги, законы руки и ИИ врагов смотрят сюда)
+  let campObj = null;
+  G.heroCamp = function () {
+    const h = hero(); if (!h) return undefined;
+    campObj = campObj || { kind: 'b', type: 'citadel', id: -1, w: 3, h: 3, lvl: 1, hp: 1, maxHp: 1, prog: 1, virtual: true };
+    campObj.x = h.x - 1.5; campObj.y = h.y - 1.5; campObj.lvl = Math.max(1, Math.min(3, 1 + Math.floor((h.lvl - 1) / 5)));
+    return campObj;
+  };
+  const alive = e => e && e.hp > 0 && !e.dead;
+  function foesNear(x, y, r) { return S_().enemies.filter(e => alive(e) && hyp(e.x - x, e.y - y) < r && !(e.charmT > S_().t)); }
+  function nearestFoe(x, y, r, f) { let b = null, bd = r; for (const e of S_().enemies) { if (!alive(e) || (f && !f(e))) continue; const d = hyp(e.x - x, e.y - y); if (d < bd) { bd = d; b = e; } } return b; }
+  const isBoss = e => !!(G.ENEMIES[e.type] && G.ENEMIES[e.type].boss) || e.type === 'capital';
+  const pw = h => h.st.dmg * (1 + 0.04 * G.day());
+  function hurt(h, e, amt) { if (alive(e)) G.damage(e, amt, h); }
+  function stun(e, s) { e.stunT = Math.max(e.stunT || 0, G.S.t + (isBoss(e) ? s * 0.4 : s)); }
+  function myTeam(h, r) { return S_().units.filter(u => u.hp > 0 && !u.down && !u.inVeh && !u.inBld && hyp(u.x - h.x, u.y - h.y) < r); }
+  function healU(u, frac) { const a = u.st.hp * frac; u.hp = Math.min(u.st.hp, u.hp + a); G.floatText(u.x, u.y, '+' + Math.round(a), '#7dffa0'); }
+  function ring(x, y, col, n) { G.fxBurst(x, y, col, n || 30); }
+  function boltFx(x0, y0, x1, y1) { if (G.bolts) G.bolts.push({ pts: [[x0, y0], [x1, y1]], t: 0.3 }); }
+  // временные усиления: держим до tmpT, потом пересчёт
+  function tmp(u, s, fn) { fn(u.st); u.tmpT = Math.max(u.tmpT || 0, G.S.t + s); }
+  function walkNear(x, y) { const w = G.nearestWalkable(Math.floor(x), Math.floor(y), 4); return w ? [w[0] + 0.5, w[1] + 0.5] : [x, y]; }
+  function summon(h, cls, n, ttl, o) {
+    const out = [];
+    for (let i = 0; i < n; i++) {
+      const a = i / n * Math.PI * 2 + R(), p = walkNear(h.x + Math.cos(a) * 1.4, h.y + Math.sin(a) * 1.4);
+      const u = G.makeUnit(cls, p[0], p[1], Object.assign({ lvl: Math.max(1, h.lvl) }, o || {}));
+      u.squad = true; u.summon = true; u.ttl = G.S.t + ttl; u.name = (o && o.name) || u.name;
+      G.fxBurst(u.x, u.y, HEROES[G.race].col, 14); out.push(u);
+    }
+    return out;
+  }
+  function target(h, r) {
+    const g = h.goal && h.goal.type === 'attack' ? G.ents.get(h.goal.t) : null;
+    if (alive(g) && hyp(g.x - h.x, g.y - h.y) < r) return g;
+    return nearestFoe(h.x, h.y, r);
+  }
+  function leapTo(h, e) { const a = Math.atan2(h.y - e.y, h.x - e.x), p = walkNear(e.x + Math.cos(a) * 0.8, e.y + Math.sin(a) * 0.8); G.fxBurst(h.x, h.y, HEROES[G.race].col, 12); h.x = p[0]; h.y = p[1]; h.path = null; h.atkT = 0.4; h.goal = { type: 'attack', t: e.id }; }
+
+  // ---------- Способности. Возвращают false, если не к чему применить (кулдаун не тратится)
+  const FX = {
+    flash(h) { const l = foesNear(h.x, h.y, 3.2); for (const e of l) { stun(e, 2); hurt(h, e, pw(h) * 1.6); } ring(h.x, h.y, '#fff2a8', 40); G.shake = 3; return true; },
+    tape(h) { for (const u of myTeam(h, 5)) healU(u, 0.35); ring(h.x, h.y, '#9ad0ff', 20); return true; },
+    turret(h) { const t = summon(h, 'gunner', 1, 25, { name: 'Турель из хлама' })[0]; t.turret = true; return true; },
+    lastbulb(h) { const l = foesNear(h.x, h.y, 7); for (const e of l) { stun(e, 4); hurt(h, e, pw(h) * 6); } ring(h.x, h.y, '#ffffff', 90); G.shake = 9; G.flashT = 0.4; return true; },
+    leap(h) { const e = target(h, 7); if (!e) return false; leapTo(h, e); hurt(h, e, pw(h) * 3); for (const o of foesNear(e.x, e.y, 1.6)) if (o !== e) hurt(h, o, pw(h)); return true; },
+    molt(h) { healU(h, 0.5); ring(h.x, h.y, '#caed59', 26); return true; },
+    brood(h) { summon(h, 'scav', 3, 25, { name: 'Трутень' }).forEach(u => tmp(u, 25, s => { s.dmg *= 3; })); return true; },
+    hunger(h) { const l = foesNear(h.x, h.y, 4); let sum = 0; for (const e of l) { const a = pw(h) * 4; hurt(h, e, a); sum += a; } h.hp = Math.min(h.st.hp, h.hp + sum * 0.35); ring(h.x, h.y, '#ff3040', 60); G.shake = 6; return true; },
+    step(h) { const e = target(h, 8); if (!e) return false; leapTo(h, e); hurt(h, e, pw(h) * 3); return true; },
+    reap(h) { const l = foesNear(h.x, h.y, 2.6); if (!l.length) return false; for (const e of l) hurt(h, e, pw(h) * 2.4); ring(h.x, h.y, '#9ae8ff', 34); return true; },
+    dread(h) { const l = foesNear(h.x, h.y, 5); for (const e of l) if (!isBoss(e)) { e.fearT = G.S.t + 4; e.target = null; } ring(h.x, h.y, '#4a2a7a', 40); return true; },
+    rift(h) { const c = target(h, 7) || h; const l = foesNear(c.x, c.y, 5.5); for (const e of l) { if (!isBoss(e)) { const p = walkNear(e.x + (c.x - e.x) * 0.7, e.y + (c.y - e.y) * 0.7); e.x = p[0]; e.y = p[1]; e.path = null; } stun(e, 1.5); hurt(h, e, pw(h) * 5); } ring(c.x, c.y, '#c890ff', 80); G.shake = 8; return true; },
+    spore(h) { const l = foesNear(h.x, h.y, 2.8); for (const e of l) { stun(e, 2); hurt(h, e, pw(h) * 1.8); } ring(h.x, h.y, '#e8d090', 36); return true; },
+    mycel(h) { if (G.mycSeed) G.mycSeed(h.x, h.y, 3.5, 1); for (const u of myTeam(h, 5)) healU(u, 0.3); ring(h.x, h.y, '#4d7cff', 26); return true; },
+    shrooms(h) { summon(h, 'scav', 3, 25, { name: 'Споровик', srace: 'survivors' }).forEach(u => { u.infected = true; tmp(u, 25, s => { s.dmg *= 3; s.hp *= 1.5; }); u.hp = u.st.hp; }); return true; },
+    bloom(h) { const l = foesNear(h.x, h.y, 6); for (const e of l) if (!isBoss(e)) e.charmT = G.S.t + 6; ring(h.x, h.y, '#ff90d0', 70); return true; },
+    dash(h) { const e = target(h, 7); if (!e) return false; const x0 = h.x, y0 = h.y; leapTo(h, e); for (const o of S_().enemies) { if (!alive(o)) continue; const vx = h.x - x0, vy = h.y - y0, L = hyp(vx, vy) || 1, k = ((o.x - x0) * vx + (o.y - y0) * vy) / L; if (k < 0 || k > L) continue; if (Math.abs((o.x - x0) * vy - (o.y - y0) * vx) / L < 1) hurt(h, o, pw(h) * 2.6); } boltFx(x0, y0, h.x, h.y); return true; },
+    shield(h) { for (const u of myTeam(h, 6)) { tmp(u, 8, s => { s.armor = Math.min(0.8, s.armor + 0.45); }); G.fxSpark(u.x, u.y, '#5ae0ff'); } ring(h.x, h.y, '#5ae0ff', 24); return true; },
+    drones(h) { summon(h, 'scout', 2, 25, { name: 'Дрон', srace: 'ai' }).forEach(u => tmp(u, 25, s => { s.dmg *= 3; })); return true; },
+    overload(h) { let p = h, hitL = []; for (let i = 0; i < 8; i++) { const e = nearestFoe(p.x, p.y, 6, q => !hitL.includes(q)); if (!e) break; boltFx(p.x, p.y, e.x, e.y); hurt(h, e, pw(h) * (5 - i * 0.4)); stun(e, 1); hitL.push(e); p = e; } if (!hitL.length) return false; G.shake = 6; G.sfx && G.sfx('bolt'); return true; },
+    mallet(h) { const e = target(h, 2.4); if (!e) return false; hurt(h, e, pw(h) * 3); stun(e, 1.5); if (!isBoss(e)) { const a = Math.atan2(e.y - h.y, e.x - h.x), p = walkNear(e.x + Math.cos(a) * 2, e.y + Math.sin(a) * 2); e.x = p[0]; e.y = p[1]; e.path = null; } h.atkT = 0.4; ring(e.x, e.y, '#ffd060', 20); G.shake = 4; return true; },
+    mirror(h) { const l = foesNear(h.x, h.y, 4.5); if (!l.length) return false; for (const e of l) if (!isBoss(e)) e.charmT = G.S.t + 5; ring(h.x, h.y, '#ff5aa8', 40); return true; },
+    parade(h) { for (const u of myTeam(h, 7)) { u.buffT = 8; tmp(u, 8, s => { s.speed *= 1.4; }); } ring(h.x, h.y, '#ffd060', 30); return true; },
+    deadly(h) { const l = foesNear(h.x, h.y, 7); for (const e of l) { if (!isBoss(e)) { e.fearT = G.S.t + 5; e.target = null; } hurt(h, e, pw(h) * 4); } ring(h.x, h.y, '#ff5aa8', 90); G.shake = 7; return true; },
+    bite(h) { const e = target(h, 2.2); if (!e) return false; const a = pw(h) * 3; hurt(h, e, a); h.hp = Math.min(h.st.hp, h.hp + a); h.atkT = 0.4; G.floatText(h.x, h.y, '+' + Math.round(a), '#ff6070'); return true; },
+    bats(h) { const l = foesNear(h.x, h.y, 4); if (!l.length) return false; for (const e of l) { hurt(h, e, pw(h) * 1.6); G.fxSpark(e.x, e.y, '#40202a'); } ring(h.x, h.y, '#301018', 50); return true; },
+    bow(h) { let b = null, bh = 0; for (const e of foesNear(h.x, h.y, 5)) if (!isBoss(e) && e.maxHp > bh) { bh = e.maxHp; b = e; } if (!b) return false; b.charmT = G.S.t + 8; b.target = null; G.floatText(b.x, b.y, 'очарован', '#ff90a0'); return true; },
+    moon(h) { for (const u of myTeam(h, 8)) { u.buffT = 10; tmp(u, 10, s => { s.lifesteal += 0.35; }); } ring(h.x, h.y, '#ff2030', 60); G.flashT = 0.25; return true; },
+    log(h) { const l = foesNear(h.x, h.y, 2.6); if (!l.length) return false; for (const e of l) hurt(h, e, pw(h) * 2.4); h.atkT = 0.4; ring(h.x, h.y, '#9b7a4a', 30); G.shake = 4; return true; },
+    bark(h) { tmp(h, 8, s => { s.armor = Math.min(0.8, s.armor + 0.5); }); healU(h, 0.2); ring(h.x, h.y, '#6a8a3a', 24); return true; },
+    gibbons(h) { summon(h, 'scout', 2, 25, { name: 'Гиббон' }).forEach(u => tmp(u, 25, s => { s.dmg *= 3; })); return true; },
+    quake(h) { const l = foesNear(h.x, h.y, 6); for (const e of l) { stun(e, 3); hurt(h, e, pw(h) * 4.5); } ring(h.x, h.y, '#9b7a4a', 80); G.shake = 12; return true; },
+    saber(h) { const e = target(h, 2.2); if (!e) return false; hurt(h, e, pw(h) * 3); h.atkT = 0.4; return true; },
+    hugs(h) { const l = foesNear(h.x, h.y, 3); if (!l.length) return false; for (const e of l) { stun(e, 3); G.floatText(e.x, e.y, 'обнят', '#ff8fc8'); } return true; },
+    plush(h) { summon(h, 'guard', 3, 25, { name: 'Плюшевый десантник' }).forEach(u => tmp(u, 25, s => { s.dmg *= 2.5; })); return true; },
+    spite(h) { for (const u of myTeam(h, 8)) u.buffT = 10; for (const e of foesNear(h.x, h.y, 4)) hurt(h, e, pw(h) * 2); ring(h.x, h.y, '#ffffff', 60); return true; },
+  };
+  const KEYS = ['q', 'w', 'e', 'r'];
+  G.heroCast = function (i) {
+    const S = S_(), h = hero(); if (!S || !h || h.down || S.over || S.intro) return;
+    const A = HEROES[G.race].ab[i]; S.heroCd = S.heroCd || {};
+    const left = (S.heroCd[A.k] || 0) - S.t;
+    if (left > 0) { G.floatText(h.x, h.y, Math.ceil(left) + ' с', '#aaa'); return; }
+    if (!FX[A.k](h)) { G.floatText(h.x, h.y, 'нет цели', '#aaa'); return; }
+    S.heroCd[A.k] = S.t + A.cd * (1 - Math.min(0.3, (h.lvl - 1) * 0.015));
+    G.floatText(h.x, h.y - 0.6, A.name, HEROES[G.race].col);
+    G.sfx && G.sfx('hit');
+    updBar(true);
+  };
+
+  // ---------- Мозг. Вождь: приказ игрока → цель; без приказа в режиме героя бьёт ближнего. Отряд — по правилу расы.
+  G.heroThink = function (u) {
+    const S = S_();
+    if (u.hero) {
+      if (u.down) { u.goal = null; return true; }
+      if (u.order) { obey(u); return true; }
+      if (!S.heroMode) return false; // в кампании — обычный боец
+      const g = u.goal && u.goal.type === 'attack' ? G.ents.get(u.goal.t) : null;
+      if (alive(g) && hyp(g.x - u.x, g.y - u.y) < 6) return true;
+      const e = nearestFoe(u.x, u.y, 4.2);
+      u.goal = e ? { type: 'attack', t: e.id } : (u.goal && u.goal.type === 'interact' ? u.goal : null);
+      return true;
+    }
+    if (u.turret) { const e = nearestFoe(u.x, u.y, u.st.range + 0.3); u.goal = e ? { type: 'attack', t: e.id } : null; return true; }
+    if (S.heroMode && (u.squad || !realCamp())) { squad(u); return true; }
+    return false;
+  };
+  function obey(h) {
+    const o = h.order;
+    if (o.type === 'attack') { const t = G.ents.get(o.id); if (!alive(t)) { h.order = null; h.goal = null; return; } h.goal = { type: 'attack', t: t.id }; return; }
+    if (o.type === 'poi') {
+      const p = G.W.pois.find(q => q.id === o.id); if (!p) { h.order = null; return; }
+      const d = hyp(h.x - p.x - 0.5, h.y - p.y - 0.5);
+      if ((p.state === 'new' || p.unmake) && !p.guarded) { if (!h.goal || h.goal.type !== 'interact') { if (o.started) { h.order = null; return; } h.goal = { type: 'interact', poi: p.id }; o.started = true; } return; }
+      if (d < 1.4) { h.order = null; h.goal = null; return; }
+      if (!h.goal || h.goal.type !== 'move') h.goal = { type: 'move', x: p.x + 0.5, y: p.y + 0.5 };
+      return;
+    }
+    if (hyp(h.x - o.x, h.y - o.y) < 0.4) { h.order = null; h.goal = null; return; }
+    if (!h.goal || h.goal.type !== 'move' || h.goal.x !== o.x || h.goal.y !== o.y) h.goal = { type: 'move', x: o.x, y: o.y };
+  }
+  function squad(u) {
+    const h = hero(), S = S_();
+    if (!h || h.down) { u.goal = null; return; }
+    const mode = HEROES[G.race].squad, dh = hyp(u.x - h.x, u.y - h.y);
+    const list = S.units.filter(q => q.hp > 0 && !q.hero && !q.turret && !q.inVeh && (q.squad || !realCamp())), i = Math.max(0, list.indexOf(u)), n = list.length;
+    // тени и мыши не отстают — встают рядом
+    if (mode === 'blink' && dh > 7) { const p = walkNear(h.x + R() * 2 - 1, h.y + R() * 2 - 1); G.fxBurst(u.x, u.y, '#301838', 10); u.x = p[0]; u.y = p[1]; u.path = null; G.fxBurst(u.x, u.y, '#301838', 10); }
+    // бой: враг у вождя или у себя под носом
+    const e = dh < 11 ? (nearestFoe(h.x, h.y, mode === 'swarm' ? 7 : 6) || nearestFoe(u.x, u.y, 3)) : null;
+    if (e) { u.goal = { type: 'attack', t: e.id }; return; }
+    let tx, ty;
+    if (mode === 'swarm') { const a = S.t * 0.7 + i / Math.max(1, n) * Math.PI * 2, r = 1.8 + (i % 2) * 0.7; tx = h.x + Math.cos(a) * r; ty = h.y + Math.sin(a) * r; }
+    else if (mode === 'train') { const prev = i > 0 ? list[i - 1] : h, f = DIRV[(prev._dir !== undefined ? prev._dir : h._dir) || 0]; tx = prev.x - f[0] * 1.1; ty = prev.y - f[1] * 1.1; }
+    else { const f = DIRV[h._dir || 0], row = 1 + Math.floor(i / 3), col = (i % 3) - 1; tx = h.x - f[0] * 1.5 * row + f[1] * col * 1.1; ty = h.y - f[1] * 1.5 * row - f[0] * col * 1.1; }
+    if (hyp(u.x - tx, u.y - ty) < 0.8) { if (u.goal && u.goal.type === 'move') u.goal = null; return; }
+    const g = u.goal; if (!g || g.type !== 'move' || hyp(g.x - tx, g.y - ty) > 0.7) u.goal = { type: 'move', x: tx, y: ty };
+  }
+
+  // ---------- Смерть и подъём
+  G.heroDown = function (u) {
+    const S = S_();
+    u.hp = 0; u.down = true; u.goal = null; u.order = null; u.path = null;
+    G.fxBurst(u.x, u.y, '#ff4040', 40); G.shake = 8;
+    if (S.heroMode && !realCamp()) {
+      G.notify(`${u.name} пал. Лагеря нет — некому поднять`, { kind: 'bad' });
+      S.over = true; setTimeout(() => G.ui && G.ui.gameOver && G.ui.gameOver(), 1400);
+      return;
+    }
+    const w = S.heroMode ? 20 : 30; u.upT = S.t + w;
+    G.notify(`${u.name} ранен. Встанет у ${S.heroMode ? 'лагеря' : 'цитадели'} через ${w} секунд`, { kind: 'bad' });
+  };
+
+  // ---------- Тап: в режиме героя — всегда; в кампании — когда вождя «ведёшь сам»
+  G.heroTap = function (sx, sy, tx, ty) {
+    const S = S_(), h = hero(); if (!S || !h || h.down || S.intro) return false;
+    if (!(S.heroMode ? !document.body.classList.contains('herobuild') : h.ctl)) return false;
+    const z = G.cam.zoom;
+    // по самому вождю — его карточка
+    { const [px, py] = G.tileToScreen(h.x, h.y); if (hyp(px - sx, py - 30 * z - sy) < 22 * z) return false; }
+    let best = null, bd = 30 * z;
+    for (const e of S.enemies) { if (!alive(e) || !G.isVis(Math.floor(e.x), Math.floor(e.y))) continue; const [px, py] = G.tileToScreen(e.x, e.y); const d = hyp(px - sx, py - 16 * z - sy); if (d < bd) { bd = d; best = e; } }
+    if (best) { h.order = { type: 'attack', id: best.id }; G.fxSpark(best.x, best.y, '#ff6040'); G.heroThink(h); return true; }
+    let poi = null; bd = 1.3;
+    for (const p of G.W.pois) { if (!p.discovered || p.type === 'capital') continue; const d = hyp(p.x + 0.5 - tx, p.y + 0.5 - ty); if (d < bd) { bd = d; poi = p; } }
+    if (poi && (poi.state === 'new' || poi.unmake) && !poi.guarded) { h.order = { type: 'poi', id: poi.id }; G.heroThink(h); return true; }
+    // свои бойцы и постройки — их карточки
+    for (const u of S.units) { if (u === h || u.hp <= 0) continue; const [px, py] = G.tileToScreen(u.x, u.y); if (hyp(px - sx, py - 16 * z - sy) < 14 * z) return false; }
+    const bi = G.bldAt[Math.floor(ty) * G.GN + Math.floor(tx)]; if (bi >= 0) return false;
+    const p = G.walk(Math.floor(tx), Math.floor(ty)) ? [tx, ty] : walkNear(tx, ty);
+    h.order = { type: 'move', x: p[0], y: p[1] }; G.heroThink(h);
+    G.fxBurst(p[0], p[1], HEROES[G.race].col, 8, 0.4);
+    return true;
+  };
+
+  // ---------- История (режим героя): дорога → встреча → удержать → владыка
+  function pickSite(h, d0, d1, avoid) {
+    const W = G.W; let best = null, bs = -1e9;
+    for (const p of W.pois) {
+      if (p.type === 'capital' || (avoid && avoid.includes(p.id))) continue;
+      const d = hyp(p.x - h.x, p.y - h.y); if (d < d0 || d > d1) continue;
+      if (G.layerAt && G.layerAt(p.x, p.y) !== G.layerAt(Math.floor(h.x), Math.floor(h.y))) continue;
+      const s = -Math.abs(d - (d0 + d1) / 2) + (p.guarded ? -6 : 0) + R() * 4;
+      if (s > bs) { bs = s; best = p; }
+    }
+    if (best) { const w = walkNear(best.x + 0.5, best.y + 0.5); return { x: w[0], y: w[1], poi: best.id, name: best.name }; }
+    // мест нет — точка на проходимой земле
+    for (let k = 0; k < 40; k++) { const a = R() * Math.PI * 2, d = d0 + R() * (d1 - d0), x = h.x + Math.cos(a) * d, y = h.y + Math.sin(a) * d; if (x > 2 && y > 2 && x < G.GN - 2 && y < G.GN - 2 && G.walk(Math.floor(x), Math.floor(y))) return { x, y }; }
+    return { x: h.x + 10, y: h.y };
+  }
+  const foeOf = () => { const f = HEROES[G.race].foe; return G.FC && G.FC(f) ? f : G.foes()[0]; };
+  function foeTypes(f) { const F = G.FC(f); const pool = (F.raidPool || []).map(p => p[0]).filter(t => G.ENEMIES[t]); return { light: (F.light || pool.slice(0, 2)).filter(t => G.ENEMIES[t]), heavy: G.ENEMIES[F.heavy] ? F.heavy : pool[pool.length - 1], boss: (F.bosses || []).find(t => G.ENEMIES[t]) || F.raidBoss || pool[pool.length - 1] }; }
+  function spawnAt(type, x, y, o) { const e = G.makeEnemy(type, x, y, Object.assign({ fac: foeOf() }, o)); return e; }
+  G.heroBegin = function () {
+    const S = S_(), h = hero(); if (!S || !S.heroMode || !h) return;
+    S.hs = { act: 0, phase: 'go', calmT: 12, line: 0 };
+    setAct(0);
+    updBar(true);
+  };
+  function setAct(i) {
+    const S = S_(), h = hero(), hs = S.hs, st = STORY[G.race];
+    hs.act = i; hs.line = 0; hs.calmT = 14;
+    if (i === 0) { hs.t = pickSite(h, 14, 26); hs.phase = 'go'; }
+    else if (i === 1) {
+      hs.far = hs.far || pickSite(h, 34, 58, [hs.t && hs.t.poi]);
+      const p = walkNear(h.x + (hs.far.x - h.x) * 0.45, h.y + (hs.far.y - h.y) * 0.45), T = foeTypes(foeOf()), m = 0.8 + 0.12 * h.lvl;
+      const L = spawnAt(T.heavy, p[0], p[1], { mode: 'guard', aggro: 0.5, leash: 30, mul: 1.8 * m, dmul: m });
+      // вожак — по силе вождя, а не по виду: у одних «тяжёлый» — громила, у других — мех
+      L.maxHp = L.hp = 650 + 200 * h.lvl; L.dmg = Math.min(L.dmg, 20 + 3 * h.lvl);
+      L.name = st.leader; L.leader = true; hs.leader = L.id; hs.pack = [L.id];
+      for (let k = 0; k < 3; k++) { const e = spawnAt(T.light[k % T.light.length], p[0] + R() * 3 - 1.5, p[1] + R() * 3 - 1.5, { mode: 'guard', aggro: 0.5, leash: 30, mul: 0.8 * m, dmul: 0.8 * m }); hs.pack.push(e.id); }
+      hs.t = { x: p[0], y: p[1] }; hs.phase = 'meet';
+    } else if (i === 2) { hs.t = hs.far || pickSite(h, 34, 58); hs.phase = 'go'; hs.holdT = 75; hs.waveT = 0; }
+    else if (i === 3) {
+      const T = foeTypes(foeOf()), a = R() * Math.PI * 2, p = walkNear(h.x + Math.cos(a) * 9, h.y + Math.sin(a) * 9), m = 0.35 + 0.07 * h.lvl;
+      const B = spawnAt(T.boss, p[0], p[1], { mode: 'guard', aggro: 0.5, leash: 40, mul: m, dmul: 0.5 + 0.05 * h.lvl });
+      B.maxHp = B.hp = 1700 + 280 * h.lvl; B.dmg = Math.min(B.dmg, 24 + 3 * h.lvl);
+      B.name = (G.ENEMIES[T.boss] || {}).name; hs.boss = B.id; hs.t = { x: p[0], y: p[1] }; hs.phase = 'boss'; hs.bossTalk = false;
+    }
+    if (hs.t) G.reveal(hs.t.x, hs.t.y, 4);
+    const A = st.acts[i]; if (A) G.notify(`${st.title}: ${A.goal.toLowerCase()}`, { kind: 'good' });
+  }
+  function actDone() {
+    const S = S_(), hs = S.hs, st = STORY[G.race], A = st.acts[hs.act];
+    if (A && A.done) say(A.done);
+    const loot = { scrap: 60 + 30 * hs.act, aether: 10 + 10 * hs.act, food: 40 };
+    for (const k in loot) S.res[k] = (S.res[k] || 0) + loot[k];
+    S.res = G.mapRes(S.res);
+    if (G.gainXp) G.gainXp(hero(), 60 + 40 * hs.act);
+    hs.bestD = undefined; hs.stuck = 0;
+    if (hs.act < 3) { setTimeout(() => G.offerDraft && G.offerDraft(), 1600); setAct(hs.act + 1); }
+  }
+  function storyTick(dt) {
+    const S = S_(), hs = S.hs, h = hero(); if (!hs || !h || h.down || hs.phase === 'done') return;
+    const d = hs.t ? hyp(h.x - hs.t.x, h.y - hs.t.y) : 99;
+    // до цели не дойти (вода, обрыв, другой уровень) — через 40 секунд без продвижения место меняется
+    if (hs.phase === 'go') {
+      if (hs.bestD === undefined || d < hs.bestD - 0.5) { hs.bestD = d; hs.stuck = 0; } else hs.stuck = (hs.stuck || 0) + dt;
+      if (hs.stuck > 40) { hs.stuck = 0; hs.bestD = undefined; const bad = [hs.t.poi]; hs.t = pickSite(h, 6, hs.act === 2 ? 30 : 16, bad); if (hs.act === 2) hs.far = hs.t; G.reveal(hs.t.x, hs.t.y, 4); G.notify('Туда не пройти. Капитан нашёл другую дорогу', { kind: 'good' }); }
+    }
+    if (hs.phase === 'go' && d < 2.6) {
+      if (hs.act === 2) { hs.phase = 'hold'; say(STORY[G.race].acts[2].calm[0]); }
+      else actDone();
+    } else if (hs.phase === 'meet') {
+      const L = G.ents.get(hs.leader);
+      if (!alive(L)) { actDone(); return; }
+      hs.t.x = L.x; hs.t.y = L.y;
+      if (!hs.talked && d < 7) { hs.talked = true; dialog(STORY[G.race].meet, L, () => { for (const id of hs.pack) { const e = G.ents.get(id); if (alive(e)) { e.aggro = 9; e.provokedT = S.t + 60; e.provokedBy = h.id; } } }); }
+    } else if (hs.phase === 'hold') {
+      if (d > 7) { hs.warnT = (hs.warnT || 0) - dt; if (hs.warnT <= 0) { hs.warnT = 6; G.notify('Вернись к цели — отсчёт стоит', { kind: 'bad' }); } return; }
+      hs.holdT -= dt; hs.waveT -= dt;
+      if (hs.waveT <= 0) {
+        hs.waveT = 14; const T = foeTypes(foeOf()), a = R() * Math.PI * 2, m = 0.7 + 0.12 * h.lvl;
+        for (let k = 0; k < 2 + Math.floor(h.lvl / 4); k++) { const p = walkNear(hs.t.x + Math.cos(a) * 12 + R() * 2, hs.t.y + Math.sin(a) * 12 + R() * 2); spawnAt(T.light[k % T.light.length], p[0], p[1], { mode: 'raid', mul: m, dmul: m }); }
+      }
+      if (hs.holdT <= 0) actDone();
+    } else if (hs.phase === 'boss') {
+      const B = G.ents.get(hs.boss);
+      if (!alive(B)) { win(); return; }
+      hs.t.x = B.x; hs.t.y = B.y;
+      if (!hs.bossTalk && d < 8) { hs.bossTalk = true; dialog(STORY[G.race].boss, B, () => { B.aggro = 12; B.provokedT = S.t + 120; B.provokedBy = h.id; }); }
+    }
+    // капитан рассказывает, пока тихо
+    const calm = !S.enemies.some(e => alive(e) && hyp(e.x - h.x, e.y - h.y) < 12 && (e.target || e.mode === 'raid'));
+    hs.calmT -= calm ? dt : 0;
+    const A = STORY[G.race].acts[hs.act];
+    if (calm && hs.calmT <= 0 && A && hs.line < A.calm.length) { hs.calmT = 22; say(A.calm[hs.line++]); }
+  }
+  function win() {
+    const S = S_(), hs = S.hs, st = STORY[G.race]; hs.phase = 'done';
+    const A = G.ADV || {}, img = G.ADV_IMG || {};
+    setTimeout(() => G.story && G.story.scene({ race: G.race, img: ((G.STORY.races || {})[G.race] || {}).img, who: { name: (A[G.race] || {}).name, img: img[G.race] }, lines: st.win, kicker: 'Эпилог · ' + st.title, title: 'История окончена', call: 'Играть дальше' }), 1200);
+    G.notify(`${st.title}: история окончена. Можно играть дальше`, { kind: 'good' });
+  }
+
+  // ---------- Голос капитана: плашка сверху, игра идёт
+  function say(text) {
+    const bark = document.getElementById('bark'); if (!bark || !text) return;
+    const A = (G.ADV || {})[G.race] || {}, im = (G.ADV_IMG || {})[G.race];
+    const t = String(text).replace(/^([^:<]{2,30}): /, '');
+    bark.dataset.race = G.race;
+    bark.innerHTML = `<div class="bk-face" style="background-image:url(${im})"></div><div class="bk-txt"><b>${A.name || ''}</b><span>${t}</span></div>`;
+    bark.hidden = false; bark.classList.remove('out'); clearTimeout(say.t);
+    say.t = setTimeout(() => { bark.classList.add('out'); setTimeout(() => { bark.hidden = true; }, 500); }, 7500);
+  }
+  G.heroSay = say;
+
+  // ---------- Диалог: два портрета, реплики по нажатию, игра стоит
+  const dlg = document.createElement('div'); dlg.id = 'hdlg'; dlg.hidden = true; document.getElementById('app').appendChild(dlg);
+  function face(r) { return `background-image:url(${sheetSrc(r)});background-size:400% 300%;background-position:0 0`; }
+  function dialog(lines, foe, done) {
+    const was = G.tutPause; G.tutPause = true;
+    const fr = foeOf(), H0 = HEROES[G.race];
+    const fName = foe.name || (G.ENEMIES[foe.type] || {}).name || G.FC(fr).name;
+    const fImg = (G.ADV_IMG || {})[fr];
+    let i = 0;
+    const draw = () => {
+      const [who, text] = lines[i], me = who === 'h';
+      dlg.dataset.race = me ? G.race : fr;
+      dlg.innerHTML = `<div class="hd-card ${me ? 'me' : 'them'}">
+        <div class="hd-face hd-l" style="${face(G.race)}"></div>
+        <div class="hd-face hd-r" style="background-image:url(${fImg})"></div>
+        <div class="hd-box"><b>${me ? H0.name : fName}</b><p>${text.replace(/^> /, '&gt; ')}</p><small>${i < lines.length - 1 ? 'Нажми, чтобы дальше' : 'Нажми — к бою'}</small></div></div>`;
+    };
+    const next = () => { i++; if (i >= lines.length) { dlg.hidden = true; dlg.onclick = null; document.body.classList.remove('hdlg-on'); removeEventListener('keydown', key); G.tutPause = false; done && done(); return; } draw(); };
+    const key = e => { if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowRight') { e.preventDefault(); e.stopPropagation(); next(); } };
+    dlg.onclick = next; addEventListener('keydown', key, true);
+    dlg.hidden = false; document.body.classList.add('hdlg-on'); draw();
+  }
+
+  // ---------- Панель вождя
+  const bar = document.createElement('div'); bar.id = 'heroBar'; bar.hidden = true; document.getElementById('app').appendChild(bar);
+  const arrow = document.createElement('div'); arrow.id = 'heroArrow'; arrow.hidden = true; document.getElementById('app').appendChild(arrow);
+  const goal = document.createElement('div'); goal.id = 'heroGoal'; goal.hidden = true; document.getElementById('app').appendChild(goal);
+  let built = '';
+  function buildBar() {
+    const S = S_(), H0 = HEROES[G.race], hm = !!S.heroMode;
+    built = G.race + hm;
+    bar.dataset.race = G.race; bar.classList.toggle('camp', !hm);
+    bar.innerHTML = `<button class="hb-face" title="${hm ? 'К вождю' : 'Вести самому'}" style="${face(G.race)}"><b class="hb-lv"></b></button>
+      <div class="hb-mid"><div class="hb-name"><b>${H0.name}</b><span>${H0.title}</span></div><div class="hb-hp"><i></i></div>
+      <div class="hb-abs">${H0.ab.map((a, i) => `<button class="hb-ab${i === 3 ? ' ult' : ''}" data-i="${i}" title="${a.name}. ${a.desc} Перезарядка ${a.cd} с."><span class="hb-an">${a.name}</span><i class="hb-cd"></i>${hm ? `<kbd>${KEYS[i].toUpperCase()}</kbd>` : ''}</button>`).join('')}</div></div>
+      ${hm ? `<div class="hb-util"><button class="hb-u" data-u="cam">Камера</button><button class="hb-u" data-u="camp">Лагерь</button><button class="hb-u" data-u="build" hidden>Стройка</button><button class="hb-u" data-u="hand">Рука</button></div>` : ''}`;
+    bar.querySelectorAll('.hb-ab').forEach(b => b.onclick = e => { e.stopPropagation(); G.heroCast(+b.dataset.i); });
+    bar.querySelector('.hb-face').onclick = e => {
+      e.stopPropagation(); const h = hero(); if (!h) return;
+      if (S_().heroMode) { camLink = true; G.ui.followId = h.id; G.lookAt(h.x, h.y); return; }
+      h.ctl = !h.ctl; h.order = null; if (h.ctl) { G.ui.followId = h.id; G.notify(`${h.name}: веду сам. Тап по земле — идти, по врагу — бить. Ещё раз на портрет — отпустить`); } else { G.ui.followId = null; h.goal = null; }
+      updBar(true);
+    };
+    bar.querySelectorAll('.hb-u').forEach(b => b.onclick = e => { e.stopPropagation(); util(b.dataset.u); });
+  }
+  let camLink = true;
+  function util(k) {
+    const S = S_(), h = hero(); if (!h) return;
+    if (k === 'cam') { camLink = !camLink; G.ui.followId = camLink ? h.id : null; if (camLink) G.lookAt(h.x, h.y); }
+    if (k === 'hand') { const f = document.getElementById('handFab'); if (f) f.click(); }
+    if (k === 'build') document.body.classList.toggle('herobuild');
+    if (k === 'camp') {
+      if (realCamp()) { const c = realCamp(); G.lookAt(c.x + 1.5, c.y + 1.5); camLink = false; G.ui.followId = null; return; }
+      const x = Math.floor(h.x) - 1, y = Math.floor(h.y) - 1;
+      let ok = null;
+      for (let r = 1; r <= 4 && !ok; r++) for (let dy = -r; dy <= r && !ok; dy++) for (let dx = -r; dx <= r && !ok; dx++) if (!G.canPlace('citadel', x + dx, y + dy)) ok = [x + dx, y + dy];
+      if (!ok) { G.notify('Здесь лагерь не встанет: нужна ровная земля 3×3', { kind: 'bad' }); return; }
+      const c = G.placeBuilding('citadel', ok[0], ok[1], true); S.citadelId = c.id; S.raid.timer = Math.max(S.raid.timer, 240);
+      for (const u of S.units) if (!u.hero) u.squad = true; // кто пришёл с вождём — остаётся при нём
+      G.computeFlow && G.computeFlow();
+      G.fxBurst(c.x + 1.5, c.y + 1.5, HEROES[G.race].col, 50);
+      say('Лагерь стоит. Теперь есть куда вернуться — и что терять.');
+    }
+    updBar(true);
+  }
+  let barT = 0;
+  function updBar(force) {
+    const S = S_(), h = hero();
+    const show = !!(S && h && !S.intro && HEROES[G.race]);
+    bar.hidden = !show; document.body.classList.toggle('heromode', !!(S && S.heroMode && !S.intro));
+    if (!show) { arrow.hidden = goal.hidden = true; return; }
+    if (built !== G.race + !!S.heroMode) buildBar();
+    bar.classList.toggle('down', !!h.down); bar.classList.toggle('ctl', !!h.ctl);
+    bar.querySelector('.hb-lv').textContent = h.lvl;
+    bar.querySelector('.hb-hp i').style.width = (h.down ? 0 : Math.max(0, h.hp / h.st.hp * 100)) + '%';
+    const cd = S.heroCd || {};
+    HEROES[G.race].ab.forEach((a, i) => {
+      const b = bar.querySelector(`.hb-ab[data-i="${i}"]`); if (!b) return;
+      const left = Math.max(0, (cd[a.k] || 0) - S.t), tot = a.cd;
+      b.classList.toggle('cool', left > 0);
+      b.querySelector('.hb-cd').style.setProperty('--p', (left / tot * 100).toFixed(1) + '%');
+      b.querySelector('.hb-cd').textContent = left > 0 ? Math.ceil(left) : '';
+    });
+    if (S.heroMode) {
+      const bb = bar.querySelector('[data-u="build"]'); if (bb) bb.hidden = !realCamp();
+      const cb = bar.querySelector('[data-u="camp"]'); if (cb) cb.textContent = realCamp() ? 'К лагерю' : 'Лагерь';
+      const cm = bar.querySelector('[data-u="cam"]'); if (cm) cm.classList.toggle('on', camLink);
+    }
+    // цель истории: строка сверху и стрелка у края экрана
+    const hs = S.hs, st = STORY[G.race];
+    if (S.heroMode && hs && hs.phase !== 'done' && st.acts[hs.act]) {
+      goal.hidden = false;
+      const extra = hs.phase === 'hold' ? ` · ${Math.ceil(Math.max(0, hs.holdT))} с` : '';
+      goal.innerHTML = `<span>${st.title} · акт ${hs.act + 1} из 4</span><b>${st.acts[hs.act].goal}${extra}</b>`;
+      const [VW, VH] = G.view(), [sx, sy] = G.tileToScreen(hs.t.x, hs.t.y), m = 46;
+      const off = sx < m || sy < m + 60 || sx > VW - m || sy > VH - m - 120;
+      arrow.hidden = !off;
+      if (off) {
+        const cx = VW / 2, cy = VH / 2, a = Math.atan2(sy - cy, sx - cx);
+        const k = Math.min((VW / 2 - m) / Math.abs(Math.cos(a) || 1e-6), (VH / 2 - m - 70) / Math.abs(Math.sin(a) || 1e-6));
+        arrow.style.left = (cx + Math.cos(a) * k) + 'px'; arrow.style.top = (cy + Math.sin(a) * k) + 'px';
+        arrow.style.setProperty('--a', a + 'rad');
+        arrow.dataset.d = Math.round(hyp(hero().x - hs.t.x, hero().y - hs.t.y));
+      }
+    } else { goal.hidden = true; arrow.hidden = true; }
+    // в кампании панель — над командами слева
+    if (!S.heroMode) { const cm = document.querySelector('.cmd-main'); if (cm) { const r = cm.getBoundingClientRect(); bar.style.bottom = Math.round(innerHeight - r.top + 10) + 'px'; } }
+    else bar.style.bottom = '';
+  }
+
+  // ---------- Шаг: подъём, время жизни призванных, временные усиления, камера, история, грибница
+  let lastFollow = null, mycT = 0;
+  G.heroTick = function (dt) {
+    const S = S_(), h = hero();
+    for (const u of S.units) {
+      if (u.ttl && S.t > u.ttl && !u.dead) { u.dead = true; G.fxBurst(u.x, u.y, '#888', 10); }
+      if (u.tmpT && S.t > u.tmpT) { u.tmpT = 0; G.recalc(u); }
+    }
+    if (!h) return;
+    if (h.down && h.upT && S.t >= h.upT) {
+      const c = realCamp(); const p = c ? walkNear(c.x + 1.5, c.y + c.h + 0.6) : [h.x, h.y];
+      h.x = p[0]; h.y = p[1]; h.down = false; h.upT = 0; G.recalc(h); h.hp = h.st.hp * 0.6; h.path = null;
+      G.fxBurst(h.x, h.y, HEROES[G.race].col, 30); G.notify(`${h.name} снова на ногах`, { kind: 'good' });
+    }
+    // вне боя вождь быстро приходит в себя
+    if (!h.down && h.hp < h.st.hp && !S.enemies.some(e => alive(e) && hyp(e.x - h.x, e.y - h.y) < 8)) h.hp = Math.min(h.st.hp, h.hp + h.st.hp * 0.025 * dt);
+    if (S.heroMode) {
+      // камеру держим на вожде; игрок сдвинул её сам — значит, отвязал
+      if (camLink) { if (lastFollow === h.id && G.ui.followId !== h.id) camLink = false; else G.ui.followId = h.id; }
+      lastFollow = G.ui.followId;
+      if (!S.intro) storyTick(dt);
+      if (G.race === 'fungi' && G.mycSeed && !h.down) { mycT -= dt; if (mycT <= 0) { mycT = 1; G.mycSeed(h.x, h.y, 1.3, 1); } }
+    }
+    barT -= dt; if (barT <= 0) { barT = 0.15; updBar(); }
+  };
+  setInterval(() => { if (G.S && (G.S.intro || G.tutPause)) updBar(); }, 500);
+
+  // ---------- Клавиши Q W E R — в режиме героя; пробел — к вождю
+  addEventListener('keydown', e => {
+    const S = S_(); if (!S || !S.heroMode || S.intro || !dlg.hidden) return;
+    if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+    const k = e.key.toLowerCase(), m = { q: 0, 'й': 0, w: 1, 'ц': 1, e: 2, 'у': 2, r: 3, 'к': 3 };
+    if (k in m) { e.preventDefault(); e.stopImmediatePropagation(); G.heroCast(m[k]); }
+    if (k === 'f' || k === 'а') { e.stopImmediatePropagation(); util('cam'); }
+  }, true);
+
+  // ---------- Метка цели на земле
+  G.heroOverlay = function (c, iso) {
+    const S = S_(); if (!S || !S.heroMode || !S.hs || S.hs.phase === 'done' || !S.hs.t) return;
+    const [px, py] = iso(S.hs.t.x, S.hs.t.y), t = G.time, col = HEROES[G.race].col;
+    c.save(); c.strokeStyle = col; c.lineWidth = 2.5; c.globalAlpha = 0.5 + 0.3 * Math.sin(t * 3);
+    for (let k = 0; k < 2; k++) { const r = 26 + k * 10 + Math.sin(t * 2 + k) * 3; c.beginPath(); c.ellipse(px, py, r, r * 0.5, 0, 0, Math.PI * 2); c.stroke(); }
+    if (S.hs.phase === 'hold') { c.globalAlpha = 0.18; c.fillStyle = col; c.beginPath(); c.ellipse(px, py, 7 * 32, 7 * 16, 0, 0, Math.PI * 2); c.fill(); }
+    c.restore();
+  };
 })();
 
 </script>
@@ -11384,7 +12168,7 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
   G.advise = advise;
   let quietSince = 0;
   setInterval(() => {
-    const S = G.S; if (!S || S.intro || S.over || G.tutPause) return;
+    const S = G.S; if (!S || S.intro || S.over || G.tutPause || S.heroMode) return;
     if (S.t < 90) return; // первые полторы минуты говорит туториал
     if (S.starving) advise('starving');
     else if (S.thirst) advise('thirst');
