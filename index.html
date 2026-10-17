@@ -966,6 +966,35 @@ body.ux2 #story .st-who { background-position: center !important; width: 72px !i
     display: grid !important; grid-template-columns: 1fr 1fr; gap: 4px !important; padding: 10px !important; z-index: 60 !important; max-height: 50vh; overflow: auto; }
   body.ux2 .mf-pop .mf { min-height: 40px; font-size: 11px !important; }
 }
+
+/* ===== Мобилка: фильтр закрывается, награды не ловят нажатия, крупнее цели для пальца ===== */
+body.ux2 .mf-pop[hidden] { display: none !important; }
+#rewards, #rewards .rw-card { pointer-events: none !important; }
+@media (max-width: 700px) {
+  .toast { white-space: normal !important; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .mini-layers button { height: 30px !important; line-height: 30px !important; font-size: 9px !important; }
+  body.ux2 .mf-toggle { width: 36px !important; height: 36px !important; padding: 8px !important; }
+  #menuBtn { min-width: 40px; min-height: 36px; }
+  #sheet .x { width: 42px !important; height: 42px !important; }
+  .tile .minus { min-width: 32px; min-height: 32px; display: inline-grid; place-items: center; }
+  #tutor .tt-btns .btn { min-height: 40px; padding: 8px 14px !important; font-size: 13px; }
+  #sheet { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 10px) !important; }
+  .trial-fab { top: auto !important; bottom: calc(env(safe-area-inset-bottom, 0px) + var(--mini, 200px) + 92px) !important; right: 10px !important; transform: scale(.88); transform-origin: right bottom; }
+}
+
+/* испытание закрылось — рамки не остаётся */
+.trial-fab[hidden] { display: none !important; }
+/* ===== Событие пустоши — карточка с выбором ===== */
+#evcard { position: absolute; z-index: 11; left: 16px; bottom: 380px; width: 340px; padding: 12px 14px 14px; background: var(--ux-bg, #0a0a0b); border: 1px solid var(--ux-line2, #444); border-left: 4px solid var(--ux-ac, #ff7b23); box-shadow: 0 16px 40px rgba(0,0,0,.6); color: var(--ux-tx, #eee); animation: fadeIn .25s ease-out; }
+#evcard.out { opacity: 0; transition: opacity .3s; }
+#evcard .ev-k { font: 700 10px/1 'JetBrains Mono', monospace; letter-spacing: .18em; text-transform: uppercase; color: var(--ux-ac, #ff7b23); }
+#evcard .ev-t { font: 800 18px/1.15 Tektur, sans-serif; text-transform: uppercase; margin: 5px 0 6px; }
+#evcard .ev-d { margin: 0 0 10px; font: 500 13.5px/1.4 'Golos Text', sans-serif; color: #d6d6d2; }
+#evcard .ev-b { display: flex; flex-wrap: wrap; gap: 6px; } #evcard .ev-b .btn { flex: 1 1 auto; min-height: 38px; }
+#evcard .ev-b .btn .cost { margin-left: 4px; }
+#evcard .ev-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgba(255,255,255,.1); } #evcard .ev-bar b { display: block; height: 100%; background: var(--ux-ac, #ff7b23); animation: evbar linear forwards; }
+@keyframes evbar { from { width: 100%; } to { width: 0; } }
+@media not all and (min-width: 1100px) and (pointer: fine) { #evcard { left: 10px; right: 10px; width: auto; bottom: calc(env(safe-area-inset-bottom, 0px) + var(--mini, 200px) + 40px); } }
 </style>
 
 </head>
@@ -1308,6 +1337,7 @@ G.PATH_STEPS = {
   ruins1:    { t: 'Обыскать руину', p: S => [S.stats.ruins || 0, 1], r: { scrap: 50, aether: 5 }, why: 'Руины — запас лома и эфира. Нажми на руину и отправь жителя.', go: 'poi:ruin' },
   barracks:  { why: 'Скоро набег. Казарма учит бойцов.', go: 'b:barracks' },
   raid1:     { why: 'Враг придёт сам. Таймер набега — вверху. Перед ним включи «Оборону».' },
+  explore5:  { t: 'Разведать 5% карты', p: S => [Math.floor(S.stats.explored / (G.GN * G.GN) * 100), 5], r: { aether: 20 }, why: 'Нажми на туман — и «Разведать»: пойдёт следопыт. Или включи режим «Экспансия» — жители сами уйдут в пустошь.' },
   explore10: { why: 'Карта в тумане. Разведка откроет руины, логова и соседей.' },
   tower:     { why: 'Башни держат стены, пока бойцы в поле.', go: 'b:tower' },
   cage:      { why: 'В клетках сидят пленники. Освободишь — получишь бойца.', go: 'poi:cage' },
@@ -1326,8 +1356,8 @@ G.PATH_STEPS = {
   capitals:  { t: 'Снести все вражеские столицы', p: S => [S.stats.capitals || 0, Math.max(1, G.foeCapitals ? G.foeCapitals().length : 1)], r: {}, why: 'Последняя правда в этом мире будет твоей.', go: 'poi:capital' },
 };
 G.PATH = [
-  { n: 1, title: 'Укорениться', sub: 'Дом, еда, люди, первая защита', steps: ['house', 'farm', 'hire2', 'ruins1', 'barracks', 'raid1'] },
-  { n: 2, title: 'Соседи', sub: 'Выйти за стены и узнать, кто рядом', steps: ['explore10', 'tower', 'cage', 'lair1', 'forge', 'cit3'] },
+  { n: 1, title: 'Укорениться', sub: 'Дом, еда, люди, первая защита', steps: ['house', 'barracks', 'hire2', 'farm', 'ruins1', 'raid1'] },
+  { n: 2, title: 'Соседи', sub: 'Выйти за стены и узнать, кто рядом', steps: ['explore5', 'tower', 'cage', 'lair1', 'forge', 'cit3'] },
   { n: 3, title: 'Сила', sub: 'Опыт, топливо, техника', steps: ['lvl5', 'veh', 'gasheld', 'outpost', 'bunker', 'mech1'] },
   { n: 4, title: 'Реликвия', sub: 'Чужие святыни — ключ к великому зданию', steps: ['relic2', 'wonder'] },
   { n: 5, title: 'Падение', sub: 'Снести чужие правды', steps: ['capital1', 'capitals'] },
@@ -2995,6 +3025,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
   function use(k, a) { if (!(a > 0)) return; if (G.race === 'others' && k !== 'aether') { a *= G.ESSENCE_RATE[k] || 0; k = 'aether'; } flowCur.use[k] = (flowCur.use[k] || 0) + a; }
   G.flowRate = function (k) { const H = G.flowHist || []; if (H.length < 5) return null; let v = 0; for (const h of H) v += (h.inc[k] || 0) - (h.use[k] || 0); return v / H.length * 60; };
   G.newGame = function (seed, race) {
+    G.speed = 1;
     seed = seed || ((Math.random() * 1e9) | 0);
     race = race || 'survivors';
     G.applyRace(race);
@@ -5459,7 +5490,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     const lairF = Math.max(0.75, 1 - S.lairsCleared * 0.04);
     // клоуны: пока Страха больше 50, соседи боятся идти — набеги мельче
     const scared = G.race === 'clowns' && S.res.aether >= 50 ? 0.7 : 1;
-    return (2 + w * 2.2 + Math.pow(w, 1.5) * 0.9 + S.units.length * 0.3) * (1 + 0.04 * (foeLvl(fac) - 1)) * lairF * pressure() * scared;
+    return (2 + w * 2.2 + Math.pow(w, 1.5) * 0.9 + S.units.length * 0.3) * (w <= 3 ? 1.3 : 1) * (1 + 0.04 * (foeLvl(fac) - 1)) * lairF * pressure() * scared;
   }
   const warnTime = () => G.hasBld('beacon') ? 60 : 35;
   function prepareRaid() {
@@ -5725,17 +5756,18 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
         const d = {};
         const a = someUnit(); if (a) d.a = a.id;
         const b = someUnit(u => u !== a); if (b) d.b = b.id;
-        autoEvent({ type: 'event', ev: k, data: d });
+        const c = { type: 'event', ev: k, data: d, until: S.t + 22 };
+        if (G.ui && G.ui.eventCard) { S.choices.push(c); G.ui.eventCard(c); } else autoEvent(c);
       }
     }
     // старые отложенные выборы решаются сами
-    for (const c of S.choices.slice()) { if (c.type === 'event') autoEvent(c); else { const u = G.ents.get(c.unit); if (u) autoSpec(u); S.choices = S.choices.filter(x => x !== c); } }
+    for (const c of S.choices.slice()) { if (c.type === 'event') { if (!(c.until > S.t)) { autoEvent(c); if (G.ui && G.ui.eventCardClose) G.ui.eventCardClose(c); } } else { const u = G.ents.get(c.unit); if (u) autoSpec(u); S.choices = S.choices.filter(x => x !== c); } }
   }
   function autoEvent(c) {
     const E = G.EVENTS[c.ev];
     const ok = E.opts.map((o, i) => i).filter(i => !E.opts[i].cost || G.canAfford(E.opts[i].cost));
     const i = ok.length ? pick(ok) : E.opts.length - 1;
-    G.notify(`${E.title}. ${G.eventText(c, E.text)} Решили: ${G.eventText(c, E.opts[i].t).toLowerCase()}.`, { kind: 'event' });
+    G.notify(`${E.title}: решили без тебя — «${G.eventText(c, E.opts[i].t).toLowerCase()}».`, { kind: 'event' });
     S.choices = S.choices.filter(x => x !== c);
     S.choices.push(c);
     G.resolveChoice(c, i);
@@ -8508,6 +8540,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
       .concat(P.arts.map(a => `<span class="rw-i art"><i class="rw-art">✦</i><b>${esc(G.ARTIFACTS[a].name)}</b><small>артефакт</small></span>`));
     if (!items.length) return pumpRewards();
     rwBusy = true;
+    if (FINE && innerWidth >= 1100) { const sh = document.getElementById('sheet'), right = sh && !sh.hidden ? sh.getBoundingClientRect().left - 16 : innerWidth - 16, left = 380; rwBox.style.setProperty('left', Math.round((left + right) / 2) + 'px', 'important'); } else rwBox.style.removeProperty('left');
     const el = document.createElement('div'); el.className = 'rw-card';
     el.innerHTML = `<div class="rw-k">Награда</div><div class="rw-t">${esc(title || 'Награда')}</div><div class="rw-row">${items.join('')}</div>${text ? `<div class="rw-d">${esc(text)}</div>` : ''}`;
     const done = () => { if (!el.isConnected) return; el.classList.add('out'); setTimeout(() => { el.remove(); rwBusy = false; pumpRewards(); }, 350); };
@@ -8596,6 +8629,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
       if (!force && performance.now() - ui.lastDown < 700) return;
       const st = sheetBody.scrollTop;
       sheetBody.innerHTML = r.html; lastHtml = r.html;
+      if (ui.hl && ui.hl.until > performance.now()) { const t = sheetBody.querySelector(`[data-type="${ui.hl.type}"]`); if (t) t.classList.add('pth-hl'); }
       sheetBody.scrollTop = force && !r.keepScroll ? 0 : st;
     }
     sheetFoot.hidden = !r.foot;
@@ -8691,13 +8725,13 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
       const best = s.units.slice().sort((a, b) => b.lvl - a.lvl || b.kills - a.kills)[0];
       const caps = G.foeCapitals(), down = caps.filter(c => !c.guarded).length;
       // меню — коротко: игра, итоги, без справочника по расам (он в «Целях»)
-      let h = `<div class="btns"><button class="btn danger" data-act="newgame">${ui.confirmNew ? 'Точно? Нажми ещё раз — партия пропадёт' : 'Завершить партию'}</button><button class="btn" data-act="tutreset">Подсказки заново</button><button class="btn" data-act="music">Музыка: ${G.music && G.music.on ? 'вкл' : 'выкл'}</button></div>`;
+      let h = `<div class="btns"><button class="btn danger" data-act="newgame">${ui.confirmNew ? 'Точно? Ещё раз' : 'Завершить партию'}</button><button class="btn" data-act="tutreset">Подсказки заново</button><button class="btn" data-act="music">Музыка: ${G.music && G.music.on ? 'вкл' : 'выкл'}</button></div>`;
       h += `<div class="sub">Партия</div><div class="stats">
         <div class="stat"><b>${G.day()}</b><span>день</span></div>
         <div class="stat"><b>${s.stats.raids}</b><span>набегов отбито</span></div>
         <div class="stat"><b>${fmt(s.stats.kills)}</b><span>врагов убито</span></div>
         <div class="stat"><b>${down} из ${caps.length}</b><span>столиц снесено</span></div>
-        <div class="stat"><b>${Math.round(s.stats.explored / (N * N) * 100)}%</b><span>карты разведано</span></div>
+        <div class="stat"><b>${Math.floor(s.stats.explored / (G.GN * G.GN) * 100)}%</b><span>карты разведано</span></div>
         <div class="stat"><b>${s.stats.legends}</b><span>легенд</span></div></div>`;
       if (best) h += `<p class="p" style="margin-top:12px">Сильнейший: <b>${esc(best.name)}</b>, ${G.className(best.cls, best.srace)} ${best.lvl} ур., убийств: ${best.kills}.</p>`;
       return { title: 'Меню', html: h };
@@ -8861,7 +8895,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
       const s = S(), C = G.CLASSES[u.cls], st = u.st;
       let h = `<div class="row" style="background:transparent;padding:0 0 8px">${avatar(u)}<div class="grow"><div class="t">${C.name}, ${u.lvl} уровень${u.spec ? ' · ' + G.SPECS[u.cls].find(x => x.id === u.spec).name : ''}</div>
         <div class="d">${G.activity(u)}</div></div></div>`;
-      h += `<div class="d muted">Здоровье ${Math.ceil(u.hp)} / ${Math.round(st.hp)}</div>${meter(u.hp / st.hp, 'hpb')}`;
+      h += `<div class="d muted">Здоровье ${Math.min(Math.ceil(u.hp), Math.round(st.hp))} / ${Math.round(st.hp)}</div>${meter(u.hp / st.hp, 'hpb')}`;
       if (u.lvl < G.MAXLVL) h += `<div class="d muted" style="margin-top:6px">Опыт ${Math.floor(u.xp)} / ${G.xpNeed(u.lvl)}</div>${meter(u.xp / G.xpNeed(u.lvl), 'xp')}`;
       h += `<div class="stats" style="margin-top:10px">
         <div class="stat"><b>${st.dmg.toFixed(1)}</b><span>урон</span></div>
@@ -9114,7 +9148,8 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     if (k === 'cit') { const c = G.cit(); G.lookAt(c.x + 1.5, c.y + 1.5); openSheet('building', { id: c.id }); return; }
     if (k === 'b') {
       openSheet('build', {});
-      setTimeout(() => { const t = sheetBody.querySelector(`[data-type="${v}"]`); if (t) { t.scrollIntoView({ block: 'center' }); t.classList.add('pth-hl'); setTimeout(() => t.classList.remove('pth-hl'), 2400); } }, 60);
+      ui.hl = { type: v, until: performance.now() + 3000 };
+      setTimeout(() => { const t = sheetBody.querySelector(`[data-type="${v}"]`); if (t) { t.scrollIntoView({ block: 'center' }); t.classList.add('pth-hl'); } }, 60);
       return;
     }
     if (k === 'poi') {
@@ -9186,7 +9221,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
       case 'tutreset': G.tutorReset && G.tutorReset(); G.notify('Советник снова будет подсказывать'); closeSheet(); break;
       case 'newgame':
         if (ui.confirmNew) { ui.confirmNew = false; G.clearSave(); G.start(null, true); }
-        else { ui.confirmNew = true; renderSheet(true); setTimeout(() => { ui.confirmNew = false; renderSheet(true); }, 3500); }
+        else { ui.confirmNew = true; renderSheet(true); setTimeout(() => { ui.confirmNew = false; renderSheet(true); }, 6000); }
         break;
       case 'garr': { const b = G.ents.get(+d.id); if (b) { b.garrison = Math.max(0, Math.min(12, (b.garrison === undefined ? (b.type === 'site' ? 1 : 2) : b.garrison) + +d.d)); } renderSheet(true); break; }
       case 'trade': { const p = G.poiById(d.poi); if (p) G.trade(p, +d.i); renderSheet(true); break; }
@@ -9244,7 +9279,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     G.placeBuilding(p.type, p.x, p.y);
     if (G.tutor) G.tutor('placed_' + p.type, true);
     const D2 = G.BUILDINGS[p.type];
-    if (!D2.unique && p.type !== 'outpost' && G.canAfford(D2.cost)) { renderBanner(); }
+    if (FINE && !D2.unique && p.type !== 'outpost' && G.canAfford(D2.cost)) { renderBanner(); }
     else { ui.place = null; renderBanner(); }
   }
 
@@ -9326,7 +9361,8 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
       G.lookAt(tg[0], tg[1], true);
     }
     ui.followId = null; baseT = 0;
-    G.notify(`Слой: ${L.name}`);
+    { let ex = 0; for (let y = L.y0; y < L.y0 + L.h && !ex; y += 2) for (let x = L.x0; x < L.x0 + L.w; x += 2) if (G.W.explored[y * N + x]) { ex = 1; break; }
+      G.notify(ex ? `Слой: ${L.name}` : k === 'sky' ? `${L.name}: сюда ещё никто не поднимался. Найди на Земле лифт или маяк — и отправь разведчика.` : `${L.name}: сюда ещё никто не спускался. Найди на Земле вход — люк, метро, пещеру — и отправь разведчика.`); }
   };
   { // уровни карты — сегментами на мини-карте
     const box = document.createElement('div'); box.className = 'mini-layers'; box.id = 'layerPill';
@@ -9335,7 +9371,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     box.addEventListener('click', e => { const b = e.target.closest('[data-l]'); if (b) { e.stopPropagation(); G.gotoLayer(b.dataset.l); baseT = 0; } });
     document.querySelector('.mini-box').appendChild(box); }
   $('#speedPill').addEventListener('click', () => {
-    G.speed = G.speed === 1 ? 2 : G.speed === 2 ? 0 : 1;
+    G.speed = G.speed === 1 ? 2 : G.speed === 2 ? 3 : 1;
     updHud();
   });
   $('#dayPill').addEventListener('click', () => { if (ui.sheet && ui.sheet.kind === 'chronicle') closeSheet(); else openSheet('chronicle', {}); });
@@ -9427,7 +9463,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     const r = s.raid;
     if (r.active) {
       const left = r.queue.length + s.enemies.filter(e => e.raid && e.hp > 0).length;
-      hud.raid.textContent = `Набег ${r.wave}: ${left}`; hud.raid.classList.add('hot');
+      hud.raid.textContent = `Волна ${r.wave} · врагов ${left}`; hud.raid.classList.add('hot');
     } else {
       const t = Math.max(0, Math.ceil(r.timer));
       hud.raid.textContent = `Набег ${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}`;
@@ -9452,7 +9488,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     hud.sound.classList.toggle('off', G.audio.muted);
     { const hb = document.querySelector('.hud').getBoundingClientRect().bottom; feed.style.top = (hb + 4) + 'px'; hud.goal.style.top = (hb + 10) + 'px'; goalTrack.style.top = (hb + 10) + 'px'; feed.style.top = (hb + 64) + 'px';
       const cb = document.querySelector(FINE && innerWidth >= 1100 && document.body.classList.contains('ux2') ? '.cmd-side' : '.cmd-main').getBoundingClientRect().top; if (FINE && innerWidth >= 1100 && document.body.classList.contains('ux2')) { const sr = document.querySelector('.cmd-side').getBoundingClientRect(); homeFab.style.bottom = Math.round(innerHeight - sr.top + 14) + 'px'; homeFab.style.right = '16px'; }
-      else { homeFab.style.bottom = Math.round(innerHeight - cb + 12) + 'px'; homeFab.style.right = ''; }
+      else { const bn = document.getElementById('banner'), bt = bn && !bn.hidden ? Math.min(cb, bn.getBoundingClientRect().top) : cb; homeFab.style.bottom = Math.round(innerHeight - bt + 12) + 'px'; homeFab.style.right = ''; }
       const sw = document.querySelector('.cmd-side').offsetWidth; if (sw && sw !== ui._sw) { ui._sw = sw; document.documentElement.style.setProperty('--strip-w', sw + 'px'); } }
     G.audioTick && G.audioTick();
   }
@@ -9533,7 +9569,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     if (k === 'escape') { if (ui.cmd) { ui.cmd = null; renderBanner(); } else if (ui.place) { ui.place = null; renderBanner(); } else closeSheet(); return; }
     if (k === ' ') { G.speed = G.speed === 0 ? 1 : 0; updHud(); e.preventDefault(); return; }
     const map = { b: 'build', 'и': 'build', r: 'recruit', 'к': 'recruit', v: 'vehicles', 'м': 'vehicles', g: 'mechs', 'п': 'mechs', h: 'home', 'р': 'home', e: 'mode', 'у': 'mode' };
-    if (map[k]) { dock(map[k]); return; }
+    if (map[k]) { const bt = document.querySelector(`.cmd [data-dock="${map[k]}"]`) || (map[k] === 'home' ? document.getElementById('homeFab') : null); if (bt) bt.click(); else dock(map[k]); return; }
     if (k === '1' || k === '2' || k === '3') { G.speed = +k; updHud(); return; }
     if (k === 'arrowleft' || k === 'a' || k === 'ф') { cam.x -= st; cam.tx = null; ui.followId = null; }
     else if (k === 'arrowright' || k === 'd' || k === 'в') { cam.x += st; cam.tx = null; ui.followId = null; }
@@ -9554,6 +9590,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
   }
 
   function tap(sx, sy) {
+    if ((ui.swallowUntil || 0) > performance.now()) return; // это нажатие закрыло всплывающую панель
     const s = S();
     const [tx, ty] = G.screenToTile(sx, sy);
     if (ui.cmd) {
@@ -9738,7 +9775,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
   const mfPop = document.createElement('div'); mfPop.className = 'mf-pop'; mfPop.hidden = true;
   mfBtn.addEventListener('pointerdown', e => e.stopPropagation());
   mfBtn.addEventListener('click', e => { e.stopPropagation(); mfPop.hidden = !mfPop.hidden; });
-  document.addEventListener('pointerdown', e => { if (!mfPop.hidden && !e.target.closest('.mf-pop, .mf-toggle')) mfPop.hidden = true; });
+  document.addEventListener('pointerdown', e => { if (!mfPop.hidden && !e.target.closest('.mf-pop, .mf-toggle')) { mfPop.hidden = true; ui.swallowUntil = performance.now() + 500; } }, true);
   mfBox.appendChild(mfBtn); mfBox.appendChild(mfPop);
   for (const [k, g, col, title] of MF_DEF) {
     const b = document.createElement('button');
@@ -9866,6 +9903,26 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
   mini.addEventListener('pointermove', e => { if (miniDown) miniJump(e); });
   mini.addEventListener('pointerup', () => { miniDown = false; });
   ui.drawMini = drawMini;
+  // ---------- Событие пустоши: карточка с выбором, игра не останавливается; 20 секунд — потом решают сами
+  const evBox = document.createElement('div'); evBox.id = 'evcard'; evBox.hidden = true; document.getElementById('app').appendChild(evBox);
+  let evCur = null;
+  ui.eventCard = function (c) {
+    if (evCur && !evBox.hidden) return; // одно событие за раз; остальные решатся сами
+    const E = G.EVENTS[c.ev]; if (!E) return;
+    evCur = c;
+    const btn = (o, i) => { const ok = !o.cost || G.canAfford(o.cost); return `<button class="btn ${i === 0 ? 'pri' : ''}" data-i="${i}" ${ok ? '' : 'disabled'}>${esc(G.eventText(c, o.t))}${o.cost ? ' ' + costHtml(o.cost) : ''}</button>`; };
+    evBox.innerHTML = `<div class="ev-k">Событие</div><div class="ev-t">${esc(E.title)}</div><p class="ev-d">${esc(G.eventText(c, E.text))}</p><div class="ev-b">${E.opts.map(btn).join('')}</div><i class="ev-bar"><b></b></i>`;
+    evBox.hidden = false; evBox.classList.remove('out');
+    const bar = evBox.querySelector('.ev-bar b'); bar.style.animationDuration = '20s';
+    if (G.sfx) G.sfx('click');
+  };
+  ui.eventCardClose = c => { if (evCur === c) { evBox.classList.add('out'); setTimeout(() => { evBox.hidden = true; }, 300); evCur = null; } };
+  evBox.addEventListener('pointerdown', e => e.stopPropagation());
+  evBox.addEventListener('click', e => {
+    const b = e.target.closest('[data-i]'); if (!b || b.disabled || !evCur) return;
+    const c = evCur, i = +b.dataset.i, s = S();
+    if (G.resolveChoice(c, i)) { s.choices = s.choices.filter(x => x !== c); ui.eventCardClose(c); }
+  });
 
   // ---------- Экраны
   ui.intro = function () {
@@ -10034,7 +10091,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     placing: { at: FINE ? null : '#banner', say: () => FINE
       ? `Веди мышью — здание едет следом. Зелёный контур — можно, красный — нельзя. Клик — поставить. Правая кнопка — выйти.`
       : `${tap} на карту — здание встанет туда. Зелёный контур — можно, красный — нельзя. Потом «Построить».` },
-    placed_house: { at: '.cmd-grid [data-dock="build"]', act: true, say: () => `Заложили. Теперь бойцы — без них нас съедят. Нужна ${B('barracks')}. Снова ${D(0)}.` },
+    placed_house: { at: '.cmd-grid [data-dock="build"]', act: true, say: () => `Заложили. Теперь бойцы — без них нас съедят. ${G.canAfford(G.BUILDINGS.barracks.cost) ? '' : 'Сборщики донесут ресурсы — подожди немного. '}Нужно здание ${B('barracks')}. Снова ${D(0)}.` },
     sheet_barracks: { at: '#sheetBody [data-type="barracks"]', sheet: 'build', act: true, say: () => `Вот она — ${B('barracks')}. ${first(G.BUILDINGS.barracks.desc)}.` },
     placed_barracks: { at: '.cmd-grid [data-dock="recruit"]', say: () => `Когда ${B('barracks')} достроится — бойцов заказывают здесь, в ${D(1)}.` },
     sheet_recruit: { at: '#sheetBody .tiles', sheet: 'recruit', say: () => G.race === 'fungi'
@@ -10049,7 +10106,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     pro: { at: '.cmd-grid [data-dock="recruit"]', say: () => `Новый профессионал. Каждое занятое место кого-то нам даёт: больница — врача, школа — учительницу, опорник врага — специалиста против него. Загляни в ${D(1)}, раздел «Профессионалы».` },
     trial: { at: '#trialPill', say: () => `Загорелось «Испытание». Короткая игра на полминуты — за неё награда. Не успел — ничего страшного, через 4 минуты будет новое.` },
     popcap: { at: '#r-pop', say: () => `Тесно. Мест больше нет. Каждое новое здание ${B('house')} — плюс четыре.` },
-    raid: { at: '#modeBtn', say: () => `Набег. Идут к нам. Жми режим, пока не станет «Оборона», — бойцы встанут у стен.` },
+    raid: { at: '#modeBtn', say: () => G.S.mode === 'defense' ? `Набег. Идут к нам. Режим уже «Оборона» — бойцы встанут у стен. Держимся.` : `Набег. Идут к нам. Жми режим, пока не станет «Оборона», — бойцы встанут у стен.` },
     vday: { at: '#dayPill', say: () => 'Светает. Господа спускаются в подземелья под замком — туда солнце не достаёт. Днём замок держат гаргульи, слуги и башни. Не тревожьте хозяев до заката.' },
     night: { at: '#dayPill', say: () => G.race === 'vampires' ? 'Ночь. Наше время. До рассвета нужно успеть всё.' : 'Стемнело. Ночью враги злее, а видно хуже. Свет и башни — лучшие друзья.' },
     tile: { at: '#sheet .btns', sheet: 'tile', say: () => `Это залежь. Сборщики носят из ближних и без приказа. Задание — чтобы послать подальше или собрать толпой.` },
@@ -10079,7 +10136,8 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     Object.assign(spot.style, { left: r.left - app.left - 6 + 'px', top: r.top - app.top - 6 + 'px', width: r.width + 12 + 'px', height: r.height + 12 + 'px' });
     spot.hidden = false; return r;
   }
-  function hide() { box.hidden = true; spot.hidden = true; G.tutPause = false; cur = null; if (unhook) { unhook(); unhook = null; } }
+  let hideT = -1e9;
+  function hide() { hideT = performance.now(); box.hidden = true; spot.hidden = true; G.tutPause = false; cur = null; if (unhook) { unhook(); unhook = null; } }
   function show(id) {
     const st = STEPS[id], el = elOf(st.at);
     cur = id;
@@ -10140,6 +10198,8 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     const el = elOf(st.at);
     if (el && st.sheet) el.scrollIntoView({ block: 'nearest' });
     if (st.at && !clear(el)) { clearTimeout(waitT); waitT = setTimeout(next, 600); return; } // цель закрыта окном — ждём
+    // обычный совет не лезет поверх стройки и чужого окна и не идёт сразу за предыдущим
+    if (!st.act && !st.sheet && (ui.place || ui.sheet || performance.now() - hideT < 9000)) { clearTimeout(waitT); waitT = setTimeout(next, 1500); return; }
     queue.shift(); show(id);
   }
   // меню стройки — с начала списка, чтобы первые здания были на виду
@@ -10381,7 +10441,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
   }
   G.story = {
     scene,
-    open() { panels(G.STORY.world.img, 'Война с энтропией', G.STORY.world.panels, G.STORY.world.call, () => (G.shatter ? G.shatter(null, null, picker) : picker()), 'world'); },
+    open() { let seen = false; try { seen = localStorage.getItem('pepel_prologue') === '1'; } catch (e) { } if (seen) return picker(); try { localStorage.setItem('pepel_prologue', '1'); } catch (e) { } panels(G.STORY.world.img, 'Война с энтропией', G.STORY.world.panels, G.STORY.world.call, () => (G.shatter ? G.shatter(null, null, picker) : picker()), 'world'); },
     picker,
   };
 })();
@@ -10484,6 +10544,9 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
     const S = G.S; if (!S || S.intro || S.over) return;
     if (G.day && G.day() >= 2) G.chapter('night');
     if (!pending.length) return;
+    // порядок глав: «Соседи» и «Реликвия» — только после «Первой ночи»
+    const S2 = G.S; const k = pending.findIndex(c => !((c.id === 'neighbors' || c.id === 'relic') && !(S2.chap && S2.chap.night && !pending.some(q => q.id === 'night'))));
+    if (k < 0) return; if (k > 0) pending.unshift(pending.splice(k, 1)[0]);
     // ждём, пока игрок закроет окна и советник замолчит
     const busy = !document.getElementById('story').hidden || !document.getElementById('modal').hidden || !document.getElementById('tutor').hidden || (G.ui && G.ui.place);
     if (busy) return;
@@ -10495,6 +10558,7 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
   let barkT = 0;
   G.bark = function (fac, kind) {
     const S = G.S; if (!S || S.intro || !FOE[fac] || !FOE[fac][kind]) return;
+    if (document.querySelector('#rewards .rw-card') || !document.getElementById('celebrate').hidden) { setTimeout(() => G.bark(fac, kind), 2500); return; }
     if (kind === 'lair' && Math.random() > 0.5) return; // не на каждое логово
     const A = (G.ADV || {})[fac] || {}, im = (G.ADV_IMG || {})[fac];
     bark.dataset.race = fac;
@@ -10609,7 +10673,7 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
         },
         update(dt) { ang += v * dt; flash = Math.max(0, flash - dt * 3);
           // пропустил выемку — тоже промах
-          const d = Math.atan2(Math.sin(ang - notch), Math.cos(ang - notch)); if ((v > 0 && d > nw / 2 + 0.35 && d < 2) || (v < 0 && d < -nw / 2 - 0.35 && d > -2)) { E.miss(E.W / 2, E.H / 2, 'проскочил'); newNotch(); } },
+          const d = Math.atan2(Math.sin(ang - notch), Math.cos(ang - notch)); if ((v > 0 && d > nw / 2 + 0.35 && d < 2) || (v < 0 && d < -nw / 2 - 0.35 && d > -2)) { E.combo = 0; E.pop(E.W / 2, E.H / 2 + 14, 'проскочил', 'rgba(255,255,255,.6)'); newNotch(); } },
         draw() { const c = E.c, cx = E.W / 2, cy = E.H / 2 + 14, r = Math.min(E.W, E.H) * 0.3;
           E.disc(cx, cy, r + 26, '#16161a'); E.ring(cx, cy, r, '#2a2a30', 22);
           c.beginPath(); c.arc(cx, cy, r, notch - nw / 2, notch + nw / 2); c.strokeStyle = E.ac; c.lineWidth = 22; c.stroke();
@@ -10938,6 +11002,7 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
     if (!document.getElementById('tutor').hidden) return;
     const r = G.race, A = (G.ADV || {})[r] || {};
     const b = document.getElementById('bark'); if (!b || !b.hidden) return;
+    if (document.querySelector('#rewards .rw-card') || !document.getElementById('evcard').hidden) { lastAdv[k] = S.t - 60; return; } // не поверх награды и события
     b.dataset.race = r; b.classList.add('own');
     b.innerHTML = `<div class="bk-face" style="background-image:url(${(G.ADV_IMG || {})[r]})"></div><div class="bk-txt"><b>${A.name || ''}</b><span>${ADVICE[k]()}</span></div>`;
     b.hidden = false; b.classList.remove('out');
