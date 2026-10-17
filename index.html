@@ -1115,12 +1115,56 @@ body.heromode #homeFab svg { stroke: #aaa; }
 body.heromode #homeFab.locked { border-color: var(--th-acc, #ffd36a); box-shadow: 0 0 10px color-mix(in srgb, var(--th-acc, #ffd36a) 50%, transparent); }
 body.heromode #homeFab.locked svg { stroke: var(--th-acc, #ffd36a); }
 #heroBar #homeFab.in-bar { position: absolute; left: 0; top: auto; right: auto; bottom: calc(100% + 8px); width: 46px; height: 46px; margin: 0; background: rgba(8,6,8,.94); }
+/* меню вождя */
+body.heromode #heroBar .hb-face::before { content: 'меню'; position: absolute; left: 0; right: 0; bottom: 0; padding: 2px 0; background: rgba(0,0,0,.72); color: var(--hc); font: 700 9px 'JetBrains Mono', monospace; letter-spacing: .1em; text-transform: uppercase; text-align: center; }
+#heroBar .hb-cam { display: none; }
+#heroBar .hb-face::after { content: ''; position: absolute; right: -5px; top: -5px; width: 18px; height: 18px; display: none; background: #ffd65a; border: 2px solid #000; clip-path: polygon(40% 0, 60% 0, 60% 40%, 100% 40%, 100% 60%, 60% 60%, 60% 100%, 40% 100%, 40% 60%, 0 60%, 0 40%, 40% 40%); }
+#heroBar.canup .hb-face::after { display: block; animation: upPulse 1.2s ease-in-out infinite; }
+#heroBar .hb-ab.canup .hb-ic { filter: drop-shadow(0 0 5px #ffd65a); }
+#heroArrow { pointer-events: auto; cursor: pointer; }
+#heroMenu { position: absolute; inset: 0; z-index: 35; display: flex; align-items: center; justify-content: center; padding: 12px; background: rgba(0,0,0,.6); }
+#heroMenu[hidden] { display: none; }
+#heroMenu .hm-card { position: relative; width: min(720px, 100%); max-height: calc(100% - 24px); overflow: auto; padding: 16px 18px; background: rgba(10,8,10,.98); border: 1px solid rgba(255,255,255,.14); border-top: 3px solid var(--hc); color: #ddd; font-family: 'Golos Text', sans-serif; }
+#heroMenu .hm-x { position: absolute; right: 8px; top: 8px; width: 36px; height: 36px; border: 1px solid rgba(255,255,255,.2); background: #1a1418; color: #fff; font-size: 16px; cursor: pointer; }
+#heroMenu .hm-top { display: flex; gap: 14px; align-items: flex-start; }
+#heroMenu .hm-face { flex: none; width: 120px; height: 126px; background-repeat: no-repeat; background-color: #1a1418; border: 1px solid rgba(255,255,255,.15); }
+#heroMenu .hm-who { min-width: 0; flex: 1; padding-right: 30px; }
+#heroMenu .hm-who > b { display: block; font: 700 22px 'Tektur', sans-serif; color: var(--hc); }
+#heroMenu .hm-who > span { font: 600 11px 'JetBrains Mono', monospace; opacity: .6; text-transform: uppercase; letter-spacing: .06em; }
+#heroMenu .hm-who p { margin: 6px 0 8px; font-size: 13px; line-height: 1.4; }
+#heroMenu .hm-xp { position: relative; height: 16px; background: #222; border: 1px solid #000; }
+#heroMenu .hm-xp i { display: block; height: 100%; background: var(--hc); }
+#heroMenu .hm-xp em { position: absolute; inset: 0; display: grid; place-items: center; font: 600 10px 'JetBrains Mono', monospace; font-style: normal; color: #fff; text-shadow: 0 0 3px #000; }
+#heroMenu .hm-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 12px 0; }
+#heroMenu .hm-stats div { padding: 6px 8px; background: #161216; border: 1px solid rgba(255,255,255,.08); }
+#heroMenu .hm-stats span { display: block; font: 600 10px 'JetBrains Mono', monospace; opacity: .55; }
+#heroMenu .hm-stats b { font: 700 15px 'Tektur', sans-serif; color: #fff; }
+#heroMenu .hm-art { padding: 8px 10px; background: #161216; border-left: 3px solid #c8a0ff; }
+#heroMenu .hm-art b { display: block; font: 700 13px 'Tektur', sans-serif; color: #d8b8ff; } #heroMenu .hm-art span { font-size: 12px; opacity: .8; }
+#heroMenu h4 { margin: 14px 0 6px; font: 700 13px 'Tektur', sans-serif; text-transform: uppercase; letter-spacing: .06em; color: var(--hc); }
+#heroMenu .hm-ab { display: grid; grid-template-columns: 44px 1fr auto; gap: 10px; align-items: center; padding: 8px; margin-bottom: 6px; background: #161216; border: 1px solid rgba(255,255,255,.08); }
+#heroMenu .hm-ab.ult { border-color: var(--hc); }
+#heroMenu .hm-ab > i { width: 40px; height: 40px; background: var(--hc); -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
+#heroMenu .hm-ab b { font: 700 14px 'Tektur', sans-serif; color: #fff; } #heroMenu .hm-ab b small { color: var(--hc); letter-spacing: 2px; margin-left: 6px; }
+#heroMenu .hm-ab p { margin: 3px 0; font-size: 12.5px; line-height: 1.35; }
+#heroMenu .hm-ab span { font: 600 10px 'JetBrains Mono', monospace; opacity: .55; }
+#heroMenu .hm-ab .btn { display: flex; flex-direction: column; align-items: center; min-width: 96px; padding: 7px 10px; }
+#heroMenu .hm-ab .btn small { font: 600 10px 'JetBrains Mono', monospace; opacity: .8; }
+#heroMenu .hm-ab .btn[disabled] { opacity: .45; }
+#heroMenu .hm-max { font: 600 10px 'JetBrains Mono', monospace; color: var(--hc); }
+#heroMenu .hm-note { font-size: 12px; opacity: .65; margin: 4px 0; }
+#heroMenu .hm-sq { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 6px; }
+#heroMenu .hm-sq > div { position: relative; padding: 6px 8px 9px; background: #161216; border: 1px solid rgba(255,255,255,.08); }
+#heroMenu .hm-sq b { display: block; font-size: 13px; color: #fff; } #heroMenu .hm-sq span { font-size: 11px; opacity: .6; }
+#heroMenu .hm-sq i { position: absolute; left: 0; bottom: 0; height: 3px; background: #6ad050; }
 #heroTip { position: absolute; z-index: 40; display: flex; gap: 10px; padding: 10px 12px; background: rgba(8,6,8,.97); border: 1px solid rgba(255,255,255,.18); border-left: 3px solid var(--hc); box-shadow: 0 8px 24px rgba(0,0,0,.8); pointer-events: none; color: #eee; }
 #heroTip > i { flex: none; width: 36px; height: 36px; background: var(--hc); -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
 #heroTip b { font: 700 14px 'Tektur', sans-serif; color: var(--hc); } #heroTip b small { font: 600 10px 'JetBrains Mono', monospace; color: #fff; opacity: .6; margin-left: 6px; }
 #heroTip p { margin: 4px 0; font: 500 13px/1.35 'Golos Text', sans-serif; }
 #heroTip span { font: 600 10px 'JetBrains Mono', monospace; opacity: .65; }
-#heroQuest { position: absolute; z-index: 6; left: 12px; top: calc(env(safe-area-inset-top, 0px) + 56px); width: 300px; padding: 10px 12px; background: rgba(8,6,8,.9); border: 1px solid rgba(255,255,255,.12); border-left: 3px solid var(--hc); color: #ddd; pointer-events: none; }
+#heroQuest { position: absolute; z-index: 6; left: 12px; top: calc(env(safe-area-inset-top, 0px) + 56px); width: 300px; padding: 10px 12px; background: rgba(8,6,8,.9); border: 1px solid rgba(255,255,255,.12); border-left: 3px solid var(--hc); color: #ddd; cursor: pointer; }
+#heroQuest:hover { background: rgba(20,16,20,.95); }
+#heroQuest::after { content: 'нажми — показать цель'; display: block; margin-top: 6px; font: 600 9px 'JetBrains Mono', monospace; opacity: .45; }
 #heroQuest .hq-t { font: 700 15px 'Tektur', sans-serif; color: var(--hc); margin-bottom: 6px; }
 #heroQuest ol { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 5px; counter-reset: q; }
 #heroQuest li { position: relative; padding-left: 24px; opacity: .45; counter-increment: q; }
@@ -1182,7 +1226,13 @@ body.heromode #bark { top: calc(env(safe-area-inset-top, 0px) + 96px); left: aut
   #heroBar .hb-ab { width: 56px; height: 54px; }
   #heroBar .hb-ic { width: 24px; height: 24px; }
   #heroBar kbd { display: none; }
-  #heroBar .hb-cam { position: absolute; left: 0; bottom: calc(100% + 8px); width: 44px; height: 44px; background: rgba(8,6,8,.94); }
+  #heroBar .hb-cam { display: grid; position: absolute; left: 0; bottom: calc(100% + 8px); width: 48px; height: 48px; background: rgba(8,6,8,.94); }
+  #heroQuest.open li:not(.now) { display: block; }
+  #heroQuest::after { content: 'нажми — цель и все шаги'; }
+  #heroMenu { padding: 0; } #heroMenu .hm-card { max-height: 100%; height: 100%; width: 100%; padding: 14px 12px calc(env(safe-area-inset-bottom, 0px) + 14px); }
+  #heroMenu .hm-face { width: 86px; height: 90px; } #heroMenu .hm-who > b { font-size: 18px; }
+  #heroMenu .hm-stats { grid-template-columns: repeat(2, 1fr); }
+  #heroMenu .hm-ab { grid-template-columns: 36px 1fr; } #heroMenu .hm-ab > i { width: 32px; height: 32px; } #heroMenu .hm-ab .btn, #heroMenu .hm-max { grid-column: 1 / -1; }
   #heroBar.camp { left: 6px; } #heroBar.camp .hb-ab { width: 46px; height: 44px; } #heroBar.camp .hb-an { display: none; } #heroBar.camp .hb-face { width: 44px; height: 50px; }
   body.heromode nav.cmd { display: none !important; }
   body.heromode .hand-fab { bottom: 150px !important; right: 12px !important; width: 46px; height: 46px; }
@@ -11863,7 +11913,7 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
         { k: 'reap', name: 'Жатва', desc: 'Коса по кругу: урон всем рядом.', cd: 9 },
         { k: 'dread', name: 'Страх пустоты', desc: 'Враги вокруг бегут 4 секунды.', cd: 18 },
         { k: 'rift', name: 'Разлом', desc: 'Затягивает врагов в точку и рвёт их.', cd: 55 }] },
-    fungi: { name: 'Старый Мицелий', title: 'ходячая грибница', col: '#7fd0ff', squad: 'line', foe: 'primates',
+    fungi: { name: 'Вождь Мицелия', title: 'ходячая грибница', col: '#7fd0ff', squad: 'line', foe: 'primates',
       ab: [
         { k: 'spore', name: 'Споровый удар', desc: 'Удар о землю: урон и оглушение на 2 с.', cd: 8 },
         { k: 'mycel', name: 'Грибница', desc: 'Грибница прорастает вокруг и лечит отряд.', cd: 15 },
@@ -11903,6 +11953,22 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
   G.HEROES = HEROES;
   // куда смотрят кадры листа: fr — «лицом» вправо, br — «спиной» вправо (остальные — влево)
   HEROES.survivors.fr = 1; HEROES.survivors.br = 1; HEROES.ai.br = 1; HEROES.others.fr = 1; HEROES.fungi.fr = 1; HEROES.primates.fr = 1; HEROES.bears.fr = 1;
+  HEROES.mutants.fr = 1; HEROES.clowns.fr = 1; HEROES.clowns.br = 1; HEROES.vampires.fr = 1; HEROES.vampires.br = 1; HEROES.bears.br = 1;
+  // походка: hop — насколько подпрыгивает на шаге (Жнец парит и скользит, грибной вождь тяжёлый)
+  HEROES.others.hop = 0; HEROES.fungi.hop = 0.3; HEROES.primates.hop = 0.7;
+  HEROES.fungi.name = 'Вождь Мицелия';
+  // внешность — для меню вождя
+  const LOOK = {
+    survivors: 'Девчонка-мусорщица лет пятнадцати. Сварочные очки на лбу, куртка в изоленте, фонарь в одной руке, гаечный ключ в другой.',
+    mutants: 'Богомол в рост человека. Хитин, вместо предплечий — костяные серпы, между пластинами пульсирует мясо.',
+    others: 'Парящий капюшон без лица. Рваная мантия уходит в дым, ног нет. Коса с кристаллом Разлома.',
+    fungi: 'Ходячая грибница: шляпка вместо головы, тело из корней и мха, вокруг — светящиеся споры.',
+    ai: 'Тонкий белый андроид с кольцом-визором. Кабели в суставах, клинок света.',
+    clowns: 'Арлекин в красно-чёрных ромбах. Жабо, нарисованная улыбка, колпак с бубенцами, молот с ярмарки.',
+    vampires: 'Бледный аристократ. Чёрный плащ с алой подкладкой, трость-шпага. Солнце ему не страшно — плащ двойной.',
+    primates: 'Огромная горилла. Шерсть — кора и мох, лианы на плечах, дубина из бревна, старое мудрое лицо.',
+    bears: 'Розовый плюшевый медведь. Вместо глаза — пуговица, швы, китель с эполетами, игрушечная сабля.',
+  };
 
   // ---------- Истории. intro — перед стартом; acts[i].calm — капитан рассказывает, пока тихо; done — по завершении акта.
   // meet — диалог с вожаком чужих (f — он, h — наш вождь); boss — перед владыкой; win — эпилог.
@@ -11938,7 +12004,7 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
       boss: [['f', '> все узлы: защитить печать'], ['h', 'Печать — это всего лишь крышка.']],
       win: ['Город под печатью был полон жизни. Теперь он полон тишины.', 'Разлом сыт. Он засыпает, как засыпает поле после жатвы.', 'Обе правды верны. Одна — сытее.'] },
     fungi: { title: 'Сквозь корни', leader: 'Лесник Дуб', site: 'мёртвый пень',
-      intro: ['Приматы сажают лес поверх наших нитей. Лес душит грибницу.', 'Старый Мицелий, иди сквозь корни. Найди Древо-матку.', 'Мы терпеливы. Но не бесконечно.'],
+      intro: ['Приматы сажают лес поверх наших нитей. Лес душит грибницу.', 'Вождь Мицелия, иди сквозь корни. Найди Древо-матку.', 'Мы терпеливы. Но не бесконечно.'],
       acts: [
         { goal: 'Найти гнилое место', calm: ['Шёпот: где гниль — там мы. Где гниль — там дом.', 'Шёпот: ступай медленно. Нити растут за тобой.'], done: 'Гниль. Мягкая, тёплая. Нити пьют её.' },
         { goal: 'Встретить лесников', calm: ['Шёпот: обезьяны слышат нас корнями. Они идут.', 'Шёпот: лес и грибница — братья. Братья спорят дольше всех.'], done: 'Лесник лёг в мох. Мох пророс сквозь него.' },
@@ -12052,8 +12118,9 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
     let dy = 0, dx = 0, rot = 0, scx = 1, scy = 1, warp = null;
     if (moving) {
       const w = u.walk || 0, st = Math.sin(w), b = Math.abs(st), land = Math.pow(1 - b, 4);
-      dy = -b * 3.2; scy = 1 - land * 0.06; scx = 1 + land * 0.04; rot = st * 0.04;
-      const leg = st * Ww * 0.06, lean = Ww * 0.04;
+      const hop = H0.hop === undefined ? 1 : H0.hop;
+      dy = -b * 3.2 * hop; scy = 1 - land * 0.06 * hop; scx = 1 + land * 0.04 * hop; rot = st * 0.04 * (hop || 0.4);
+      const leg = st * Ww * 0.06 * hop, lean = Ww * 0.04;
       warp = h => (h < 0.36 ? leg * (0.36 - h) / 0.36 : 0) - (h > 0.5 ? st * Ww * 0.012 : 0) + fwd * lean * h;
       const step = Math.floor(w / Math.PI); if (step !== u._step) { u._step = step; if (G.dust) G.dust(u, r); }
     } else {
@@ -12199,6 +12266,10 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
     const S = S_();
     if (u.hero) {
       if (u.down) { u.goal = null; return true; }
+      if ((u.order && u.order.type === 'poi') || (u.goal && u.goal.type === 'interact')) {
+        const threat = nearestFoe(u.x, u.y, 3.5, e => e.target === u.id || isBoss(e) || e.leader || e.mode === 'raid');
+        if (threat) { u.order = null; u.goal = { type: 'attack', t: threat.id }; return true; }
+      }
       if (u.order) { obey(u); return true; }
       if (!S.heroMode) return false; // в кампании — обычный боец
       const g = u.goal && u.goal.type === 'attack' ? G.ents.get(u.goal.t) : null;
@@ -12267,8 +12338,10 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
     if (!(S.heroMode || h.ctl)) return false;
     const z = G.cam.zoom;
     { const [px, py] = G.tileToScreen(h.x, h.y); if (hyp(px - sx, py - 30 * z - sy) < 22 * z) return false; }
-    let best = null, bd = 30 * z;
-    for (const e of S.enemies) { if (!alive(e) || !G.isVis(Math.floor(e.x), Math.floor(e.y))) continue; const [px, py] = G.tileToScreen(e.x, e.y); const d = hyp(px - sx, py - 16 * z - sy); if (d < bd) { bd = d; best = e; } }
+    let best = null, bd = 44 * z;
+    for (const e of S.enemies) { if (!alive(e) || !G.isVis(Math.floor(e.x), Math.floor(e.y))) continue; const [px, py] = G.tileToScreen(e.x, e.y); const d = hyp(px - sx, py - 18 * z - sy); if (d < bd) { bd = d; best = e; } }
+    // рядом с точкой тапа дерётся враг — значит, бить, а не поднимать
+    if (!best) { let bt = 2.2; for (const e of S.enemies) { if (!alive(e) || !G.isVis(Math.floor(e.x), Math.floor(e.y))) continue; const d = hyp(e.x - tx, e.y - ty); if (d < bt) { bt = d; best = e; } } }
     if (best) { h.order = { type: 'attack', id: best.id }; FX({ k: 'ring', x: best.x, y: best.y, r: 0.7, col: '#ff5040', dur: 0.5 }); G.heroThink(h); return true; }
     let poi = null; bd = 1.3;
     for (const p of G.W.pois) { if (!p.discovered || p.type === 'capital') continue; const d = hyp(p.x + 0.5 - tx, p.y + 0.5 - ty); if (d < bd) { bd = d; poi = p; } }
@@ -12410,7 +12483,7 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
       if (d > HOLD_R) return;
       hs.holdT -= dt; hs.waveT -= dt;
       if (hs.waveT <= 0) {
-        hs.waveT = 14; const T = foeTypes(foeOf()), a = R() * Math.PI * 2, m = 0.7 + 0.12 * h.lvl;
+        hs.waveT = 15; const T = foeTypes(foeOf()), a = R() * Math.PI * 2, m = 0.6 + 0.1 * h.lvl;
         for (let k = 0; k < 2 + Math.floor(h.lvl / 4); k++) { const p = walkNear(hs.t.x + Math.cos(a) * 12 + R() * 2, hs.t.y + Math.sin(a) * 12 + R() * 2); spawnAt(T.light[k % T.light.length], p[0], p[1], { mode: 'raid', mul: m, dmul: m }); }
       }
       if (hs.holdT <= 0) actDone();
@@ -12469,7 +12542,14 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
 
   // ---------- Панель вождя, подсказка способности, задание, полоса вожака, стрелка к цели
   const mk = (id, tag) => { const e = document.createElement(tag || 'div'); e.id = id; e.hidden = true; document.getElementById('app').appendChild(e); return e; };
-  const bar = mk('heroBar'), tip = mk('heroTip'), quest = mk('heroQuest'), bossBar = mk('heroBoss'), arrow = mk('heroArrow');
+  const bar = mk('heroBar'), tip = mk('heroTip'), quest = mk('heroQuest'), bossBar = mk('heroBoss'), arrow = mk('heroArrow'), menu = mk('heroMenu');
+  quest.addEventListener('click', e => {
+    e.stopPropagation(); const S = S_(), hs = S && S.hs; if (!hs) return;
+    quest.classList.toggle('open');
+    if (hs.t && hs.phase !== 'done') { camLink = false; G.ui.followId = null; G.lookAt(hs.t.x, hs.t.y); FX({ k: 'ring', x: hs.t.x, y: hs.t.y, r: 1.5, col: HEROES[G.race].col, dur: 1.2 }); say('Вот цель. Прицел вернёт камеру к вождю.'); updBar(); }
+  });
+  quest.addEventListener('pointerdown', e => e.stopPropagation());
+  arrow.addEventListener('click', e => { e.stopPropagation(); quest.click(); });
   const CROSS = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>';
   let built = '', camLink = true;
   function buildBar() {
@@ -12478,19 +12558,20 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
     bar.dataset.race = G.race; bar.classList.toggle('camp', !hm); bar.style.setProperty('--hc', H0.col);
     bar.innerHTML = `<button class="hb-face" style="${face(G.race)}"><b class="hb-lv"></b></button>
       <div class="hb-mid"><div class="hb-name"><b>${H0.name}</b><span class="hb-lives"></span></div><div class="hb-hp"><i></i><em></em></div>
-      <div class="hb-abs">${H0.ab.map((a, i) => `<button class="hb-ab${i === 3 ? ' ult' : ''}" data-i="${i}"><i class="hb-ic" style="-webkit-mask-image:url(${icon(a.k)});mask-image:url(${icon(a.k)})"></i><span class="hb-an">${a.name}</span><i class="hb-cd"></i><kbd>${KEYS[i].toUpperCase()}</kbd><em class="hb-rk"></em>${hm ? `<b class="hb-up" title="Усилить">+</b>` : ''}</button>`).join('')}</div></div>
+      <div class="hb-abs">${H0.ab.map((a, i) => `<button class="hb-ab${i === 3 ? ' ult' : ''}" data-i="${i}"><i class="hb-ic" style="-webkit-mask-image:url(${icon(a.k)});mask-image:url(${icon(a.k)})"></i><span class="hb-an">${a.name}</span><i class="hb-cd"></i><kbd>${KEYS[i].toUpperCase()}</kbd><em class="hb-rk"></em></button>`).join('')}</div></div>
 `;
+    if (hm) { const mc = document.createElement('button'); mc.className = 'hb-cam'; mc.title = 'Камера к вождю'; mc.innerHTML = CROSS; mc.onclick = e => { e.stopPropagation(); toggleCam(); }; bar.appendChild(mc); }
     const fb = bar.querySelector('.hb-face');
-    fb.title = hm ? 'Камера к вождю' : 'Вести самому: тап по земле — идти, по врагу — бить';
+    fb.title = hm ? 'Меню вождя: способности, прокачка, отряд' : 'Вести самому: тап по земле — идти, по врагу — бить';
     fb.onclick = e => {
       e.stopPropagation(); const h = hero(); if (!h) return;
-      if (S_().heroMode) { camLink = true; G.ui.followId = h.id; G.lookAt(h.x, h.y); return; }
+      if (S_().heroMode) { openMenu(); return; }
       h.ctl = !h.ctl; h.order = null; if (h.ctl) { G.ui.followId = h.id; G.notify(`${h.name}: ведёшь сам. Тап по земле — идти, по врагу — бить. Ещё раз на портрет — отпустить`); } else { G.ui.followId = null; h.goal = null; }
       updBar(true);
     };
     bar.querySelectorAll('.hb-ab').forEach(b => {
       const i = +b.dataset.i;
-      b.onclick = e => { e.stopPropagation(); if (b._long) { b._long = false; return; } if (e.target.closest('.hb-up')) { G.heroUpgrade(i); return; } G.heroCast(i); };
+      b.onclick = e => { e.stopPropagation(); if (b._long) { b._long = false; return; } G.heroCast(i); };
       b.onmouseenter = () => showTip(i, b); b.onmouseleave = hideTip;
       // на телефоне — зажать, чтобы прочитать
       b.addEventListener('touchstart', () => { b._lt = setTimeout(() => { b._long = true; showTip(i, b); }, 380); }, { passive: true });
@@ -12521,6 +12602,7 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
     if (built !== G.race + !!S.heroMode) buildBar();
     bar.classList.toggle('down', !!h.down); bar.classList.toggle('ctl', !!h.ctl);
     bar.querySelector('.hb-lv').textContent = h.lvl;
+    bar.classList.toggle('canup', !!S.heroMode && HEROES[G.race].ab.some(a => { const c = upCost(rankOf(a.k)); return c && (S.res[mainRes()] || 0) >= c; }));
     bar.querySelector('.hb-hp i').style.width = (h.down ? 0 : Math.max(0, h.hp / h.st.hp * 100)) + '%';
     bar.querySelector('.hb-hp em').textContent = h.down ? (h.upT ? `встанет через ${Math.ceil(h.upT - S.t)} с` : 'пал') : `${Math.ceil(h.hp)} / ${Math.round(h.st.hp)}`;
     const lv = bar.querySelector('.hb-lives'); if (lv) lv.innerHTML = S.heroMode && S.hs ? Array.from({ length: 3 }, (_, i) => `<i class="${i < S.hs.lives ? 'on' : ''}"></i>`).join('') : '';
@@ -12531,14 +12613,15 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
       b.classList.toggle('cool', left > 0); b.classList.toggle('ready', left <= 0);
       const c = b.querySelector('.hb-cd'); c.style.setProperty('--p', (left / tot * 100).toFixed(1) + '%'); c.textContent = left > 0 ? Math.ceil(left) : '';
       const rk = rankOf(a.k), cost = upCost(rk); b.querySelector('.hb-rk').textContent = rk > 1 ? 'I'.repeat(rk) : '';
-      const up = b.querySelector('.hb-up'); if (up) up.hidden = !(S.heroMode && cost && (S.res[mainRes()] || 0) >= cost);
+      b.classList.toggle('canup', !!(S.heroMode && cost && (S.res[mainRes()] || 0) >= cost));
     });
+    { const cm = bar.querySelector('.hb-cam'); if (cm) cm.classList.toggle('on', camLink); }
     // прицел у мини-карты — он же кнопка камеры; на телефоне мини-карты нет — прицел переезжает на панель
     const hf = document.getElementById('homeFab');
     if (hf) {
       hf.classList.toggle('locked', !!S.heroMode && camLink);
       hf.title = S.heroMode ? (camLink ? 'Камера держится на вожде. Нажми — отпустить' : 'Камера свободна. Нажми — к вождю') : 'К цитадели (H)';
-      const inBar = S.heroMode && innerWidth < 700, box = document.querySelector('.mini-box');
+      const inBar = false, box = document.querySelector('.mini-box');
       if (inBar && hf.parentElement !== bar) { bar.appendChild(hf); hf.classList.add('in-bar'); }
       else if (!inBar && hf.parentElement === bar && box) { box.appendChild(hf); hf.classList.remove('in-bar'); }
     }
@@ -12567,11 +12650,51 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
       if (off) {
         const cx = VW / 2, cy = VH / 2, a = Math.atan2(sy - cy, sx - cx);
         const k = Math.min((VW / 2 - m) / Math.abs(Math.cos(a) || 1e-6), (VH / 2 - m - 80) / Math.abs(Math.sin(a) || 1e-6));
-        arrow.style.left = (cx + Math.cos(a) * k) + 'px'; arrow.style.top = (cy + Math.sin(a) * k) + 'px';
+        let ax = cx + Math.cos(a) * k, ay = cy + Math.sin(a) * k;
+        // не прятаться под панелями: двигаемся к центру, пока стрелка поверх интерфейса
+        const blocks = ['#heroQuest', '#heroBar', '.mini-box', '#handFab', '.hud', '#heroBoss', '#bark'].map(q => document.querySelector(q)).filter(e => e && !e.hidden && e.offsetParent !== null).map(e => e.getBoundingClientRect());
+        for (let n = 0; n < 80 && blocks.some(r => ax > r.left - 26 && ax < r.right + 26 && ay > r.top - 26 && ay < r.bottom + 34); n++) { ax += (cx - ax) * 0.04; ay += (cy - ay) * 0.04; }
+        arrow.style.left = ax + 'px'; arrow.style.top = ay + 'px';
         arrow.style.setProperty('--a', a + 'rad'); arrow.style.setProperty('--hc', HEROES[G.race].col);
         arrow.dataset.d = Math.round(hyp(h.x - hs.t.x, h.y - hs.t.y)) + ' кл.';
       }
     } else arrow.hidden = true;
+  }
+
+  // ---------- Меню вождя: кто он, что умеет, прокачка, отряд
+  function openMenu() { menu.hidden = false; G.tutPause = true; fillMenu(); }
+  function closeMenu() { menu.hidden = true; G.tutPause = false; }
+  menu.addEventListener('click', e => {
+    const up = e.target.closest('[data-up]'); if (up) { G.heroUpgrade(+up.dataset.up); fillMenu(); return; }
+    if (e.target.closest('.hm-x') || e.target === menu) closeMenu();
+  });
+  menu.addEventListener('pointerdown', e => e.stopPropagation());
+  function fillMenu() {
+    const S = S_(), h = hero(), H0 = HEROES[G.race]; if (!h) return;
+    const k = mainRes(), R0 = G.RES[k], have = Math.floor(S.res[k] || 0), need = G.xpNeed ? G.xpNeed(h.lvl) : 1;
+    const art = h.art && G.ARTIFACTS[h.art];
+    const squadL = S.units.filter(u => !u.hero && u.hp > 0);
+    const stat = (n, v) => `<div><span>${n}</span><b>${v}</b></div>`;
+    menu.style.setProperty('--hc', H0.col);
+    menu.innerHTML = `<div class="hm-card">
+      <button class="hm-x" title="Закрыть">✕</button>
+      <div class="hm-top"><div class="hm-face" style="${face(G.race)}"></div>
+        <div class="hm-who"><b>${H0.name}</b><span>${H0.title}</span><p>${LOOK[G.race] || ''}</p>
+          <div class="hm-xp"><i style="width:${Math.min(100, (h.xp || 0) / need * 100).toFixed(1)}%"></i><em>уровень ${h.lvl} · опыт ${Math.floor(h.xp || 0)} / ${need}</em></div></div></div>
+      <div class="hm-stats">${stat('Здоровье', `${Math.ceil(h.hp)} / ${Math.round(h.st.hp)}`)}${stat('Урон', Math.round(h.st.dmg))}${stat('Броня', Math.round(h.st.armor * 100) + '%')}${stat('Скорость', h.st.speed.toFixed(1))}${S.heroMode && S.hs ? stat('Жизни', S.hs.lives) : ''}${stat('Припасы', `${have} ${R0.name.toLowerCase()}`)}</div>
+      <div class="hm-art">${art ? `<b>Артефакт: ${art.name}</b><span>${art.desc || ''}</span>` : '<b>Артефакта нет</b><span>Ищи в заводах, НИИ, бункерах и на кладбищах электроники.</span>'}</div>
+      <h4>Способности</h4>
+      <div class="hm-abs">${H0.ab.map((a, i) => {
+        const M = ABI[a.k] || {}, rk = rankOf(a.k), c = upCost(rk);
+        const meta = [M.r ? `область ${M.r} кл.` : M.tr ? `враг ближе ${M.tr} кл.` : 'без цели', `перезарядка ${Math.round(cdOf(a, h))} с`, `клавиша ${KEYS[i].toUpperCase()}`].join(' · ');
+        return `<div class="hm-ab${i === 3 ? ' ult' : ''}"><i style="-webkit-mask-image:url(${icon(a.k)});mask-image:url(${icon(a.k)})"></i>
+          <div><b>${a.name} <small>${'●'.repeat(rk)}${'○'.repeat(3 - rk)}</small></b><p>${a.desc}</p><span>${meta}</span></div>
+          ${S.heroMode ? (c ? `<button class="btn${have >= c ? ' pri' : ''}" data-up="${i}" ${have >= c ? '' : 'disabled'}>Усилить<small>${c} ${R0.name.toLowerCase()}</small></button>` : '<em class="hm-max">максимум</em>') : ''}</div>`;
+      }).join('')}</div>
+      ${S.heroMode ? '<p class="hm-note">Ступень способности — +35% силы и −12% перезарядки. Припасы — обыском мест: склады, банки, заправки, руины.</p>' : ''}
+      <h4>Отряд · ${squadL.length}</h4>
+      <div class="hm-sq">${squadL.length ? squadL.map(u => `<div><b>${u.name}</b><span>${(G.CLASSES[u.cls] || {}).name || ''} · ${u.lvl} ур.</span><i style="width:${(u.hp / u.st.hp * 100).toFixed(0)}%"></i></div>`).join('') : '<p class="hm-note">Никого. Бойцы приходят из клеток, вокзалов, кинотеатров и часовен.</p>'}</div>
+    </div>`;
   }
 
   // ---------- Шаг: подъём, призванные, временные усиления, камера, история, грибница
