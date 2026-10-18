@@ -1111,7 +1111,8 @@ body.ux2 .mf-pop[hidden] { display: none !important; }
 #heroBar .hb-up[hidden] { display: none; }
 @keyframes upPulse { 50% { transform: scale(1.15); } }
 body.heromode #homeFab { border-color: rgba(255,255,255,.3); }
-body.heromode #homeFab svg { stroke: #aaa; }
+body.heromode #homeFab svg { stroke: #888; opacity: .6; }
+body.heromode #homeFab:not(.locked) { border-style: dashed; }
 body.heromode #homeFab.locked { border-color: var(--th-acc, #ffd36a); box-shadow: 0 0 10px color-mix(in srgb, var(--th-acc, #ffd36a) 50%, transparent); }
 body.heromode #homeFab.locked svg { stroke: var(--th-acc, #ffd36a); }
 #heroBar #homeFab.in-bar { position: absolute; left: 0; top: auto; right: auto; bottom: calc(100% + 8px); width: 46px; height: 46px; margin: 0; background: rgba(8,6,8,.94); }
@@ -1134,7 +1135,7 @@ body.heromode #heroBar .hb-face::before { content: 'меню'; position: absolut
 #heroMenu .hm-who p { margin: 6px 0 8px; font-size: 13px; line-height: 1.4; }
 #heroMenu .hm-xp { position: relative; height: 16px; background: #222; border: 1px solid #000; }
 #heroMenu .hm-xp i { display: block; height: 100%; background: var(--hc); }
-#heroMenu .hm-xp em { position: absolute; inset: 0; display: grid; place-items: center; font: 600 10px 'JetBrains Mono', monospace; font-style: normal; color: #fff; text-shadow: 0 0 3px #000; }
+#heroMenu .hm-xp em { position: absolute; inset: 0; display: grid; place-items: center; font: 700 10px 'JetBrains Mono', monospace; font-style: normal; color: #fff; text-shadow: 0 0 2px #000, 0 0 3px #000, 1px 1px 0 #000, -1px -1px 0 #000; }
 #heroMenu .hm-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 12px 0; }
 #heroMenu .hm-stats div { padding: 6px 8px; background: #161216; border: 1px solid rgba(255,255,255,.08); }
 #heroMenu .hm-stats span { display: block; font: 600 10px 'JetBrains Mono', monospace; opacity: .55; }
@@ -1178,7 +1179,7 @@ body.heromode #heroBar .hb-face::before { content: 'меню'; position: absolut
 #heroQuest .hq-bar i { display: block; height: 100%; background: var(--hc); }
 #heroQuest .hq-bar em { position: absolute; inset: 0; margin: 0; display: grid; place-items: center; font: 700 9px 'JetBrains Mono', monospace; color: #000; }
 #heroQuest .hq-win { margin-top: 6px; font: 700 13px 'Tektur', sans-serif; color: var(--hc); }
-body.heromode #feed { top: calc(env(safe-area-inset-top, 0px) + 270px) !important; }
+
 #heroBoss { position: absolute; z-index: 6; left: 50%; transform: translateX(-50%); top: calc(env(safe-area-inset-top, 0px) + 58px); width: min(420px, calc(100% - 24px)); text-align: center; pointer-events: none; }
 #heroBoss b { display: block; font: 700 14px 'Tektur', sans-serif; color: #ff7a80; text-shadow: 0 0 6px #000; text-transform: uppercase; letter-spacing: .05em; }
 #heroBoss div { height: 12px; margin-top: 3px; background: rgba(20,0,0,.85); border: 1px solid #000; box-shadow: 0 0 0 1px rgba(255,90,90,.4); }
@@ -1205,7 +1206,7 @@ body.heromode #feed { top: calc(env(safe-area-inset-top, 0px) + 270px) !importan
 #hdlg .them .hd-box b { color: #ff7a80; }
 #hdlg .hd-box p { margin: 6px 0 4px; font: 500 17px/1.35 'Golos Text', sans-serif; color: #fff; }
 #hdlg .hd-box small { font: 600 10px 'JetBrains Mono', monospace; opacity: .5; }
-body.hdlg-on nav.cmd, body.hdlg-on .hand-fab, body.hdlg-on #feed, body.hdlg-on #heroBar, body.hdlg-on #heroQuest, body.hdlg-on #heroBoss, body.hdlg-on #heroArrow, body.hdlg-on #heroAct, body.hdlg-on #bark { visibility: hidden; }
+body.hdlg-on #fxBan, body.hdlg-on #rewards, body.hdlg-on nav.cmd, body.hdlg-on .hand-fab, body.hdlg-on #feed, body.hdlg-on #heroBar, body.hdlg-on #heroQuest, body.hdlg-on #heroBoss, body.hdlg-on #heroArrow, body.hdlg-on #heroAct, body.hdlg-on #bark { visibility: hidden; }
 body.heromode .cmd-side, body.heromode #goalPill, body.heromode #goalTrack, body.heromode #raidPill { display: none !important; }
 body.heromode .cmd-main { flex: 0 0 auto !important; width: auto !important; max-width: none !important; }
 body.heromode .hand-fab { bottom: 128px !important; right: 16px !important; }
@@ -1239,7 +1240,7 @@ body.heromode #bark { top: calc(env(safe-area-inset-top, 0px) + 96px); left: aut
   #heroQuest { left: 6px; right: 6px; width: auto; top: calc(env(safe-area-inset-top, 0px) + 96px); padding: 8px 10px; }
   #heroQuest li:not(.now) { display: none; }
   #heroQuest .hq-t { font-size: 12px; margin-bottom: 3px; }
-  body.heromode #feed { top: calc(env(safe-area-inset-top, 0px) + 200px) !important; }
+
   #heroBoss { top: calc(env(safe-area-inset-top, 0px) + 215px); }
   body.heromode #bark { top: calc(env(safe-area-inset-top, 0px) + 250px); left: 6px; right: 6px; width: auto; }
   #heroAct b { font-size: 22px; } #fxBan b { font-size: 26px; } #fxBan i { width: 60px; height: 60px; }
@@ -3280,7 +3281,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
   function use(k, a) { if (!(a > 0)) return; if (G.race === 'others' && k !== 'aether') { a *= G.ESSENCE_RATE[k] || 0; k = 'aether'; } flowCur.use[k] = (flowCur.use[k] || 0) + a; }
   G.flowRate = function (k) { const H = G.flowHist || []; if (H.length < 5) return null; let v = 0; for (const h of H) v += (h.inc[k] || 0) - (h.use[k] || 0); return v / H.length * 60; };
   G.newGame = function (seed, race, opt) {
-    G.speed = 1; opt = opt || {};
+    G.speed = 1; opt = opt || {}; if (G.FX) G.FX.clear(); G._later = [];
     seed = seed || ((Math.random() * 1e9) | 0);
     race = race || 'survivors';
     G.applyRace(race);
@@ -3581,6 +3582,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     if ((u.srace || G.race) === 'primates' && u.cls === 'scout') dodge += 0.25; // гиббон на лианах — попробуй попади
     if ((u.srace || G.race) === 'primates' && u.cls === 'guard') armor += 0.15; // кора вместо шкуры
     dmg *= 1 + 0.1 * S.upg.dmg; hp *= 1 + 0.1 * S.upg.hp; speed *= 1 + 0.06 * S.upg.speed; carry *= 1 + 0.3 * S.upg.carry;
+    if (u.tmp) for (const m of u.tmp) if (m.until > S.t) { if (m.dmg) dmg *= m.dmg; if (m.hp) hp *= m.hp; if (m.speed !== undefined) speed *= m.speed; if (m.armor) armor += m.armor; if (m.lifesteal) lifesteal += m.lifesteal; }
     const old = u.st ? u.st.hp : 0;
     u.st = { hp, dmg, range, rate, speed, vision, armor: Math.min(armor, 0.6), carry, gather, dodge: Math.min(dodge, 0.5), xp, lifesteal, regen, regenAdd, thorns, splash, flee, night };
     if (old) u.hp = clamp(u.hp * hp / old, 1, hp);
@@ -3881,7 +3883,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     return cap;
   };
   G.isVeh = u => G.CLASSES[u.cls].role === 'vehicle';
-  G.people = () => S.units.filter(u => !G.isVeh(u));
+  G.people = () => S.units.filter(u => !G.isVeh(u) && !u.hero); // вождь — сверх лимита
   G.vehCap = () => 3 * S.buildings.filter(b => b.type === 'garage' && b.prog >= 1).length;
   G.hasBld = type => S.buildings.some(b => b.type === type && b.prog >= 1);
   // учёный жив — улучшения на четверть дешевле
@@ -5309,6 +5311,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
   function followFlow(e, dt) {
     const c = G.cit();
     if (!c) return false;
+    if (c.virtual) { const h = G.heroUnit && G.heroUnit(); if (!h || h.down) return false; if (hyp(e.x - h.x, e.y - h.y) <= e.range + 0.2) { e.target = h.id; return false; } moveTo(e, h.x, h.y, dt); return true; }
     if (distTo(e.x, e.y, c) <= e.range + 0.15) { e.target = c.id; return false; }
     const tx = Math.floor(e.x), ty = Math.floor(e.y);
     const ff = W.ff;
@@ -6036,7 +6039,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
       { t: 'Согреть (−40 грибов)', cost: { food: 40 }, fx: () => { for (let k = 0; k < 2; k++) { const sp = spawnPoint(); G.makeUnit('scav', sp[0], sp[1]); } G.notify(`Вылупились два новых: ${G.CLASSES.scav.name}`, { kind: 'good' }); } },
       { t: 'Съесть', fx: () => { G.notify('Съели. ' + grant({ food: 60 })); } }] },
     whisper: { races: ['others'], title: 'Шёпот Пустоты', text: 'Разлом шепчет: он отдаст силу, если ему отдадут кого-то из слабых.', opts: [
-      { t: 'Отдать слабейшего', fx: () => { const l = S.units.filter(u => !G.isVeh(u)).sort((a, b) => a.lvl - b.lvl); const u = l[0]; if (u && S.units.length > 3) { u.hp = 0; u.dead = true; G.notify(`${u.name} уходит в Разлом. ${grant({ aether: 160 })}`, { kind: 'event' }); } } },
+      { t: 'Отдать слабейшего', fx: () => { const l = S.units.filter(u => !G.isVeh(u) && !u.hero).sort((a, b) => a.lvl - b.lvl); const u = l[0]; if (u && S.units.length > 3) { u.hp = 0; u.dead = true; G.notify(`${u.name} уходит в Разлом. ${grant({ aether: 160 })}`, { kind: 'event' }); } } },
       { t: 'Отказать', fx: () => {} }] },
     lostsoul: { races: ['others'], title: 'Заблудшая душа', text: 'У края Разлома бродит чья-то тень. Её можно привязать к себе.', opts: [
       { t: 'Привязать', cost: { aether: 40 }, fx: () => { const sp = spawnPoint(); const u = G.makeUnit(pick(['scout', 'flamer', 'guard']), sp[0], sp[1]); G.notify(`${u.name} теперь служит Разлому (${G.CLASSES[u.cls].name})`, { ent: u.id, kind: 'good' }); } },
@@ -6249,6 +6252,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     if (S.over) return;
     S.t += dt;
     if (G.cardFx) G.cardFx.tick(dt);
+    if (G._later && G._later.length) { const now = G._later.filter(q => q.t <= S.t); if (now.length) { G._later = G._later.filter(q => q.t > S.t); for (const q of now) q.fn(); } }
     G.pathBudget = 6;
     // чего у расы нет — то сразу переходит в её ресурсы (лом у грибницы становится древесиной и т. п.)
     foldRes();
@@ -7068,7 +7072,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     }
     // вампиры днём: солнце жжёт всех, кроме слуг, гаргулий (каменеют) и тех, кто в тени
     if (G.race === 'vampires' && isDay()) for (const u of S.units) {
-      if (u.hp <= 0 || u.inVeh || u.inBld || u.cls === 'scav' || G.isVeh(u) || G.CLASSES[u.cls].mech || layerOf(u.x, u.y) === 'under') continue;
+      if (u.hero || S.heroMode || u.hp <= 0 || u.inVeh || u.inBld || u.cls === 'scav' || G.isVeh(u) || G.CLASSES[u.cls].mech || layerOf(u.x, u.y) === 'under') continue;
       if (u.cls === 'guard') { u.stone = true; continue; }
       u.hp -= u.st.hp * 0.012 * dt; if (R() < dt * 2) G.fxSmoke(u.x, u.y, 14);
       if (u.hp <= 0) killUnit(u, null);
@@ -7085,7 +7089,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     return JSON.stringify({ S: data, explored: G.packBits(W.explored), N: N, nodesFull: W.nodes.map(n => ({ id: n.id, dep: n.dep, x: n.x, y: n.y, amount: Math.round(n.amount * 10) / 10, max: n.max, obj: n.obj || undefined, acid: n.acid || undefined, corpse: n.corpse || undefined, rotT: n.rotT || undefined })), pois: W.pois, cam: G.cam ? { x: G.cam.x, y: G.cam.y, zoom: G.cam.zoom } : null });
   };
   G.deserialize = function (str) {
-    const d = JSON.parse(str);
+    const d = JSON.parse(str); if (G.FX) G.FX.clear(); G._later = [];
     if (d.N && d.N !== N) throw new Error('другой размер карты');
     S = G.S = d.S;
     if (S.mycRLE) { S.myc = G.unrle(S.mycRLE, N * N); delete S.mycRLE; } else S.myc = new Uint8Array(N * N);
@@ -10763,7 +10767,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRq6QBABXRUJQVlA4WAoA
     const was = G.tutPause; G.tutPause = true;
     const lines = o.lines.slice();
     if (o.who && o.who.img) lines[0] = `<span class="st-who" style="background-image:url(${o.who.img})"></span><b class="st-whoname">${o.who.name || ''}</b>` + lines[0];
-    panels(o.img, o.title || '', lines, o.call || 'Дальше', () => { G.tutPause = false; }, o.race);
+    panels(o.img, o.title || '', lines, o.call || 'Дальше', () => { setTimeout(() => G.pauseRecalc ? G.pauseRecalc() : (G.tutPause = false), 0); }, o.race);
     box.classList.toggle('gray', !!o.gray);
     // готовый ролик (моушн-графика) подменяет картинку: G.CUTSCENE_VIDEO['vampires_neighbors'] = 'video/....webm'
     const art = $('.st-art'); art.innerHTML = '';
@@ -11292,6 +11296,14 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
     add(o) { o.t = 0; o.dur = o.dur || 1; L.push(o); return o; },
     clear() { L.length = 0; },
   };
+  // урон и последствия — по игровому времени (пауза, скорость), а не по кадрам отрисовки
+  G.later = (sec, fn) => { if (!G.S) return; (G._later = G._later || []).push({ t: G.S.t + sec, fn }); };
+  // пауза — пока открыто хоть одно окно, которое её требует
+  G.pauseRecalc = function () {
+    const vis = id => { const e = document.getElementById(id); return !!(e && !e.hidden); };
+    const hand = document.getElementById('hand');
+    G.tutPause = !!(hand && !hand.hidden && hand.dataset.mode === 'draft') || vis('heroMenu') || vis('hdlg') || vis('story');
+  };
   const ease = t => 1 - Math.pow(1 - Math.min(1, Math.max(0, t)), 3);
   const rgba = (hex, a) => { const h = hex.replace('#', ''); const n = parseInt(h.length === 3 ? h.split('').map(c => c + c).join('') : h, 16); return `rgba(${n >> 16 & 255},${n >> 8 & 255},${n & 255},${a})`; };
   G.rgba = rgba;
@@ -11569,7 +11581,7 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
   const S_ = () => G.S, vis = e => e.hp > 0 && (G.isVis ? G.isVis(e.x, e.y) : true);
   const seen = () => S_().enemies.filter(vis);
   const near = (r) => { const c = G.cit(); return S_().enemies.filter(e => e.hp > 0 && c && Math.hypot(e.x - c.x - 1.5, e.y - c.y - 1.5) < r); };
-  const targets = () => { const a = seen(); return a.length ? a : near(30); };
+  const targets = () => { const [cx, cy] = G.screenToTile(...G.view().map(v => v / 2)); return seen().sort((a, b) => Math.hypot(a.x - cx, a.y - cy) - Math.hypot(b.x - cx, b.y - cy)); };
   const own = () => S_().units.filter(u => u.hp > 0);
   const boomFx = (x, y, col, n) => { if (G.fxBurst) G.fxBurst(x, y, col, n || 22); };
   // зрелище: баннер, область, символы. Всё через слой fx.js
@@ -11580,10 +11592,10 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
   const boss = e => !!(G.ENEMIES[e.type] && G.ENEMIES[e.type].boss);
   const TRICK_U = [
     T('starfall', 'Звездопад', 'Дюжина метеоров падает на врагов в поле зрения. Каждый взрывается и ранит всех рядом.', 'war', () => {
-      const L = targets().sort(() => Math.random() - 0.5).slice(0, 12); if (!L.length) return 0;
+      const L = targets().slice(0, 12); if (!L.length) return 0;
       cast('starfall', '#ffb040'); G.fxTint && G.fxTint('radial-gradient(ellipse at 60% 0%, rgba(255,140,40,.28), rgba(40,10,0,.35))', 3.4);
       const dmg = 90 + 6 * G.day();
-      L.forEach((e, i) => FXa({ k: 'meteor', x: e.x + (Math.random() - 0.5) * 0.6, y: e.y + (Math.random() - 0.5) * 0.6, delay: 0.25 + i * 0.22, dur: 1.5, r: 1.5, size: 1, flash: i === 0, hit: f => { for (const o of nb(f.x, f.y, 1.6)) G.damage(o, dmg, null); } }));
+      L.forEach((e, i) => { const x = e.x + (Math.random() - 0.5) * 0.6, y = e.y + (Math.random() - 0.5) * 0.6, d = 0.25 + i * 0.22; FXa({ k: 'meteor', x, y, delay: d, dur: 1.5, r: 1.5, size: 1, flash: i === 0 }); G.later(d + 0.55, () => { for (const o of nb(x, y, 1.6)) G.damage(o, dmg, null); }); });
       // и пара метеоров «для красоты» вокруг
       const [cx, cy] = ctr(); for (let i = 0; i < 6; i++) FXa({ k: 'meteor', x: cx + (Math.random() - 0.5) * 16, y: cy + (Math.random() - 0.5) * 16, delay: 0.1 + Math.random() * 2.4, dur: 1.3, r: 1, size: 0.7 });
       return L.length;
@@ -11625,7 +11637,7 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
     }, { hero: 1 }),
     others: T('rifttear', 'Разлом', 'Пустота рвётся под врагами: все в поле зрения теряют треть здоровья.', 'war', () => {
       const L = targets(); if (!L.length) return 0; cast('rifttear', '#a66bff'); G.fxTint && G.fxTint('rgba(60,0,90,.3)', 2.5); G.shake = 8;
-      L.forEach((e, i) => { const d = 0.2 + Math.min(i, 20) * 0.08; FXa({ k: 'vortex', x: e.x, y: e.y, r: 1.2, col: '#a66bff', dur: 1.6, delay: d }); FXa({ k: 'zap', x: e.x, y: e.y, col: '#b080ff', dur: 0.4, delay: d + 0.5, start: () => { if (e.hp > 0) G.damage(e, Math.min(400, e.maxHp * 0.34), null); } }); });
+      L.forEach((e, i) => { const d = 0.2 + Math.min(i, 20) * 0.08; FXa({ k: 'vortex', x: e.x, y: e.y, r: 1.2, col: '#a66bff', dur: 1.6, delay: d }); FXa({ k: 'zap', x: e.x, y: e.y, col: '#b080ff', dur: 0.4, delay: d + 0.5 }); G.later(d + 0.5, () => { if (e.hp > 0) G.damage(e, Math.min(400, e.maxHp * 0.34), null); }); });
       return L.length;
     }, { noUnitsOk: 1, hero: 1 }),
     fungi: T('sporeburst', 'Споровый взрыв', 'Мицелий разом прорастает вокруг Сердца и всех построек.', 'eco', () => {
@@ -11660,7 +11672,7 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
     bears: T('hugs', 'Обнимашки', 'Колючие объятия: 6 секунд враги в поле зрения теряют здоровье.', 'war', () => {
       const L = targets(); if (!L.length) return 0; cast('hugs', '#f568c5');
       L.forEach((e, i) => { if (i < 24) { FXa({ k: 'rise', x: e.x, y: e.y, r: 0.4, sym: '♥', col: '#ff7ad0', n: 10, dur: 6, size: 20 }); FXa({ k: 'aura', id: e.id, col: '#f568c5', dur: 6 }); } });
-      let k = 0; const it = setInterval(() => { for (const e of L) if (e.hp > 0) G.damage(e, 18 + G.day(), null); if (++k >= 12) clearInterval(it); }, 500);
+      for (let k = 1; k <= 12; k++) G.later(k * 0.5, () => { for (const e of L) if (e.hp > 0 && !e.dead) G.damage(e, 18 + G.day(), null); });
       return L.length;
     }, { noUnitsOk: 1, hero: 1 }),
   };
@@ -11771,7 +11783,7 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
   fab.innerHTML = '<svg viewBox="0 0 32 32" aria-hidden="true"><rect x="5" y="9" width="11" height="16" rx="1.5" transform="rotate(-16 10 17)"/><rect x="10.5" y="7" width="11" height="16" rx="1.5"/><rect x="16" y="9" width="11" height="16" rx="1.5" transform="rotate(16 21 17)"/></svg><b></b>';
   app.appendChild(fab);
   fab.addEventListener('click', () => { if (box.hidden || box.dataset.mode !== 'hand') openHand(); else closeBox(); });
-  function closeBox() { box.hidden = true; box.innerHTML = ''; box.dataset.mode = ''; G.tutPause = false; }
+  function closeBox() { box.hidden = true; box.innerHTML = ''; box.dataset.mode = ''; if (G.pauseRecalc) G.pauseRecalc(); else G.tutPause = false; }
   let all = [];
   function openHand() {
     all = hand().map(cardObj).concat(legends());
@@ -11847,7 +11859,7 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
     if (!taken.length) return;
     const opts = taken.map(c => cardObj(c.key));
     box.dataset.mode = 'draft';
-    box.innerHTML = `<div class="hd-dim"></div><div class="dr-wrap"><div class="dr-top"><b>${S.heroMode ? 'Акт пройден' : 'Набег отбит'}</b><span>выбери одну карту</span></div>
+    box.innerHTML = `<div class="hd-dim"></div><div class="dr-wrap"><div class="dr-top"><b>${S.heroMode ? 'Шаг пройден' : 'Набег отбит'}</b><span>выбери одну карту</span></div>
       <div class="dr-row">${opts.map((o, i) => `<button class="dr-c" data-k="${o.key}" style="--i:${i}"><span class="dr-why">${why[i]}</span><div class="dr-float">${cardHTML(o)}</div><span class="dr-desc"><b>${o.name}</b>${o.desc}</span></button>`).join('')}</div>
       <p class="dr-hint">Закон действует, пока лежит в руке. Приём разыгрывается один раз — когда нужно.</p></div>`;
     box.hidden = false; G.tutPause = true;
@@ -11864,7 +11876,7 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
   }
   function chooseDiscard(key, type) {
     const H = hand().filter(k => CARDS[k].type === type).map(cardObj);
-    box.dataset.mode = 'draft';
+    box.dataset.mode = 'draft'; box.hidden = false; G.tutPause = true;
     box.innerHTML = `<div class="hd-dim"></div><div class="dr-wrap"><div class="dr-top"><b>Рука полна</b><span>берёшь «${CARDS[key].name}» — какую сбросить?</span></div>
       <div class="dr-row small">${H.map((o, i) => `<button class="dr-c" data-k="${o.key}" style="--i:${i}"><div class="dr-float">${cardHTML(o)}</div><span class="dr-desc"><b>${o.name}</b>${o.desc}</span></button>`).join('')}</div>
       <div class="dr-foot"><button class="btn dr-keep">Оставить как есть</button></div></div>`;
@@ -11919,7 +11931,7 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
         { k: 'mycel', name: 'Грибница', desc: 'Грибница прорастает вокруг и лечит отряд.', cd: 15 },
         { k: 'shrooms', name: 'Мухоморы', desc: 'Три споровика прорастают на 25 секунд.', cd: 25 },
         { k: 'bloom', name: 'Цветение', desc: 'Облако спор: враги вокруг 6 секунд дерутся друг с другом.', cd: 55 }] },
-    ai: { name: 'Модуль Ω', title: 'исполняющий узел', col: '#5ae0ff', squad: 'swarm', foe: 'clowns',
+    ai: { name: 'Модуль Омега', title: 'исполняющий узел', col: '#5ae0ff', squad: 'swarm', foe: 'clowns',
       ab: [
         { k: 'dash', name: 'Рывок', desc: 'Разрез по линии до врага.', cd: 7 },
         { k: 'shield', name: 'Щит', desc: 'Броня отряду на 8 секунд.', cd: 16 },
@@ -12014,15 +12026,15 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
       boss: [['f', 'Лес помнит каждое дерево, что ты съел.'], ['h', 'Мы тоже помним. Каждое было вкусным.']],
       win: ['Древо-матка стоит. Но внутри оно уже наше.', 'Лес растёт дальше — на наших нитях, нашим соком.', 'Никто не победил. Все проросли друг в друга. Тишина.'] },
     ai: { title: 'Сбойный узел', leader: 'Ведущий Хохотун', site: 'узел связи',
-      intro: ['<code>&gt; в сети шум. источник: органика с краской на лицах</code>', '<code>&gt; модуль Ω: найти узел и вернуть тишину</code>', '<code>&gt; допуск потерь: в пределах нормы</code>'],
+      intro: ['<code>&gt; в сети шум. источник: органика с краской на лицах</code>', '<code>&gt; модуль Омега: найти узел и вернуть тишину</code>', '<code>&gt; допуск потерь: в пределах нормы</code>'],
       acts: [
         { goal: 'Найти ретранслятор', calm: ['Консоль: <code>&gt; ретранслятор рядом. сигнал искажён смехом</code>', 'Консоль: <code>&gt; смех не несёт информации. зачем органика смеётся?</code>'], done: '<code>&gt; ретранслятор найден. шум идёт с юга</code>' },
         { goal: 'Встретить клоунов', calm: ['Консоль: <code>&gt; группа органики. маркировка: «цирк»</code>', 'Консоль: <code>&gt; рекомендация: не слушать. юмор заразен</code>'], done: '<code>&gt; ведущий отключён. шум упал на 40%</code>' },
-        { goal: 'Удержать узел 75 секунд', calm: ['Консоль: <code>&gt; перезапуск узла: 60 секунд. защищать</code>', 'Консоль: <code>&gt; ошибка: модуль Ω улыбается. проверить лицевые приводы</code>'], done: '<code>&gt; узел чист. в сети тишина</code>' },
+        { goal: 'Удержать узел 75 секунд', calm: ['Консоль: <code>&gt; перезапуск узла: 60 секунд. защищать</code>', 'Консоль: <code>&gt; ошибка: модуль Омега улыбается. проверить лицевые приводы</code>'], done: '<code>&gt; узел чист. в сети тишина</code>' },
         { goal: 'Победить владыку', calm: ['Консоль: <code>&gt; приближается источник шума. крупный</code>'], done: '' }],
       meet: [['f', 'Почтеннейшая публика! Железный дровосек пришёл за сердцем!'], ['h', '<code>&gt; сердце: не требуется</code>'], ['f', 'Вот это и смешно, дружок.'], ['h', '<code>&gt; смешно: не определено. применить клинок</code>']],
       boss: [['f', 'Последний акт! Машина против цирка!'], ['h', '<code>&gt; акт: завершить</code>']],
-      win: ['<code>&gt; сеть: тишина. порядок: 100%</code>', '<code>&gt; лог: модуль Ω сохранил запись смеха. причина: не определена</code>', '<code>&gt; вопрос отклонён. запись сохранена</code>'] },
+      win: ['<code>&gt; сеть: тишина. порядок: 100%</code>', '<code>&gt; лог: модуль Омега сохранил запись смеха. причина: не определена</code>', '<code>&gt; вопрос отклонён. запись сохранена</code>'] },
     clowns: { title: 'Гастроли', leader: 'Мажордом Скорбь', site: 'сцена',
       intro: ['Почтеннейшая публика! Где-то есть замок, где не смеются уже триста лет!', 'Бим-Бом, это вызов. Труппа едет на гастроли.', 'Билеты не нужны. Выход не предусмотрен.'],
       acts: [
@@ -12108,7 +12120,13 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
     const sx = u.x - u.y, sy = u.x + u.y;
     if (u._sx === undefined) { u._sx = sx; u._sy = sy; u._f = -1; u._back = false; u._mv = -9; }
     const vx = sx - u._sx, vy = sy - u._sy; u._sx = sx; u._sy = sy;
-    if (vx * vx + vy * vy > 1e-6) { u._mv = t; if (Math.abs(vx) > 0.003) u._f = vx > 0 ? 1 : -1; if (Math.abs(vy) > 0.003) u._back = vy < 0; }
+    if (vx * vx + vy * vy > 1e-6) {
+      u._mv = t;
+      // новое направление принимаем, только если оно держится 0,12 с — без дрожи на зигзагах
+      const wf = Math.abs(vx) > 0.003 ? (vx > 0 ? 1 : -1) : u._f, wb = vy < -0.3 * Math.abs(vx);
+      if (wf !== u._f || wb !== u._back) { u._turn = (u._turn || 0) + Math.max(0, t - (u._tl || t)); if (u._turn > 0.12) { u._f = wf; u._back = wb; u._turn = 0; } } else u._turn = 0;
+    }
+    u._tl = t;
     const tg = u.goal && u.goal.type === 'attack' ? G.ents.get(u.goal.t) : null;
     if (u.atkT > 0 && tg) { const tx = (tg.x - tg.y) - sx, ty = (tg.x + tg.y) - sy; if (Math.abs(tx) > 0.05) u._f = tx > 0 ? 1 : -1; u._back = ty < -0.3; }
     const moving = t - u._mv < 0.15, face = u._f;
@@ -12186,7 +12204,7 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
   const FX = o => G.FX && G.FX.add(o);
   const area = (x, y, r, col) => { FX({ k: 'ring', x, y, r, col, dur: 0.6 }); FX({ k: 'shock', x, y, r, col, dur: 0.45 }); };
   function boltFx(x0, y0, x1, y1) { if (G.bolts) G.bolts.push({ pts: [[x0, y0], [x1, y1]], t: 0.35, w: 4 }); }
-  function tmp(u, s, fn) { fn(u.st); u.tmpT = Math.max(u.tmpT || 0, G.S.t + s); }
+  function tmp(u, s, m) { (u.tmp = (u.tmp || []).filter(q => q.until > G.S.t)).push(Object.assign({ until: G.S.t + s }, m)); u.tmpT = Math.max(u.tmpT || 0, G.S.t + s); G.recalc(u); }
   function walkNear(x, y) { const w = G.nearestWalkable(Math.floor(x), Math.floor(y), 4); return w ? [w[0] + 0.5, w[1] + 0.5] : [x, y]; }
   function summon(h, cls, n, ttl, o) {
     const out = [];
@@ -12210,11 +12228,11 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
   const AB = {
     flash(h) { const l = foesNear(h.x, h.y, 3.2); for (const e of l) { stun(e, 2); hurt(h, e, pw(h) * 1.6); } area(h.x, h.y, 3.2, '#fff2a8'); FX({ k: 'pillar', x: h.x, y: h.y, col: '#fff2a8', dur: 0.5, w: 50 }); G.fxFlash && G.fxFlash('rgba(255,245,200,.35)', 250); return true; },
     tape(h) { for (const u of myTeam(h, 5)) { healU(u, 0.35); FX({ k: 'rise', x: u.x, y: u.y, r: 0.4, sym: '+', col: '#9ad0ff', n: 4, dur: 1.4, size: 20 }); } area(h.x, h.y, 5, '#9ad0ff'); return true; },
-    turret(h) { const t = summon(h, 'gunner', 1, 25, { name: 'Турель из хлама' })[0]; t.turret = true; return true; },
+    turret(h) { const t = summon(h, 'gunner', 1, 25, { name: 'Турель из хлама' })[0]; t.turret = true; tmp(t, 25, { speed: 0, dmg: 2 }); return true; },
     lastbulb(h) { const l = foesNear(h.x, h.y, 7); for (const e of l) { stun(e, 4); hurt(h, e, pw(h) * 6); } area(h.x, h.y, 7, '#ffffff'); FX({ k: 'pillar', x: h.x, y: h.y, col: '#fff6c0', dur: 1.4, w: 120 }); FX({ k: 'shock', x: h.x, y: h.y, r: 9, col: '#fff6c0', dur: 0.9, w: 10 }); G.fxFlash && G.fxFlash('rgba(255,255,230,.9)', 900); G.shake = 10; return true; },
     leap(h) { const e = target(h, 7); if (!e) return false; leapTo(h, e); hurt(h, e, pw(h) * 3); for (const o of foesNear(e.x, e.y, 1.6)) if (o !== e) hurt(h, o, pw(h)); FX({ k: 'shock', x: e.x, y: e.y, r: 1.6, col: '#caed59', dur: 0.5, w: 6 }); G.shake = 4; return true; },
     molt(h) { healU(h, 0.5); FX({ k: 'confetti', x: h.x, y: h.y, cols: ['#caed59', '#8a6a4a', '#e8d0a0'], n: 30, dur: 1.2 }); area(h.x, h.y, 1.4, '#caed59'); return true; },
-    brood(h) { summon(h, 'scav', 3, 25, { name: 'Трутень' }).forEach(u => tmp(u, 25, s => { s.dmg *= 3; })); FX({ k: 'cloud', x: h.x, y: h.y, r: 1.5, col: '#9ad040', dur: 1.5 }); return true; },
+    brood(h) { summon(h, 'scav', 3, 25, { name: 'Трутень' }).forEach(u => tmp(u, 25, { dmg: 3 })); FX({ k: 'cloud', x: h.x, y: h.y, r: 1.5, col: '#9ad040', dur: 1.5 }); return true; },
     hunger(h) { const l = foesNear(h.x, h.y, 4); let sum = 0; for (const e of l) { const a = pw(h) * 4; hurt(h, e, a); sum += a; } h.hp = Math.min(h.st.hp, h.hp + sum * 0.35); FX({ k: 'vortex', x: h.x, y: h.y, r: 4, col: '#ff3040', dur: 1.2 }); area(h.x, h.y, 4, '#ff3040'); G.shake = 6; return true; },
     step(h) { const e = target(h, 8); if (!e) return false; FX({ k: 'cloud', x: h.x, y: h.y, r: 0.8, col: '#2a1a40', dur: 1 }); leapTo(h, e); hurt(h, e, pw(h) * 3); FX({ k: 'cloud', x: h.x, y: h.y, r: 0.8, col: '#2a1a40', dur: 1 }); return true; },
     reap(h) { const l = foesNear(h.x, h.y, 2.6); if (!l.length) return false; for (const e of l) hurt(h, e, pw(h) * 2.4); for (let q = 0; q < 3; q++) FX({ k: 'slash', x: h.x, y: h.y, a: q * 2.1, col: '#9ae8ff', r: 2.2, dur: 0.35, delay: q * 0.07, w: 8 }); area(h.x, h.y, 2.6, '#9ae8ff'); return true; },
@@ -12222,33 +12240,33 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
     rift(h) { const c = target(h, 7) || h; const l = foesNear(c.x, c.y, 5.5); for (const e of l) { if (!isBoss(e)) { const p = walkNear(e.x + (c.x - e.x) * 0.7, e.y + (c.y - e.y) * 0.7); e.x = p[0]; e.y = p[1]; e.path = null; } stun(e, 1.5); hurt(h, e, pw(h) * 5); } FX({ k: 'vortex', x: c.x, y: c.y, r: 5.5, col: '#c890ff', dur: 1.8 }); FX({ k: 'zap', x: c.x, y: c.y, col: '#c890ff', dur: 0.5, delay: 0.5 }); G.fxTint && G.fxTint('rgba(60,0,90,.3)', 1.5); G.shake = 8; return true; },
     spore(h) { const l = foesNear(h.x, h.y, 2.8); for (const e of l) { stun(e, 2); hurt(h, e, pw(h) * 1.8); } FX({ k: 'cloud', x: h.x, y: h.y, r: 2.8, col: '#e8d090', dur: 1.4 }); area(h.x, h.y, 2.8, '#e8d090'); G.shake = 4; return true; },
     mycel(h) { if (G.mycSeed) G.mycSeed(h.x, h.y, 3.5, 1); for (const u of myTeam(h, 5)) { healU(u, 0.3); FX({ k: 'rise', x: u.x, y: u.y, r: 0.4, sym: '+', col: '#7fd0ff', n: 3, dur: 1.4 }); } area(h.x, h.y, 5, '#4d7cff'); return true; },
-    shrooms(h) { summon(h, 'scav', 3, 25, { name: 'Споровик', srace: 'survivors' }).forEach(u => { u.infected = true; tmp(u, 25, s => { s.dmg *= 3; s.hp *= 1.5; }); u.hp = u.st.hp; }); FX({ k: 'cloud', x: h.x, y: h.y, r: 2, col: '#4d7cff', dur: 1.5 }); return true; },
+    shrooms(h) { summon(h, 'scav', 3, 25, { name: 'Споровик', srace: 'survivors' }).forEach(u => { u.infected = true; tmp(u, 25, { dmg: 3, hp: 1.5 }); u.hp = u.st.hp; }); FX({ k: 'cloud', x: h.x, y: h.y, r: 2, col: '#4d7cff', dur: 1.5 }); return true; },
     bloom(h) { const l = foesNear(h.x, h.y, 6); for (const e of l) if (!isBoss(e)) e.charmT = G.S.t + 6; FX({ k: 'cloud', x: h.x, y: h.y, r: 6, col: '#ff90d0', dur: 3, s: 1.5 }); area(h.x, h.y, 6, '#ff90d0'); return true; },
     dash(h) { const e = target(h, 7); if (!e) return false; const x0 = h.x, y0 = h.y; leapTo(h, e); for (const o of S_().enemies) { if (!alive(o)) continue; const vx = h.x - x0, vy = h.y - y0, L = hyp(vx, vy) || 1, k = ((o.x - x0) * vx + (o.y - y0) * vy) / L; if (k < 0 || k > L) continue; if (Math.abs((o.x - x0) * vy - (o.y - y0) * vx) / L < 1) hurt(h, o, pw(h) * 2.6); } boltFx(x0, y0, h.x, h.y); return true; },
-    shield(h) { for (const u of myTeam(h, 6)) { tmp(u, 8, s => { s.armor = Math.min(0.8, s.armor + 0.45); }); FX({ k: 'aura', id: u.id, col: '#5ae0ff', dur: 8 }); } area(h.x, h.y, 6, '#5ae0ff'); return true; },
-    drones(h) { summon(h, 'scout', 2, 25, { name: 'Дрон', srace: 'ai' }).forEach(u => tmp(u, 25, s => { s.dmg *= 3; })); return true; },
+    shield(h) { for (const u of myTeam(h, 6)) { tmp(u, 8, { armor: 0.45 }); FX({ k: 'aura', id: u.id, col: '#5ae0ff', dur: 8 }); } area(h.x, h.y, 6, '#5ae0ff'); return true; },
+    drones(h) { summon(h, 'scout', 2, 25, { name: 'Дрон', srace: 'ai' }).forEach(u => tmp(u, 25, { dmg: 3 })); return true; },
     overload(h) { let p = h; const hitL = []; for (let i = 0; i < 8; i++) { const e = nearestFoe(p.x, p.y, 6, q => !hitL.includes(q)); if (!e) break; boltFx(p.x, p.y, e.x, e.y); FX({ k: 'zap', x: e.x, y: e.y, dur: 0.35, delay: i * 0.06 }); hurt(h, e, pw(h) * (5 - i * 0.4)); stun(e, 1); hitL.push(e); p = e; } if (!hitL.length) return false; G.fxFlash && G.fxFlash('rgba(120,230,255,.3)', 300); G.shake = 6; G.sfx && G.sfx('bolt'); return true; },
     mallet(h) { const e = target(h, 2.4); if (!e) return false; hurt(h, e, pw(h) * 3); stun(e, 1.5); if (!isBoss(e)) { const a = Math.atan2(e.y - h.y, e.x - h.x), p = walkNear(e.x + Math.cos(a) * 2, e.y + Math.sin(a) * 2); e.x = p[0]; e.y = p[1]; e.path = null; } h.atkT = 0.3; FX({ k: 'shock', x: e.x, y: e.y, r: 1.3, col: '#ffd060', dur: 0.4, w: 7 }); FX({ k: 'rise', x: e.x, y: e.y, r: 0.2, sym: 'БОМ', col: '#ffd060', n: 1, dur: 1.2, size: 22 }); G.shake = 5; return true; },
     mirror(h) { const l = foesNear(h.x, h.y, 4.5); if (!l.length) return false; for (const e of l) if (!isBoss(e)) { e.charmT = G.S.t + 5; FX({ k: 'rise', x: e.x, y: e.y, r: 0.2, sym: '?', col: '#ff5aa8', n: 2, dur: 1.4, size: 22 }); } area(h.x, h.y, 4.5, '#ff5aa8'); return true; },
-    parade(h) { for (const u of myTeam(h, 7)) { u.buffT = 8; tmp(u, 8, s => { s.speed *= 1.4; }); FX({ k: 'aura', id: u.id, col: '#ffd060', dur: 8 }); } FX({ k: 'confetti', x: h.x, y: h.y, cols: ['#ff5aa8', '#ffe14a', '#5ad0ff'], n: 40, dur: 1.4 }); area(h.x, h.y, 7, '#ffd060'); return true; },
+    parade(h) { for (const u of myTeam(h, 7)) { u.buffT = 8; tmp(u, 8, { speed: 1.4 }); FX({ k: 'aura', id: u.id, col: '#ffd060', dur: 8 }); } FX({ k: 'confetti', x: h.x, y: h.y, cols: ['#ff5aa8', '#ffe14a', '#5ad0ff'], n: 40, dur: 1.4 }); area(h.x, h.y, 7, '#ffd060'); return true; },
     deadly(h) { const l = foesNear(h.x, h.y, 7); for (const e of l) { if (!isBoss(e)) { e.fearT = G.S.t + 5; e.target = null; } hurt(h, e, pw(h) * 4); FX({ k: 'confetti', x: e.x, y: e.y, cols: ['#ff5aa8', '#ffe14a', '#5ad0ff'], n: 16, dur: 1.2 }); } FX({ k: 'pillar', x: h.x, y: h.y, col: '#ff5aa8', dur: 1.4, w: 90 }); area(h.x, h.y, 7, '#ff5aa8'); G.shake = 7; return true; },
     bite(h) { const e = target(h, 2.2); if (!e) return false; const a = pw(h) * 3; hurt(h, e, a); h.hp = Math.min(h.st.hp, h.hp + a); h.atkT = 0.3; G.floatText(h.x, h.y, '+' + Math.round(a), '#ff6070'); FX({ k: 'trail', x0: e.x, y0: e.y, x1: h.x, y1: h.y, col: '#ff2a3a', dur: 0.5 }); return true; },
     bats(h) { const l = foesNear(h.x, h.y, 4); if (!l.length) return false; for (const e of l) hurt(h, e, pw(h) * 1.6); FX({ k: 'vortex', x: h.x, y: h.y, r: 4, col: '#802030', dur: 1.2 }); FX({ k: 'confetti', x: h.x, y: h.y, cols: ['#1a0a10', '#401018'], n: 50, dur: 1.4 }); return true; },
     bow(h) { let b = null, bh = 0; for (const e of foesNear(h.x, h.y, 5)) if (!isBoss(e) && e.maxHp > bh) { bh = e.maxHp; b = e; } if (!b) return false; b.charmT = G.S.t + 8; b.target = null; FX({ k: 'rise', x: b.x, y: b.y, r: 0.3, sym: '♥', col: '#ff90a0', n: 5, dur: 2 }); FX({ k: 'aura', id: b.id, col: '#ff90a0', dur: 8 }); return true; },
-    moon(h) { for (const u of myTeam(h, 8)) { u.buffT = 10; tmp(u, 10, s => { s.lifesteal += 0.35; }); FX({ k: 'aura', id: u.id, col: '#ff2030', dur: 10 }); } G.fxTint && G.fxTint('radial-gradient(ellipse at 70% 10%, rgba(255,40,40,.35), rgba(80,0,10,.4))', 10); FX({ k: 'pillar', x: h.x, y: h.y, col: '#ff2030', dur: 1.5, w: 70 }); return true; },
+    moon(h) { for (const u of myTeam(h, 8)) { u.buffT = 10; tmp(u, 10, { lifesteal: 0.35 }); FX({ k: 'aura', id: u.id, col: '#ff2030', dur: 10 }); } G.fxTint && G.fxTint('radial-gradient(ellipse at 70% 10%, rgba(255,40,40,.35), rgba(80,0,10,.4))', 10); FX({ k: 'pillar', x: h.x, y: h.y, col: '#ff2030', dur: 1.5, w: 70 }); return true; },
     log(h) { const l = foesNear(h.x, h.y, 2.6); if (!l.length) return false; for (const e of l) hurt(h, e, pw(h) * 2.4); h.atkT = 0.3; FX({ k: 'shock', x: h.x, y: h.y, r: 2.6, col: '#c8a060', dur: 0.5, w: 8 }); FX({ k: 'confetti', x: h.x, y: h.y, cols: ['#6a5030', '#8a7050'], n: 30, dur: 1 }); G.shake = 5; return true; },
-    bark(h) { tmp(h, 8, s => { s.armor = Math.min(0.8, s.armor + 0.5); }); healU(h, 0.2); FX({ k: 'aura', id: h.id, col: '#9b7a4a', dur: 8 }); area(h.x, h.y, 1.4, '#9be05a'); return true; },
-    gibbons(h) { summon(h, 'scout', 2, 25, { name: 'Гиббон' }).forEach(u => tmp(u, 25, s => { s.dmg *= 3; })); return true; },
+    bark(h) { tmp(h, 8, { armor: 0.5 }); healU(h, 0.2); FX({ k: 'aura', id: h.id, col: '#9b7a4a', dur: 8 }); area(h.x, h.y, 1.4, '#9be05a'); return true; },
+    gibbons(h) { summon(h, 'scout', 2, 25, { name: 'Гиббон' }).forEach(u => tmp(u, 25, { dmg: 3 })); return true; },
     quake(h) { const l = foesNear(h.x, h.y, 6); for (const e of l) { stun(e, 3); hurt(h, e, pw(h) * 4.5); } for (let q = 0; q < 3; q++) FX({ k: 'shock', x: h.x, y: h.y, r: 6, col: '#c8a060', dur: 0.8, w: 9, delay: q * 0.18 }); FX({ k: 'confetti', x: h.x, y: h.y, cols: ['#6a5030', '#4a3a28', '#8a7050'], n: 60, dur: 1.4 }); G.shake = 14; return true; },
     saber(h) { const e = target(h, 2.2); if (!e) return false; hurt(h, e, pw(h) * 3); h.atkT = 0.3; FX({ k: 'slash', x: e.x, y: e.y, a: 0.3, col: '#ffffff', r: 1, dur: 0.3, w: 8 }); return true; },
     hugs(h) { const l = foesNear(h.x, h.y, 3); if (!l.length) return false; for (const e of l) { stun(e, 3); FX({ k: 'rise', x: e.x, y: e.y, r: 0.3, sym: '♥', col: '#ff8fc8', n: 4, dur: 2.5, size: 20 }); } area(h.x, h.y, 3, '#ff8fc8'); return true; },
-    plush(h) { summon(h, 'guard', 3, 25, { name: 'Плюшевый десант' }).forEach(u => tmp(u, 25, s => { s.dmg *= 2.5; })); return true; },
+    plush(h) { summon(h, 'guard', 3, 25, { name: 'Плюшевый десант' }).forEach(u => tmp(u, 25, { dmg: 2.5 })); return true; },
     spite(h) { for (const u of myTeam(h, 8)) { u.buffT = 10; FX({ k: 'aura', id: u.id, col: '#ff8fc8', dur: 10 }); } for (const e of foesNear(h.x, h.y, 4)) hurt(h, e, pw(h) * 2); FX({ k: 'confetti', x: h.x, y: h.y, cols: ['#ffffff', '#ffe0f0'], n: 70, dur: 1.6 }); area(h.x, h.y, 4, '#ffffff'); return true; },
   };
   const KEYS = ['q', 'w', 'e', 'r'];
   function cdOf(A, h) { return A.cd * (1 - Math.min(0.3, (h.lvl - 1) * 0.015)) * (G.cardHas && G.cardHas('quickhands') ? 0.75 : 1) * (1 - 0.12 * (rankOf(A.k) - 1)); }
   G.heroCast = function (i) {
-    const S = S_(), h = hero(); if (!S || !h || h.down || S.over || S.intro) return;
+    const S = S_(), h = hero(); if (!S || !h || h.down || S.over || S.intro || G.tutPause) return;
     const A = HEROES[G.race].ab[i]; S.heroCd = S.heroCd || {};
     const left = (S.heroCd[A.k] || 0) - S.t;
     if (left > 0) { G.floatText(h.x, h.y, 'ещё ' + Math.ceil(left) + ' с', '#aaa'); return; }
@@ -12323,7 +12341,7 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
     G.fxBurst(u.x, u.y, '#ff4040', 40); G.shake = 8; G.fxFlash && G.fxFlash('rgba(160,0,0,.35)', 700);
     if (S.heroMode && hs) {
       hs.lives = (hs.lives === undefined ? 3 : hs.lives) - 1;
-      if (hs.lives <= 0) { S.over = true; setTimeout(() => G.ui && G.ui.gameOver && G.ui.gameOver(), 1400); return; }
+      if (hs.lives <= 0) { S.over = true; G.clearSave && G.clearSave(); setTimeout(() => G.ui && G.ui.gameOver && G.ui.gameOver(), 1400); return; }
       u.upT = S.t + 10;
       say(`${u.name} пал. Осталось жизней: ${hs.lives}. Через 10 секунд — снова в строю, на последней пройденной точке.`);
       updBar(true); return;
@@ -12339,14 +12357,14 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
     const z = G.cam.zoom;
     { const [px, py] = G.tileToScreen(h.x, h.y); if (hyp(px - sx, py - 30 * z - sy) < 22 * z) return false; }
     let best = null, bd = 44 * z;
-    for (const e of S.enemies) { if (!alive(e) || !G.isVis(Math.floor(e.x), Math.floor(e.y))) continue; const [px, py] = G.tileToScreen(e.x, e.y); const d = hyp(px - sx, py - 18 * z - sy); if (d < bd) { bd = d; best = e; } }
+    for (const e of S.enemies) { if (!alive(e) || !G.isVis(Math.floor(e.x), Math.floor(e.y))) continue; const [px, py] = G.tileToScreen(e.x, e.y), big = isBoss(e) || e.leader ? 2.2 : 1; const dy = Math.max(0, Math.max(py - 70 * big * z - sy, sy - py - 8 * z)); const d = hyp((px - sx) / big, dy); if (d < bd) { bd = d; best = e; } }
     // рядом с точкой тапа дерётся враг — значит, бить, а не поднимать
     if (!best) { let bt = 2.2; for (const e of S.enemies) { if (!alive(e) || !G.isVis(Math.floor(e.x), Math.floor(e.y))) continue; const d = hyp(e.x - tx, e.y - ty); if (d < bt) { bt = d; best = e; } } }
     if (best) { h.order = { type: 'attack', id: best.id }; FX({ k: 'ring', x: best.x, y: best.y, r: 0.7, col: '#ff5040', dur: 0.5 }); G.heroThink(h); return true; }
     let poi = null; bd = 1.3;
     for (const p of G.W.pois) { if (!p.discovered || p.type === 'capital') continue; const d = hyp(p.x + 0.5 - tx, p.y + 0.5 - ty); if (d < bd) { bd = d; poi = p; } }
     if (poi && (poi.state === 'new' || poi.unmake) && !poi.guarded) { h.order = { type: 'poi', id: poi.id }; G.heroThink(h); return true; }
-    for (const u of S.units) { if (u === h || u.hp <= 0) continue; const [px, py] = G.tileToScreen(u.x, u.y); if (hyp(px - sx, py - 16 * z - sy) < 14 * z) return false; }
+    if (!S.heroMode) for (const u of S.units) { if (u === h || u.hp <= 0) continue; const [px, py] = G.tileToScreen(u.x, u.y); if (hyp(px - sx, py - 16 * z - sy) < 14 * z) return false; }
     const bi = G.bldAt[Math.floor(ty) * G.GN + Math.floor(tx)]; if (bi >= 0 && !S.heroMode) return false;
     const p = G.walk(Math.floor(tx), Math.floor(ty)) ? [tx, ty] : walkNear(tx, ty);
     h.order = { type: 'move', x: p[0], y: p[1] }; G.heroThink(h);
@@ -12407,6 +12425,7 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
   G.heroBegin = function () {
     const S = S_(), h = hero(); if (!S || !S.heroMode || !h) return;
     S.hs = { act: 0, phase: 'go', calmT: 12, line: 0, lives: 3, cp: { x: h.x, y: h.y } };
+    camLink = true; lastFollow = null; G.ui.followId = h.id;
     setAct(0);
     updBar(true);
   };
@@ -12426,7 +12445,7 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
     } else if (i === 2) { hs.t = hs.far || pickWant(h, 34, 58, (WANT[G.race] || [[], []])[1]); hs.t.label = hs.t.name || st.site; hs.phase = 'go'; hs.holdT = 75; hs.waveT = 0; }
     else if (i === 3) {
       const T = foeTypes(foeOf()), a = R() * Math.PI * 2, p = walkNear(h.x + Math.cos(a) * 9, h.y + Math.sin(a) * 9), m = 0.35 + 0.07 * h.lvl;
-      const B = spawnAt(T.boss, p[0], p[1], { mode: 'guard', aggro: 0.5, leash: 40, mul: m, dmul: 0.5 + 0.05 * h.lvl });
+      const B = spawnAt(T.boss, p[0], p[1], { mode: 'raid', mul: m, dmul: 0.5 + 0.05 * h.lvl });
       B.maxHp = B.hp = 1700 + 280 * h.lvl; B.dmg = Math.min(B.dmg, 24 + 3 * h.lvl);
       B.name = (G.ENEMIES[T.boss] || {}).name; hs.boss = B.id; hs.t = { x: p[0], y: p[1], label: B.name }; hs.phase = 'boss';
     }
@@ -12453,6 +12472,8 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
     if (hs.phase === 'boss') return hs.bossTalk ? `Победи владыку. Береги здоровье — главная способность (R) бьёт сильнее всех.` : `Владыка идёт к тебе — ${d} кл.`;
     return '';
   }
+  const draftOpen = () => { const b = document.getElementById('hand'); return !!(b && !b.hidden && b.dataset.mode === 'draft'); };
+  function draftWhenFree() { if (!dlg.hidden || !menu.hidden || (S_() && S_().over)) { setTimeout(draftWhenFree, 700); return; } G.offerDraft && G.offerDraft(); }
   function actDone() {
     const S = S_(), hs = S.hs, st = STORY[G.race], A = st.acts[hs.act], h = hero();
     if (A && A.done) say(A.done);
@@ -12460,13 +12481,14 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
     hs.cp = { x: h.x, y: h.y }; hs.done = (hs.done || 0) + 1;
     FX({ k: 'pillar', x: h.x, y: h.y, col: HEROES[G.race].col, dur: 1.6, w: 50 }); FX({ k: 'shock', x: h.x, y: h.y, r: 4, col: HEROES[G.race].col, dur: 0.9 });
     if (G.cardHas && G.cardHas('retinue')) { const cls = ['guard', 'gunner', 'scout'][hs.act % 3], p = walkNear(h.x + 1, h.y + 1), u = G.makeUnit(cls, p[0], p[1], { lvl: Math.max(1, h.lvl - 1) }); u.squad = true; G.notify(`Свита: к отряду пришёл ${u.name}`, { kind: 'good' }); }
-    if (hs.act < 3) { setTimeout(() => G.offerDraft && G.offerDraft(), 1600); setAct(hs.act + 1); }
+    if (hs.act < 3) { setTimeout(draftWhenFree, 1600); setAct(hs.act + 1); }
   }
   function storyTick(dt) {
     const S = S_(), hs = S.hs, h = hero(); if (!hs || !h || h.down || hs.phase === 'done') return;
     const d = hs.t ? hyp(h.x - hs.t.x, h.y - hs.t.y) : 99;
     if (hs.phase === 'go') {
-      if (hs.bestD === undefined || d < hs.bestD - 0.5) { hs.bestD = d; hs.stuck = 0; } else hs.stuck = (hs.stuck || 0) + dt;
+      const walking = h.goal && h.goal.type === 'move' && !nearestFoe(h.x, h.y, 7);
+      if (hs.bestD === undefined || d < hs.bestD - 0.5) { hs.bestD = d; hs.stuck = 0; } else if (walking) hs.stuck = (hs.stuck || 0) + dt;
       if (hs.stuck > 40) { hs.stuck = 0; hs.bestD = undefined; hs.t = pickWant(h, 6, hs.act === 2 ? 30 : 16, (WANT[G.race] || [[], []])[hs.act === 2 ? 1 : 0], [hs.t.poi]); hs.t.label = hs.t.name || 'Цель'; if (hs.act === 2) hs.far = hs.t; else hs.site0 = hs.t; G.reveal(hs.t.x, hs.t.y, 4); say('Туда не пройти. Нашёл другую дорогу — смотри на стрелку.'); }
     }
     if (hs.phase === 'go' && d < 2.6) {
@@ -12478,7 +12500,9 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
       const L = G.ents.get(hs.leader);
       if (!alive(L)) { actDone(); return; }
       hs.t.x = L.x; hs.t.y = L.y;
-      if (!hs.talked && d < 7) { hs.talked = true; dialog(STORY[G.race].meet, L, () => { for (const id of hs.pack) { const e = G.ents.get(id); if (alive(e)) { e.aggro = 9; e.provokedT = S.t + 60; e.provokedBy = h.id; } } }); }
+      const provoke = () => { hs.provoked = true; for (const id of hs.pack) { const e = G.ents.get(id); if (alive(e)) { e.aggro = 9; e.provokedT = S.t + 60; e.provokedBy = h.id; } } };
+      if (!hs.talked && d < 7 && !draftOpen() && menu.hidden) { hs.talked = true; dialog(STORY[G.race].meet, L, provoke); }
+      else if (hs.talked && !hs.provoked && dlg.hidden) provoke();
     } else if (hs.phase === 'hold') {
       if (d > HOLD_R) return;
       hs.holdT -= dt; hs.waveT -= dt;
@@ -12491,7 +12515,9 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
       const B = G.ents.get(hs.boss);
       if (!alive(B)) { win(); return; }
       hs.t.x = B.x; hs.t.y = B.y;
-      if (!hs.bossTalk && d < 8) { hs.bossTalk = true; dialog(STORY[G.race].boss, B, () => { B.aggro = 12; B.provokedT = S.t + 120; B.provokedBy = h.id; }); }
+      const provB = () => { hs.bossProv = true; B.aggro = 12; B.provokedT = S.t + 120; B.provokedBy = h.id; };
+      if (!hs.bossTalk && d < 10 && !draftOpen() && menu.hidden) { hs.bossTalk = true; dialog(STORY[G.race].boss, B, provB); }
+      else if (hs.bossTalk && !hs.bossProv && dlg.hidden) provB();
     }
     const calm = !S.enemies.some(e => alive(e) && hyp(e.x - h.x, e.y - h.y) < 12 && (e.target || e.mode === 'raid'));
     hs.calmT -= calm ? dt : 0;
@@ -12534,7 +12560,7 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
         <div class="hd-face hd-r" style="background-image:url(${fImg})"></div>
         <div class="hd-box"><b>${me ? H0.name : fName}</b><p>${text.replace(/^> /, '&gt; ')}</p><small>${i < lines.length - 1 ? 'Нажми, чтобы дальше' : 'Нажми — к бою'}</small></div></div>`;
     };
-    const next = () => { i++; if (i >= lines.length) { dlg.hidden = true; dlg.onclick = null; document.body.classList.remove('hdlg-on'); removeEventListener('keydown', key, true); G.tutPause = false; done && done(); actBanner(); return; } draw(); };
+    const next = () => { i++; if (i >= lines.length) { dlg.hidden = true; dlg.onclick = null; setTimeout(() => document.body.classList.remove('hdlg-on'), 350); removeEventListener('keydown', key, true); G.pauseRecalc(); done && done(); actBanner(); return; } draw(); };
     const key = e => { if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowRight') { e.preventDefault(); e.stopPropagation(); next(); } };
     dlg.onclick = next; addEventListener('keydown', key, true);
     dlg.hidden = false; document.body.classList.add('hdlg-on'); draw();
@@ -12578,7 +12604,7 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
       b.addEventListener('touchend', () => { clearTimeout(b._lt); setTimeout(hideTip, b._long ? 1800 : 0); });
     });
   }
-  function toggleCam() { const h = hero(); if (!h) return; camLink = !camLink; G.ui.followId = camLink ? h.id : null; if (camLink) G.lookAt(h.x, h.y); updBar(true); }
+  function toggleCam() { const h = hero(); if (!h) return; camLink = !camLink; G.ui.followId = camLink ? h.id : null; G.cam.tx = null; G.cam.ty = null; updBar(true); }
   let preview = null;
   function showTip(i, b) {
     const A = HEROES[G.race].ab[i], M = ABI[A.k] || {}, h = hero();
@@ -12604,7 +12630,7 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
     bar.querySelector('.hb-lv').textContent = h.lvl;
     bar.classList.toggle('canup', !!S.heroMode && HEROES[G.race].ab.some(a => { const c = upCost(rankOf(a.k)); return c && (S.res[mainRes()] || 0) >= c; }));
     bar.querySelector('.hb-hp i').style.width = (h.down ? 0 : Math.max(0, h.hp / h.st.hp * 100)) + '%';
-    bar.querySelector('.hb-hp em').textContent = h.down ? (h.upT ? `встанет через ${Math.ceil(h.upT - S.t)} с` : 'пал') : `${Math.ceil(h.hp)} / ${Math.round(h.st.hp)}`;
+    bar.querySelector('.hb-hp em').textContent = h.down ? (h.upT ? `встанет через ${Math.ceil(h.upT - S.t)} с` : 'пал') : `${Math.min(Math.round(h.hp), Math.round(h.st.hp))} / ${Math.round(h.st.hp)}`;
     const lv = bar.querySelector('.hb-lives'); if (lv) lv.innerHTML = S.heroMode && S.hs ? Array.from({ length: 3 }, (_, i) => `<i class="${i < S.hs.lives ? 'on' : ''}"></i>`).join('') : '';
     const cd = S.heroCd || {};
     HEROES[G.race].ab.forEach((a, i) => {
@@ -12630,18 +12656,20 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
   }
   function updQuest() {
     const S = S_(), hs = S.hs, st = STORY[G.race], h = hero();
+    { const fd = document.getElementById('feed'); if (fd) fd.style.top = S.heroMode && !quest.hidden ? Math.round(quest.getBoundingClientRect().bottom + 8) + 'px' : ''; }
     if (!S.heroMode || !hs) { quest.hidden = bossBar.hidden = arrow.hidden = true; return; }
     quest.hidden = false; quest.style.setProperty('--hc', HEROES[G.race].col);
     const done = hs.phase === 'done';
     let prog = '';
     if (hs.phase === 'hold') prog = `<div class="hq-bar"><i style="width:${(100 - hs.holdT / 75 * 100).toFixed(1)}%"></i><em>${Math.ceil(Math.max(0, hs.holdT))} с</em></div>`;
-    quest.innerHTML = `<div class="hq-t">${st.title}</div><ol>${STEPS.map((s, i) => {
+    const qh = `<div class="hq-t">${st.title}</div><ol>${STEPS.map((s, i) => {
       const cls = done || i < hs.act ? 'ok' : i === hs.act ? 'now' : '';
       return `<li class="${cls}"><b>${s}</b><span>${goalOf(i)}</span>${cls === 'now' ? `<em>${hint()}</em>${prog}` : ''}</li>`;
     }).join('')}</ol>${done ? '<div class="hq-win">История пройдена</div>' : ''}`;
+    if (quest._h !== qh) { quest.innerHTML = qh; quest._h = qh; }
     // полоса вожака или владыки
     const id = hs.phase === 'meet' && hs.talked ? hs.leader : hs.phase === 'boss' && hs.bossTalk ? hs.boss : null, e = id && G.ents.get(id);
-    if (alive(e)) { bossBar.hidden = false; bossBar.innerHTML = `<b>${e.name || ''}</b><div><i style="width:${(e.hp / e.maxHp * 100).toFixed(1)}%"></i></div>`; } else bossBar.hidden = true;
+    if (alive(e)) { bossBar.hidden = false; if (bossBar._id !== e.id) { bossBar.innerHTML = `<b>${e.name || ''}</b><div><i></i></div>`; bossBar._id = e.id; } bossBar.querySelector('i').style.width = (e.hp / e.maxHp * 100).toFixed(1) + '%'; } else bossBar.hidden = true;
     // стрелка к цели у края экрана
     if (!done && hs.t && h) {
       const [VW, VH] = G.view(), [sx, sy] = G.tileToScreen(hs.t.x, hs.t.y), m = 46;
@@ -12663,7 +12691,7 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
 
   // ---------- Меню вождя: кто он, что умеет, прокачка, отряд
   function openMenu() { menu.hidden = false; G.tutPause = true; fillMenu(); }
-  function closeMenu() { menu.hidden = true; G.tutPause = false; }
+  function closeMenu() { menu.hidden = true; G.pauseRecalc(); }
   menu.addEventListener('click', e => {
     const up = e.target.closest('[data-up]'); if (up) { G.heroUpgrade(+up.dataset.up); fillMenu(); return; }
     if (e.target.closest('.hm-x') || e.target === menu) closeMenu();
@@ -12681,7 +12709,7 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
       <div class="hm-top"><div class="hm-face" style="${face(G.race)}"></div>
         <div class="hm-who"><b>${H0.name}</b><span>${H0.title}</span><p>${LOOK[G.race] || ''}</p>
           <div class="hm-xp"><i style="width:${Math.min(100, (h.xp || 0) / need * 100).toFixed(1)}%"></i><em>уровень ${h.lvl} · опыт ${Math.floor(h.xp || 0)} / ${need}</em></div></div></div>
-      <div class="hm-stats">${stat('Здоровье', `${Math.ceil(h.hp)} / ${Math.round(h.st.hp)}`)}${stat('Урон', Math.round(h.st.dmg))}${stat('Броня', Math.round(h.st.armor * 100) + '%')}${stat('Скорость', h.st.speed.toFixed(1))}${S.heroMode && S.hs ? stat('Жизни', S.hs.lives) : ''}${stat('Припасы', `${have} ${R0.name.toLowerCase()}`)}</div>
+      <div class="hm-stats">${stat('Здоровье', `${Math.min(Math.round(h.hp), Math.round(h.st.hp))} / ${Math.round(h.st.hp)}`)}${stat('Урон', Math.round(h.st.dmg))}${stat('Броня', Math.round(h.st.armor * 100) + '%')}${stat('Скорость', h.st.speed.toFixed(1))}${S.heroMode && S.hs ? stat('Жизни', S.hs.lives) : ''}${stat('Припасы', `${have} ${R0.name.toLowerCase()}`)}</div>
       <div class="hm-art">${art ? `<b>Артефакт: ${art.name}</b><span>${art.desc || ''}</span>` : '<b>Артефакта нет</b><span>Ищи в заводах, НИИ, бункерах и на кладбищах электроники.</span>'}</div>
       <h4>Способности</h4>
       <div class="hm-abs">${H0.ab.map((a, i) => {
@@ -12703,7 +12731,7 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
     const S = S_(), h = hero();
     for (const u of S.units) {
       if (u.ttl && S.t > u.ttl && !u.dead) { u.dead = true; G.fxBurst(u.x, u.y, '#888', 10); }
-      if (u.tmpT && S.t > u.tmpT) { u.tmpT = 0; G.recalc(u); }
+      if (u.tmpT && S.t > u.tmpT) { u.tmpT = 0; u.tmp = (u.tmp || []).filter(q => q.until > S.t); G.recalc(u); }
     }
     if (!h) return;
     if (h.down && h.upT && S.t >= h.upT) {
@@ -12712,10 +12740,11 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
       h.x = p[0]; h.y = p[1]; h.down = false; h.upT = 0; G.recalc(h); h.hp = h.st.hp * (S.heroMode ? 1 : 0.6); h.path = null;
       if (S.heroMode) for (const u of S.units) if (!u.hero && u.hp > 0) { const q = walkNear(h.x + R() * 2 - 1, h.y + R() * 2 - 1); u.x = q[0]; u.y = q[1]; u.path = null; }
       FX({ k: 'pillar', x: h.x, y: h.y, col: HEROES[G.race].col, dur: 1.4, w: 40 }); G.notify(`${h.name} снова на ногах`, { kind: 'good' });
+      h._justUp = true; if (camLink && S.heroMode) { G.ui.followId = h.id; G.lookAt(h.x, h.y, true); }
     }
     if (!h.down && h.hp < h.st.hp && !S.enemies.some(e => alive(e) && hyp(e.x - h.x, e.y - h.y) < 8)) h.hp = Math.min(h.st.hp, h.hp + h.st.hp * 0.025 * dt);
     if (S.heroMode) {
-      if (camLink) { if (lastFollow === h.id && G.ui.followId !== h.id) { camLink = false; updBar(); } else G.ui.followId = h.id; }
+      if (camLink && !h.down) { if (lastFollow === h.id && G.ui.followId !== h.id && !h._justUp) { camLink = false; updBar(); } else G.ui.followId = h.id; h._justUp = false; }
       lastFollow = G.ui.followId;
       if (!S.intro) storyTick(dt);
       if (G.race === 'fungi' && G.mycSeed && !h.down) { mycT -= dt; if (mycT <= 0) { mycT = 1; G.mycSeed(h.x, h.y, 1.3, 1); } }
@@ -12795,6 +12824,9 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
   const lootOf = p => LOOT[p.type === 'ruin' ? p.name : p.type] || (p.type === 'cage' ? ['боец', null] : (p.type === 'ruin' || p.type === 'cache') ? ['карта', null] : null);
   G.heroLoot = function (p, u) {
     const h = hero(); if (!h) return;
+    const hs = S_().hs;
+    // место с тем же именем, что в задании, — тоже то самое место
+    if (hs && hs.phase === 'go' && hs.t && hs.t.name && p.name === hs.t.name && p.id !== hs.t.poi) { hs.t.x = p.x + 0.5; hs.t.y = p.y + 0.5; hs.t.poi = p.id; }
     const L = lootOf(p), msg = L && L[1] ? L[1](p, h) : '';
     // карта — в каждом третьем месте и в каждом тайнике, руины без своего бонуса — всегда
     let card = null; if (G.cardFind && (!L || L[0] === 'карта' || p.type === 'cache' || R() < 0.33)) card = G.cardFind();
