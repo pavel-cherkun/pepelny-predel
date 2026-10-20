@@ -1116,6 +1116,16 @@ body.heromode #homeFab:not(.locked) { border-style: dashed; }
 body.heromode #homeFab.locked { border-color: var(--th-acc, #ffd36a); box-shadow: 0 0 10px color-mix(in srgb, var(--th-acc, #ffd36a) 50%, transparent); }
 body.heromode #homeFab.locked svg { stroke: var(--th-acc, #ffd36a); }
 #heroBar #homeFab.in-bar { position: absolute; left: 0; top: auto; right: auto; bottom: calc(100% + 8px); width: 46px; height: 46px; margin: 0; background: rgba(8,6,8,.94); }
+/* кружок вождя в «Схватке» и режим вождя */
+#heroDot { position: absolute; z-index: 6; right: 12px; bottom: 270px; width: 56px; height: 56px; padding: 0; border-radius: 50%; border: 0; cursor: pointer; background: conic-gradient(var(--hc) var(--hp, 100%), rgba(255,255,255,.12) 0); box-shadow: 0 4px 14px rgba(0,0,0,.6); }
+#heroDot i { position: absolute; inset: 4px; border-radius: 50%; background-color: #1a1418; background-repeat: no-repeat; background-size: 400% 300%; background-position: 0 6%; border: 2px solid #000; }
+#heroDot b { position: absolute; left: -4px; bottom: -4px; min-width: 20px; height: 20px; display: grid; place-items: center; border-radius: 50%; background: var(--hc); color: #000; font: 700 11px 'Tektur', sans-serif; border: 2px solid #000; }
+#heroDot.down { filter: grayscale(1) brightness(.6); }
+#heroDot:hover { filter: brightness(1.2); }
+body.heroctl nav.cmd, body.heroctl #goalPill, body.heroctl #goalTrack, body.heroctl .hand-fab { display: none !important; }
+#heroBar .hb-home { flex: none; align-self: center; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 8px; border: 1px solid rgba(255,255,255,.25); background: #1c171b; color: #ddd; font: 600 10px 'Golos Text', sans-serif; cursor: pointer; }
+#heroBar .hb-home svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; }
+#heroBar.raid .hb-home { border-color: #ff5040; color: #ff8070; animation: upPulse .9s ease-in-out infinite; }
 /* меню вождя */
 body.heromode #heroBar .hb-face::before { content: 'меню'; position: absolute; left: 0; right: 0; bottom: 0; padding: 2px 0; background: rgba(0,0,0,.72); color: var(--hc); font: 700 9px 'JetBrains Mono', monospace; letter-spacing: .1em; text-transform: uppercase; text-align: center; }
 #heroBar .hb-cam { display: none; }
@@ -1247,6 +1257,90 @@ body.heromode #bark { top: calc(env(safe-area-inset-top, 0px) + 96px); left: aut
   #hdlg .hd-face { width: 120px; height: 126px; }
   #hdlg .hd-r { width: 96px; height: 106px; }
   #hdlg .hd-box { margin: 0 0 110px; }
+}
+/* ---------- Главное меню (menu.js), в духе больших игр: арт во весь экран, колонка пунктов слева */
+#mainMenu { position: absolute; inset: 0; z-index: 60; overflow: hidden; background: #050405; color: #e8e0d8; font-family: 'Golos Text', sans-serif; }
+#mainMenu[hidden] { display: none; }
+#mainMenu .mm-bg { position: absolute; inset: -2%; background: center / cover no-repeat; transform-origin: 88% 45%; }
+#mainMenu .mm-bg.go { animation: mmZoom 40s ease-in-out infinite alternate, mmIn 1.6s ease-out; }
+@keyframes mmZoom { from { transform: scale(1) translate(0, 0); } to { transform: scale(1.06) translate(0.5%, -0.5%); } }
+@keyframes mmIn { from { opacity: 0; filter: brightness(2) blur(6px); } to { opacity: 1; filter: none; } }
+#mainMenu .mm-ash { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+#mainMenu .mm-vig { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(0,0,0,.82) 0%, rgba(0,0,0,.45) 32%, transparent 55%), radial-gradient(ellipse at 70% 40%, transparent 45%, rgba(0,0,0,.6)); }
+#mainMenu .mm-col { position: absolute; left: clamp(24px, 6vw, 96px); top: 0; bottom: 0; display: flex; flex-direction: column; justify-content: center; gap: 36px; max-width: 520px; transition: opacity .3s, transform .3s; }
+#mainMenu.mm-open .mm-col { opacity: .25; transform: translateX(-12px); pointer-events: none; }
+#mainMenu .mm-logo { display: flex; gap: 16px; align-items: center; }
+#mainMenu .mm-logo i { flex: none; width: 74px; height: 74px; background: var(--ve-emblem) center / contain no-repeat; filter: drop-shadow(0 0 18px rgba(255,123,35,.5)); }
+#mainMenu .mm-logo b { display: block; font: 700 clamp(30px, 3.4vw, 46px)/1 'Tektur', sans-serif; color: #fff; text-transform: uppercase; letter-spacing: .02em; text-shadow: 0 2px 18px rgba(0,0,0,.8); }
+#mainMenu .mm-logo span { display: block; margin-top: 6px; font: 600 13px 'JetBrains Mono', monospace; letter-spacing: .3em; text-transform: uppercase; color: #ff7b23; }
+#mainMenu .mm-list { display: flex; flex-direction: column; gap: 4px; }
+#mainMenu .mm-i { position: relative; display: flex; align-items: baseline; gap: 12px; padding: 6px 0 6px 18px; border: 0; background: none; color: rgba(232,224,216,.72); font: 700 clamp(22px, 2.2vw, 30px)/1.15 'Tektur', sans-serif; text-transform: uppercase; letter-spacing: .04em; text-align: left; cursor: pointer; transition: color .15s, transform .15s; text-shadow: 0 2px 10px rgba(0,0,0,.9); }
+#mainMenu .mm-i::before { content: ''; position: absolute; left: 0; top: 50%; width: 4px; height: 0; background: #ff7b23; transform: translateY(-50%); transition: height .15s; box-shadow: 0 0 12px #ff7b23; }
+#mainMenu .mm-i:hover, #mainMenu .mm-i:focus-visible { color: #fff; transform: translateX(10px); outline: none; }
+#mainMenu .mm-i:hover::before, #mainMenu .mm-i:focus-visible::before { height: 70%; }
+#mainMenu .mm-i:first-child { color: #ffb15a; }
+#mainMenu .mm-i.soon { color: rgba(232,224,216,.38); }
+#mainMenu .mm-i em { font: 600 10px 'JetBrains Mono', monospace; font-style: normal; letter-spacing: .15em; color: #ff7b23; opacity: .8; }
+#mainMenu .mm-foot { position: absolute; left: clamp(24px, 6vw, 96px); bottom: calc(env(safe-area-inset-bottom, 0px) + 18px); font: 600 11px 'JetBrains Mono', monospace; letter-spacing: .12em; color: rgba(232,224,216,.45); }
+/* панели разделов */
+#mainMenu .mm-panel { position: absolute; right: clamp(16px, 4vw, 64px); top: 50%; transform: translateY(-50%); width: min(760px, calc(100% - 580px)); min-width: 420px; max-height: calc(100% - 64px); overflow: auto; padding: 22px 24px 24px; background: rgba(8,6,8,.9); border: 1px solid rgba(255,255,255,.1); border-top: 3px solid #ff7b23; box-shadow: 0 20px 60px rgba(0,0,0,.7); backdrop-filter: blur(6px); animation: mmPanel .25s ease-out; }
+#mainMenu .mm-panel[hidden] { display: none; }
+@keyframes mmPanel { from { opacity: 0; transform: translate(20px, -50%); } }
+#mainMenu .mm-back { margin-bottom: 8px; padding: 6px 0; border: 0; background: none; color: #ff7b23; font: 700 12px 'JetBrains Mono', monospace; letter-spacing: .12em; text-transform: uppercase; cursor: pointer; }
+#mainMenu h2 { margin: 0 0 4px; font: 700 28px 'Tektur', sans-serif; text-transform: uppercase; color: #fff; }
+#mainMenu h4 { margin: 16px 0 4px; font: 700 13px 'Tektur', sans-serif; text-transform: uppercase; color: #ff7b23; letter-spacing: .06em; }
+#mainMenu .mm-panel p { font-size: 14px; line-height: 1.5; color: #d8d0c8; margin: 6px 0; }
+#mainMenu .mm-sub { color: #a89f96 !important; }
+/* кампания */
+#mainMenu .mm-chs { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+#mainMenu .mm-ch { display: grid; grid-template-columns: 110px 1fr; gap: 14px; padding: 10px; background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); }
+#mainMenu .mm-ch.locked { opacity: .45; filter: grayscale(.8); }
+#mainMenu .mm-ch.done { border-color: rgba(200,255,120,.35); }
+#mainMenu .mm-ch-art { position: relative; height: 110px; background: center / cover no-repeat; border: 1px solid rgba(255,255,255,.12); }
+#mainMenu .mm-ch-art b { position: absolute; left: 6px; top: 4px; font: 700 26px 'Tektur', sans-serif; color: #fff; text-shadow: 0 0 8px #000; }
+#mainMenu .mm-ch.locked .mm-ch-art::after { content: '🔒︎'; position: absolute; inset: 0; display: grid; place-items: center; font-size: 28px; background: rgba(0,0,0,.5); }
+#mainMenu .mm-ch-t span { font: 600 10px 'JetBrains Mono', monospace; letter-spacing: .12em; text-transform: uppercase; color: #a89f96; }
+#mainMenu .mm-ch-t h3 { margin: 2px 0; font: 700 19px 'Tektur', sans-serif; color: #fff; }
+#mainMenu .mm-ch-t > em { font-style: normal; font-size: 12px; color: #ffb15a; }
+#mainMenu .mm-ms { display: flex; flex-direction: column; gap: 5px; margin-top: 8px; }
+#mainMenu .mm-m { display: grid; grid-template-columns: 26px 1fr auto; gap: 10px; align-items: center; padding: 8px 10px; border: 1px solid rgba(255,255,255,.12); background: #120e12; color: #e8e0d8; text-align: left; cursor: pointer; font-family: 'Golos Text', sans-serif; }
+#mainMenu .mm-m:hover:not([disabled]) { border-color: #ff7b23; background: #1c1418; }
+#mainMenu .mm-m > b { width: 24px; height: 24px; display: grid; place-items: center; border: 1px solid #ff7b23; color: #ff7b23; font: 700 12px 'Tektur', sans-serif; }
+#mainMenu .mm-m.ok > b { background: #c8ff78; border-color: #c8ff78; color: #000; }
+#mainMenu .mm-m strong { display: block; font: 700 14px 'Tektur', sans-serif; color: #fff; }
+#mainMenu .mm-m span, #mainMenu .mm-m strong { font-family: 'Golos Text', sans-serif !important; text-transform: none !important; letter-spacing: 0 !important; }
+#mainMenu .mm-m span { font-size: 12px !important; line-height: 1.35; color: #c8c0b8 !important; }
+#mainMenu .mm-m strong { font-family: 'Tektur', sans-serif !important; }
+#mainMenu.mm-open .mm-foot { display: none; }
+#mainMenu .mm-m i { font: 600 9px 'JetBrains Mono', monospace; font-style: normal; text-transform: uppercase; letter-spacing: .1em; color: #a89f96; white-space: nowrap; }
+#mainMenu .mm-m.wip { opacity: .5; cursor: default; }
+/* схватка */
+#mainMenu .mm-races { display: grid; grid-template-columns: repeat(9, 1fr); gap: 6px; margin: 12px 0 8px; }
+#mainMenu .mm-r { position: relative; aspect-ratio: 1; padding: 0; border: 2px solid rgba(255,255,255,.12); background: #120e12 center 20% / cover no-repeat; cursor: pointer; }
+#mainMenu .mm-r span { position: absolute; left: 0; right: 0; bottom: 0; padding: 2px; background: rgba(0,0,0,.75); font: 600 9px 'Golos Text', sans-serif; color: #fff; text-align: center; line-height: 1.1; }
+#mainMenu .mm-r.on { border-color: #ff7b23; box-shadow: 0 0 12px rgba(255,123,35,.5); }
+#mainMenu .mm-rinfo { padding: 10px 12px; background: rgba(255,255,255,.03); border-left: 3px solid #ff7b23; }
+#mainMenu .mm-rinfo b { font: 700 18px 'Tektur', sans-serif; color: #fff; } #mainMenu .mm-rinfo span { margin-left: 8px; font-size: 13px; color: #ffb15a; }
+#mainMenu .mm-opt { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+#mainMenu .mm-opt > span { min-width: 180px; font: 700 13px 'Tektur', sans-serif; text-transform: uppercase; letter-spacing: .04em; color: #d8d0c8; }
+#mainMenu .mm-opt > em { flex-basis: 100%; font-style: normal; font-size: 12px; color: #a89f96; }
+#mainMenu .mm-seg { display: flex; border: 1px solid rgba(255,255,255,.18); }
+#mainMenu .mm-seg button { padding: 8px 14px; border: 0; background: #120e12; color: #c8c0b8; font: 600 13px 'Golos Text', sans-serif; cursor: pointer; }
+#mainMenu .mm-seg button + button { border-left: 1px solid rgba(255,255,255,.12); }
+#mainMenu .mm-seg button.on { background: #ff7b23; color: #000; }
+#mainMenu .mm-go { margin-top: 18px; padding: 12px 34px; font-size: 16px; }
+@media (max-width: 1100px) { #mainMenu .mm-panel { left: 16px; right: 16px; width: auto; min-width: 0; } #mainMenu.mm-open .mm-col { opacity: 0; } }
+@media (max-width: 700px), (orientation: portrait) {
+  #mainMenu .mm-vig { background: linear-gradient(0deg, rgba(0,0,0,.9) 0%, rgba(0,0,0,.55) 42%, transparent 65%); }
+  #mainMenu .mm-col { left: 20px; right: 20px; top: auto; bottom: calc(env(safe-area-inset-bottom, 0px) + 44px); justify-content: flex-end; gap: 22px; }
+  #mainMenu .mm-logo i { width: 56px; height: 56px; } #mainMenu .mm-logo b { font-size: 28px; } #mainMenu .mm-logo span { font-size: 10px; letter-spacing: .2em; }
+  #mainMenu .mm-i { font-size: 22px; padding: 7px 0 7px 16px; }
+  #mainMenu .mm-foot { left: 20px; bottom: calc(env(safe-area-inset-bottom, 0px) + 14px); font-size: 9px; }
+  #mainMenu .mm-panel { inset: 0; transform: none; max-height: none; width: auto; padding: calc(env(safe-area-inset-top, 0px) + 14px) 14px calc(env(safe-area-inset-bottom, 0px) + 20px); border: 0; border-top: 3px solid #ff7b23; animation: none; }
+  #mainMenu .mm-races { grid-template-columns: repeat(5, 1fr); }
+  #mainMenu .mm-ch { grid-template-columns: 70px 1fr; } #mainMenu .mm-ch-art { height: 70px; }
+  #mainMenu .mm-m { grid-template-columns: 24px 1fr; } #mainMenu .mm-m i { grid-column: 2; }
+  #mainMenu .mm-opt > span { min-width: 0; flex-basis: 100%; }
 }
 </style>
 
@@ -3280,6 +3374,8 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRnZ2BABXRUJQVlA4WAoA
   function inc(k, a) { if (!(a > 0)) return; if (G.race === 'others' && k !== 'aether') { a *= G.ESSENCE_RATE[k] || 0; k = 'aether'; } flowCur.inc[k] = (flowCur.inc[k] || 0) + a; }
   function use(k, a) { if (!(a > 0)) return; if (G.race === 'others' && k !== 'aether') { a *= G.ESSENCE_RATE[k] || 0; k = 'aether'; } flowCur.use[k] = (flowCur.use[k] || 0) + a; }
   G.flowRate = function (k) { const H = G.flowHist || []; if (H.length < 5) return null; let v = 0; for (const h of H) v += (h.inc[k] || 0) - (h.use[k] || 0); return v / H.length * 60; };
+  G.DIFF = { easy: { raid: 0.6, interval: 1.4, res: 1.5, first: 300 }, normal: { raid: 1, interval: 1, res: 1, first: 170 }, hard: { raid: 1.3, interval: 0.85, res: 0.8, first: 140 } };
+  const D = () => G.DIFF[(S && S.diff) || 'normal'] || G.DIFF.normal;
   G.newGame = function (seed, race, opt) {
     G.speed = 1; opt = opt || {}; if (G.FX) G.FX.clear(); G._later = [];
     seed = seed || ((Math.random() * 1e9) | 0);
@@ -3298,6 +3394,8 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRnZ2BABXRUJQVlA4WAoA
       lairsCleared: 0, eventT: 200, wanderT: 45, caravanT: 260, shelterT: 0, rainT: 0, starving: false,
       lastEvent: null, over: false, intro: true,
     };
+    S.diff = opt.diff || 'normal'; S.noRaids = !!opt.noRaids;
+    S.raid.timer = D().first; for (const k in S.res) S.res[k] = Math.round(S.res[k] * D().res);
     W = G.W = G.genWorld(seed);
     G.resHist = []; G.flowHist = []; G.alerts.length = 0;
     G.ents.clear(); G.bldAt.fill(-1); G.P.length = 0; G.FT.length = 0;
@@ -5781,7 +5879,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRnZ2BABXRUJQVlA4WAoA
     let a = Math.atan2(sx, -sy); if (a < 0) a += Math.PI * 2;
     return DIRS[Math.round(a / (Math.PI / 4)) % 8];
   }
-  function raidInterval() { return Math.max(120, 175 - S.raid.wave * 3.5) * (G.bossMods(S.bossesDone).raidCut ? 1.3 : 1); }
+  function raidInterval() { return Math.max(120, 175 - S.raid.wave * 3.5) * (G.bossMods(S.bossesDone).raidCut ? 1.3 : 1) * D().interval; }
   // «давление» подстраивается под исход: разгромили — враг тоже обескровлен и даёт передышку; отбились чисто — злится
   const pressure = () => S.raid.press || 1;
   function armyPower() {
@@ -5794,7 +5892,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRnZ2BABXRUJQVlA4WAoA
     const lairF = Math.max(0.75, 1 - S.lairsCleared * 0.04);
     // клоуны: пока Страха больше 50, соседи боятся идти — набеги мельче
     const scared = G.race === 'clowns' && S.res.aether >= 50 ? 0.7 : 1;
-    return (2 + w * 2.2 + Math.pow(w, 1.5) * 0.9 + S.units.length * 0.3) * (w <= 3 ? 1.3 : 1) * (1 + 0.04 * (foeLvl(fac) - 1)) * lairF * pressure() * scared;
+    return (2 + w * 2.2 + Math.pow(w, 1.5) * 0.9 + S.units.length * 0.3) * (w <= 3 ? 1.3 : 1) * (1 + 0.04 * (foeLvl(fac) - 1)) * lairF * pressure() * scared * D().raid;
   }
   const warnTime = () => G.hasBld('beacon') ? 60 : 35;
   function prepareRaid() {
@@ -6304,7 +6402,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRnZ2BABXRUJQVlA4WAoA
       }
     }
     const gt = G._gridT || 0; if (S.t >= gt || S.t < gt - 1) { G._gridT = S.t + 0.1; buildGrid(); }
-    if (camp) updRaid(dt);
+    if (camp && !S.noRaids) updRaid(dt);
     updRaces(dt);
     if (camp) updWanderers(dt);
     updForagers(dt);
@@ -9137,7 +9235,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRnZ2BABXRUJQVlA4WAoA
       const best = s.units.slice().sort((a, b) => b.lvl - a.lvl || b.kills - a.kills)[0];
       const caps = G.foeCapitals(), down = caps.filter(c => !c.guarded).length;
       // меню — коротко: игра, итоги, без справочника по расам (он в «Целях»)
-      let h = `<div class="btns"><button class="btn danger" data-act="newgame">${ui.confirmNew ? 'Точно? Ещё раз' : 'Завершить партию'}</button><button class="btn" data-act="tutreset">Подсказки заново</button><button class="btn" data-act="music">Музыка: ${G.music && G.music.on ? 'вкл' : 'выкл'}</button></div>`;
+      let h = `<div class="btns"><button class="btn danger" data-act="newgame">${ui.confirmNew ? 'Точно? Ещё раз' : 'Завершить партию'}</button><button class="btn" data-act="mainmenu">Главное меню</button><button class="btn" data-act="tutreset">Подсказки заново</button><button class="btn" data-act="music">Музыка: ${G.music && G.music.on ? 'вкл' : 'выкл'}</button></div>`;
       h += `<div class="sub">Партия</div><div class="stats">
         <div class="stat"><b>${G.day()}</b><span>день</span></div>
         <div class="stat"><b>${s.stats.raids}</b><span>набегов отбито</span></div>
@@ -9630,6 +9728,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRnZ2BABXRUJQVlA4WAoA
       }
       case 'unmake': { const p = G.poiById(+d.poi); if (p && !p.unmake) { p.unmake = true; G.addTask('interact', { poi: p.id, x: p.x, y: p.y }); G.notify('Послушник идёт развоплощать место'); } renderSheet(true); break; }
       case 'nukeAim': { ui.nukeAim = +d.id; closeSheet(); G.notify('☢ Выбери цель на карте. Ещё раз по шахте — отмена'); break; }
+      case 'mainmenu': closeSheet(); G.saveGame && G.saveGame(); G.menu && G.menu.open(); break;
       case 'tutreset': G.tutorReset && G.tutorReset(); G.notify('Советник снова будет подсказывать'); closeSheet(); break;
       case 'newgame':
         if (ui.confirmNew) { ui.confirmNew = false; G.clearSave(); G.start(null, true); }
@@ -10846,10 +10945,10 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRnZ2BABXRUJQVlA4WAoA
     addEventListener('keydown', keyH);
     draw(0);
   }
-  function startRace(r, heroMode) {
+  function startRace(r, heroMode, opt) {
     if (heroMode) {
       // режим героя: всегда новая партия без базы; вступление — история вождя
-      G.newGame(undefined, r, { hero: true }); const c = G.cit(); G.lookAt(c.x + 1.5, c.y + 1.5, true); G.ui.reset(); G.ui.updHud && G.ui.updHud();
+      G.newGame(undefined, r, { hero: true }); if (opt && opt.campaign) G.S.campaign = opt.campaign; const c = G.cit(); G.lookAt(c.x + 1.5, c.y + 1.5, true); G.ui.reset(); G.ui.updHud && G.ui.updHud();
       const H = G.HEROES[r], T = G.HERO_STORY[r];
       panels(G.STORY.races[r].img, `${H.name} · ${T.title}`, T.intro.concat(['<b>Как играть.</b> Тап по земле — идти, по врагу — бить. Внизу — способности вождя: наведи или зажми, чтобы прочитать. Слева сверху — задание и что делать сейчас. Три жизни.']), 'В путь', () => { G.S.intro = false; const h = G.heroUnit(); if (h) G.ui.followId = h.id; G.heroBegin(); }, r);
       return;
@@ -10863,7 +10962,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRnZ2BABXRUJQVlA4WAoA
     const was = G.tutPause; G.tutPause = true;
     const lines = o.lines.slice();
     if (o.who && o.who.img) lines[0] = `<span class="st-who" style="background-image:url(${o.who.img})"></span><b class="st-whoname">${o.who.name || ''}</b>` + lines[0];
-    panels(o.img, o.title || '', lines, o.call || 'Дальше', () => { setTimeout(() => G.pauseRecalc ? G.pauseRecalc() : (G.tutPause = false), 0); }, o.race);
+    panels(o.img, o.title || '', lines, o.call || 'Дальше', () => { setTimeout(() => G.pauseRecalc ? G.pauseRecalc() : (G.tutPause = false), 0); if (o.done) o.done(); }, o.race);
     box.classList.toggle('gray', !!o.gray);
     // готовый ролик (моушн-графика) подменяет картинку: G.CUTSCENE_VIDEO['vampires_neighbors'] = 'video/....webm'
     const art = $('.st-art'); art.innerHTML = '';
@@ -10875,16 +10974,26 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRnZ2BABXRUJQVlA4WAoA
     mo.observe(tx, { childList: true });
     const done = box.onclick; box.onclick = e => { done(e); if (box.hidden) { mo.disconnect(); box.classList.remove('gray'); $('.st-art').innerHTML = ''; } };
   }
+  // «Схватка» из главного меню: раса, сложность, набеги, подсказки
+  function skirmish(r, opt) {
+    G.newGame(undefined, r, opt || {}); const c = G.cit(); G.lookAt(c.x + 1.5, c.y + 1.5, true); G.ui.reset(); G.ui.updHud && G.ui.updHud();
+    if (opt && opt.noHints) { G.S.tut = { off: true }; }
+    const R = G.STORY.races[r];
+    panels(R.img, G.RACES[r].name, R.panels, R.call, () => { G.S.intro = false; if (G.tutor && !(opt && opt.noHints)) G.tutor('start'); }, r);
+  }
   G.story = {
     scene,
-    hero: r => startRace(r, true),
+    hero: (r, opt) => startRace(r, true, opt),
+    skirmish,
+    prologue: done => panels(G.STORY.world.img, 'Война с энтропией', G.STORY.world.panels, G.STORY.world.call, () => done && done(), 'world'),
     open() { let seen = false; try { seen = localStorage.getItem('pepel_prologue') === '1'; } catch (e) { } if (seen) return picker(); try { localStorage.setItem('pepel_prologue', '1'); } catch (e) { } panels(G.STORY.world.img, 'Война с энтропией', G.STORY.world.panels, G.STORY.world.call, () => (G.shatter ? G.shatter(null, null, picker) : picker()), 'world'); },
     picker,
   };
 })();
 // старый экран выбора расы заменён историей
 // перед историей — заставка со знаком «Войны с энтропией»
-if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()) : G.story.open());
+// вход в игру: заставка один раз, дальше — главное меню
+if (G.ui) G.ui.intro = () => { if (!G._splashed && G.brandSplash) { G._splashed = true; G.brandSplash(() => G.menu.open()); } else G.menu.open(); };
 
 </script>
 <script>
@@ -12622,9 +12731,10 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
   }
   function win() {
     const S = S_(), hs = S.hs, st = STORY[G.race]; hs.phase = 'done'; hs.done = 4;
+    if (S.campaign && G.campDone) G.campDone(S.campaign);
     const A = G.ADV || {}, img = G.ADV_IMG || {};
     G.fxFlash && G.fxFlash('rgba(255,240,200,.6)', 1500);
-    setTimeout(() => G.story && G.story.scene({ race: G.race, img: ((G.STORY.races || {})[G.race] || {}).img, who: { name: (A[G.race] || {}).name, img: img[G.race] }, lines: st.win, kicker: 'Эпилог · ' + st.title, title: 'История пройдена', call: 'Играть дальше' }), 1500);
+    setTimeout(() => G.story && G.story.scene({ race: G.race, img: ((G.STORY.races || {})[G.race] || {}).img, who: { name: (A[G.race] || {}).name, img: img[G.race] }, lines: st.win, kicker: 'Эпилог · ' + st.title, title: 'История пройдена', call: S.campaign ? 'К кампании' : 'Играть дальше', done: S.campaign ? () => { const go = () => { G.menu.open(); G.menu.campaign(); }; G.ads ? G.ads.after(go) : go(); } : null }), 1500);
   }
 
   // ---------- Голос капитана: плашка сверху, игра идёт
@@ -12672,12 +12782,29 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
   });
   quest.addEventListener('pointerdown', e => e.stopPropagation());
   arrow.addEventListener('click', e => { e.stopPropagation(); quest.click(); });
+  const HOME = '<svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>';
+  // кружок вождя в «Схватке»: нажатие — режим вождя
+  const dot = mk('heroDot', 'button');
+  dot.addEventListener('click', e => { e.stopPropagation(); G.heroControl(true); });
+  dot.addEventListener('pointerdown', e => e.stopPropagation());
+  G.heroControl = function (on) {
+    const S = S_(), h = hero(); if (!S || !h || S.heroMode) return;
+    if (on && h.down) { G.notify(`${h.name} ранен — ждём, пока встанет`); return; }
+    h.ctl = on; h.order = null; h.goal = null;
+    document.body.classList.toggle('heroctl', !!on);
+    if (on) { G.ui.followId = h.id; G.cam.tx = null; say(`${h.name} — под твоим началом. Тап по земле — идти, по врагу — бить. База живёт сама. «К базе» — вернуться.`); }
+    else {
+      G.ui.followId = null; const c = G.ents.get(S.citadelId);
+      if (c) { G.lookAt(c.x + 1.5, c.y + 1.5); const p = walkNear(c.x + 1.5, c.y + c.h + 1); h.order = { type: 'move', x: p[0], y: p[1] }; }
+    }
+    updBar(true);
+  };
   const CROSS = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>';
   let built = '', camLink = true;
   function buildBar() {
     const S = S_(), H0 = HEROES[G.race], hm = !!S.heroMode;
     built = G.race + hm;
-    bar.dataset.race = G.race; bar.classList.toggle('camp', !hm); bar.style.setProperty('--hc', H0.col);
+    bar.dataset.race = G.race; bar.classList.toggle('camp', false); bar.classList.toggle('skirm', !hm); bar.style.setProperty('--hc', H0.col);
     bar.innerHTML = `<button class="hb-face" style="${face(G.race)}"><b class="hb-lv"></b></button>
       <div class="hb-mid"><div class="hb-name"><b>${H0.name}</b><span class="hb-lives"></span></div><div class="hb-hp"><i></i><em></em></div>
       <div class="hb-abs">${H0.ab.map((a, i) => `<button class="hb-ab${i === 3 ? ' ult' : ''}" data-i="${i}"><i class="hb-ic" style="-webkit-mask-image:url(${icon(a.k)});mask-image:url(${icon(a.k)})"></i><span class="hb-an">${a.name}</span><i class="hb-cd"></i><kbd>${KEYS[i].toUpperCase()}</kbd><em class="hb-rk"></em></button>`).join('')}</div></div>
@@ -12687,10 +12814,9 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
     fb.title = hm ? 'Меню вождя: способности, прокачка, отряд' : 'Вести самому: тап по земле — идти, по врагу — бить';
     fb.onclick = e => {
       e.stopPropagation(); const h = hero(); if (!h) return;
-      if (S_().heroMode) { openMenu(); return; }
-      h.ctl = !h.ctl; h.order = null; if (h.ctl) { G.ui.followId = h.id; G.notify(`${h.name}: ведёшь сам. Тап по земле — идти, по врагу — бить. Ещё раз на портрет — отпустить`); } else { G.ui.followId = null; h.goal = null; }
-      updBar(true);
+      openMenu();
     };
+    if (!hm) { const hb = document.createElement('button'); hb.className = 'hb-home'; hb.title = 'К базе'; hb.innerHTML = HOME + '<span>К базе</span>'; hb.onclick = e => { e.stopPropagation(); G.heroControl(false); }; bar.appendChild(hb); }
     bar.querySelectorAll('.hb-ab').forEach(b => {
       const i = +b.dataset.i;
       b.onclick = e => { e.stopPropagation(); if (b._long) { b._long = false; return; } G.heroCast(i); };
@@ -12719,7 +12845,15 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
   function updBar() {
     const S = S_(), h = hero();
     const show = !!(S && h && !S.intro && HEROES[G.race]);
-    bar.hidden = !show; document.body.classList.toggle('heromode', !!(S && S.heroMode && !S.intro));
+    const ctl = !!(show && !S.heroMode && h.ctl);
+    bar.hidden = !show || (!S.heroMode && !ctl); document.body.classList.toggle('heromode', !!(S && S.heroMode && !S.intro)); document.body.classList.toggle('heroctl', ctl);
+    dot.hidden = !show || S.heroMode || ctl;
+    if (!dot.hidden) {
+      if (dot._r !== G.race) { dot._r = G.race; dot.innerHTML = `<i style="${face(G.race)}"></i><b></b><em></em>`; dot.title = `${HEROES[G.race].name}: нажми, чтобы вести самому`; }
+      dot.style.setProperty('--hc', HEROES[G.race].col); dot.style.setProperty('--hp', (h.down ? 0 : h.hp / h.st.hp * 100).toFixed(0) + '%');
+      dot.querySelector('b').textContent = h.lvl; dot.classList.toggle('down', !!h.down);
+      const hf = document.getElementById('handFab'); if (hf && !hf.hidden) { const r = hf.getBoundingClientRect(); if (r.height) { dot.style.bottom = Math.round(innerHeight - r.top + 12) + 'px'; dot.style.right = Math.round(innerWidth - r.right) + 'px'; } }
+    }
     if (!show) { arrow.hidden = quest.hidden = bossBar.hidden = true; return; }
     if (built !== G.race + !!S.heroMode) buildBar();
     bar.classList.toggle('down', !!h.down); bar.classList.toggle('ctl', !!h.ctl);
@@ -12747,7 +12881,7 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
       if (inBar && hf.parentElement !== bar) { bar.appendChild(hf); hf.classList.add('in-bar'); }
       else if (!inBar && hf.parentElement === bar && box) { box.appendChild(hf); hf.classList.remove('in-bar'); }
     }
-    if (!S.heroMode) { const c = document.querySelector('.cmd-main'); if (c) { const r = c.getBoundingClientRect(); bar.style.bottom = Math.round(innerHeight - r.top + 10) + 'px'; } } else bar.style.bottom = '';
+    bar.style.bottom = '';
     updQuest();
   }
   function updQuest() {
@@ -12839,6 +12973,12 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
       h._justUp = true; if (camLink && S.heroMode) { G.ui.followId = h.id; G.lookAt(h.x, h.y, true); }
     }
     if (!h.down && h.hp < h.st.hp && !S.enemies.some(e => alive(e) && hyp(e.x - h.x, e.y - h.y) < 8)) h.hp = Math.min(h.st.hp, h.hp + h.st.hp * 0.025 * dt);
+    // «Схватка»: вождь в поле, а у базы набег — позвать назад; пал — режим вождя выключается
+    if (!S.heroMode && h.ctl) {
+      if (h.down) G.heroControl(false);
+      else if (S.raid && S.raid.warned && !h._raidCall) { h._raidCall = true; say('Набег идёт к базе! «К базе» — вернуть вождя.'); bar.classList.add('raid'); }
+      if (S.raid && !S.raid.warned && !S.raid.active) { h._raidCall = false; bar.classList.remove('raid'); }
+    }
     if (S.heroMode) {
       if (camLink && !h.down) { if (lastFollow === h.id && G.ui.followId !== h.id && !h._justUp) { camLink = false; updBar(); } else G.ui.followId = h.id; h._justUp = false; }
       lastFollow = G.ui.followId;
@@ -12851,7 +12991,7 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
 
   // ---------- Клавиши Q W E R — в режиме героя; F — камера к вождю
   addEventListener('keydown', e => {
-    const S = S_(); if (!S || !S.heroMode || S.intro || !dlg.hidden) return;
+    const S = S_(); if (!S || S.intro || !dlg.hidden) return; const hh = hero(); if (!S.heroMode && !(hh && hh.ctl)) return;
     if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
     const k = e.key.toLowerCase(), m = { q: 0, 'й': 0, w: 1, 'ц': 1, e: 2, 'у': 2, r: 3, 'к': 3 };
     if (k in m) { e.preventDefault(); e.stopImmediatePropagation(); G.heroCast(m[k]); }
@@ -13176,6 +13316,202 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
 
 </script>
 <script>
+// js/menu.js
+'use strict';
+// Главное меню (библия, 16–17): фон во весь экран по прогрессу кампании, колонка пунктов, кампания, «Схватка», настройки, «Об игре».
+(function () {
+  const app = document.getElementById('app');
+  const ls = { get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { } } };
+
+  // ---------- Кампания «Хроника энтропии»: главы по порядку, в главе три миссии
+  const M = (id, name, kind, desc, ready) => ({ id, name, kind, desc, ready: !!ready });
+  const CH = [
+    { n: 1, race: 'survivors', title: 'Последняя лампочка', teach: 'добыча, стройка, найм, оборона', art: 'ch1', ms: [
+      M('1.1', 'Свет', 'base', 'Посёлок у костра: жилище, теплица, казарма, первые трое бойцов. Первый набег — маленький.'),
+      M('1.2', 'Лампа', 'hero', 'Последняя лампочка на сто вёрст. Донести её до радиовышки.', true),
+      M('1.3', 'Маяк', 'trial', 'Держать вышку пять волн, пока маяк набирает свет.')] },
+    { n: 2, race: 'mutants', title: 'Первый выводок', teach: 'рост, мутации, нападение', art: 'ch2', ms: [
+      M('2.1', 'Голод', 'base', 'Улей тесен. Кормить выводок и растить формы.'),
+      M('2.2', 'Первенец', 'hero', 'Тёплое место для второго Улья — у света.', true),
+      M('2.3', 'Тёплые люди', 'trial', 'Разорить три поселения у маяка.')] },
+    { n: 3, race: 'clowns', title: 'Гастроли', teach: 'страх вместо экономики', art: 'ch3', ms: [
+      M('3.1', 'Антракт', 'base', 'Улей залез в канализацию к цирку. Труппа выходит наверх.'),
+      M('3.2', 'Бим-Бом', 'hero', 'Сцена там, где не смеются.', true),
+      M('3.3', 'Огненное шоу', 'trial', 'Страх до ста за отведённое время.')] },
+    { n: 4, race: 'primates', title: 'Семя', teach: 'вода, лес, рост бойцов', ms: [] },
+    { n: 5, race: 'vampires', title: 'Приглашение', teach: 'день и ночь, подземелья', ms: [] },
+    { n: 6, race: 'bears', title: 'Возврат игрушек', teach: 'небо, острова, уровни карты', ms: [] },
+    { n: 7, race: 'fungi', title: 'Сквозь корни', teach: 'игра без армии', ms: [] },
+    { n: 8, race: 'ai', title: 'Сбойный узел', teach: 'сеть сигнала', ms: [] },
+    { n: 9, race: 'others', title: 'Жатва', teach: 'энтропия', ms: [] },
+  ];
+  G.CAMPAIGN = CH;
+  const prog = () => ls.get('pepel_campaign', { done: {} });
+  const isDone = id => !!prog().done[id];
+  const chDone = c => c.ms.length && c.ms.every(m => isDone(m.id));
+  // глава открыта, если первая или в прошлой главе пройдено испытание (или все готовые миссии)
+  const chOpen = c => c.n === 1 || (() => { const p = CH[c.n - 2]; return p && p.ms.length && p.ms.filter(m => m.ready).every(m => isDone(m.id)); })();
+  G.campDone = function (id) { const p = prog(); p.done[id] = Date.now(); ls.set('pepel_campaign', p); };
+
+  // ---------- Фон: ключевой арт мира, дальше — арт последней главы, где что-то пройдено
+  function bgKey() {
+    let k = 'world';
+    for (const c of CH) if (c.art && c.ms.some(m => isDone(m.id))) k = c.art;
+    return k;
+  }
+  const bgSrc = k => `art/menu/${k}_${innerHeight > innerWidth ? 't' : 'w'}.webp`;
+
+  // ---------- Разметка
+  const el = document.createElement('div'); el.id = 'mainMenu'; el.hidden = true;
+  el.innerHTML = `<div class="mm-bg"></div><canvas class="mm-ash"></canvas><div class="mm-vig"></div>
+    <div class="mm-col"><div class="mm-logo"><i></i><div><b>Война с энтропией</b><span>стратегия и оборона</span></div></div><nav class="mm-list"></nav></div>
+    <section class="mm-panel" hidden></section><div class="mm-foot">Истины нет. Есть то, что ты удержишь.</div>`;
+  app.appendChild(el);
+  const list = el.querySelector('.mm-list'), panel = el.querySelector('.mm-panel'), bg = el.querySelector('.mm-bg');
+  el.addEventListener('pointerdown', e => e.stopPropagation());
+
+  const ITEMS = [
+    ['continue', 'Продолжить', () => G.S && !G.S.intro && !G.S.over],
+    ['campaign', 'Кампания'], ['skirmish', 'Схватка'],
+    ['wall', 'Стена', null, 'скоро'], ['defense', 'Оборона', null, 'скоро'],
+    ['settings', 'Настройки'], ['about', 'Об игре'],
+  ];
+  function drawList() {
+    list.innerHTML = ITEMS.filter(([, , show]) => !show || show()).map(([k, t, , tag]) => `<button class="mm-i${tag ? ' soon' : ''}" data-k="${k}"><span>${t}</span>${tag ? `<em>${tag}</em>` : ''}</button>`).join('');
+  }
+  list.addEventListener('click', e => { const b = e.target.closest('.mm-i'); if (!b) return; G.sfx && G.sfx('click'); act(b.dataset.k); });
+  list.addEventListener('mouseover', e => { const b = e.target.closest('.mm-i'); if (b && b !== list._hov) { list._hov = b; G.sfx && G.sfx('click'); } });
+
+  function act(k) {
+    if (k === 'continue') return close();
+    if (k === 'campaign') return showCampaign();
+    if (k === 'skirmish') return showSkirmish();
+    if (k === 'settings') return showSettings();
+    if (k === 'about') return showAbout();
+    if (k === 'wall' || k === 'defense') return showSoon(k);
+  }
+  function openPanel(html, cls) {
+    panel.className = 'mm-panel ' + (cls || ''); panel.innerHTML = `<button class="mm-back">← Назад</button>${html}`; panel.hidden = false; el.classList.add('mm-open');
+    panel.querySelector('.mm-back').onclick = () => { panel.hidden = true; el.classList.remove('mm-open'); G.sfx && G.sfx('click'); };
+  }
+
+  // ---------- Кампания
+  function showCampaign() {
+    // первый вход — пролог мира
+    if (!ls.get('pepel_prologue_seen', false) && G.STORY && G.STORY.world) {
+      ls.set('pepel_prologue_seen', true);
+      el.hidden = true;
+      return G.story.prologue(() => { el.hidden = false; showCampaign(); });
+    }
+    const html = `<h2>Хроника энтропии</h2><p class="mm-sub">Девять рас — по очереди. Противник одной главы становится героем следующей.</p>
+      <div class="mm-chs">${CH.map(c => {
+        const open = chOpen(c), done = chDone(c), img = (G.STORY.races[c.race] || {}).img;
+        return `<div class="mm-ch${open ? '' : ' locked'}${done ? ' done' : ''}" data-race="${c.race}">
+          <div class="mm-ch-art" style="background-image:url(${img})"><b>${c.n}</b></div>
+          <div class="mm-ch-t"><span>Глава ${c.n} · ${G.RACES[c.race].name}</span><h3>${c.title}</h3><em>${open ? 'учит: ' + c.teach : 'откроется после главы ' + (c.n - 1)}</em>
+          ${open && c.ms.length ? `<div class="mm-ms">${c.ms.map((m, i) => `<button class="mm-m${isDone(m.id) ? ' ok' : ''}${m.ready ? '' : ' wip'}" data-m="${m.id}" ${m.ready ? '' : 'disabled'}><b>${i + 1}</b><span><strong>${m.name}</strong>${m.desc}</span><i>${m.kind === 'hero' ? 'вождь' : m.kind === 'base' ? 'база' : 'испытание'}${m.ready ? '' : ' · в работе'}</i></button>`).join('')}</div>` : ''}</div></div>`;
+      }).join('')}</div>`;
+    openPanel(html, 'camp');
+    panel.querySelectorAll('.mm-m[data-m]').forEach(b => b.onclick = () => startMission(b.dataset.m));
+  }
+  function startMission(id) {
+    const c = CH.find(q => q.ms.some(m => m.id === id)), m = c.ms.find(q => q.id === id);
+    if (!m.ready) return;
+    close(true);
+    if (m.kind === 'hero') { G.story.hero(c.race, { campaign: id }); }
+  }
+
+  // ---------- Схватка: раса, сложность, набеги, подсказки
+  const SK = ls.get('pepel_skirmish', { race: 'survivors', diff: 'easy', raids: true, hints: true });
+  function showSkirmish() {
+    const DIFF = [['easy', 'Спокойно', 'набеги реже и слабее, ресурсов больше'], ['normal', 'Обычно', 'как задумано'], ['hard', 'Жёстко', 'набеги чаще и злее']];
+    const draw = () => {
+      const R = G.STORY.races[SK.race] || {};
+      openPanel(`<h2>Схватка</h2><p class="mm-sub">Свободная партия за любую расу.</p>
+        <div class="mm-races">${G.RACE_LIST.map(r => `<button class="mm-r${r === SK.race ? ' on' : ''}" data-r="${r}" style="background-image:url(${(G.ADV_IMG || {})[r]})"><span>${G.RACES[r].name}</span></button>`).join('')}</div>
+        <div class="mm-rinfo"><b>${G.RACES[SK.race].name}</b><span>${R.tag || ''}</span><p>${R.pitch || ''}</p></div>
+        <div class="mm-opt"><span>Сложность</span><div class="mm-seg">${DIFF.map(([k, t, d]) => `<button class="${SK.diff === k ? 'on' : ''}" data-d="${k}" title="${d}">${t}</button>`).join('')}</div><em>${DIFF.find(d => d[0] === SK.diff)[2]}</em></div>
+        <div class="mm-opt"><span>Набеги</span><div class="mm-seg"><button class="${SK.raids ? 'on' : ''}" data-raids="1">вкл</button><button class="${SK.raids ? '' : 'on'}" data-raids="0">выкл</button></div></div>
+        <div class="mm-opt"><span>Подсказки советника</span><div class="mm-seg"><button class="${SK.hints ? 'on' : ''}" data-hints="1">вкл</button><button class="${SK.hints ? '' : 'on'}" data-hints="0">выкл</button></div></div>
+        <button class="btn pri mm-go">В бой</button>`, 'skirm');
+      panel.querySelectorAll('[data-r]').forEach(b => b.onclick = () => { SK.race = b.dataset.r; ls.set('pepel_skirmish', SK); draw(); });
+      panel.querySelectorAll('[data-d]').forEach(b => b.onclick = () => { SK.diff = b.dataset.d; ls.set('pepel_skirmish', SK); draw(); });
+      panel.querySelectorAll('[data-raids]').forEach(b => b.onclick = () => { SK.raids = b.dataset.raids === '1'; ls.set('pepel_skirmish', SK); draw(); });
+      panel.querySelectorAll('[data-hints]').forEach(b => b.onclick = () => { SK.hints = b.dataset.hints === '1'; ls.set('pepel_skirmish', SK); draw(); });
+      panel.querySelector('.mm-go').onclick = () => { close(true); G.story.skirmish(SK.race, { diff: SK.diff, noRaids: !SK.raids, noHints: !SK.hints }); };
+    };
+    draw();
+  }
+
+  // ---------- Настройки
+  function showSettings() {
+    const draw = () => {
+      const snd = !(G.audio && G.audio.muted), mus = !!(G.music && G.music.on);
+      openPanel(`<h2>Настройки</h2>
+        <div class="mm-opt"><span>Звук</span><div class="mm-seg"><button class="${snd ? 'on' : ''}" data-snd="1">вкл</button><button class="${snd ? '' : 'on'}" data-snd="0">выкл</button></div></div>
+        <div class="mm-opt"><span>Музыка</span><div class="mm-seg"><button class="${mus ? 'on' : ''}" data-mus="1">вкл</button><button class="${mus ? '' : 'on'}" data-mus="0">выкл</button></div></div>
+        <div class="mm-opt"><span>Подсказки советника</span><div class="mm-seg"><button class="${SK.hints ? 'on' : ''}" data-hints="1">вкл</button><button class="${SK.hints ? '' : 'on'}" data-hints="0">выкл</button></div></div>
+        ${G.canFull && G.canFull() ? '<div class="mm-opt"><span>Экран</span><div class="mm-seg"><button data-fs="1">во весь экран</button></div></div>' : ''}`, 'set');
+      panel.querySelectorAll('[data-snd]').forEach(b => b.onclick = () => { G.setMuted(b.dataset.snd !== '1'); draw(); });
+      panel.querySelectorAll('[data-mus]').forEach(b => b.onclick = () => { const want = b.dataset.mus === '1'; if (G.music && G.music.on !== want) G.music.toggle(); draw(); });
+      panel.querySelectorAll('[data-hints]').forEach(b => b.onclick = () => { SK.hints = b.dataset.hints === '1'; ls.set('pepel_skirmish', SK); draw(); });
+      const fs = panel.querySelector('[data-fs]'); if (fs) fs.onclick = () => G.fullscreen();
+    };
+    draw();
+  }
+
+  // ---------- Об игре: описание, управление, правила и соглашение (требование площадки — текстом внутри игры)
+  function showAbout() {
+    openPanel(`<h2>Об игре</h2>
+      <p>«Война с энтропией: стратегия и оборона» — изометрическая стратегия о девяти расах после конца света. Строишь поселение, отбиваешь набеги, растишь бойцов, ведёшь вождя. У каждой расы своя правда.</p>
+      <h4>Управление</h4>
+      <p>Компьютер: мышь — выбрать и указать, колесо — масштаб, перетаскивание или W A S D — камера, пробел — пауза, 1 2 3 — скорость. Вождь: Q W E R — способности, F — камера к вождю.<br>Телефон: касание — выбрать и указать, двумя пальцами — масштаб, перетаскивание — камера.</p>
+      <h4>Конфиденциальность</h4>
+      <p>Игра хранит только прогресс партии — в браузере и, на Яндекс Играх, в облачном сохранении вашего профиля. Личные данные не собираются и никому не передаются. Реклама показывается средствами площадки.</p>
+      <h4>Пользовательское соглашение</h4>
+      <p>Игра предоставляется бесплатно, «как есть». Все права на игру, тексты и изображения принадлежат автору. Запрещено копировать и распространять материалы игры без разрешения автора.</p>`, 'about');
+  }
+  function showSoon(k) {
+    openPanel(`<h2>${k === 'wall' ? 'Стена' : 'Оборона'}</h2><p class="mm-sub">${k === 'wall' ? 'Мерж-оборона: бойцы твоей расы на стене, слей двух одинаковых — получишь сильнее. Короткие бои по 3–5 минут.' : 'Защита башен: путь врагов задан, вдоль пути — места под башни расы, вождь закрывает дыры.'}</p><p>Режим готовится.</p>`, 'soon');
+  }
+
+  // ---------- Пепел в воздухе
+  const ash = el.querySelector('.mm-ash'), actx = ash.getContext('2d'); let parts = [], raf = 0;
+  function ashLoop() {
+    if (el.hidden) { raf = 0; return; }
+    const w = ash.width = ash.clientWidth, h = ash.height = ash.clientHeight;
+    if (parts.length < 70) parts.push({ x: Math.random() * w, y: h + 10, v: 12 + Math.random() * 30, s: 1 + Math.random() * 2.5, a: Math.random() * 6, hot: Math.random() < 0.3 });
+    actx.clearRect(0, 0, w, h);
+    for (const p of parts) {
+      p.y -= p.v / 60; p.x += Math.sin(p.a += 0.01) * 0.4;
+      actx.fillStyle = p.hot ? `rgba(255,${120 + (p.a * 30) % 80 | 0},40,${0.5 + 0.4 * Math.sin(p.a * 3)})` : 'rgba(200,190,180,.35)';
+      actx.fillRect(p.x, p.y, p.s, p.s);
+    }
+    parts = parts.filter(p => p.y > -10);
+    raf = requestAnimationFrame(ashLoop);
+  }
+
+  // ---------- Открыть / закрыть
+  G.menuOpen = false;
+  function open() {
+    G.menuOpen = true; el.hidden = false; panel.hidden = true; el.classList.remove('mm-open');
+    const k = bgKey(), src = bgSrc(k);
+    if (bg.dataset.src !== src) { bg.dataset.src = src; bg.style.backgroundImage = `url(${src})`; bg.classList.remove('go'); void bg.offsetWidth; bg.classList.add('go'); }
+    drawList();
+    if (!raf) raf = requestAnimationFrame(ashLoop);
+    if (G.music && G.music.menu) G.music.menu();
+  }
+  function close(starting) {
+    el.hidden = true; G.menuOpen = false;
+    if (!starting && G.S) G.S.intro = G.S.intro && false;
+  }
+  addEventListener('resize', () => { if (!el.hidden) { const src = bgSrc(bgKey()); if (bg.dataset.src !== src) { bg.dataset.src = src; bg.style.backgroundImage = `url(${src})`; } } });
+  addEventListener('keydown', e => { if (el.hidden) return; if (e.key === 'Escape') { if (!panel.hidden) panel.querySelector('.mm-back').click(); else if (G.S && !G.S.intro && !G.S.over) close(); } });
+  G.menu = { open, close, campaign: showCampaign };
+})();
+
+</script>
+<script>
 // js/main.js
 'use strict';
 // Запуск, цикл, сохранение
@@ -13200,7 +13536,8 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
       const c = G.cit(); G.lookAt(c.x + 1.5, c.y + 1.5, true);
       G.ui.intro();
     } else if (!data || !data.save) {
-      G.notify(`С возвращением. День ${G.day()}, жителей: ${G.S.units.length}`);
+      // сохранённая партия — сначала главное меню, там «Продолжить»
+      G.ui.intro();
     }
     if (!running) { running = true; requestAnimationFrame(frame); }
     if (G.yaReady) G.yaReady();
@@ -13213,7 +13550,7 @@ if (G.ui) G.ui.intro = () => (G.brandSplash ? G.brandSplash(() => G.story.open()
   function frame(now) {
     const dt = Math.min(0.1, (now - last) / 1000);
     last = now;
-    const play = !!(G.S && !G.S.over && G.speed > 0 && !G.S.intro && !G.tutPause && !G.extPause);
+    const play = !!(G.S && !G.S.over && G.speed > 0 && !G.S.intro && !G.tutPause && !G.extPause && !G.menuOpen);
     if (G.yaGameplay) G.yaGameplay(play); // разметка геймплея для Яндекса
     if (play) {
       acc += dt * G.speed;
