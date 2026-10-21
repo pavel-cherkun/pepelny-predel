@@ -1426,6 +1426,37 @@ body.heromode #bark { top: calc(env(safe-area-inset-top, 0px) + 96px); left: aut
 #arena .td-bot.side .td-hero div { width: 100%; }
 #arena .td-bot.side .td-ult, #arena .td-bot.side .td-call { width: 104px; height: 74px; }
 #arena .td-bot:not(.side) { border-top: 2px solid #ff7b23; }
+#arena .td-res { display: flex; align-items: center; gap: 5px; font: 700 18px 'Tektur', sans-serif; color: #fff; text-shadow: 0 0 6px #000; } #arena .td-res small { font: 600 10px 'JetBrains Mono', monospace; color: #b8b0a8; text-transform: uppercase; }
+#arena u.c1, #arena u.c2 { display: inline-block; width: 11px; height: 11px; border-radius: 50%; text-decoration: none; vertical-align: -1px; background: radial-gradient(circle at 35% 35%, #fff2c8, #d8a050 60%, #6a4a20); }
+#arena u.c2 { background: radial-gradient(circle at 35% 35%, #f0e0ff, #a070f0 60%, #402070); }
+#arena .td-res u { width: 15px; height: 15px; }
+#arena .td-cit { width: 90px; height: 8px; background: #2a1414; border: 1px solid #000; } #arena .td-cit u { display: block; height: 100%; background: #7ad060; text-decoration: none; transition: width .2s; }
+#arena .td-info2 { position: absolute; left: 0; right: 0; top: 46px; padding: 0 12px; font: 600 11px 'JetBrains Mono', monospace; color: #ffb0a0; text-shadow: 0 0 4px #000, 0 0 2px #000; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#arena .td-panel { position: absolute; left: 0; right: 0; bottom: 0; height: 230px; display: flex; flex-direction: column; gap: 6px; padding: 8px 8px 10px; border-top: 2px solid #ff7b23; }
+#arena .td-panel.side { left: auto; top: 0; width: 180px; height: auto; padding: 52px 8px 10px; border-top: 0; border-left: 2px solid #ff7b23; }
+#arena .td-row { display: flex; gap: 6px; align-items: stretch; height: 58px; flex: none; }
+#arena .td-panel.side .td-row { flex-wrap: wrap; height: auto; }
+#arena .td-panel.side .td-hero { flex: 1 1 100%; }
+#arena .td-panel.side .td-ult, #arena .td-panel.side .td-call { flex: 1; width: auto; height: 52px; }
+#arena .td-row .td-ult, #arena .td-row .td-call { width: 96px; height: auto; }
+#arena .td-hero i { width: 46px; height: 50px; }
+#arena .td-cards { flex: 1; display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 1fr; gap: 5px; min-height: 0; }
+#arena .td-panel.side .td-cards { grid-template-columns: 1fr 1fr; }
+#arena .td-cards button { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 1px; padding: 2px 3px 3px; border: 1px solid rgba(255,255,255,.14); background: #161216; color: #eee; cursor: pointer; overflow: hidden; min-width: 0; }
+#arena .td-cards button i { position: absolute; left: 50%; top: 1px; width: 38px; height: 42px; transform: translateX(-50%); background: center bottom / contain no-repeat; opacity: .95; }
+#arena .td-cards button i.bar { background: linear-gradient(135deg, transparent 30%, #7a5a3a 30% 70%, transparent 70%); width: 30px; height: 24px; top: 12px; }
+#arena .td-cards button b { position: relative; font: 700 10.5px 'Tektur', sans-serif; line-height: 1.05; text-align: center; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 40px; }
+#arena .td-cards button span { position: relative; font-size: 9px; color: #a8a098; line-height: 1.05; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+#arena .td-cards button em { position: relative; font: 700 10px 'JetBrains Mono', monospace; font-style: normal; color: #ffd65a; white-space: nowrap; }
+#arena .td-cards button.on { border-color: #8aff9a; box-shadow: inset 0 0 0 1px #8aff9a, 0 0 12px rgba(120,255,140,.35); background: #142016; }
+#arena .td-cards button:disabled { opacity: .42; }
+#arena .td-info .hp { display: block; margin-top: 2px; font: 600 10px 'JetBrains Mono', monospace; color: #c8c0b8; }
+#arena .wl-top .wl-wall { position: relative; left: auto; right: auto; top: auto; flex: 0 0 210px; height: 14px; }
+#arena .wl-bot.side { left: auto; top: 0; width: 180px; height: auto; flex-direction: column; justify-content: flex-end; align-items: stretch; padding: 56px 10px 16px; border-top: 0; border-left: 2px solid #ff7b23; }
+#arena .wl-bot.side .wl-buy { flex: none; height: 96px; } #arena .wl-bot.side .wl-skill { width: auto; height: 70px; } #arena .wl-bot.side .wl-coins { justify-content: center; }
+#arena .td-cards button i { width: 32px !important; height: 34px !important; }
+#arena .td-cards button b { margin-top: 34px !important; }
+#arena .td-panel.side .td-cards button span { display: none; }
 @media (max-width: 700px) { #arena .ar-races { grid-template-columns: repeat(5, 1fr); } #arena .ar-ups { grid-template-columns: 1fr; } #arena h2 { font-size: 24px; } }
 #fxBan { z-index: 80 !important; }
 </style>
@@ -13475,12 +13506,12 @@ if (G.ui) G.ui.intro = () => { if (!G._splashed && G.brandSplash) { G._splashed 
   }
 
   // ---------- цикл
-  let mode = null, run = null, last = 0, raf = 0, shake = 0, curKey = null;
+  let mode = null, run = null, last = 0, raf = 0, shake = 0, curKey = null, forced = false;
   G.arenaPlaying = false;
   function loop(now) {
     raf = requestAnimationFrame(loop);
     const dt = Math.min(0.05, (now - last) / 1000); last = now;
-    const paused = !run || run.over || run.pause || G.extPause || document.hidden || !over.hidden || !coach.hidden;
+    const paused = !run || run.over || run.pause || G.extPause || (document.hidden && !forced) || !over.hidden || !coach.hidden;
     G.arenaPlaying = !!(run && !paused);
     if (!paused) { run.t += dt; mode.update(run, dt); }
     // рисование
@@ -13592,224 +13623,385 @@ if (G.ui) G.ui.intro = () => { if (!G._splashed && G.brandSplash) { G._splashed 
   }
 
   // для проверок: прогнать n кадров вручную (фоновая вкладка не даёт кадров)
-  const debugStep = (n, dt) => { for (let i = 0; i < n; i++) { last = performance.now() - (dt || 1 / 30) * 1000; loop(performance.now()); cancelAnimationFrame(raf); } raf = requestAnimationFrame(loop); };
+  const debugStep = (n, dt) => { forced = true; for (let i = 0; i < n; i++) { last = performance.now() - (dt || 1 / 30) * 1000; loop(performance.now()); cancelAnimationFrame(raf); } forced = false; raf = requestAnimationFrame(loop); };
   G.arena = { step: debugStep, run: () => run, ground, GROUND, open: openArena, close: closeArena, finish, register: (k, m) => { MODES[k] = m; }, drawUnit, burst, float, shake: v => { shake = Math.max(shake, v); }, ui, TIERS, sprite, foeOf: r => (G.HEROES && G.HEROES[r] && G.HEROES[r].foe) || 'mutants', ls };
+})();
+
+</script>
+<script>
+// js/arena_iso.js
+'use strict';
+// Изометрия коротких режимов (библия, 17): те же ромбы 64×32, текстуры земли, спрайты и пропорции, что в основной игре.
+// Клетка (i, j) занимает [i, i+1] × [j, j+1]; центр — (i + 0.5, j + 0.5).
+(function () {
+  const A = () => G.arena;
+  // земля расы: основная текстура и пятна второй (номера — атлас ground.webp)
+  const LAND = { survivors: [0, 5], mutants: [7, 4], others: [9, 11], fungi: [13, 1], ai: [3, 10], clowns: [10, 8], vampires: [12, 11], primates: [14, 2], bears: [2, 8] };
+  // камни и деревья на поляне — предметы мира основной игры: [кадр, ширина, высота, сдвиг основания]
+  const OBJ = { tree: ['tree', 58, 76, 4], rock: ['rock', 42, 40, 5], crystal: ['crystal', 38, 60, 4], wreck: ['wreck', 54, 40, 5], ruin: ['ruinblock', 70, 110, 14], monolith: ['monolith', 46, 80, 4] };
+  const DECOR = { survivors: ['wreck', 'rock', 'tree', 'ruin'], mutants: ['tree', 'rock', 'rock'], others: ['crystal', 'rock', 'crystal'], fungi: ['tree', 'rock'], ai: ['wreck', 'ruin', 'rock'], clowns: ['wreck', 'rock', 'tree'], vampires: ['tree', 'rock', 'ruin'], primates: ['tree', 'tree', 'rock'], bears: ['tree', 'rock', 'crystal'] };
+  const hash = (x, y, s) => { let h = (x * 374761393 + y * 668265263 + (s || 0) * 982451653) | 0; h = (h ^ (h >>> 13)) * 1274126177 | 0; return ((h ^ (h >>> 16)) >>> 0) / 4294967296; };
+
+  // вид: hw, hh — половины ромба; (ox, oy) — экранная точка клетки (0, 0)
+  function view(hw, hh, ox, oy) {
+    const V = { hw, hh, ox, oy };
+    V.s = (gx, gy) => [ox + (gx - gy) * hw, oy + (gx + gy) * hh];
+    V.g = (x, y) => { const a = (x - ox) / hw, b = (y - oy) / hh; return [(a + b) / 2, (b - a) / 2]; };
+    V.tile = (x, y) => { const [gx, gy] = V.g(x, y); return [Math.floor(gx), Math.floor(gy)]; };
+    V.dia = (p, i, j, w, h, ins) => { w = w || 1; h = h || 1; ins = ins || 0; const t = V.s(i + ins, j + ins), r = V.s(i + w - ins, j + ins), b = V.s(i + w - ins, j + h - ins), l = V.s(i + ins, j + h - ins); p.moveTo(t[0], t[1]); p.lineTo(r[0], r[1]); p.lineTo(b[0], b[1]); p.lineTo(l[0], l[1]); p.closePath(); };
+    // круг радиуса r клеток вокруг (gx, gy) на земле — эллипс
+    V.ring = (c, gx, gy, r) => { const [x, y] = V.s(gx, gy); c.beginPath(); c.ellipse(x, y, r * hw * Math.SQRT2, r * hh * Math.SQRT2, 0, 0, 6.28); };
+    return V;
+  }
+  // земля: каждая клетка — ромб своей текстурой, пятна второй, лёгкие тени; вне поля — туман с мягким краем
+  function groundCanvas(V, tiles, race, W, H, opt) {
+    opt = opt || {};
+    const k = 2, cv = document.createElement('canvas'); cv.width = W * k; cv.height = H * k; const c = cv.getContext('2d'); c.scale(k, k);
+    c.fillStyle = '#0c0a0d'; c.fillRect(0, 0, W, H);
+    const [t0, t1] = LAND[race] || [0, 5], seed = opt.seed || 1, ok = !!A().ground(c, t0, 0, 0, 0, 0);
+    // клетка: [i, j] — основная текстура с пятнами второй; [i, j, номер] — своя текстура (двор, площадка)
+    const PS = {}, SH = new Path2D(), LI = new Path2D(), path = t => PS[t] || (PS[t] = new Path2D());
+    for (const [i, j, tex] of tiles) {
+      const n = hash(i >> 1, j >> 1, seed) * 0.6 + hash(i, j, seed + 1) * 0.4;
+      V.dia(path(tex != null ? tex : n > 0.8 ? t1 : t0), i, j, 1, 1, -0.02);
+      const h = hash(i, j, seed + 7); if (h < 0.18) V.dia(SH, i, j); else if (h > 0.9) V.dia(LI, i, j);
+    }
+    const fill = (p, t) => { c.save(); c.clip(p); if (!A().ground(c, t, 0, 0, W, H, 0.5)) { c.fillStyle = '#3a3430'; c.fillRect(0, 0, W, H); } c.restore(); };
+    for (const t in PS) fill(PS[t], +t);
+    c.fillStyle = 'rgba(0,0,0,.14)'; c.fill(SH); c.fillStyle = 'rgba(255,240,220,.05)'; c.fill(LI);
+    // сетка — едва видна, чтобы читались клетки
+    if (opt.grid !== false) { c.strokeStyle = 'rgba(0,0,0,.09)'; c.lineWidth = 1; const G2 = new Path2D(); for (const [i, j] of tiles) V.dia(G2, i, j); c.stroke(G2); }
+    // туман: тёмное всё, кроме поля, край размыт
+    const fog = document.createElement('canvas'); fog.width = cv.width; fog.height = cv.height; const f = fog.getContext('2d'); f.scale(k, k);
+    f.fillStyle = 'rgba(8,6,10,.96)'; f.fillRect(0, 0, W, H); f.globalCompositeOperation = 'destination-out';
+    try { f.filter = 'blur(10px)'; } catch (e) { }
+    const M = new Path2D(); for (const [i, j] of tiles) V.dia(M, i, j, 1, 1, -0.1); f.fillStyle = '#000'; f.fill(M);
+    c.setTransform(1, 0, 0, 1, 0, 0); c.drawImage(fog, 0, 0);
+    cv.ok = ok; return cv;
+  }
+  // постройка: ширина картинки — ширина ромба основания, низ — на нижнем углу (как в render.js)
+  function bldBox(race, key, V, w, h) {
+    const f = G.SPRITE_META[race] && G.SPRITE_META[race].f[key]; if (!f) return null;
+    const span = (w + h) * V.hw, bw = span * 0.88, bh = bw * 2.6, s = Math.min(bw / f[2], bh / f[3]);
+    return [bw, bh, f[3] * s];
+  }
+  function drawBld(c, race, key, V, i, j, w, h, o) {
+    o = o || {};
+    const [x] = V.s(i + w / 2, j + h / 2), [, by] = V.s(i + w, j + h), B = bldBox(race, key, V, w, h); if (!B) return 0;
+    let [bw, bh, dh] = B; const cap = o.cap; if (cap && dh > cap) { const k = cap / dh; bw *= k; bh *= k; dh = cap; }
+    if (!(G.sprHas && G.sprHas(race, key))) { c.fillStyle = '#555'; c.fillRect(x - bw / 3, by - dh, bw / 1.5, dh); return dh; }
+    G.sprDraw(c, race, key, x, by - 2 + (o.dy || 0), { bw, bh, flash: o.flash, alpha: o.alpha, flip: o.flip });
+    return dh;
+  }
+  // боец или враг: размер кадра — из основной игры (SPR_BOX), z — масштаб поля
+  function drawMob(c, sheet, key, x, y, o) {
+    o = o || {}; const B = (G.SPR_BOX && G.SPR_BOX[key]) || [44, 36], z = (o.z || 1) * (o.sc || 1), bw = B[0] * z, bh = B[1] * z;
+    c.fillStyle = 'rgba(0,0,0,.42)'; c.beginPath(); c.ellipse(x, y, bw * 0.32, bw * 0.13, 0, 0, 6.28); c.fill();
+    if (o.ring) { c.strokeStyle = o.ring; c.lineWidth = 1.5; c.beginPath(); c.ellipse(x, y, bw * 0.32 + 1, bw * 0.13 + 1, 0, 0, 6.28); c.stroke(); }
+    const opt = { bw, bh, flip: !!o.flip, flash: !!o.flash, alpha: o.alpha };
+    const yy = y + 1 + (o.dy || 0), xx = x + (o.dx || 0);
+    if (!(G.sprHas && G.sprHas(sheet, key))) {
+      if (G.sprHas && G.sprHas('survivors', key)) { G.sprDrawTint(c, 'survivors', key, o.tint || 'rgba(120,200,255,.35)', xx, yy, opt); return bh; }
+      c.fillStyle = o.tint || '#a33'; c.fillRect(x - bw / 4, y - bh * 0.8, bw / 2, bh * 0.8); return bh;
+    }
+    if (o.tint) G.sprDrawTint(c, sheet, key, o.tint, xx, yy, opt); else G.sprDraw(c, sheet, key, xx, yy, opt);
+    return bh;
+  }
+  // предмет мира (камень, дерево, обломки) на клетке
+  function drawObj(c, V, kind, i, j, z) {
+    const o = OBJ[kind]; if (!o || !(G.sprHas && G.sprHas('world', o[0]))) return;
+    const [x, y] = V.s(i + 0.5, j + 0.5); z = z || 1;
+    G.sprDraw(c, 'world', o[0], x, y + o[3] * z, { bw: o[1] * z, bh: o[2] * z, flip: hash(i, j, 3) > 0.5 });
+  }
+  // спрайт врага основной игры: [лист, кадр, масштаб], у грибов-противников — заражённый вид
+  function foeSprite(type) {
+    const SP = (G.ENEMY_SPR && G.ENEMY_SPR[type]) || null; if (SP) return SP;
+    const c = type.split(':'); return c.length > 1 ? [c[0], c[1], 1] : ['mutants', 'scav', 1];
+  }
+  // имена и описания рас без вмешательства в текущую партию
+  function skin(race) { return (G.SKINS && G.SKINS[race]) || (race === 'mutants' ? G.MUTANT_SKIN : race === 'others' ? G.OTHERS_SKIN : null); }
+  function bName(race, k) { const M = skin(race), v = M && M.buildings && M.buildings[k]; return v ? v : [((G._orig && G._orig.buildings[k]) || [G.BUILDINGS[k].name])[0], ((G._orig && G._orig.buildings[k]) || [0, G.BUILDINGS[k].desc])[1]]; }
+  function cName(race, k) { const M = skin(race), v = M && M.classes && M.classes[k]; return v ? v[0] : ((G._orig && G._orig.classes[k]) || [G.CLASSES[k].name])[0]; }
+  function uName(race, k) { const M = skin(race), v = M && M.upgrades && M.upgrades[k]; return v ? v : ((G._orig && G._orig.upgrades[k]) || [G.UPGRADES[k].name, G.UPGRADES[k].desc]); }
+  // два ресурса расы: первый — «лом», второй — «эфир» (у кого их нет — то, что вместо)
+  const RES2 = { survivors: ['Лом', 'Эфир'], mutants: ['Камень', 'Грибы'], others: ['Прах', 'Эссенция'], fungi: ['Древесина', 'Вода'], ai: ['Лом', 'Данные'], clowns: ['Лом', 'Страх'], vampires: ['Золото', 'Кровь'], primates: ['Вода', 'Хлорофилл'], bears: ['Пух', 'Радуга'] };
+  const RESC = ['#d8b070', '#b48cff'];
+  // иконка постройки или бойца для кнопок: картинка из атласа в dataURL
+  const ICON = {};
+  function icon(sheet, key, w, h) {
+    const id = sheet + ':' + key + ':' + w; if (ICON[id]) return ICON[id];
+    if (!(G.sprHas && G.sprHas(sheet, key))) return '';
+    const cv = document.createElement('canvas'); cv.width = w * 2; cv.height = h * 2; const c = cv.getContext('2d'); c.scale(2, 2);
+    G.sprDraw(c, sheet, key, w / 2, h - 2, { bw: w - 4, bh: h - 4 });
+    return (ICON[id] = cv.toDataURL());
+  }
+  Object.assign(G.arena, { iso: { view, groundCanvas, drawBld, bldBox, drawMob, drawObj, foeSprite, bName, cName, uName, RES2, RESC, LAND, DECOR, OBJ, icon, hash } });
 })();
 
 </script>
 <script>
 // js/wall.js
 'use strict';
-// «Стена» (библия, 17): мерж-оборона. Бойцы твоей расы на стене, сетка 2×5. Купил бойца, слил двух одинаковых — боец ступенью выше.
-// Враги чужой расы идут волнами и бьют стену. Стена пала — конец. Каждая пятая волна — владыка.
-// Две раскладки: на телефоне враги идут сверху вниз, на компьютере — справа налево.
+// «Стена» (библия, 17): мерж-оборона — тренажёр основной игры. Каменная стена поперёк поля, за ней площадка из ромбов 6×3.
+// Бойцы — классы основной игры, каждый ведёт себя как в игре: мусорщик приносит монеты, страж держит удар у стены,
+// стрелок бьёт далеко, огнемётчик — близко и по площади, заклинатель — сгустком по толпе. Сливаются одинаковые класс и ступень.
+// Враги — набег расы-противника вождя. Координаты: s — глубина (растёт от врагов к стене), d — вбок; ромб — как в основной игре.
 (function () {
-  const A = () => G.arena;
-  const FOE_T = ['scav', 'scout', 'gunner', 'guard', 'flamer', 'mech1', 'mech2'];
-  const NAMES = ['Новобранец', 'Разведчик', 'Стрелок', 'Страж', 'Огнемётчик', 'Мистик', 'Броневик', 'Мех', 'Тяжёлый мех', 'Колосс'];
-  const R = Math.random;
-  const dmgOf = (run, l) => 5 * Math.pow(1.9, l - 1) * (1 + 0.1 * run.up('dmg'));
-  const lvlCol = l => ['#cfc6bc', '#9ad0ff', '#7aff8a', '#ffd65a', '#ff9a40', '#ff5a8a', '#c890ff', '#5ae0ff', '#ffffff', '#ffe08a'][Math.min(9, l - 1)];
-
-  // геометрия раскладки
-  function layout(run) {
-    if (run.land) {
-      run.wallX = 330; run.slots = []; for (let r = 0; r < 5; r++) for (let c = 0; c < 2; c++) run.slots.push({ x: 95 + c * 120, y: 92 + r * 76 });
-      run.field = { x: 360, y: 40, w: 600, h: 410 };
-    } else {
-      run.wallY = 600; run.slots = []; for (let r = 0; r < 2; r++) for (let c = 0; c < 5; c++) run.slots.push({ x: 70 + c * 100, y: 712 + r * 96 });
-      run.field = { x: 0, y: 44, w: 540, h: 530 };
-    }
-  }
-  const atWall = (run, e) => run.land ? e.x <= run.wallX + 34 : e.y >= run.wallY - 26;
+  const A = () => G.arena, I = () => G.arena.iso, R = Math.random, Q = Math.SQRT2;
+  const SW = 22, ROWS = [26, 27, 28]; // ряды стены (22–23) и площадки — ромбы вплотную, как плитка в игре
+  const COLS = s => s % 2 ? [-4, -2, 0, 2, 4] : [-5, -3, -1, 1, 3, 5]; // у центра ромба s + d нечётно
+  const FRONT = SW - 1; // передний край стены
+  // классы: дальность — в клетках, как соотношения в основной игре (стрелок дальше заклинателя, огнемётчик — вблизи)
+  const CLS = {
+    scav: { role: 'Приносит монеты', range: 0, w: 14 },
+    guard: { role: 'Держит удар у стены', range: 4.2, w: 20 },
+    gunner: { role: 'Бьёт далеко, по одному', range: 12, w: 28 },
+    flamer: { role: 'Бьёт близко, по площади', range: 5.4, w: 20, splash: 1.8 },
+    mystic: { role: 'Сгусток по толпе, медленно', range: 9, w: 18, splash: 1.6 },
+  };
+  const RANK = ['Новобранец', 'Боец', 'Ветеран', 'Элита', 'Легенда'];
+  const rankCol = r => ['#cfc6bc', '#9ad0ff', '#7aff8a', '#ffd65a', '#ff7ab0'][Math.min(4, r - 1)];
+  const gd = (a, b) => Math.hypot(a.s - b.s, a.d - b.d) / Q; // расстояние в клетках
+  const dmgOf = (run, u) => G.CLASSES[u.k].dmg * Math.pow(1.8, u.r - 1) * (1 + 0.1 * run.up('dmg'));
 
   const mode = {
     kicker: 'Режим · мерж-оборона', title: 'Стена',
-    about: 'Бойцы твоей расы стоят за стеной и бьют врагов. Купи бойца, перетащи одного на такого же — они сольются в одного, вдвое сильнее. Держи стену, сколько сможешь.',
-    howto: 'Перетащи бойца на такого же — слить, на другого — поменять местами. Тап по бойцу — кто он и сколько бьёт. «Залп» бьёт всех врагов на поле.',
+    about: 'Бойцы твоей расы стоят за стеной. Каждый — как в основной игре: стрелок бьёт далеко, огнемётчик — вблизи, страж держит удар, мусорщик приносит монеты. Перетащи бойца на такого же — сольются в одного, ступенью выше.',
+    howto: 'Перетащи бойца на такого же класса и ступени — слить; на другого — поменять местами. Тап по бойцу — кто он и что умеет. Огнемётчика и стража ставь в первый ряд, стрелка можно в тыл.',
     ups: [{ k: 'wall', name: 'Крепкая стена', desc: '+20% прочности стены' }, { k: 'gold', name: 'Казна', desc: '+15 монет на старте' }, { k: 'dmg', name: 'Закалка', desc: '+10% урона бойцов' }],
     bestText: b => `волна ${b.wave}`,
     better: (a, b) => a.wave > b.wave,
     dims: land => land ? [960, 540] : [540, 960],
     teach(run) {
       const H = run.hud, r = el => { const b = el.getBoundingClientRect(), u = A().ui.getBoundingClientRect(), s = u.width / run.W; return [(b.left + b.width / 2 - u.left) / s, (b.top - u.top) / s]; };
-      const s0 = run.slots[0];
+      const c0 = sc(run, ROWS[0], COLS(ROWS[0])[2]), w0 = sc(run, SW, 0);
       return [
-        ['Кнопка «Боец» ставит нового бойца за стену. Монеты дают за каждого убитого врага и за выдержанную волну.', ...r(H.buy)],
-        ['Перетащи бойца на такого же — они сольются в одного, вдвое сильнее. Пары для слияния светятся зелёным.', s0.x, s0.y - 60],
-        ['Враги идут к стене и бьют её. Полоса прочности — над стеной. Стена пала — конец партии.', ...r(H.wallBox)],
-        ['«Залп» раз в 30 секунд бьёт метеорами по всему полю. Каждая пятая волна — владыка: копи силу.', ...r(H.skill)],
+        ['Кнопка «Боец» ставит за стену случайного бойца. Монеты — за врагов и за выдержанную волну.', ...r(H.buy)],
+        ['Бойцы — как в основной игре. Огнемётчик и страж работают только у стены — им место в первом ряду. Стрелок достаёт далеко и из тыла.', c0[0], c0[1] - 50],
+        ['Перетащи бойца на такого же класса и ступени — сольются в одного, сильнее. Пары светятся зелёным.', c0[0], c0[1] - 50],
+        ['Враги бьют стену. Плевальщики и стрелки бьют издалека — до них достанут только стрелки и заклинатели. Стена пала — конец.', w0[0], w0[1] - 40],
       ];
     },
     start(run) {
-      layout(run);
-      run.units = new Array(10).fill(null); run.enemies = []; run.shots = [];
-      run.wallMax = run.wall = 150 * (1 + 0.2 * run.up('wall'));
-      run.coins = 30 + 15 * run.up('gold'); run.bought = 0; run.kills = 0; run.wave = 0; run.next = 3; run.queue = 0; run.spawnT = 0;
-      run.skillCd = 8; run.foe = A().foeOf(run.race); run.drag = null; run.bossKills = 0; run.tip = null;
-      run.gk = A().GROUND[run.race] || 0;
+      const L = run.land, HW = L ? 32 : 44, HH = HW / 2;
+      run.HW = HW; run.z = HW / 32;
+      run.V = I().view(HW, HH, L ? 390 : run.W / 2, L ? 22 : 70);
+      // земля: поле — земля расы, двор за стеной — камень, площадка — плиты
+      const tiles = [];
+      for (let j = -40; j < 80; j++) for (let i = -40; i < 80; i++) {
+        const s = i + j + 1, d = i - j, [x, y] = run.V.s(i + 0.5, j + 0.5);
+        if (x < -HW || x > (L ? 780 : run.W) + HW || y < -HH || y > run.H + HH) continue;
+        tiles.push(s >= SW + 2 ? [i, j, ROWS.includes(s) && COLS(s).includes(d) ? 11 : 5] : [i, j]);
+      }
+      run.gc = I().groundCanvas(run.V, tiles, run.race, run.W, run.H, { seed: 3 + Math.floor(R() * 99), grid: false });
+      run.tiles = tiles;
+      run.cells = []; for (const s of ROWS) for (const d of COLS(s)) run.cells.push({ s, d, u: null });
+      run.enemies = []; run.shots = []; run.fx = [];
+      run.wallMax = run.wall = 600 * (1 + 0.2 * run.up('wall'));
+      run.coins = 40 + 15 * run.up('gold'); run.bought = 0; run.kills = 0; run.wave = 0; run.next = 4; run.queue = []; run.spawnT = 0;
+      run.skillCd = 10; run.foe = A().foeOf(run.race); run.drag = null; run.bossKills = 0; run.tip = null;
+      run.decor = []; for (let k = 0; k < 9; k++) { const s = 2 + R() * 15, d = (R() - 0.5) * (L ? 22 : 11); run.decor.push({ s, d, k: (I().DECOR[run.race] || ['rock'])[Math.floor(R() * 3) % (I().DECOR[run.race] || ['rock']).length] }); }
       buildHud(run);
-      place(run, 1); place(run, 1);
+      place(run, 'gunner', 1, 1); place(run, 'guard', 1, 0); place(run, 'scav', 1, 2);
     },
     update(run, dt) {
-      if (run.queue <= 0 && !run.enemies.length) {
-        if (run.wave && !run.paid) { run.paid = true; const bonus = 10 + run.wave * 2; run.coins += bonus; run.wall = Math.min(run.wallMax, run.wall + run.wallMax * 0.1); A().float(run.field.x + run.field.w / 2, run.field.y + run.field.h / 2, `Волна выдержана · +${bonus}`, '#ffd65a', true); }
-        run.next -= dt;
-        if (run.next <= 0) { run.paid = false; run.wave++; run.queue = 6 + Math.floor(run.wave * 1.6); run.boss = run.wave % 5 === 0; run.spawnT = 0.5; banner(run, run.boss ? `Волна ${run.wave} · владыка` : `Волна ${run.wave}`); run.next = 3; }
+      if (!run.queue.length && !run.enemies.length) {
+        if (run.wave && !run.paid) { run.paid = true; const bonus = 10 + run.wave * 3; run.coins += bonus; run.wall = Math.min(run.wallMax, run.wall + run.wallMax * 0.1); const [x, y] = sc(run, 12, 0); A().float(x, y, `Волна выдержана · +${bonus}`, '#ffd65a', true); }
+        run.next -= dt; if (run.next <= 0) callWave(run);
       }
-      if (run.queue > 0) { run.spawnT -= dt; if (run.spawnT <= 0) { run.spawnT = Math.max(0.35, 1 - run.wave * 0.02); spawn(run, run.boss && run.queue === 1); run.queue--; } }
+      if (run.queue.length) { run.spawnT -= dt; if (run.spawnT <= 0) { run.spawnT = Math.max(0.4, 1.1 - run.wave * 0.03); spawn(run, run.queue.shift()); } }
+      // стражи в первом ряду принимают удар на себя
+      const guardK = 1 - Math.min(0.6, run.cells.filter(c => c.u && c.u.k === 'guard' && c.s === ROWS[0]).reduce((a, c) => a + 0.08 * c.u.r, 0));
       for (const e of run.enemies) {
-        e.hitT -= dt; e.punch = Math.max(0, (e.punch || 0) - dt);
-        if (!atWall(run, e)) { if (run.land) e.x -= e.spd * dt; else e.y += e.spd * dt; e.walk += dt * 8; }
-        else { e.atk -= dt; if (e.atk <= 0) { e.atk = 1; run.wall -= e.dmg; A().burst(run.land ? run.wallX + 20 : e.x, run.land ? e.y - 20 : run.wallY - 10, '#b9a48a', 5, 0.5); e.punch = 0.2; if (run.wall <= 0) return end(run); } }
+        e.hitT -= dt; e.atkT = Math.max(0, e.atkT - dt);
+        const stop = e.ranged ? FRONT - 0.3 - Math.min(5, e.range) : FRONT - 0.3;
+        if (e.s < stop) { const st = e.spd * dt; e.s = Math.min(stop, e.s + st); const dd = e.td - e.d; if (Math.abs(dd) > 0.05) { e.d += Math.sign(dd) * Math.min(Math.abs(dd), st * 0.35); e.f = dd > 0 ? 1 : -1; } e.walk += st * 6; continue; }
+        e.cd -= dt; if (e.cd > 0) continue; e.cd = e.rate; e.atkT = 0.3;
+        const hit = e.dmg * guardK * (e.T.prefersBuildings && !e.boss ? 1.5 : 1);
+        if (e.ranged) run.shots.push({ s: e.s, d: e.d, ts: FRONT + 0.5, td: e.d, v: 14, dmg: hit, col: '#ff7050', foe: true, z: 20 });
+        else { run.wall -= hit; const [x, y] = sc(run, FRONT, e.d); A().burst(x, y - 10, '#b9a48a', 4, 0.5); if (run.wall <= 0) return end(run); }
       }
-      run.units.forEach((u, i) => {
-        if (!u) return; u.cd -= dt; u.atkT = Math.max(0, u.atkT - dt);
-        if (u.cd > 0 || !run.enemies.length) return;
-        // цель — враг ближе всех к стене
-        let t = null; for (const e of run.enemies) if (!t || (run.land ? e.x < t.x : e.y > t.y)) t = e;
-        const s = run.slots[i], big = u.lvl >= 7;
-        u.cd = big ? 1.3 : Math.max(0.45, 0.95 - u.lvl * 0.03); u.atkT = 0.25;
-        run.shots.push({ x: s.x + (run.land ? 20 : 0), y: s.y - 46, t, v: big ? 520 : 760, dmg: dmgOf(run, u.lvl), splash: big ? 60 : 0, col: big ? '#ffb040' : lvlCol(u.lvl) });
-        if (G.sfx && R() < 0.3) G.sfx('shot');
-      });
+      // бойцы
+      for (const c of run.cells) { const u = c.u; if (!u) continue; u.cd -= dt; u.atkT = Math.max(0, u.atkT - dt);
+        if (u.k === 'scav') { if (u.cd <= 0) { u.cd = 5; const g = Math.round(3 * Math.pow(1.8, u.r - 1)); run.coins += g; const [x, y] = sc(run, c.s, c.d); A().float(x, y - 50, '+' + g, '#ffd65a'); } continue; }
+        if (u.cd > 0 || !run.enemies.length) continue;
+        const C = CLS[u.k], S = G.CLASSES[u.k]; let t = null;
+        for (const e of run.enemies) { if (e.dead || gd(c, e) > C.range) continue; if (!t || e.s > t.s) t = e; }
+        if (!t) continue;
+        u.cd = S.rate; u.atkT = 0.3; u.f = t.d > c.d ? 1 : -1;
+        const dmg = dmgOf(run, u);
+        if (u.k === 'guard') { hurt(run, t, dmg, true); continue; }
+        if (u.k === 'flamer') { for (const e of run.enemies) if (!e.dead && Math.hypot(e.s - t.s, e.d - t.d) / Q < C.splash) hurt(run, e, dmg); run.fx.push({ a: [c.s, c.d], b: [t.s, t.d], t: 0, dur: 0.3, col: '#ff9a40' }); if (G.sfx && R() < 0.2) G.sfx('cast'); continue; }
+        run.shots.push({ s: c.s, d: c.d, ts: t.s, td: t.d, tg: t, v: u.k === 'mystic' ? 16 : 34, dmg, splash: C.splash || 0, col: u.k === 'mystic' ? '#c890ff' : rankCol(u.r), z: 34 * run.z, single: u.k === 'gunner' });
+        if (G.sfx && R() < 0.25) G.sfx(u.k === 'mystic' ? 'bolt' : 'shot');
+      }
       for (const p of run.shots) {
-        if (!p.t || p.t.dead) { p.gone = true; continue; }
-        const tx = p.t.x, ty = p.t.y - 24, d = Math.hypot(tx - p.x, ty - p.y), st = p.v * dt;
-        if (d <= st) { p.gone = true; hit(run, p.t, p.dmg); if (p.splash) { A().burst(tx, ty, '#ffb040', 14); for (const e of run.enemies) if (e !== p.t && Math.hypot(e.x - tx, e.y - ty) < p.splash) hit(run, e, p.dmg * 0.5); } }
-        else { p.x += (tx - p.x) / d * st; p.y += (ty - p.y) / d * st; }
+        if (p.tg && !p.tg.dead) { p.ts = p.tg.s; p.td = p.tg.d; }
+        const ds = p.ts - p.s, dd = p.td - p.d, L = Math.hypot(ds, dd), st = p.v * dt;
+        if (L <= st) { p.gone = true;
+          if (p.foe) { run.wall -= p.dmg; if (run.wall <= 0) return end(run); continue; }
+          if (p.tg && !p.tg.dead) hurt(run, p.tg, p.dmg, p.single);
+          if (p.splash) { for (const e of run.enemies) if (!e.dead && e !== p.tg && Math.hypot(e.s - p.ts, e.d - p.td) / Q < p.splash) hurt(run, e, p.dmg * 0.6); const [x, y] = sc(run, p.ts, p.td); A().burst(x, y - 10, p.col, 10); }
+          continue; }
+        p.s += ds / L * st; p.d += dd / L * st;
       }
-      run.shots = run.shots.filter(p => !p.gone);
-      run.enemies = run.enemies.filter(e => !e.dead);
+      run.shots = run.shots.filter(p => !p.gone); run.enemies = run.enemies.filter(e => !e.dead);
+      for (const f of run.fx) f.t += dt; run.fx = run.fx.filter(f => f.t < f.dur);
       run.skillCd = Math.max(0, run.skillCd - dt);
-      if (run.meteors) for (const m of run.meteors) { m.t += dt; if (!m.done && m.t >= m.d) { m.done = true; for (const e of run.enemies) if (Math.hypot(e.x - m.x, e.y - m.y) < 90) hit(run, e, e.max * 0.25 + 40 * run.wave); A().burst(m.x, m.y, '#ff8a2a', 26, 1.4); A().shake(8); G.sfx && G.sfx('boom'); } }
-      if (run.meteors) run.meteors = run.meteors.filter(m => m.t < m.d + 0.6);
+      if (run.meteors) for (const m of run.meteors) { m.t += dt; if (!m.done && m.t >= m.dl) { m.done = true; for (const e of run.enemies) if (Math.hypot(e.s - m.s, e.d - m.d) / Q < 2.4) hurt(run, e, e.max * 0.25 + 30 * run.wave); const [x, y] = sc(run, m.s, m.d); A().burst(x, y, '#ff8a2a', 26, 1.4); A().shake(8); G.sfx && G.sfx('boom'); } }
+      if (run.meteors) run.meteors = run.meteors.filter(m => m.t < m.dl + 0.6);
       if (run.tip) { run.tip.t -= dt; if (run.tip.t <= 0) run.tip = null; }
     },
     draw(c, run) {
-      const W = run.W, H = run.H, f = run.field;
-      // поле — земля расы, тыл — тёмный камень
-      A().ground(c, run.gk, 0, 0, W, H, 0.5);
-      c.fillStyle = 'rgba(0,0,0,.25)'; c.fillRect(0, 0, W, H);
-      if (!run.decor) run.decor = Array.from({ length: 12 }, () => ({ x: f.x + 30 + R() * (f.w - 60), y: f.y + 40 + R() * (f.h - 60), k: ['rock', 'wreck', 'tree', 'rock'][Math.floor(R() * 4)], s: 0.45 + R() * 0.35 }));
-      for (const d of run.decor) if (G.sprHas && G.sprHas('world', d.k)) G.sprDraw(c, 'world', d.k, d.x, d.y, { bw: 90 * d.s, bh: 80 * d.s, alpha: 0.7 });
-      // тыл за стеной
-      c.fillStyle = 'rgba(8,6,6,.55)';
-      if (run.land) c.fillRect(0, 0, run.wallX, H); else c.fillRect(0, run.wallY + 24, W, H);
-      // враги
-      const list = run.enemies.slice().sort((a, b) => a.y - b.y);
-      for (const e of list) {
-        const h = e.boss ? 120 : 46 + e.tier * 4, bob = atWall(run, e) ? 0 : -Math.abs(Math.sin(e.walk)) * 3;
-        c.fillStyle = 'rgba(0,0,0,.4)'; c.beginPath(); c.ellipse(e.x, e.y, h * 0.3, h * 0.1, 0, 0, 6.28); c.fill();
-        A().drawUnit(c, run.foe, e.key, e.x - (run.land && e.punch ? 6 : 0), e.y + bob - (!run.land && e.punch ? 6 : 0), h, { flash: e.hitT > 0, flip: run.land, enemy: true });
-        c.fillStyle = '#300'; c.fillRect(e.x - 18, e.y - h - 8, 36, 4); c.fillStyle = e.boss ? '#ff4060' : '#e05040'; c.fillRect(e.x - 18, e.y - h - 8, 36 * Math.max(0, e.hp / e.max), 4);
+      const W = run.W, H = run.H, V = run.V, z = run.z;
+      c.drawImage(run.gc, 0, 0, W, H);
+      // площадка: ромбы-плиты; пары для слияния светятся
+      const cnt = {}; run.cells.forEach(q => { if (q.u) { const k = q.u.k + q.u.r; cnt[k] = (cnt[k] || 0) + 1; } });
+      const pulse = 0.5 + 0.5 * Math.sin(performance.now() / 260), du = run.drag && run.drag.moved && run.drag.from.u;
+      for (const q of run.cells) {
+        const u = q.u, target = du && q !== run.drag.from && u && u.k === du.k && u.r === du.r, pair = !run.drag && u && u.k !== 'scav' && cnt[u.k + u.r] >= 2 || (!run.drag && u && u.k === 'scav' && cnt['scav' + u.r] >= 2);
+        const p = new Path2D(); diaS(run, p, q.s, q.d, 0.08);
+        c.fillStyle = target ? 'rgba(200,255,120,.35)' : pair ? `rgba(200,255,120,${0.1 + 0.12 * pulse})` : 'rgba(0,0,0,.18)'; c.fill(p);
+        c.strokeStyle = target || pair ? '#c8ff78' : q.s === ROWS[0] ? 'rgba(255,200,120,.35)' : 'rgba(255,255,255,.16)'; c.lineWidth = target ? 3 : 1.5; c.stroke(p);
       }
-      for (const p of run.shots) { c.fillStyle = p.col; c.shadowColor = p.col; c.shadowBlur = 8; c.beginPath(); c.arc(p.x, p.y, p.splash ? 6 : 3.5, 0, 6.28); c.fill(); c.shadowBlur = 0; }
-      if (run.meteors) for (const m of run.meteors) { if (m.t < m.d) { const k = Math.max(0, m.t / m.d), x = m.x + 160 * (1 - k), y = m.y - 420 * (1 - k); c.strokeStyle = 'rgba(255,180,80,.8)'; c.lineWidth = 8; c.lineCap = 'round'; c.beginPath(); c.moveTo(x + 40, y - 100); c.lineTo(x, y); c.stroke(); c.fillStyle = '#fff3c0'; c.beginPath(); c.arc(x, y, 7, 0, 6.28); c.fill(); } else { const a = 1 - (m.t - m.d) / 0.6; c.fillStyle = `rgba(255,140,40,${a * 0.5})`; c.beginPath(); c.ellipse(m.x, m.y, 90 * (1.2 - a * 0.2), 36, 0, 0, 6.28); c.fill(); } }
-      // стена — каменная кладка из той же земли
-      drawWall(c, run);
-      // площадки и бойцы
-      const cnt = {}; run.units.forEach(u => { if (u) cnt[u.lvl] = (cnt[u.lvl] || 0) + 1; });
-      const pulse = 0.5 + 0.5 * Math.sin(performance.now() / 260);
-      run.slots.forEach((s, i) => {
-        const u = run.units[i], drag = run.drag && run.drag.moved && run.drag.from === i, du = run.drag && run.drag.moved && run.units[run.drag.from];
-        const target = du && !drag && u && u.lvl === du.lvl, pair = !run.drag && u && cnt[u.lvl] >= 2;
-        c.fillStyle = target ? 'rgba(200,255,120,.35)' : pair ? `rgba(200,255,120,${0.12 + 0.12 * pulse})` : 'rgba(255,255,255,.07)';
-        c.strokeStyle = target || pair ? '#c8ff78' : 'rgba(255,255,255,.18)'; c.lineWidth = target ? 3 : 2;
-        c.beginPath(); c.ellipse(s.x, s.y, 42, 15, 0, 0, 6.28); c.fill(); c.stroke();
-        if (u && !drag) drawU(c, run, u, s.x, s.y);
-      });
-      if (run.drag && run.drag.moved && run.units[run.drag.from]) drawU(c, run, run.units[run.drag.from], run.drag.x, run.drag.y + 30, 0.85);
+      // предметы на поле, враги, стена, бойцы — по глубине
+      const Lst = [];
+      for (const o of run.decor) Lst.push([o.s, 0, o]);
+      for (const e of run.enemies) Lst.push([e.s, 1, e]);
+      Lst.push([SW + 1.5, 2, null]);
+      for (const q of run.cells) if (q.u && !(run.drag && run.drag.moved && run.drag.from === q)) Lst.push([q.s, 3, q]);
+      Lst.sort((a, b) => a[0] - b[0]);
+      for (const [, k, o] of Lst) {
+        if (k === 0) { const O = I().OBJ[o.k]; if (O && G.sprHas && G.sprHas('world', O[0])) { const [x, y] = sc(run, o.s, o.d); G.sprDraw(c, 'world', O[0], x, y + O[3] * z, { bw: O[1] * z, bh: O[2] * z }); } }
+        else if (k === 1) drawEnemy(c, run, o);
+        else if (k === 2) drawWall(c, run);
+        else drawUnit(c, run, o.u, ...sc(run, o.s, o.d));
+      }
+      if (run.drag && run.drag.moved) drawUnit(c, run, run.drag.from.u, run.drag.x, run.drag.y + 20, 0.85);
+      // выстрелы, огонь, метеоры
+      for (const p of run.shots) { const [x, y] = sc(run, p.s, p.d); c.fillStyle = p.col; c.shadowColor = p.col; c.shadowBlur = 8; c.beginPath(); c.arc(x, y - p.z, p.splash ? 5 : 3, 0, 6.28); c.fill(); c.shadowBlur = 0; }
+      for (const f of run.fx) { const [x0, y0] = sc(run, f.a[0], f.a[1]), [x1, y1] = sc(run, f.b[0], f.b[1]), k = f.t / f.dur; c.strokeStyle = `rgba(255,150,60,${0.8 * (1 - k)})`; c.lineWidth = 10 * (1 - k * 0.5); c.lineCap = 'round'; c.beginPath(); c.moveTo(x0, y0 - 26 * z); c.lineTo(x1, y1 - 12); c.stroke(); c.lineCap = 'butt'; }
+      if (run.meteors) for (const m of run.meteors) { const [mx, my] = sc(run, m.s, m.d); if (m.t < m.dl) { const k = Math.max(0, m.t / m.dl), x = mx + 160 * (1 - k), y = my - 420 * (1 - k); c.strokeStyle = 'rgba(255,180,80,.8)'; c.lineWidth = 8; c.lineCap = 'round'; c.beginPath(); c.moveTo(x + 40, y - 100); c.lineTo(x, y); c.stroke(); c.lineCap = 'butt'; c.fillStyle = '#fff3c0'; c.beginPath(); c.arc(x, y, 7, 0, 6.28); c.fill(); } else { const a = 1 - (m.t - m.dl) / 0.6; c.fillStyle = `rgba(255,140,40,${a * 0.5})`; c.beginPath(); c.ellipse(mx, my, 2.4 * run.HW * Q * (1.2 - a * 0.2), 2.4 * run.HW / 2 * Q, 0, 0, 6.28); c.fill(); } }
       // подсказка по бойцу
-      if (run.tip) { const t = run.tip, w = 210; let x = Math.max(6, Math.min(W - w - 6, t.x - w / 2)), y = t.y - 140; if (y < 50) y = t.y + 30; c.fillStyle = 'rgba(8,6,8,.95)'; c.fillRect(x, y, w, 64); c.fillStyle = lvlCol(t.lvl); c.fillRect(x, y, 3, 64); c.textAlign = 'left'; c.font = '700 14px Tektur, sans-serif'; c.fillText(`${NAMES[Math.min(9, t.lvl - 1)]} · ступень ${t.lvl}`, x + 10, y + 20); c.fillStyle = '#ddd'; c.font = '500 12px Golos Text, sans-serif'; c.fillText(`урон ${Math.round(dmgOf(run, t.lvl))} за выстрел${t.lvl >= 7 ? ', по площади' : ''}`, x + 10, y + 38); c.fillText(`слей с таким же → ступень ${t.lvl + 1} (урон ×1,9)`, x + 10, y + 55); }
+      if (run.tip) { const t = run.tip, u = t.u, w = 230; let x = Math.max(6, Math.min(W - w - 6, t.x - w / 2)), y = t.y - 150; if (y < 50) y = t.y + 30; c.fillStyle = 'rgba(8,6,8,.95)'; c.fillRect(x, y, w, 78); c.fillStyle = rankCol(u.r); c.fillRect(x, y, 3, 78); c.textAlign = 'left'; c.font = '700 14px Tektur, sans-serif'; c.fillText(`${I().cName(run.race, u.k)} · ${RANK[u.r - 1]}`, x + 10, y + 20); c.fillStyle = '#ddd'; c.font = '500 12px Golos Text, sans-serif'; c.fillText(CLS[u.k].role + (u.k === 'scav' ? `: +${Math.round(3 * Math.pow(1.8, u.r - 1))} за 5 с` : `, урон ${Math.round(dmgOf(run, u))}`), x + 10, y + 39); c.fillText(u.k === 'guard' || u.k === 'flamer' ? 'Работает из первого ряда, у стены' : u.k === 'scav' ? 'Место не важно' : 'Достаёт и из тыла', x + 10, y + 56); c.fillStyle = '#a8a098'; c.fillText(`Слей с таким же → ${RANK[Math.min(4, u.r)]}`, x + 10, y + 72); }
+      if (run.land) { c.fillStyle = 'rgba(8,6,8,.95)'; c.fillRect(780, 0, 180, H); } else { c.fillStyle = 'rgba(8,6,8,.95)'; c.fillRect(0, H - 96, W, 96); }
     },
     hud(run) {
       const H = run.hud; if (!H) return;
-      const cost = buyCost(run);
+      const cost = buyCost(run), full = run.cells.every(q => q.u);
       set(H.coins, Math.floor(run.coins)); set(H.wave, run.wave ? `Волна ${run.wave}` : 'Готовься');
-      set(H.cost, cost); H.buy.disabled = run.coins < cost || run.units.every(Boolean);
-      set(H.buyT, run.units.every(Boolean) ? 'нет мест — слей пары' : 'Боец');
+      set(H.cost, cost); H.buy.disabled = run.coins < cost || full; set(H.buyT, full ? 'нет мест — слей пары' : 'Боец');
       H.wall.style.width = Math.max(0, run.wall / run.wallMax * 100) + '%'; set(H.wallT, `стена ${Math.max(0, Math.ceil(run.wall))} / ${Math.round(run.wallMax)}`);
       H.skill.disabled = run.skillCd > 0; set(H.skillT, run.skillCd > 0 ? Math.ceil(run.skillCd) + ' с' : 'готов');
-      H.skill.style.setProperty('--p', (run.skillCd / 30 * 100) + '%');
     },
-    down(run, x, y) { const i = slotAt(run, x, y); if (i < 0 || !run.units[i]) return; run.drag = { from: i, x, y, x0: x, y0: y, moved: false }; },
+    down(run, x, y) { const q = cellAt(run, x, y); if (!q || !q.u) return; run.drag = { from: q, x, y, x0: x, y0: y, moved: false }; },
     move(run, x, y) { const d = run.drag; if (!d) return; d.x = x; d.y = y; if (Math.hypot(x - d.x0, y - d.y0) > 8) d.moved = true; },
     up(run, x, y) {
       const d = run.drag; run.drag = null; if (!d) return;
-      if (!d.moved) { const u = run.units[d.from]; if (u) run.tip = { lvl: u.lvl, x: run.slots[d.from].x, y: run.slots[d.from].y, t: 3 }; return; }
-      const j = slotAt(run, x, y); if (j < 0 || j === d.from) return;
-      const a = run.units[d.from], b = run.units[j];
-      if (b && b.lvl === a.lvl) { run.units[j] = { lvl: a.lvl + 1, cd: 0, atkT: 0 }; run.units[d.from] = null; const s = run.slots[j]; A().burst(s.x, s.y - 30, lvlCol(a.lvl + 1), 22); A().float(s.x, s.y - 80, `${NAMES[Math.min(9, a.lvl)]} · ступень ${a.lvl + 1}`, lvlCol(a.lvl + 1)); G.sfx && G.sfx('level'); }
-      else { run.units[j] = a; run.units[d.from] = b; G.sfx && G.sfx('click'); }
+      const a = d.from.u; if (!a) return;
+      if (!d.moved) { const [cx, cy] = sc(run, d.from.s, d.from.d); run.tip = { u: a, x: cx, y: cy, t: 3.5 }; return; }
+      const q = cellAt(run, x, y); if (!q || q === d.from) return;
+      const b = q.u;
+      if (b && b.k === a.k && b.r === a.r && a.r < 5) { q.u = { k: a.k, r: a.r + 1, cd: 0, atkT: 0, f: 1 }; d.from.u = null; const [cx, cy] = sc(run, q.s, q.d); A().burst(cx, cy - 30, rankCol(a.r + 1), 22); A().float(cx, cy - 70, `${I().cName(run.race, a.k)} · ${RANK[a.r]}`, rankCol(a.r + 1)); G.sfx && G.sfx('level'); }
+      else { q.u = a; d.from.u = b; G.sfx && G.sfx('click'); }
     },
   };
 
+  // ---------- геометрия: (s, d) → экран
+  const sc = (run, s, d) => run.V.s((s + d) / 2, (s - d) / 2);
+  function diaS(run, p, s, d, ins) { const k = 1 - (ins || 0), hw = run.HW * k, hh = run.HW / 2 * k, [x, y] = sc(run, s, d); p.moveTo(x, y - hh); p.lineTo(x + hw, y); p.lineTo(x, y + hh); p.lineTo(x - hw, y); p.closePath(); }
+  function cellAt(run, x, y) { let b = null, bd = 1e9; for (const q of run.cells) { const [cx, cy] = sc(run, q.s, q.d), dd = Math.abs(x - cx) / run.HW + Math.abs(y + 20 * run.z - cy) / (run.HW / 2); if (dd < 1.6 && dd < bd) { bd = dd; b = q; } } return b; }
+  // стена — ряд каменных блоков ромбами, с зубцами; трещины темнеют, когда прочность падает
   function drawWall(c, run) {
-    const hpK = Math.max(0, run.wall / run.wallMax);
-    c.save();
-    if (run.land) {
-      const x = run.wallX;
-      A().ground(c, 5, x, 0, 34, run.H, 0.35); c.fillStyle = 'rgba(0,0,0,.25)'; c.fillRect(x, 0, 34, run.H);
-      for (let y = 0; y < run.H; y += 36) { A().ground(c, 5, x + 34, y, 14, 22, 0.35); }
-      c.strokeStyle = 'rgba(0,0,0,.6)'; c.lineWidth = 2; for (let y = 18; y < run.H; y += 36) { c.beginPath(); c.moveTo(x, y); c.lineTo(x + 34, y); c.stroke(); }
-      c.fillStyle = 'rgba(255,255,255,.08)'; c.fillRect(x + 30, 0, 4, run.H);
-      if (hpK < 0.5) { c.fillStyle = `rgba(0,0,0,${0.5 - hpK})`; c.fillRect(x, 0, 48, run.H); }
-    } else {
-      const y = run.wallY - 20;
-      A().ground(c, 5, 0, y, run.W, 44, 0.35); c.fillStyle = 'rgba(0,0,0,.25)'; c.fillRect(0, y, run.W, 44);
-      for (let x = 0; x < run.W; x += 36) A().ground(c, 5, x, y - 14, 22, 14, 0.35);
-      c.strokeStyle = 'rgba(0,0,0,.6)'; c.lineWidth = 2; for (let x = 18; x < run.W; x += 36) { c.beginPath(); c.moveTo(x, y); c.lineTo(x, y + 44); c.stroke(); }
-      c.fillStyle = 'rgba(255,255,255,.08)'; c.fillRect(0, y, run.W, 4);
-      if (hpK < 0.5) { c.fillStyle = `rgba(0,0,0,${0.5 - hpK})`; c.fillRect(0, y - 14, run.W, 58); }
+    const V = run.V, HW = run.HW, HH = HW / 2, h = 30 * run.z, k = Math.max(0, run.wall / run.wallMax);
+    const span = run.land ? 14 : 7, list = [];
+    for (let d = -span; d <= span; d++) for (const s of [SW, SW + 1]) if ((s + d) % 2 !== 0) list.push([s, d]);
+    list.sort((a, b) => a[0] - b[0]);
+    const pt = A().ground; // текстура камня на верхней грани
+    for (const [s, d] of list) {
+      const [x, y] = sc(run, s, d), dk = 0.6 + 0.4 * k;
+      const L = [[x - HW, y], [x, y + HH], [x, y + HH - h], [x - HW, y - h]], Rr = [[x, y + HH], [x + HW, y], [x + HW, y - h], [x, y + HH - h]], T = [[x, y - HH - h], [x + HW, y - h], [x, y + HH - h], [x - HW, y - h]];
+      const poly = (P, col) => { c.beginPath(); P.forEach((q, i) => i ? c.lineTo(q[0], q[1]) : c.moveTo(q[0], q[1])); c.closePath(); if (col) { c.fillStyle = col; c.fill(); } };
+      poly(L, `rgb(${70 * dk | 0},${64 * dk | 0},${58 * dk | 0})`); poly(Rr, `rgb(${96 * dk | 0},${88 * dk | 0},${80 * dk | 0})`);
+      c.save(); poly(T); c.clip(); if (!pt(c, 5, x - HW, y - HH - h, HW * 2, HH * 2, 0.35)) { c.fillStyle = '#8a8076'; c.fill(); } c.fillStyle = `rgba(0,0,0,${0.35 - 0.25 * k})`; c.fillRect(x - HW, y - HH - h, HW * 2, HH * 2); c.restore();
+      c.strokeStyle = 'rgba(0,0,0,.45)'; c.lineWidth = 1; poly(T); c.stroke();
+      // кладка на боках
+      c.strokeStyle = 'rgba(0,0,0,.3)'; for (let r = 1; r < 3; r++) { const yy = r * h / 3; c.beginPath(); c.moveTo(x - HW, y - yy); c.lineTo(x, y + HH - yy); c.lineTo(x + HW, y - yy); c.stroke(); }
+      // зубец на переднем ряду
+      if (s === SW && (d + 100) % 4 === 1 && k > 0.25) { const zh = 10 * run.z, zw = HW * 0.35; c.fillStyle = `rgb(${110 * dk | 0},${100 * dk | 0},${90 * dk | 0})`; c.fillRect(x - zw / 2, y - h - zh - HH * 0.3, zw, zh); c.fillStyle = 'rgba(0,0,0,.25)'; c.fillRect(x, y - h - zh - HH * 0.3, zw / 2, zh); }
+      if (k < 0.5 && ((s * 7 + d * 13) % 5 === 0)) { c.strokeStyle = 'rgba(0,0,0,.7)'; c.lineWidth = 2; c.beginPath(); c.moveTo(x - 6, y - h + 2); c.lineTo(x + 2, y - h / 2); c.lineTo(x - 3, y); c.stroke(); }
     }
-    c.restore();
   }
-  function drawU(c, run, u, x, y, alpha) {
-    const key = A().TIERS[Math.min(9, u.lvl - 1)], h = Math.min(92, 50 + u.lvl * 5), lift = u.atkT > 0 ? -4 : 0;
-    if (u.lvl >= 4) { c.fillStyle = lvlCol(u.lvl); c.globalAlpha = 0.18 + 0.08 * Math.sin(performance.now() / 300); c.beginPath(); c.arc(x, y - h * 0.45, h * 0.55, 0, 6.28); c.fill(); c.globalAlpha = 1; }
-    A().drawUnit(c, run.race, key, x, y + lift, h, { alpha });
-    c.fillStyle = '#000'; c.fillRect(x + 16, y - 6, 24, 18); c.fillStyle = lvlCol(u.lvl); c.font = '700 14px Tektur, sans-serif'; c.textAlign = 'center'; c.fillText(u.lvl, x + 28, y + 8);
+  function drawUnit(c, run, u, x, y, alpha) {
+    const race = run.race, lift = u.atkT > 0 ? -3 : 0;
+    if (u.r >= 3) { c.fillStyle = rankCol(u.r); c.globalAlpha = 0.16 + 0.08 * Math.sin(performance.now() / 300); c.beginPath(); c.ellipse(x, y, run.HW * 0.7, run.HW * 0.32, 0, 0, 6.28); c.fill(); c.globalAlpha = 1; }
+    const bh = I().drawMob(c, race, u.k, x, y + lift, { z: run.z * (1 + 0.06 * (u.r - 1)), flip: (u.f || 1) < 0, alpha, ring: rankCol(u.r) });
+    // ступень — точками
+    for (let k = 0; k < u.r; k++) { c.fillStyle = rankCol(u.r); c.strokeStyle = '#000'; c.lineWidth = 1.5; c.beginPath(); c.arc(x - (u.r - 1) * 4 + k * 8, y + 9 * run.z, 3, 0, 6.28); c.fill(); c.stroke(); }
   }
-  const slotAt = (run, x, y) => run.slots.findIndex(s => Math.abs(s.x - x) < (run.land ? 58 : 48) && Math.abs(s.y - 30 - y) < (run.land ? 40 : 52));
-  const buyCost = run => 8 + run.bought * 2;
-  function place(run, lvl) {
-    const free = run.units.map((u, i) => u ? -1 : i).filter(i => i >= 0); if (!free.length) return false;
-    const i = free[Math.floor(R() * free.length)]; run.units[i] = { lvl, cd: R() * 0.5, atkT: 0 };
-    const s = run.slots[i]; A().burst(s.x, s.y - 20, lvlCol(lvl), 12); return true;
+  function drawEnemy(c, run, e) {
+    const [x, y] = sc(run, e.s, e.d), bob = e.atkT > 0 ? 0 : -Math.abs(Math.sin(e.walk)) * 2;
+    const tint = (G.FC(run.foe) || {}).infected ? 'rgba(225,255,190,.45)' : null;
+    const bh = I().drawMob(c, e.sheet, e.key, x, y, { z: run.z, sc: e.sc, flip: e.f < 0, flash: e.hitT > 0, tint, ring: 'rgba(255,70,50,.85)', dy: bob + (e.fly ? -12 : 0) });
+    if (e.hp < e.max) { const w = e.boss ? 50 : 28; c.fillStyle = '#300'; c.fillRect(x - w / 2, y - bh - 6, w, 3); c.fillStyle = e.boss ? '#ff4060' : '#e05040'; c.fillRect(x - w / 2, y - bh - 6, w * Math.max(0, e.hp / e.max), 3); }
   }
-  function spawn(run, boss) {
-    const maxT = Math.min(FOE_T.length - 1, Math.floor(run.wave / 3)), tier = boss ? 6 : Math.floor(R() * (maxT + 1));
-    const hp = 14 * Math.pow(1.14, run.wave - 1) * (1 + tier * 0.7) * (boss ? 8 : 1), f = run.field;
-    const pos = run.land ? { x: run.W + 30 + R() * 40, y: f.y + 50 + R() * (f.h - 60) } : { x: 40 + R() * 460, y: -30 - R() * 40 };
-    run.enemies.push(Object.assign(pos, { hp, max: hp, spd: (boss ? 22 : 32 + R() * 18) + (tier === 1 ? 20 : 0), dmg: 3 * (1 + tier * 0.4) * Math.pow(1.06, run.wave) * (boss ? 3 : 1), tier, boss, key: boss ? 'mech2' : FOE_T[tier], walk: R() * 6, atk: 0.5, hitT: 0 }));
+  // ---------- набег
+  function pool(run) { const F = G.FC(run.foe), w = run.wave; const p = (F.raidPool || []).filter(q => w >= q[3] && !q[4] && G.ENEMIES[q[0]]); return p.length ? p : [F.raidPool[0]]; }
+  function callWave(run) {
+    run.paid = false; run.wave++; run.next = 4;
+    let budget = 3 + run.wave * 1.8; const P = pool(run), list = [];
+    const boss = run.wave % 5 === 0; if (boss) { const F = G.FC(run.foe), B = [F.raidBoss, ...(F.bosses || [])].filter(t => G.ENEMIES[t]); list.push(B[Math.min(B.length - 1, run.wave / 5 - 1)] || B[0]); budget *= 0.6; }
+    for (let g = 0; budget > 0.5 && g < 150; g++) { const tot = P.reduce((s, p) => s + p[2], 0); let x = R() * tot, ch = P[0]; for (const p of P) { x -= p[2]; if (x <= 0) { ch = p; break; } } budget -= ch[1]; list.push(ch[0]); }
+    if (boss) list.push(list.shift());
+    run.queue = list; run.spawnT = 0.5;
+    const b = run.hud && run.hud.ban; if (b) { b.textContent = boss ? `Волна ${run.wave} · ${G.ENEMIES[list[list.length - 1]].name}` : `Волна ${run.wave}`; b.classList.remove('go'); void b.offsetWidth; b.classList.add('go'); }
+    G.sfx && G.sfx(boss ? 'horn' : 'goal');
   }
-  function hit(run, e, dmg) {
-    if (e.dead) return; e.hp -= dmg; e.hitT = 0.1;
-    if (e.hp <= 0) { e.dead = true; run.kills++; const g = 3 + e.tier * 2 + (e.boss ? 40 : 0); run.coins += g; A().float(e.x, e.y - 40, '+' + g, '#ffd65a'); A().burst(e.x, e.y - 20, e.boss ? '#ff4060' : '#c84030', e.boss ? 40 : 10); if (e.boss) { run.bossKills++; A().shake(10); G.sfx && G.sfx('legend'); } else if (G.sfx && R() < 0.4) G.sfx('death'); }
+  function spawn(run, type) {
+    const T = G.ENEMIES[type], w = run.wave, SP = I().foeSprite(type), boss = !!T.boss;
+    // сила — между своей и ценой в набеге: у рас, чьи набеги из крепких бойцов, враги не втрое сильнее гулей
+    const cost = ((G.FC(run.foe).raidPool || []).find(p => p[0] === type) || [0, 1.5])[1];
+    const hp = boss ? (220 + 70 * w) * (1 + 0.08 * w) : Math.sqrt(T.hp * 35 * cost) * 0.6 * (1 + 0.08 * w) * Math.pow(1.05, w);
+    const dm = boss ? Math.min(T.dmg, 40) * 0.25 : Math.sqrt(T.dmg * 5 * cost) * (T.ranged ? 0.6 : 1);
+    const d0 = (R() - 0.5) * 11;
+    run.enemies.push({ type, T, s: 0.5 + R(), d: d0, td: Math.max(-5.5, Math.min(5.5, d0 + (R() - 0.5) * 4)), hp, max: hp, dmg: dm * (1 + 0.05 * w), rate: T.rate, spd: T.speed * 0.5 * Q, ranged: !!T.ranged && !boss, range: T.range || 1, armor: T.armor || 0, dodge: T.dodge || 0, boss, fly: !!T.flying, sheet: SP[0], key: SP[1], sc: SP[2] || 1, f: d0 < 0 ? 1 : -1, walk: R() * 6, cd: 0.6, atkT: 0, hitT: 0 });
   }
+  function hurt(run, e, dmg, single) {
+    if (e.dead) return;
+    if (single && e.dodge && R() < e.dodge) { if (R() < 0.4) { const [x, y] = sc(run, e.s, e.d); A().float(x, y - 40, 'мимо', '#ccc'); } return; }
+    e.hp -= dmg * (1 - Math.min(0.6, e.armor)); e.hitT = 0.1;
+    if (e.hp > 0) return;
+    e.dead = true; run.kills++; const g = Math.round((e.T.loot || 4) * 0.5) + 1 + (e.boss ? 40 : 0); run.coins += g;
+    const [x, y] = sc(run, e.s, e.d); A().float(x, y - 40, '+' + g, '#ffd65a'); A().burst(x, y - 16, e.boss ? '#ff4060' : '#c84030', e.boss ? 40 : 10);
+    if (e.boss) { run.bossKills++; A().shake(10); G.sfx && G.sfx('legend'); } else if (G.sfx && R() < 0.4) G.sfx('death');
+  }
+  // ---------- покупка: случайный класс первой ступени в свободную клетку
+  const buyCost = run => 10 + run.bought * 3;
+  function place(run, k, r, at) {
+    const free = run.cells.filter(q => !q.u); if (!free.length) return false;
+    const q = at != null && !run.cells[at].u ? run.cells[at] : free[Math.floor(R() * free.length)];
+    q.u = { k, r, cd: R() * 0.5, atkT: 0, f: q.d < 0 ? 1 : -1 }; const [x, y] = sc(run, q.s, q.d); A().burst(x, y - 20, rankCol(r), 12); return true;
+  }
+  function randomClass() { const L = Object.keys(CLS), tot = L.reduce((s, k) => s + CLS[k].w, 0); let x = R() * tot; for (const k of L) { x -= CLS[k].w; if (x <= 0) return k; } return 'gunner'; }
   function end(run) {
-    if (run.over) return;
+    if (run.over) return; const best = run.cells.reduce((m, q) => q.u && q.u.r > m.r ? q.u : m, { r: 0 });
     A().finish({ title: `Стена пала на волне ${run.wave}`, wave: run.wave, kills: run.kills, sparks: run.wave * 2 + Math.floor(run.kills / 8) + run.bossKills * 5,
-      lines: [['Волна', run.wave], ['Врагов повержено', run.kills], ['Владык', run.bossKills], ['Сильнейший боец', 'ступень ' + Math.max(0, ...run.units.map(u => u ? u.lvl : 0))]] });
+      lines: [['Волна', run.wave], ['Врагов повержено', run.kills], ['Владык', run.bossKills], ['Сильнейший', best.r ? `${I().cName(run.race, best.k)} · ${RANK[best.r - 1]}` : '—']] });
   }
-  function banner(run, t) { const b = run.hud && run.hud.ban; if (!b) return; b.textContent = t; b.classList.remove('go'); void b.offsetWidth; b.classList.add('go'); G.sfx && G.sfx(run.boss ? 'horn' : 'goal'); }
   const set = (e, v) => { v = String(v); if (e._v !== v) { e._v = v; e.textContent = v; } };
   function buildHud(run) {
     const ui = A().ui, L = run.land;
-    ui.innerHTML = `<div class="wl-top"><div class="wl-wave"></div></div>
-      <div class="wl-wall"><i></i><em></em></div><div class="wl-ban"></div>
-      <div class="wl-bot"><div class="wl-coins"><i></i><b></b></div>
+    ui.innerHTML = `<div class="wl-top"><div class="wl-wave"></div><div class="wl-wall"><i></i><em></em></div></div><div class="wl-ban"></div>
+      <div class="wl-bot${L ? ' side' : ''}"><div class="wl-coins"><i></i><b></b></div>
       <button class="wl-buy"><span></span><b><i></i><em></em></b></button>
       <button class="wl-skill"><span>Залп</span><em></em></button></div>`;
     const q = s => ui.querySelector(s);
     run.hud = { wave: q('.wl-wave'), coins: q('.wl-coins b'), buy: q('.wl-buy'), buyT: q('.wl-buy span'), cost: q('.wl-buy em'), wall: q('.wl-wall i'), wallT: q('.wl-wall em'), wallBox: q('.wl-wall'), skill: q('.wl-skill'), skillT: q('.wl-skill em'), ban: q('.wl-ban') };
-    // раскладка панели под ориентацию
-    const wb = run.hud.wallBox, bot = q('.wl-bot'), ban = run.hud.ban;
-    if (L) { Object.assign(wb.style, { left: '370px', right: '20px', top: '452px' }); Object.assign(bot.style, { left: '0', right: '0', height: '72px' }); Object.assign(ban.style, { top: '180px', left: '330px' }); }
-    run.hud.buy.onclick = () => { const c = buyCost(run); if (run.coins < c) return; if (place(run, R() < 0.12 ? 2 : 1)) { run.coins -= c; run.bought++; G.sfx && G.sfx('build'); } };
-    run.hud.skill.onclick = () => { if (run.skillCd > 0 || !run.enemies.length) return; run.skillCd = 30; const f = run.field; run.meteors = (run.meteors || []).concat(Array.from({ length: 6 }, (_, i) => ({ x: f.x + 40 + R() * (f.w - 80), y: f.y + 40 + R() * (f.h - 80), t: 0, d: 0.4 + i * 0.15 }))); G.castBanner && G.castBanner('Залп', null, '#ff8a2a', 'стена'); };
+    if (L) { q('.wl-top').style.right = '180px'; Object.assign(run.hud.ban.style, { right: '180px', top: '170px' }); }
+    run.hud.buy.onclick = () => { const c = buyCost(run); if (run.coins < c) return; if (place(run, randomClass(), R() < 0.1 ? 2 : 1)) { run.coins -= c; run.bought++; G.sfx && G.sfx('build'); } };
+    run.hud.skill.onclick = () => { if (run.skillCd > 0 || !run.enemies.length) return; run.skillCd = 30; run.meteors = (run.meteors || []).concat(Array.from({ length: 6 }, (_, i) => ({ s: 3 + R() * 16, d: (R() - 0.5) * 11, t: 0, dl: 0.4 + i * 0.15 }))); G.castBanner && G.castBanner('Залп', null, '#ff8a2a', 'стена'); };
   }
+  G.arena.wallDbg = { CLS, place, buyCost, randomClass };
   G.arena.register('wall', mode);
 })();
 
@@ -13817,230 +14009,479 @@ if (G.ui) G.ui.intro = () => { if (!G._splashed && G.brandSplash) { G._splashed 
 <script>
 // js/td.js
 'use strict';
-// «Оборона» (библия, 17): защита башен. Тропа, вдоль неё — места под башни (постройки расы: вышка, пушка, тесла),
-// три ступени у каждой, вождь бегает по тапу и держит врагов. 15 волн; каждая пятая — владыка.
-// На телефоне тропа идёт сверху вниз, на компьютере — слева направо; панель — снизу или справа.
+// «Оборона» (библия, 17): набег на базу — тренажёр основной игры. Цитадель в середине поляны, враги выходят из тумана с краёв
+// и идут к ней кратчайшим путём; постройки ставятся на любую свободную клетку, враги их обходят или ломают.
+// Постройки, их цифры и названия — из основной игры (G.BUILDINGS, скины рас), враги — набег расы-противника (G.FACTIONS).
 (function () {
-  const A = () => G.arena;
-  const C = 60, WAVES = 15;
-  const FOE_T = ['scav', 'scout', 'gunner', 'guard', 'flamer', 'mech1', 'mech2'];
-  const R = Math.random;
-  // тропы в клетках вертикальной раскладки (9×14); строка −1 — вход, 13 — база. Горизонтальная — та же, повёрнутая
-  const PATHS = [
-    [[1, -1], [1, 3], [7, 3], [7, 7], [1, 7], [1, 11], [7, 11], [7, 13]],
-    [[4, -1], [4, 2], [1, 2], [1, 6], [7, 6], [7, 10], [4, 10], [4, 13]],
-  ];
-  const TOWERS = {
-    arrow: { name: 'Вышка', key: 'tower', cost: 50, range: 140, rate: 0.55, dmg: 10, desc: 'быстро, по одному' },
-    blast: { name: 'Пушка', key: 'cannon', cost: 80, range: 115, rate: 1.6, dmg: 30, splash: 55, desc: 'медленно, по площади' },
-    frost: { name: 'Тесла', key: 'tesla', cost: 70, range: 130, rate: 1.0, dmg: 7, slow: 0.45, chain: 2, desc: 'замедляет, бьёт троих' },
+  const A = () => G.arena, I = () => G.arena.iso;
+  const HW = 32, HH = 16, N = 40, K = 0.55, WAVES = 15, R = Math.random;
+  const DEF = ['tower', 'cannon', 'tesla', 'barricade', 'lamp', 'beacon', 'infirmary', 'forge'];
+  // особые постройки рас — как в основной игре
+  const SPECIAL = { fungi: { tower: 'infect', cannon: 'poison', tesla: 'mold' }, clowns: { tesla: 'mirror' }, vampires: { tesla: 'bell' }, primates: { tesla: 'grab' } };
+  const SHORT = {
+    tower: 'Бьёт по одному', cannon: 'Бьёт по толпе', tesla: 'Цепь до 4 целей', barricade: 'Держит удар в проходе', lamp: 'Рядом бьют на 15% сильнее',
+    beacon: 'Видно, откуда пойдут', infirmary: 'Лечит вождя', forge: 'Усиление построек',
+    infect: 'Убитые встают твоими', poison: 'Яд по толпе', mold: 'Плесень жжёт врагов', mirror: 'Сбивает врагов с пути', bell: 'Оглушает до 4', grab: 'Держит до 4',
   };
-  const upCost = t => Math.round(TOWERS[t.type].cost * 0.8 * t.lvl);
-  // постройка расы, если её нет — выживших
-  const bsp = (race, k) => (G.sprHas && G.sprHas(race, k)) ? [race, k] : [(G.sprHas && G.sprHas('survivors', k)) ? 'survivors' : race, k];
+  const NB = [[1, 0, 1], [-1, 0, 1], [0, 1, 1], [0, -1, 1], [1, 1, 1.414], [1, -1, 1.414], [-1, 1, 1.414], [-1, -1, 1.414]];
+  const idx = (i, j) => j * N + i;
+
+  // цифры построек из основной игры; цена — в двух ресурсах расы
+  function bstat(race, k) {
+    const B = G.BUILDINGS[k], M = (G.SKINS && G.SKINS[race]) || (race === 'mutants' ? G.MUTANT_SKIN : race === 'others' ? G.OTHERS_SKIN : null), O = G._orig && G._orig.buildings[k];
+    const cost = (M && M.bcosts && M.bcosts[k]) || (O ? O[2] : B.cost) || {};
+    const c1 = (cost.scrap || 0) + (cost.food || 0) + (cost.fuel || 0) + (cost.water || 0), c2 = cost.aether || 0;
+    const sz = (G.BSIZE[race] && G.BSIZE[race][k]) || [O ? O[5] : B.w, O ? O[6] : B.h];
+    return { k, hp: B.hp, atk: B.attack || null, cost: [c1, c2], w: sz[0], h: sz[1], unique: k === 'forge' };
+  }
+  // постройки, которые у расы в основной игре работают иначе (люк клоунов, споровый столб грибов), сюда не берём
+  const SKIP = { clowns: ['beacon', 'lamp'], fungi: ['beacon', 'lamp'] };
+  function available(race, k) {
+    if (k === 'barricade') return true;
+    if ((SKIP[race] || []).includes(k)) return false;
+    const n = I().bName(race, k)[0];
+    return n && n !== '—' && !!(G.SPRITE_META[race] && G.SPRITE_META[race].f[k]);
+  }
 
   const mode = {
-    kicker: 'Режим · защита башен', title: 'Оборона',
-    about: 'Враги идут по тропе к твоей базе. Ставь башни на места вдоль тропы и усиливай их. Вождь бегает по тапу и держит врагов. Выдержи 15 волн.',
-    howto: 'Тап по месту — поставить башню, по башне — усилить или продать, по земле — вести вождя. «Волна» — позвать следующую раньше за монеты.',
-    ups: [{ k: 'gold', name: 'Казна', desc: '+30 монет на старте' }, { k: 'lives', name: 'Ворота', desc: '+2 жизни' }, { k: 'dmg', name: 'Закалка', desc: '+10% урона башен' }],
-    bestText: b => b.win ? 'все 15 волн' : `волна ${b.wave}`,
+    kicker: 'Режим · защита базы', title: 'Оборона',
+    about: 'Набег идёт на твою цитадель. Строй вышки, пушки, баррикады — те же, что в основной игре, — на любой свободной клетке. Враги ищут путь в обход построек, а если обхода нет, ломают их. Выдержи 15 набегов.',
+    howto: 'Выбери постройку внизу и нажми на клетку. Нажми на свою постройку — починить, разобрать, усилить. Нажми на землю — туда побежит вождь. «Набег» — позвать следующий раньше за награду.',
+    ups: [{ k: 'gold', name: 'Запасы', desc: '+40 к первому ресурсу на старте' }, { k: 'cit', name: 'Крепкая цитадель', desc: '+15% прочности цитадели' }, { k: 'dmg', name: 'Закалка', desc: '+10% урона построек' }],
+    bestText: b => b.win ? 'все 15 набегов' : `набег ${b.wave}`,
     better: (a, b) => a.wave > b.wave || (a.win && !b.win),
     dims: land => land ? [960, 540] : [540, 960],
     teach(run) {
-      const s = run.slots[Math.floor(run.slots.length / 3)], b = run.wp[run.wp.length - 1];
+      const V = run.V, [cx, cy] = V.s(N / 2, N / 2), H = run.hud, r = el => { const b = el.getBoundingClientRect(), u = A().ui.getBoundingClientRect(), s = u.width / run.W; return [(b.left + b.width / 2 - u.left) / s, (b.top - u.top) / s]; };
+      const br = run.plan.br[0], [bx, by] = V.s(br[0] + 0.5, br[1] + 0.5);
       return [
-        ['Враги пойдут по тропе к твоей базе. Каждый, кто дойдёт, отнимает жизнь. Жизни — сверху слева.', b[0], b[1] - 60],
-        ['Тёмные круги вдоль тропы — места под башни. Нажми на место и выбери: вышка, пушка или тесла.', s.x, s.y - 20],
-        ['Нажми на землю — туда побежит вождь. Он держит врагов и бьёт их. Внизу его главный удар.', run.hero.x, run.hero.y - 60],
-        ['Монеты — за врагов и за каждую волну. Башню можно усилить до третьей ступени. Каждая пятая волна — владыка.', null, null],
+        [`Это ${I().bName(run.race, 'citadel')[0].toLowerCase()} — сердце базы. Она сама стреляет. Падёт — конец партии.`, cx, cy - 70],
+        ['Красным отмечен прорыв: оттуда пойдёт набег. Пунктир — путь врагов к цитадели.', bx, by - 20],
+        ['Выбери постройку здесь и нажми на клетку. Враги обходят постройки — можно строить лабиринт. Баррикада дешёвая и держит удар.', ...r(H.cards.querySelector('button'))],
+        ['Вождь бегает по тапу и держит врагов. Его удар — по кругу. Маяк заранее показывает, откуда пойдёт следующий набег.', ...r(H.ult)],
       ];
     },
     start(run) {
-      const L = run.land, COLS = L ? 14 : 9, ROWS = L ? 9 : 14;
-      run.COLS = COLS; run.ROWS = ROWS; run.FW = COLS * C; run.FH = ROWS * C;
-      const P = PATHS[Math.floor(R() * PATHS.length)], flip = R() < 0.5;
-      run.wp = P.map(([c, r]) => { const cc = flip ? 8 - c : c; return L ? [(r + 0.5) * C, (cc + 0.5) * C] : [(cc + 0.5) * C, (r + 0.5) * C]; });
-      run.len = []; let Lt = 0; for (let i = 1; i < run.wp.length; i++) { Lt += Math.hypot(run.wp[i][0] - run.wp[i - 1][0], run.wp[i][1] - run.wp[i - 1][1]); run.len.push(Lt); } run.total = Lt;
-      const onPath = new Set();
-      for (let i = 1; i < run.wp.length; i++) { const [x0, y0] = run.wp[i - 1], [x1, y1] = run.wp[i]; const n = Math.ceil(Math.hypot(x1 - x0, y1 - y0) / 10); for (let k = 0; k <= n; k++) { const x = x0 + (x1 - x0) * k / n, y = y0 + (y1 - y0) * k / n, c = Math.floor(x / C), r = Math.floor(y / C); if (r >= 0 && r < ROWS && c >= 0 && c < COLS) onPath.add(c + ',' + r); } }
-      run.slots = [];
-      const endC = Math.floor(run.wp[run.wp.length - 1][0] / C), endR = Math.floor(run.wp[run.wp.length - 1][1] / C);
-      for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) { if (onPath.has(c + ',' + r) || (Math.abs(c - endC) <= 1 && Math.abs(r - endR) <= 1)) continue; if ((c + r) % 2 === 0 && [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]].some(([dx, dy]) => onPath.has((c + dx) + ',' + (r + dy)))) run.slots.push({ c, r, x: (c + 0.5) * C, y: (r + 0.5) * C, tower: null }); }
-      run.enemies = []; run.shots = []; run.gold = 140 + 30 * run.up('gold'); run.lives = run.livesMax = 20 + 2 * run.up('lives');
-      run.wave = 0; run.next = 10; run.queue = 0; run.spawnT = 0; run.kills = 0; run.foe = A().foeOf(run.race); run.sel = null;
-      run.gk = A().GROUND[run.race] || 0;
-      const H0 = (G.HEROES || {})[run.race] || { name: 'Вождь', col: '#ffd36a', ab: [{}, {}, {}, { name: 'Удар' }] };
-      const b = run.wp[run.wp.length - 1], hs = L ? [b[0] - 150, b[1]] : [b[0], b[1] - 150];
-      run.hero = { x: hs[0], y: hs[1], tx: hs[0], ty: hs[1], home: hs, hp: 400, max: 400, dmg: 18, cd: 0, atkT: 0, down: 0, f: -1, back: false, walk: 0, name: H0.name, col: H0.col, ult: H0.ab[3].name, ultCd: 6, fr: H0.fr, br: H0.br };
+      const L = run.land, FR = L ? { x: 0, y: 44, w: 960 - 180, h: 540 - 44 } : { x: 0, y: 48, w: 540, h: 960 - 48 - 230 };
+      run.FR = FR;
+      const V = run.V = I().view(HW, HH, FR.x + FR.w / 2, FR.y + FR.h / 2 + 8 - N * HH);
+      run.valid = new Uint8Array(N * N); run.tiles = [];
+      for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) { const [x, y] = V.s(i + 0.5, j + 0.5); if (x > FR.x + HW * 0.9 && x < FR.x + FR.w - HW * 0.9 && y > FR.y + HH + 22 && y < FR.y + FR.h - HH - 2) { run.valid[idx(i, j)] = 1; run.tiles.push([i, j]); } }
+      run.obj = new Array(N * N).fill(null); run.bAt = new Int32Array(N * N).fill(-1); run.mold = new Uint8Array(N * N);
+      run.blds = []; run.enemies = []; run.allies = []; run.shots = []; run.zaps = []; run.fx = [];
+      const ci = N / 2 - 2; run.c = ci; // цитадель 3×3 в середине
+      addBld(run, 'citadel', ci, ci, true);
+      const cb = run.blds[0]; cb.max = cb.hp = 1500 * (1 + 0.15 * run.up('cit'));
+      // края поля — откуда выходят враги
+      run.edge = run.tiles.filter(([i, j]) => NB.slice(0, 4).some(([dx, dy]) => !okT(run, i + dx, j + dy)));
+      // камни и деревья: не у цитадели и не на краю
+      const dec = I().DECOR[run.race] || ['rock'];
+      for (const [i, j] of run.tiles) { if (Math.abs(i - ci - 1) < 4 && Math.abs(j - ci - 1) < 4) continue; if (run.edge.some(e => Math.abs(e[0] - i) + Math.abs(e[1] - j) < 2)) continue; if (R() < 0.075) run.obj[idx(i, j)] = dec[Math.floor(R() * dec.length)]; }
+      // Иные: дикие монолиты — занять дёшево, станут стражами
+      if (run.race === 'others') { let n = 0; for (let t = 0; t < 300 && n < 2; t++) { const [i, j] = run.tiles[Math.floor(R() * run.tiles.length)], d = Math.hypot(i - ci - 1, j - ci - 1); if (d > 4 && d < 8 && !run.obj[idx(i, j)] && run.bAt[idx(i, j)] < 0) { run.obj[idx(i, j)] = 'monolith'; n++; } } }
+      flow(run);
+      // если какой-то край отрезан камнями — убрать камни рядом
+      for (let g = 0; g < 30; g++) { const cut = run.edge.find(([a, b]) => !isFinite(run.dist[idx(a, b)])); if (!cut) break; const [i, j] = cut; for (let r2 = 0; r2 < 5; r2++) for (const [dx, dy] of NB) { const x = i + dx * r2, y = j + dy * r2; if (okT(run, x, y) && run.obj[idx(x, y)] && run.obj[idx(x, y)] !== 'monolith') run.obj[idx(x, y)] = null; } flow(run); }
+      run.gc = I().groundCanvas(V, run.tiles, run.race, run.W, run.H, { seed: 1 + Math.floor(R() * 999) });
+      run.r1 = 400 + 40 * run.up('gold'); run.r2 = 100; run.wave = 0; run.next = 24; run.queue = []; run.spawnT = 0; run.kills = 0; run.cur = { br: [] };
+      run.foe = A().foeOf(run.race); run.sel = null; run.ghost = null; run.forge = 0; run.pop = null;
+      run.citH = (I().bldBox(run.race, 'citadel', V, 3, 3) || [0, 0, 160])[2];
+      const H0 = (G.HEROES || {})[run.race] || { name: 'Вождь', col: '#ffd36a', ab: [{}, {}, {}, { name: 'Удар' }] }, CH = G.CLASSES.hero;
+      run.hero = { gx: ci + 1.5, gy: ci + 4.2, tx: ci + 1.5, ty: ci + 4.2, hp: CH.hp, max: CH.hp, dmg: CH.dmg, cd: 0, atkT: 0, down: 0, f: 1, back: false, walk: 0, name: H0.name, col: H0.col, ult: H0.ab[3].name, ultCd: 6, fr: H0.fr, br: H0.br };
       run.img = new Image(); run.img.src = 'art/heroes/' + run.race + '.webp';
-      run.decor = []; for (let k = 0; k < 22; k++) { const c = Math.floor(R() * COLS), r = Math.floor(R() * ROWS); if (onPath.has(c + ',' + r) || run.slots.some(s => s.c === c && s.r === r)) continue; run.decor.push({ x: (c + 0.5) * C + (R() - 0.5) * 20, y: (r + 0.5) * C + 18, k: ['rock', 'tree', 'wreck', 'tree', 'rock'][Math.floor(R() * 5)], s: 0.45 + R() * 0.35 }); }
+      run.plan = plan(run, 1);
       buildHud(run);
     },
     update(run, dt) {
-      if (run.queue <= 0 && !run.enemies.length && run.wave >= WAVES) return win(run);
-      if (run.queue <= 0 && !run.enemies.length) { run.next -= dt; if (run.next <= 0) callWave(run); }
-      if (run.queue > 0) { run.spawnT -= dt; if (run.spawnT <= 0) { run.spawnT = Math.max(0.45, 0.85 - run.wave * 0.02); spawn(run, run.boss && run.queue === 1); run.queue--; } }
       const h = run.hero;
-      let held = 0;
-      for (const e of run.enemies) {
-        e.hitT -= dt; e.slowT -= dt;
-        const near = h.down <= 0 && Math.hypot(e.x - h.x, e.y - h.y) < 30 && held < 2;
-        if (near) { held++; e.f = h.x > e.x ? 1 : -1; e.atk -= dt; if (e.atk <= 0) { e.atk = 1; h.hp -= e.dmg; A().burst(h.x, h.y - 30, '#ff6050', 4, 0.5); if (h.hp <= 0) { h.down = 10; h.hp = 0; A().float(h.x, h.y - 60, h.name + ' пал', '#ff6050'); } } continue; }
-        e.d += e.spd * (e.slowT > 0 ? 0.55 : 1) * dt; e.walk += dt * 8;
-        if (e.d >= run.total) { e.dead = true; run.lives -= e.boss ? 5 : 1; A().shake(6); A().float(e.x, e.y - 30, '−' + (e.boss ? 5 : 1), '#ff4040', true); G.sfx && G.sfx('bad'); if (run.lives <= 0) return lose(run); continue; }
-        const p = at(run, e.d); if (Math.abs(p[0] - e.x) > 0.01) e.f = p[0] > e.x ? 1 : -1; e.x = p[0]; e.y = p[1];
+      // набег: ожидание → поток врагов из прорывов
+      if (!run.queue.length && !run.enemies.length) {
+        if (run.wave >= WAVES) return win(run);
+        if (run.wave && !run.paid) { run.paid = true; reward(run); }
+        run.next -= dt; if (run.next <= 0) callWave(run);
       }
-      if (h.down > 0) { h.down -= dt; if (h.down <= 0) { h.x = h.tx = h.home[0]; h.y = h.ty = h.home[1]; h.hp = h.max; A().float(h.x, h.y - 60, 'снова в строю', '#7aff8a'); } }
+      if (run.queue.length) { run.spawnT -= dt; if (run.spawnT <= 0) { run.spawnT = Math.max(0.35, 0.8 - run.wave * 0.02); const q = run.queue.shift(); spawn(run, q[0], q[1]); } }
+      for (const e of run.enemies) enemyTick(run, e, dt);
+      if (run.over) return;
+      for (const a of run.allies) allyTick(run, a, dt);
+      run.allies = run.allies.filter(a => !a.dead);
+      // вождь
+      if (h.down > 0) { h.down -= dt; if (h.down <= 0) { h.gx = h.tx = run.c + 1.5; h.gy = h.ty = run.c + 4.2; h.hp = h.max; A().float(...sc(run, h.gx, h.gy, 60), 'снова в строю', '#7aff8a'); } }
       else {
-        h.cd -= dt; h.atkT = Math.max(0, h.atkT - dt); h.ultCd = Math.max(0, h.ultCd - dt); h.hp = Math.min(h.max, h.hp + h.max * 0.02 * dt);
-        const t = nearest(run, h.x, h.y, 40);
-        if (t) { h.moving = false; if (h.cd <= 0) { h.cd = 0.8; h.atkT = 0.3; hit(run, t, h.dmg * (1 + 0.08 * run.wave)); h.f = t.x > h.x ? 1 : -1; G.sfx && G.sfx('slash'); } }
-        else { const dx = h.tx - h.x, dy = h.ty - h.y, d = Math.hypot(dx, dy); if (d > 3) { const st = Math.min(d, 110 * dt); h.x += dx / d * st; h.y += dy / d * st; h.walk += dt * 9; if (Math.abs(dx) > 2) h.f = dx > 0 ? 1 : -1; h.back = dy < -Math.abs(dx) * 0.3; h.moving = true; } else h.moving = false; }
+        h.cd -= dt; h.atkT = Math.max(0, h.atkT - dt); h.ultCd = Math.max(0, h.ultCd - dt); h.hp = Math.min(h.max, h.hp + h.max * 0.01 * dt);
+        if (nearB(run, 'infirmary', h.gx, h.gy, 7 * K)) h.hp = Math.min(h.max, h.hp + h.max * 0.05 * dt);
+        const t = nearestE(run, h.gx, h.gy, 1.1);
+        if (t && Math.hypot(h.tx - h.gx, h.ty - h.gy) < 0.5) { h.moving = false; if (h.cd <= 0) { h.cd = G.CLASSES.hero.rate; h.atkT = 0.3; hurt(run, t, h.dmg * (1 + 0.06 * run.wave) * auraK(run, h.gx, h.gy), true); h.f = scrDx(t.gx - h.gx, t.gy - h.gy) > 0 ? 1 : -1; G.sfx && G.sfx('slash'); } }
+        else { const dx = h.tx - h.gx, dy = h.ty - h.gy, d = Math.hypot(dx, dy); if (d > 0.05) { const st = Math.min(d, 3.2 * dt); h.gx += dx / d * st; h.gy += dy / d * st; h.walk += dt * 9; const sx = scrDx(dx, dy); if (Math.abs(sx) > 0.01) h.f = sx > 0 ? 1 : -1; h.back = dx + dy < -0.2; h.moving = true; } else h.moving = false; }
       }
-      const dk = 1 + 0.1 * run.up('dmg');
-      for (const s of run.slots) {
-        const t = s.tower; if (!t) continue; const T = TOWERS[t.type]; t.cd -= dt; t.atkT = Math.max(0, t.atkT - dt);
-        if (t.cd > 0) continue;
-        const range = T.range * (1 + 0.1 * (t.lvl - 1)), tg = furthest(run, s.x, s.y, range); if (!tg) continue;
-        t.cd = T.rate; t.atkT = 0.25;
-        run.shots.push({ x: s.x, y: s.y - 50, t: tg, v: t.type === 'blast' ? 420 : 640, dmg: T.dmg * Math.pow(1.6, t.lvl - 1) * dk, type: t.type });
-        if (G.sfx && R() < 0.3) G.sfx(t.type === 'blast' ? 'boom' : t.type === 'frost' ? 'bolt' : 'shot');
-      }
-      for (const p of run.shots) {
-        if (!p.t || p.t.dead) { p.gone = true; continue; }
-        const tx = p.t.x, ty = p.t.y - 20, d = Math.hypot(tx - p.x, ty - p.y), st = p.v * dt;
-        if (d <= st) {
-          p.gone = true; const T = TOWERS[p.type]; hit(run, p.t, p.dmg);
-          if (T.splash) { A().burst(tx, ty, '#ffb040', 12); for (const e of run.enemies) if (e !== p.t && Math.hypot(e.x - tx, e.y - ty) < T.splash) hit(run, e, p.dmg * 0.6); }
-          if (T.slow) { p.t.slowT = 1.5; let cur = p.t; const done = [cur]; for (let k = 0; k < T.chain; k++) { const n = run.enemies.filter(e => !e.dead && !done.includes(e) && Math.hypot(e.x - cur.x, e.y - cur.y) < 80).sort((a, b) => Math.hypot(a.x - cur.x, a.y - cur.y) - Math.hypot(b.x - cur.x, b.y - cur.y))[0]; if (!n) break; run.zaps = (run.zaps || []).concat([{ x0: cur.x, y0: cur.y - 20, x1: n.x, y1: n.y - 20, t: 0.2 }]); hit(run, n, p.dmg * 0.6); n.slowT = 1.5; done.push(n); cur = n; } }
-        } else { p.x += (tx - p.x) / d * st; p.y += (ty - p.y) / d * st; }
-      }
+      // постройки
+      const dk = (1 + 0.25 * run.forge) * (1 + 0.1 * run.up('dmg'));
+      for (const b of run.blds) { if (b.dead) continue; b.atkT = Math.max(0, b.atkT - dt); b.hitT = Math.max(0, (b.hitT || 0) - dt); if (b.atk || b.spec) towerTick(run, b, dt, dk); }
+      // плесень жжёт, яд травит
+      for (const e of run.enemies) { const t = idx(Math.floor(e.gx), Math.floor(e.gy)); if (run.mold[t]) hurt(run, e, 14 * dt * dk, false, true); if (e.poison > 0) { e.poison -= dt; hurt(run, e, 7 * dt * dk, false, true); } }
+      for (const p of run.shots) shotTick(run, p, dt);
+      if (run.over) return;
       run.shots = run.shots.filter(p => !p.gone);
       run.enemies = run.enemies.filter(e => !e.dead);
-      if (run.zaps) { for (const z of run.zaps) z.t -= dt; run.zaps = run.zaps.filter(z => z.t > 0); }
-      if (run.blast) { run.blast.t += dt; if (run.blast.t > 0.6) run.blast = null; }
+      for (const z of run.zaps) z.t -= dt; run.zaps = run.zaps.filter(z => z.t > 0);
+      for (const f of run.fx) f.t += dt; run.fx = run.fx.filter(f => f.t < f.d);
+      if (run.dirty) { run.dirty = false; flow(run); }
     },
     draw(c, run) {
-      const W = run.W, H = run.H, FW = run.FW, FH = run.FH;
-      // земля расы и тропа своей текстурой
-      A().ground(c, run.gk, 0, 0, FW, FH, 0.45);
-      c.fillStyle = 'rgba(0,0,0,.18)'; c.fillRect(0, 0, FW, FH);
-      drawPath(c, run);
-      for (const d of run.decor) if (G.sprHas && G.sprHas('world', d.k)) G.sprDraw(c, 'world', d.k, d.x, d.y, { bw: 80 * d.s, bh: 72 * d.s, alpha: 0.85 });
-      // вход и база
-      const s0 = run.wp[1], b = run.wp[run.wp.length - 1], ent = run.wp[0];
-      const gr = c.createRadialGradient(ent[0], ent[1], 4, ent[0], ent[1], 80); gr.addColorStop(0, 'rgba(255,60,40,.7)'); gr.addColorStop(1, 'rgba(255,60,40,0)'); c.fillStyle = gr; c.fillRect(ent[0] - 80, ent[1] - 80, 160, 160);
-      const cb = bsp(run.race, 'citadel'); G.sprDraw(c, cb[0], cb[1], b[0], b[1] + 30, { bw: 140, bh: 120 });
-      // места и башни (сверху вниз — ближние поверх)
-      for (const s of run.slots.slice().sort((a, b2) => a.y - b2.y)) {
-        const sel = run.sel === s;
-        if (!s.tower) { c.fillStyle = sel ? 'rgba(255,214,90,.3)' : 'rgba(0,0,0,.35)'; c.strokeStyle = sel ? '#ffd65a' : 'rgba(255,255,255,.22)'; c.lineWidth = 2; c.beginPath(); c.ellipse(s.x, s.y + 12, 24, 10, 0, 0, 6.28); c.fill(); c.stroke(); continue; }
-        const t = s.tower, T = TOWERS[t.type], sp = bsp(run.race, T.key), k = 0.85 + t.lvl * 0.12;
-        if (sel) { c.strokeStyle = 'rgba(255,214,90,.6)'; c.setLineDash([6, 6]); c.lineWidth = 2; c.beginPath(); c.arc(s.x, s.y, T.range * (1 + 0.1 * (t.lvl - 1)), 0, 6.28); c.stroke(); c.setLineDash([]); }
-        c.fillStyle = 'rgba(0,0,0,.4)'; c.beginPath(); c.ellipse(s.x, s.y + 14, 26, 10, 0, 0, 6.28); c.fill();
-        G.sprDraw(c, sp[0], sp[1], s.x, s.y + 18 - (t.atkT > 0 ? 2 : 0), { bw: 68 * k, bh: 80 * k, flash: t.atkT > 0.18 });
-        for (let q = 0; q < t.lvl; q++) { c.fillStyle = '#ffd65a'; c.strokeStyle = '#000'; c.lineWidth = 1.5; c.beginPath(); c.arc(s.x - 9 + q * 9, s.y + 26, 3.5, 0, 6.28); c.fill(); c.stroke(); }
+      const V = run.V, W = run.W, H = run.H;
+      c.drawImage(run.gc, 0, 0, W, H);
+      if (!run.gc.ok && !run.regen && I().LAND) { run.regen = true; setTimeout(() => { run.gc = I().groundCanvas(V, run.tiles, run.race, W, H, { seed: 7 }); run.regen = false; }, 500); }
+      // плесень
+      if (run.mold.some(Boolean)) { const P = new Path2D(); for (let t = 0; t < N * N; t++) if (run.mold[t]) V.dia(P, t % N, (t / N) | 0, 1, 1, 0.04); c.fillStyle = 'rgba(30,10,40,.55)'; c.fill(P); c.strokeStyle = 'rgba(160,80,200,.35)'; c.lineWidth = 1; c.stroke(P); }
+      // путь набега пунктиром и прорывы
+      const pulse = 0.5 + 0.5 * Math.sin(performance.now() / 300);
+      const brs = run.queue.length || run.enemies.length ? run.cur.br : (showPlan(run) ? run.plan.br : []);
+      for (const br of brs) {
+        const pts = pathFrom(run, br[0], br[1]); c.fillStyle = 'rgba(255,120,90,.9)'; c.strokeStyle = 'rgba(0,0,0,.6)'; c.lineWidth = 1;
+        for (let k = 1; k < pts.length - 1; k++) { const [x, y] = V.s(pts[k][0] + 0.5, pts[k][1] + 0.5); c.beginPath(); c.ellipse(x, y, 4.5, 2.3, 0, 0, 6.28); c.fill(); c.stroke(); }
+        const [x, y] = V.s(br[0] + 0.5, br[1] + 0.5), gr = c.createRadialGradient(x, y, 2, x, y, 46); gr.addColorStop(0, `rgba(255,60,40,${0.55 + 0.3 * pulse})`); gr.addColorStop(1, 'rgba(255,60,40,0)'); c.fillStyle = gr; c.fillRect(x - 46, y - 46, 92, 92);
       }
-      // враги: смотрят по ходу движения
-      for (const e of run.enemies.slice().sort((a, b2) => a.y - b2.y)) {
-        const h = e.boss ? 84 : 38 + e.tier * 3, bob = -Math.abs(Math.sin(e.walk)) * 2.5;
-        c.fillStyle = 'rgba(0,0,0,.4)'; c.beginPath(); c.ellipse(e.x, e.y + 8, h * 0.3, h * 0.1, 0, 0, 6.28); c.fill();
-        A().drawUnit(c, run.foe, e.key, e.x, e.y + 8 + bob, h, { flash: e.hitT > 0, flip: e.f < 0, tint: e.slowT > 0 ? 'rgba(120,200,255,.45)' : null, enemy: true });
-        c.fillStyle = '#300'; c.fillRect(e.x - 16, e.y - h, 32, 4); c.fillStyle = e.boss ? '#ff4060' : '#e05040'; c.fillRect(e.x - 16, e.y - h, 32 * Math.max(0, e.hp / e.max), 4);
+      // место под постройку
+      if (run.sel && run.ghost) {
+        const S0 = bstat(run.race, run.sel), [i, j] = run.ghost, ok = canPlace(run, run.sel, i, j);
+        const P = new Path2D(); V.dia(P, i, j, S0.w, S0.h); c.fillStyle = ok ? 'rgba(120,255,140,.28)' : 'rgba(255,70,60,.3)'; c.fill(P); c.strokeStyle = ok ? '#8aff9a' : '#ff6050'; c.lineWidth = 2; c.stroke(P);
+        const rr = rangeOf(run, run.sel); if (rr) { V.ring(c, i + S0.w / 2, j + S0.h / 2, rr + S0.w / 2); c.strokeStyle = 'rgba(255,230,140,.6)'; c.setLineDash([6, 6]); c.lineWidth = 1.5; c.stroke(); c.setLineDash([]); }
       }
-      // вождь
-      const hh = run.hero;
-      if (hh.down <= 0) {
-        c.strokeStyle = hh.col; c.lineWidth = 2; c.beginPath(); c.ellipse(hh.x, hh.y + 6, 20, 8, 0, 0, 6.28); c.stroke();
-        const im = run.img, HH = 74, Wd = HH * 200 / 210, bob = hh.moving ? -Math.abs(Math.sin(hh.walk)) * 3 : 0, srcR = hh.back ? !!hh.br : !!hh.fr;
-        if (im.complete && im.naturalWidth) { c.save(); c.translate(hh.x + (hh.atkT > 0 ? hh.f * 5 : 0), hh.y + 10 + bob); c.scale((hh.f > 0) === srcR ? 1 : -1, 1); c.drawImage(im, hh.back ? 400 : 0, 0, 200, 210, -Wd / 2, -HH, Wd, HH); c.restore(); }
-        else A().drawUnit(c, run.race, 'guard', hh.x, hh.y + 10, 60);
-        c.fillStyle = '#300'; c.fillRect(hh.x - 18, hh.y - 70, 36, 4); c.fillStyle = '#7ad060'; c.fillRect(hh.x - 18, hh.y - 70, 36 * hh.hp / hh.max, 4);
-        if (Math.hypot(hh.tx - hh.x, hh.ty - hh.y) > 6) { c.strokeStyle = hh.col; c.globalAlpha = 0.7; c.lineWidth = 2; c.beginPath(); c.arc(hh.tx, hh.ty, 9, 0, 6.28); c.stroke(); c.globalAlpha = 1; }
-      }
-      for (const p of run.shots) { const col = p.type === 'frost' ? '#9ad0ff' : p.type === 'blast' ? '#ffb040' : '#ffe8a0'; c.fillStyle = col; c.shadowColor = col; c.shadowBlur = 8; c.beginPath(); c.arc(p.x, p.y, p.type === 'blast' ? 6 : 3.5, 0, 6.28); c.fill(); c.shadowBlur = 0; }
-      if (run.zaps) for (const z of run.zaps) { c.strokeStyle = `rgba(160,220,255,${z.t * 5})`; c.lineWidth = 3; c.beginPath(); c.moveTo(z.x0, z.y0); c.lineTo((z.x0 + z.x1) / 2 + (R() - 0.5) * 12, (z.y0 + z.y1) / 2 + (R() - 0.5) * 12); c.lineTo(z.x1, z.y1); c.stroke(); }
-      if (run.blast) { const k = run.blast.t / 0.6; c.strokeStyle = `rgba(255,230,160,${1 - k})`; c.lineWidth = 8 * (1 - k); c.beginPath(); c.arc(run.blast.x, run.blast.y, 20 + 100 * k, 0, 6.28); c.stroke(); }
+      if (run.pop && run.pop.b && !run.pop.b.dead && run.pop.b.k) { const b = run.pop.b, rr = rangeOf(run, b.k); const P = new Path2D(); V.dia(P, b.i, b.j, b.w, b.h); c.strokeStyle = '#ffd65a'; c.lineWidth = 2; c.stroke(P); if (rr) { V.ring(c, b.i + b.w / 2, b.j + b.h / 2, rr + b.w / 2); c.strokeStyle = 'rgba(255,214,90,.6)'; c.setLineDash([6, 6]); c.stroke(); c.setLineDash([]); } }
+      // всё, что стоит и ходит, — по глубине
+      const L = [];
+      for (let t = 0; t < N * N; t++) if (run.obj[t]) L.push([(t % N) + ((t / N) | 0) + 1, 0, t]);
+      for (const b of run.blds) if (!b.dead) L.push([b.i + b.w + b.j + b.h - 0.5, 1, b]);
+      for (const e of run.enemies) L.push([e.gx + e.gy, 2, e]);
+      for (const a of run.allies) L.push([a.gx + a.gy, 2, a]);
+      if (run.hero.down <= 0) L.push([run.hero.gx + run.hero.gy, 3, run.hero]);
+      L.sort((a, b) => a[0] - b[0]);
+      for (const [, k, o] of L) { if (k === 0) I().drawObj(c, V, run.obj[o], o % N, (o / N) | 0); else if (k === 1) drawBuilding(c, run, o); else if (k === 2) drawEnemy(c, run, o); else drawHero(c, run, o); }
+      // снаряды, молнии, вспышки
+      for (const p of run.shots) { const [x, y] = V.s(p.gx, p.gy), col = p.col; c.fillStyle = col; c.shadowColor = col; c.shadowBlur = 8; c.beginPath(); c.arc(x, y - p.z, p.r, 0, 6.28); c.fill(); c.shadowBlur = 0; }
+      for (const z of run.zaps) { const [x0, y0] = V.s(z.a[0], z.a[1]), [x1, y1] = V.s(z.b[0], z.b[1]); c.strokeStyle = z.col.replace('A', Math.min(1, z.t * 5)); c.lineWidth = 3; c.beginPath(); c.moveTo(x0, y0 - z.z0); c.lineTo((x0 + x1) / 2 + (R() - 0.5) * 12, (y0 + y1) / 2 - (z.z0 + 20) / 2 + (R() - 0.5) * 12); c.lineTo(x1, y1 - 20); c.stroke(); }
+      for (const f of run.fx) { const k = f.t / f.d, [x, y] = V.s(f.gx, f.gy); c.strokeStyle = f.col.replace('A', 1 - k); c.lineWidth = 6 * (1 - k) + 1; c.beginPath(); c.ellipse(x, y, f.r * HW * Math.SQRT2 * (0.3 + 0.7 * k), f.r * HH * Math.SQRT2 * (0.3 + 0.7 * k), 0, 0, 6.28); c.stroke(); }
       // панель
-      c.fillStyle = 'rgba(8,6,8,.94)'; if (run.land) c.fillRect(FW, 0, W - FW, H); else c.fillRect(0, FH, W, H - FH);
+      c.fillStyle = 'rgba(8,6,8,.95)'; if (run.land) c.fillRect(W - 180, 0, 180, H); else c.fillRect(0, H - 230, W, 230);
     },
     hud(run) {
-      const H = run.hud; if (!H) return; const h = run.hero;
-      set(H.gold, Math.floor(run.gold)); set(H.lives, run.lives); set(H.wave, `Волна ${run.wave} / ${WAVES}`);
-      const waiting = run.queue <= 0 && !run.enemies.length && run.wave < WAVES;
-      H.call.disabled = !waiting; set(H.callT, waiting ? `через ${Math.ceil(run.next)} с · +15` : 'идёт волна');
+      const H = run.hud; if (!H) return; const h = run.hero, cit = run.blds[0];
+      set(H.r1, Math.floor(run.r1)); set(H.r2, Math.floor(run.r2)); set(H.wave, `Набег ${run.wave} / ${WAVES}`);
+      H.cit.style.width = Math.max(0, cit.hp / cit.max * 100) + '%';
+      const waiting = !run.queue.length && !run.enemies.length && run.wave < WAVES;
+      H.call.disabled = !waiting; set(H.callT, waiting ? `через ${Math.ceil(run.next)} с` : 'идёт');
+      set(H.info, waiting ? (showPlan(run) ? planText(run) : 'Поставь маяк — будет видно, откуда пойдут') : `В набеге ${run.enemies.length + run.queue.length}`);
       H.hp.style.width = (h.down > 0 ? 0 : h.hp / h.max * 100) + '%'; set(H.hpT, h.down > 0 ? `встанет через ${Math.ceil(h.down)} с` : h.name);
       H.ult.disabled = h.ultCd > 0 || h.down > 0; set(H.ultT, h.ultCd > 0 ? Math.ceil(h.ultCd) + ' с' : 'готов');
-      if (run.sel && H.pop.hidden === false) fillPop(run);
+      const key = Math.floor(run.r1) + ':' + Math.floor(run.r2) + ':' + run.sel + ':' + run.blds.length;
+      if (H._k !== key) { H._k = key; H.cards.querySelectorAll('[data-k]').forEach(b => { const S0 = bstat(run.race, b.dataset.k); b.classList.toggle('on', run.sel === b.dataset.k); b.disabled = run.r1 < S0.cost[0] || run.r2 < S0.cost[1] || (S0.unique && run.blds.some(q => q.k === S0.k && !q.dead)); }); }
+      if (run.pop) fillPop(run);
     },
-    down(run, x, y) {
-      const s = run.slots.find(q => Math.abs(q.x - x) < 28 && Math.abs(q.y - y) < 30);
-      if (s) { run.sel = run.sel === s ? null : s; showPop(run); G.sfx && G.sfx('click'); return; }
-      if (x < run.FW && y < run.FH) { run.sel = null; showPop(run); const h = run.hero; if (h.down <= 0) { h.tx = Math.max(10, Math.min(run.FW - 10, x)); h.ty = Math.max(10, Math.min(run.FH - 10, y)); } }
+    down(run, x, y, ev) {
+      if (run.pop) closePop(run);
+      if (x > run.FR.x + run.FR.w || y > run.FR.y + run.FR.h) return;
+      const [i, j] = run.V.tile(x, y + 4); if (!okT(run, i, j)) return;
+      const t = idx(i, j);
+      if (run.sel) {
+        const mouse = ev && ev.pointerType === 'mouse';
+        if (mouse || (run.ghost && run.ghost[0] === i && run.ghost[1] === j)) { if (build(run, run.sel, i, j) && !mouse) run.ghost = null; }
+        else run.ghost = [i, j];
+        return;
+      }
+      if (run.bAt[t] >= 0) { openPop(run, run.blds[run.bAt[t]]); return; }
+      if (run.obj[t] === 'monolith') { openPop(run, { mono: t, i, j, w: 1, h: 1 }); return; }
+      const h = run.hero; if (h.down <= 0) { const [gx, gy] = run.V.g(x, y); h.tx = gx; h.ty = gy; run.mark = true; }
     },
+    move(run, x, y, ev) { if (run.sel && ev && ev.pointerType === 'mouse') { const [i, j] = run.V.tile(x, y + 4); run.ghost = okT(run, i, j) ? [i, j] : null; } },
   };
-  // тропа: тёмная кайма и полоса из текстуры потрескавшейся земли; кэш собирается, когда атлас загружен
-  function drawPath(c, run) {
-    const line = x => { x.lineJoin = 'round'; x.lineCap = 'round'; x.beginPath(); run.wp.forEach(([px, py], i) => i ? x.lineTo(px, py) : x.moveTo(px, py)); };
-    if (!run.pathCv) {
-      const k = document.createElement('canvas'); k.width = run.FW; k.height = run.FH; const x = k.getContext('2d');
-      line(x); x.lineWidth = 44; x.strokeStyle = '#000'; x.stroke(); x.globalCompositeOperation = 'source-in';
-      if (!A().ground(x, 15, 0, 0, run.FW, run.FH, 0.4, '#5a4a3a')) { line(c); c.strokeStyle = 'rgba(0,0,0,.55)'; c.lineWidth = 54; c.stroke(); c.drawImage(k, 0, 0); return; }
-      x.globalCompositeOperation = 'source-over'; line(x); x.lineWidth = 3; x.strokeStyle = 'rgba(0,0,0,.25)'; x.setLineDash([2, 14]); x.stroke();
-      run.pathCv = k;
+
+  // ---------- клетки и путь
+  const okT = (run, i, j) => i >= 0 && j >= 0 && i < N && j < N && run.valid[idx(i, j)] === 1;
+  const walk = (run, t) => run.valid[t] === 1 && !run.obj[t];
+  const scrDx = (dx, dy) => dx - dy;
+  const sc = (run, gx, gy, up) => { const [x, y] = run.V.s(gx, gy); return [x, y - (up || 0)]; };
+  // поле расстояний до цитадели: постройки проходимы, но «дороги» — враги их обходят, если обход короче, чем ломать
+  function flow(run) {
+    const dist = run.dist = new Float32Array(N * N).fill(Infinity), nxt = run.nxt = new Int32Array(N * N).fill(-1), done = new Uint8Array(N * N);
+    const heap = [], push = (t, d) => { heap.push([d, t]); let k = heap.length - 1; while (k > 0) { const p = (k - 1) >> 1; if (heap[p][0] <= heap[k][0]) break; [heap[p], heap[k]] = [heap[k], heap[p]]; k = p; } };
+    const pop = () => { const top = heap[0], last = heap.pop(); if (heap.length) { heap[0] = last; let k = 0; for (;;) { const l = 2 * k + 1, r = l + 1; let m = k; if (l < heap.length && heap[l][0] < heap[m][0]) m = l; if (r < heap.length && heap[r][0] < heap[m][0]) m = r; if (m === k) break; [heap[m], heap[k]] = [heap[k], heap[m]]; k = m; } } return top; };
+    const cb = run.blds[0]; for (let j = cb.j; j < cb.j + 3; j++) for (let i = cb.i; i < cb.i + 3; i++) { dist[idx(i, j)] = 0; push(idx(i, j), 0); }
+    const blk = t => { const b = run.bAt[t]; return b >= 0 && run.blds[b].k !== 'citadel'; };
+    while (heap.length) {
+      const [d, t] = pop(); if (done[t]) continue; done[t] = 1; const i = t % N, j = (t / N) | 0;
+      for (const [dx, dy, w] of NB) {
+        const a = i + dx, b = j + dy; if (!okT(run, a, b)) continue; const n = idx(a, b); if (!walk(run, n) || done[n]) continue;
+        if (dx && dy && (!walk(run, idx(i + dx, j)) || !walk(run, idx(i, j + dy)) || blk(idx(i + dx, j)) || blk(idx(i, j + dy)))) continue;
+        const extra = blk(n) ? (run.blds[run.bAt[n]].k === 'barricade' ? 9 : 14) : 0;
+        const nd = d + w + extra; if (nd < dist[n]) { dist[n] = nd; nxt[n] = t; push(n, nd); }
+      }
     }
-    line(c); c.strokeStyle = 'rgba(0,0,0,.55)'; c.lineWidth = 54; c.stroke();
-    c.drawImage(run.pathCv, 0, 0);
   }
-  function at(run, d) { let i = 0; while (i < run.len.length && run.len[i] < d) i++; const a = run.wp[i], b = run.wp[i + 1] || a, l0 = i ? run.len[i - 1] : 0, seg = (run.len[i] || l0) - l0 || 1, k = Math.min(1, (d - l0) / seg); return [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k]; }
-  function nearest(run, x, y, r) { let b = null, bd = r; for (const e of run.enemies) { if (e.dead) continue; const d = Math.hypot(e.x - x, e.y - y); if (d < bd) { bd = d; b = e; } } return b; }
-  function furthest(run, x, y, r) { let b = null; for (const e of run.enemies) { if (e.dead || Math.hypot(e.x - x, e.y - y) > r) continue; if (!b || e.d > b.d) b = e; } return b; }
+  function pathFrom(run, i, j) { const pts = [[i, j]]; let t = idx(i, j); for (let k = 0; k < 160 && t >= 0 && run.dist[t] > 0; k++) { t = run.nxt[t]; if (t < 0) break; pts.push([t % N, (t / N) | 0]); } return pts; }
+  const hasB = (run, k) => run.blds.some(b => b.k === k && !b.dead);
+  const showPlan = run => run.wave < 2 || hasB(run, 'beacon') || !available(run.race, 'beacon');
+
+  // ---------- постройки
+  function addBld(run, k, i, j, free) {
+    const S0 = k === 'citadel' ? { k, hp: 1500, atk: G.BUILDINGS.citadel.attack, w: 3, h: 3, cost: [0, 0] } : bstat(run.race, k);
+    const b = { k, i, j, w: S0.w, h: S0.h, hp: S0.hp, max: S0.hp, atk: S0.atk, cd: R() * 0.5, atkT: 0, spec: (SPECIAL[run.race] || {})[k] || null, spent: free ? [0, 0] : S0.cost.slice(), grown: 0 };
+    run.blds.push(b); const id = run.blds.length - 1;
+    for (let y = j; y < j + b.h; y++) for (let x = i; x < i + b.w; x++) run.bAt[idx(x, y)] = id;
+    run.dirty = true; return b;
+  }
+  function canPlace(run, k, i, j) {
+    const S0 = bstat(run.race, k);
+    for (let y = j; y < j + S0.h; y++) for (let x = i; x < i + S0.w; x++) {
+      if (!okT(run, x, y)) return false; const t = idx(x, y); if (run.obj[t] || run.bAt[t] >= 0) return false;
+      if (run.enemies.some(e => Math.floor(e.gx) === x && Math.floor(e.gy) === y)) return false;
+      if (run.edge.some(e => e[0] === x && e[1] === y)) return false;
+    }
+    return true;
+  }
+  function build(run, k, i, j) {
+    const S0 = bstat(run.race, k); if (!canPlace(run, k, i, j)) { G.sfx && G.sfx('bad'); return false; }
+    if (run.r1 < S0.cost[0] || run.r2 < S0.cost[1]) { G.sfx && G.sfx('bad'); return false; }
+    if (S0.unique && hasB(run, k)) return false;
+    run.r1 -= S0.cost[0]; run.r2 -= S0.cost[1]; addBld(run, k, i, j);
+    const [x, y] = sc(run, i + S0.w / 2, j + S0.h / 2); A().burst(x, y, '#ffd65a', 14); G.sfx && G.sfx('build');
+    if (S0.unique || run.r1 < S0.cost[0] || run.r2 < S0.cost[1]) { run.sel = null; run.ghost = null; }
+    return true;
+  }
+  function freeTiles(run, b) { const id = run.blds.indexOf(b); for (let y = b.j; y < b.j + b.h; y++) for (let x = b.i; x < b.i + b.w; x++) if (run.bAt[idx(x, y)] === id) run.bAt[idx(x, y)] = -1; run.dirty = true; }
+  function killBld(run, b) {
+    if (b.dead) return; b.dead = true; freeTiles(run, b);
+    const [x, y] = sc(run, b.i + b.w / 2, b.j + b.h / 2); A().burst(x, y - 20, '#ff8a3a', 24, 1.2); A().shake(5); G.sfx && G.sfx('boom');
+    if (b.k === 'citadel') lose(run);
+  }
+  const rangeOf = (run, k) => { if (k === 'lamp') return 3; if (k === 'infirmary') return 7 * K; if (k === 'citadel') return G.BUILDINGS.citadel.attack.range * K; const S0 = bstat(run.race, k); return S0.atk ? S0.atk.range * K : 0; };
+  const bc = b => [b.i + b.w / 2, b.j + b.h / 2];
+  function nearB(run, k, gx, gy, r) { return run.blds.some(b => !b.dead && b.k === k && Math.hypot(bc(b)[0] - gx, bc(b)[1] - gy) < r); }
+  const auraK = (run, gx, gy) => nearB(run, 'lamp', gx, gy, 3) ? 1.15 : 1;
+  // расстояние от точки до ромба постройки
+  const dB = (b, gx, gy) => Math.hypot(Math.max(b.i - gx, 0, gx - b.i - b.w), Math.max(b.j - gy, 0, gy - b.j - b.h));
+  function towerTick(run, b, dt, dk) {
+    b.cd -= dt; if (b.cd > 0) return;
+    const [cx, cy] = bc(b), r = rangeOf(run, b.k), k = dk * auraK(run, cx, cy), A0 = b.atk || { dmg: 0, rate: 1.4 };
+    if (b.spec === 'mold') { // плесневой узел не стреляет: растит плесень рядом
+      b.cd = 0.9; if (b.grown >= 22) return; const c = [];
+      for (let y = Math.floor(cy - r); y <= cy + r; y++) for (let x = Math.floor(cx - r); x <= cx + r; x++) { if (!okT(run, x, y)) continue; const t = idx(x, y); if (run.mold[t] || !walk(run, t) || Math.hypot(x + 0.5 - cx, y + 0.5 - cy) > r) continue; if (NB.some(([dx, dy]) => (okT(run, x + dx, y + dy) && run.mold[idx(x + dx, y + dy)]) || run.bAt[idx(x + dx, y + dy)] === run.blds.indexOf(b))) c.push(t); }
+      if (c.length) { run.mold[c[Math.floor(R() * c.length)]] = 1; b.grown++; } return;
+    }
+    const inR = run.enemies.filter(e => !e.dead && dB(b, e.gx, e.gy) < r);
+    if (!inR.length) return;
+    const dd = e => run.dist[idx(Math.floor(e.gx), Math.floor(e.gy))] || 0; inR.sort((a, q) => dd(a) - dd(q));
+    b.atkT = 0.25; const z0 = b.k === 'citadel' ? 70 : 46;
+    if (b.spec === 'mirror' || b.spec === 'bell' || b.spec === 'grab') {
+      b.cd = A0.rate; const tg = inR.filter(e => b.spec === 'bell' || !e.boss).filter(e => b.spec === 'mirror' ? !(e.immune > 0) : b.spec === 'grab' ? !(e.root > 0) : true).slice(0, 4); if (!tg.length) { b.cd = 0.3; return; }
+      for (const e of tg) { if (b.spec === 'mirror') { e.lost = 2.5; e.immune = 6; e.ld = R() * 6.28; } else if (b.spec === 'bell') { e.stun = 1.5; hurt(run, e, 12 * k); } else { e.root = 2; e.rootDmg = 16 * k; } run.zaps.push({ a: [cx, cy], b: [e.gx, e.gy], t: 0.25, z0, col: b.spec === 'mirror' ? 'rgba(255,170,240,A)' : b.spec === 'bell' ? 'rgba(255,90,110,A)' : 'rgba(140,255,120,A)' }); }
+      if (b.spec === 'bell') run.fx.push({ gx: cx, gy: cy, r, t: 0, d: 0.5, col: 'rgba(255,90,110,A)' });
+      return;
+    }
+    b.cd = A0.rate;
+    if (b.k === 'tesla') { // цепь до 4 целей
+      let cur = inR[0], from = [cx, cy]; const done = [];
+      for (let n = 0; n < (A0.chain || 4) && cur; n++) { run.zaps.push({ a: from, b: [cur.gx, cur.gy], t: 0.2, z0: n ? 20 : z0, col: 'rgba(160,220,255,A)' }); hurt(run, cur, A0.dmg * k * (n ? 0.75 : 1)); done.push(cur); from = [cur.gx, cur.gy]; const f0 = from; cur = run.enemies.filter(e => !e.dead && !done.includes(e) && Math.hypot(e.gx - f0[0], e.gy - f0[1]) < 1.8).sort((a, q) => Math.hypot(a.gx - f0[0], a.gy - f0[1]) - Math.hypot(q.gx - f0[0], q.gy - f0[1]))[0]; }
+      G.sfx && R() < 0.4 && G.sfx('bolt'); return;
+    }
+    const e = inR[0], blob = !!A0.splash;
+    run.shots.push({ gx: cx, gy: cy, z: z0, t: e, v: blob ? 7 : 12, dmg: A0.dmg * k, splash: blob ? A0.splash * 0.7 : 0, spec: b.spec, r: blob ? 6 : 3.5, col: blob ? (b.spec === 'poison' ? '#a8ff60' : '#c890ff') : b.k === 'citadel' ? '#ffe8a0' : b.spec === 'infect' ? '#c8ff90' : '#ffd890', single: !blob });
+    if (G.sfx && R() < 0.3) G.sfx(blob ? 'boom' : 'shot');
+  }
+  function shotTick(run, p, dt) {
+    if (p.enemyShot) { // выстрел врага по постройке
+      const b = p.b; if (b.dead) { p.gone = true; return; } const [tx, ty] = bc(b), d = Math.hypot(tx - p.gx, ty - p.gy), st = p.v * dt;
+      if (d <= st + 0.4) { p.gone = true; dmgB(run, b, p.dmg); if (p.splash) for (const q of run.blds) if (q !== b && !q.dead && dB(q, tx, ty) < p.splash) dmgB(run, q, p.dmg * 0.5); return; }
+      p.gx += (tx - p.gx) / d * st; p.gy += (ty - p.gy) / d * st; return;
+    }
+    const tg = p.t; if (!tg || tg.dead) { p.gone = true; return; }
+    const d = Math.hypot(tg.gx - p.gx, tg.gy - p.gy), st = p.v * dt;
+    p.z += ((tg.boss ? 34 : 18) - p.z) * Math.min(1, dt * 6);
+    if (d <= st) {
+      p.gone = true; hurt(run, tg, p.dmg, p.single);
+      if (p.spec === 'infect') tg.infectT = 8;
+      if (p.splash) { const [x, y] = sc(run, tg.gx, tg.gy, 14); A().burst(x, y, p.col, 12); for (const e of run.enemies) if (e !== tg && !e.dead && Math.hypot(e.gx - tg.gx, e.gy - tg.gy) < p.splash) { hurt(run, e, p.dmg * 0.6); if (p.spec === 'poison') e.poison = 3; } if (p.spec === 'poison') tg.poison = 3; }
+    } else { p.gx += (tg.gx - p.gx) / d * st; p.gy += (tg.gy - p.gy) / d * st; }
+  }
+  function dmgB(run, b, dmg) { if (b.dead) return; b.hp -= dmg; b.hitT = 0.12; if (b.hp <= 0) killBld(run, b); }
+
+  // ---------- враги: набег расы-противника из основной игры
+  function pool(run, w) { const F = G.FC(run.foe); const p = (F.raidPool || []).filter(q => w >= q[3] && !q[4] && G.ENEMIES[q[0]]); return p.length ? p : [F.raidPool[0]]; }
+  function bossOf(run, w) { const F = G.FC(run.foe), list = [F.raidBoss, ...(F.bosses || [])].filter(t => G.ENEMIES[t]); return list[Math.min(list.length - 1, Math.floor(w / 5) - 1)] || list[0]; }
+  function plan(run, w) {
+    const nb = w < 3 ? 1 : w < 8 ? 2 : 3, br = [], a0 = R() * 6.28, cc = N / 2;
+    for (let k = 0; k < nb; k++) { const a = a0 + k * 6.28 / nb + (R() - 0.5) * 0.8; let best = null, bd = 1e9; for (const e of run.edge) { if (!isFinite(run.dist[idx(e[0], e[1])])) continue; const d = Math.abs(((Math.atan2(e[1] - cc, e[0] - cc) - a + 9.42) % 6.28) - 3.14); if (d < bd) { bd = d; best = e; } } if (best && !br.includes(best)) br.push(best); }
+    let budget = 3 + w * 1.8; const list = [], P = pool(run, w);
+    if (w % 5 === 0) { list.push(bossOf(run, w)); budget *= 0.55; }
+    for (let g = 0; budget > 0.5 && g < 120; g++) { const tot = P.reduce((s, p) => s + p[2], 0); let x = R() * tot, ch = P[0]; for (const p of P) { x -= p[2]; if (x <= 0) { ch = p; break; } } budget -= ch[1]; list.push(ch[0]); }
+    return { w, br: br.length ? br : [run.edge[0]], list };
+  }
+  const planText = run => { const c = {}; for (const t of run.plan.list) c[t] = (c[t] || 0) + 1; return `Дальше: ${Object.entries(c).map(([t, n]) => `${G.ENEMIES[t].name.toLowerCase()} ×${n}`).join(', ')}`; };
   function callWave(run) {
     if (run.wave >= WAVES) return;
-    if (run.wave) { const bonus = 20 + run.wave * 3; run.gold += bonus; A().float(run.FW / 2, run.FH / 2, `Волна выдержана · +${bonus}`, '#ffd65a', true); }
-    run.wave++; run.queue = 5 + run.wave * 2; run.boss = run.wave % 5 === 0; run.spawnT = 0.3; run.next = 5;
-    const b = run.hud && run.hud.ban; if (b) { b.textContent = run.boss ? `Волна ${run.wave} · владыка` : `Волна ${run.wave}`; b.classList.remove('go'); void b.offsetWidth; b.classList.add('go'); }
-    G.sfx && G.sfx(run.boss ? 'horn' : 'goal');
+    run.wave++; run.paid = false; run.cur = run.plan.w === run.wave ? run.plan : plan(run, run.wave);
+    run.queue = run.cur.list.map((t, k) => [t, run.cur.br[k % run.cur.br.length]]); run.spawnT = 0.2; run.next = 14;
+    run.plan = plan(run, run.wave + 1);
+    const boss = run.wave % 5 === 0, b = run.hud && run.hud.ban; if (b) { b.textContent = boss ? `Набег ${run.wave} · ${G.ENEMIES[run.cur.list[0]].name}` : `Набег ${run.wave}`; b.classList.remove('go'); void b.offsetWidth; b.classList.add('go'); }
+    G.sfx && G.sfx(boss ? 'horn' : 'goal');
   }
-  function spawn(run, boss) {
-    const maxT = Math.min(FOE_T.length - 2, Math.floor(run.wave / 2.5)), tier = boss ? 6 : Math.floor(R() * (maxT + 1)), s = run.wp[0];
-    const hp = 28 * Math.pow(1.15, run.wave - 1) * (1 + tier * 0.6) * (boss ? 12 : 1);
-    run.enemies.push({ x: s[0], y: s[1], d: 0, hp, max: hp, spd: boss ? 30 : (tier === 1 ? 80 : 52 + R() * 14), tier, boss, key: boss ? 'mech2' : FOE_T[tier], dmg: (6 + tier * 3) * Math.pow(1.06, run.wave) * (boss ? 3 : 1), walk: R() * 6, atk: 0.6, hitT: 0, slowT: 0, f: 1 });
+  function reward(run) {
+    const bk = hasB(run, 'beacon') ? 1.25 : 1, a = Math.round((40 + run.wave * 10) * bk), b = Math.round((20 + run.wave * 5) * bk);
+    run.r1 += a; run.r2 += b; const cb = run.blds[0]; cb.hp = Math.min(cb.max, cb.hp + cb.max * 0.15); const [x, y] = sc(run, N / 2, N / 2, 110); A().float(x, y, `Набег отбит · +${a} · +${b}`, '#ffd65a', true);
   }
-  function hit(run, e, dmg) {
-    if (e.dead) return; e.hp -= dmg; e.hitT = 0.1;
-    if (e.hp <= 0) { e.dead = true; run.kills++; const g = 5 + e.tier * 2 + (e.boss ? 60 : 0); run.gold += g; A().float(e.x, e.y - 30, '+' + g, '#ffd65a'); A().burst(e.x, e.y - 14, e.boss ? '#ff4060' : '#c84030', e.boss ? 36 : 8); if (e.boss) { A().shake(10); G.sfx && G.sfx('legend'); } }
+  function spawn(run, type, br) {
+    const T = G.ENEMIES[type], w = run.wave, SP = I().foeSprite(type), boss = !!T.boss;
+    // владыки у рас разные (колосс 1500, мехи до 5200) — в коротком режиме приводим к одной шкале
+    const hp = boss ? (400 + 90 * w) * (1 + 0.05 * w) : T.hp * 0.8 * (1 + 0.05 * w) * Math.pow(1.035, w);
+    run.enemies.push({ type, T, gx: br[0] + 0.5 + (R() - 0.5) * 0.4, gy: br[1] + 0.5 + (R() - 0.5) * 0.4, hp, max: hp, dmg: boss ? Math.min(T.dmg, 42) * (0.5 + 0.03 * w) : T.dmg * (1 + 0.045 * w), rate: T.rate, fly: !!T.flying, spd: T.speed * 0.8, range: T.ranged ? Math.max(1.8, T.range * K) : 0.9, armor: T.armor || 0, dodge: T.dodge || 0, boss, sheet: SP[0], key: SP[1], sc: SP[2] || 1, f: 1, walk: R() * 6, cd: 0.5, atkT: 0, hitT: 0, summonT: 6 });
   }
-  function lose(run) { if (run.over) return; A().finish({ title: `База пала на волне ${run.wave}`, wave: run.wave, win: false, sparks: run.wave * 3 + Math.floor(run.kills / 10), lines: [['Волна', `${run.wave} из ${WAVES}`], ['Врагов повержено', run.kills], ['Башен', run.slots.filter(s => s.tower).length]] }); }
-  function win(run) { if (run.over) return; A().finish({ title: 'Все 15 волн выдержаны', wave: WAVES, win: true, sparks: WAVES * 3 + 25 + Math.floor(run.kills / 10), lines: [['Жизней осталось', `${run.lives} из ${run.livesMax}`], ['Врагов повержено', run.kills], ['Башен', run.slots.filter(s => s.tower).length]] }); }
-  const set = (e, v) => { v = String(v); if (e._v !== v) { e._v = v; e.textContent = v; } };
-  function showPop(run) {
-    const p = run.hud.pop; if (!run.sel) { p.hidden = true; return; } p.hidden = false; p._k = ''; fillPop(run);
-    const s = run.sel; p.style.left = Math.max(6, Math.min(run.FW - 236, s.x - 115)) + 'px'; p.style.top = (s.y > run.FH * 0.55 ? s.y - 190 : s.y + 36) + 'px';
+  function hurt(run, e, dmg, single, dot) {
+    if (e.dead) return;
+    if (single && e.dodge && R() < e.dodge) { if (R() < 0.5) A().float(...sc(run, e.gx, e.gy, 40), 'мимо', '#ccc'); return; }
+    e.hp -= dmg * (1 - Math.min(0.6, e.armor)); if (!dot) e.hitT = 0.1;
+    if (e.hp > 0) return;
+    e.dead = true; if (e.ally) return; run.kills++;
+    const g = Math.round((e.T.loot || 4) * 1.6) + 2, g2 = e.boss ? 60 : (e.T.ranged ? 1 : 0);
+    run.r1 += g; run.r2 += g2; const [x, y] = sc(run, e.gx, e.gy, 30); A().float(x, y, '+' + g, '#ffd65a'); A().burst(x, y + 10, e.boss ? '#ff4060' : '#c84030', e.boss ? 36 : 8);
+    if (e.boss) { A().shake(10); G.sfx && G.sfx('legend'); }
+    // грибница кордицепса: убитый вскоре после спор встаёт твоим бойцом
+    if (e.infectT > 0 && !e.boss && R() < 0.4) { run.allies.push(Object.assign({}, e, { dead: false, ally: true, hp: e.max * 0.6, max: e.max * 0.6, ttl: 20, cd: 0.5, infectT: 0, poison: 0, root: 0, stun: 0, lost: 0 })); A().float(x, y - 20, 'заражён', '#c8ff90'); }
   }
+  function enemyTick(run, e, dt) {
+    if (e.dead) return;
+    e.hitT -= dt; e.atkT = Math.max(0, e.atkT - dt); if (e.infectT > 0) e.infectT -= dt; if (e.immune > 0) e.immune -= dt;
+    if (e.stun > 0) { e.stun -= dt; return; }
+    if (e.root > 0) { e.root -= dt; hurt(run, e, (e.rootDmg || 10) * dt, false, true); return; }
+    if (e.T.summon && G.ENEMIES[e.T.summon]) { e.summonT -= dt; if (e.summonT <= 0) { e.summonT = 7; for (let k = 0; k < 2; k++) spawn(run, e.T.summon, [Math.floor(e.gx), Math.floor(e.gy)]); } }
+    const h = run.hero, sp = e.spd * dt;
+    if (e.lost > 0) { e.lost -= dt; const nx = e.gx + Math.cos(e.ld) * sp * 0.6, ny = e.gy + Math.sin(e.ld) * sp * 0.6, i = Math.floor(nx), j = Math.floor(ny); if (okT(run, i, j) && walk(run, idx(i, j)) && run.bAt[idx(i, j)] < 0) mv(e, nx - e.gx, ny - e.gy); else e.ld += 2; return; }
+    // заражённые и вождь держат врага
+    let foe = run.allies.find(a => !a.dead && Math.hypot(a.gx - e.gx, a.gy - e.gy) < 0.8);
+    if (!foe && h.down <= 0 && Math.hypot(h.gx - e.gx, h.gy - e.gy) < 0.8 && (e.held === h || run.enemies.filter(q => q.held === h).length < 3)) foe = h;
+    if (foe && !e.T.ranged) { e.held = foe; attack(run, e, dt, null, foe); return; } e.held = null;
+    // стрелки бьют постройку в радиусе, громилы идут ломать ближнюю
+    if (e.T.ranged) { let b = null, bd = e.range; for (const q of run.blds) { if (q.dead) continue; const d = dB(q, e.gx, e.gy); if (d < bd) { bd = d; b = q; } } if (b) { attack(run, e, dt, b); return; } }
+    if (e.T.prefersBuildings) { let b = null, bd = 3.5; for (const q of run.blds) { if (q.dead || q.k === 'citadel') continue; const d = dB(q, e.gx, e.gy); if (d < bd) { bd = d; b = q; } } if (b) { if (bd < 0.55) { attack(run, e, dt, b); return; } const [tx, ty] = bc(b), d = Math.hypot(tx - e.gx, ty - e.gy); mv(e, (tx - e.gx) / d * sp, (ty - e.gy) / d * sp); return; } }
+    // летуны летят напрямую, над постройками
+    if (e.fly) { const cb = run.blds[0]; if (dB(cb, e.gx, e.gy) < 0.5) { attack(run, e, dt, cb); return; } const [tx, ty] = bc(cb), d = Math.hypot(tx - e.gx, ty - e.gy); mv(e, (tx - e.gx) / d * sp, (ty - e.gy) / d * sp); return; }
+    // путь к цитадели
+    const t = idx(Math.floor(e.gx), Math.floor(e.gy));
+    if (run.bAt[t] >= 0 && !run.blds[run.bAt[t]].dead) { attack(run, e, dt, run.blds[run.bAt[t]]); return; }
+    const nt = run.nxt[t] >= 0 ? run.nxt[t] : t, bi = run.bAt[nt];
+    if (bi >= 0) { const b = run.blds[bi]; if (dB(b, e.gx, e.gy) < 0.6) { attack(run, e, dt, b); return; } }
+    const tx = (nt % N) + 0.5, ty = ((nt / N) | 0) + 0.5, d = Math.hypot(tx - e.gx, ty - e.gy);
+    if (d > 0.01) mv(e, (tx - e.gx) / d * Math.min(sp, d), (ty - e.gy) / d * Math.min(sp, d));
+  }
+  function mv(e, dx, dy) { e.gx += dx; e.gy += dy; e.walk += Math.hypot(dx, dy) * 9; const s = scrDx(dx, dy); if (Math.abs(s) > 1e-4) e.f = s > 0 ? 1 : -1; }
+  function attack(run, e, dt, b, unit) {
+    e.cd -= dt; const [tx, ty] = b ? bc(b) : [unit.gx, unit.gy]; const s = scrDx(tx - e.gx, ty - e.gy); if (Math.abs(s) > 0.05) e.f = s > 0 ? 1 : -1;
+    if (e.cd > 0) return; e.cd = e.rate; e.atkT = 0.3;
+    if (unit) { unit.hp -= e.dmg; unit.hitT = 0.1; if (unit === run.hero && unit.hp <= 0) { unit.down = 10; unit.hp = 0; A().float(...sc(run, unit.gx, unit.gy, 60), unit.name + ' пал', '#ff6050'); } if (unit.ally && unit.hp <= 0) unit.dead = true; return; }
+    if (e.T.ranged) run.shots.push({ enemyShot: true, gx: e.gx, gy: e.gy, z: 22, b, v: 8, dmg: e.dmg, splash: e.T.splash ? e.T.splash * 0.6 : 0, r: 3, col: '#ff7050' });
+    else { dmgB(run, b, e.dmg); const [x, y] = sc(run, e.gx, e.gy, 20); A().burst(x, y, '#b9a48a', 4, 0.4); }
+  }
+  function allyTick(run, a, dt) {
+    a.ttl -= dt; a.hitT -= dt; a.atkT = Math.max(0, a.atkT - dt); if (a.ttl <= 0 || a.hp <= 0) { a.dead = true; return; }
+    const t = nearestE(run, a.gx, a.gy, 6); if (!t) return; const d = Math.hypot(t.gx - a.gx, t.gy - a.gy);
+    if (d < 0.8) { a.cd -= dt; if (a.cd <= 0) { a.cd = a.rate; a.atkT = 0.3; hurt(run, t, a.dmg * 1.5); } const s = scrDx(t.gx - a.gx, t.gy - a.gy); if (Math.abs(s) > 0.05) a.f = s > 0 ? 1 : -1; }
+    else mv(a, (t.gx - a.gx) / d * a.spd * dt, (t.gy - a.gy) / d * a.spd * dt);
+  }
+  function nearestE(run, gx, gy, r) { let b = null, bd = r; for (const e of run.enemies) { if (e.dead) continue; const d = Math.hypot(e.gx - gx, e.gy - gy); if (d < bd) { bd = d; b = e; } } return b; }
+
+  // ---------- рисование
+  function drawBuilding(c, run, b) {
+    const V = run.V;
+    if (b.k === 'barricade') drawBarricade(c, run, b);
+    else I().drawBld(c, run.race, b.k, V, b.i, b.j, b.w, b.h, { cap: b.k === 'citadel' ? null : run.citH * 0.9, flash: b.hitT > 0.06 || b.atkT > 0.18 });
+    if (b.hp < b.max) { const [x, y] = V.s(b.i + b.w / 2, b.j + b.h / 2), w = b.k === 'citadel' ? 80 : 34, yy = y - (b.k === 'citadel' ? run.citH * 0.72 : b.k === 'barricade' ? 30 : 62); c.fillStyle = '#300'; c.fillRect(x - w / 2, yy, w, 4); c.fillStyle = b.k === 'citadel' ? '#7ad060' : '#d0b060'; c.fillRect(x - w / 2, yy, w * Math.max(0, b.hp / b.max), 4); }
+  }
+  // баррикады нет в атласах — ящик из досок с железными скобами, ромбом
+  function drawBarricade(c, run, b) {
+    const V = run.V, h = 16, p = (gx, gy) => V.s(gx, gy), i = b.i + 0.12, j = b.j + 0.12, w = 0.76;
+    const T = p(i, j), Rr = p(i + w, j), B = p(i + w, j + w), Lf = p(i, j + w), dk = b.hitT > 0.06 ? 1.4 : 1;
+    const f = (pts, col) => { c.fillStyle = col; c.beginPath(); pts.forEach((q, k) => k ? c.lineTo(q[0], q[1]) : c.moveTo(q[0], q[1])); c.closePath(); c.fill(); };
+    const rgb = (r, g, bl) => `rgb(${Math.min(255, r * dk) | 0},${Math.min(255, g * dk) | 0},${Math.min(255, bl * dk) | 0})`;
+    f([Lf, B, [B[0], B[1] - h], [Lf[0], Lf[1] - h]], rgb(70, 52, 38));
+    f([B, Rr, [Rr[0], Rr[1] - h], [B[0], B[1] - h]], rgb(92, 70, 50));
+    f([[T[0], T[1] - h], [Rr[0], Rr[1] - h], [B[0], B[1] - h], [Lf[0], Lf[1] - h]], rgb(120, 94, 66));
+    c.strokeStyle = 'rgba(30,20,14,.8)'; c.lineWidth = 1.5; for (let k = 1; k < 3; k++) { const a = p(i + w * k / 3, j + w), q = p(i + w, j + w * k / 3); c.beginPath(); c.moveTo(a[0], a[1]); c.lineTo(a[0], a[1] - h); c.moveTo(q[0], q[1]); c.lineTo(q[0], q[1] - h); c.stroke(); }
+    const top = (gx, gy) => { const q = p(gx, gy); return [q[0], q[1] - h - 4]; };
+    c.strokeStyle = '#a0a0a0'; c.lineWidth = 2; for (const [a, q] of [[top(i, j), top(i + w, j + w)], [top(i + w, j), top(i, j + w)]]) { c.beginPath(); c.moveTo(a[0], a[1]); c.lineTo(q[0], q[1]); c.stroke(); }
+  }
+  function drawEnemy(c, run, e) {
+    const [x, y] = run.V.s(e.gx, e.gy), bob = e.fly ? -14 + Math.sin(e.walk * 0.5) * 3 : e.atkT > 0 ? 0 : -Math.abs(Math.sin(e.walk)) * 2;
+    const tint = e.ally ? 'rgba(170,255,120,.5)' : (G.FC(run.foe) || {}).infected ? 'rgba(225,255,190,.45)' : null;
+    const bh = I().drawMob(c, e.sheet, e.key, x + (e.atkT > 0.15 ? e.f * 3 : 0), y, { sc: e.sc, flip: e.f < 0, flash: e.hitT > 0, tint, ring: e.ally ? '#8aff6a' : 'rgba(255,70,50,.85)', dy: bob });
+    if (e.boss) { c.fillStyle = 'rgba(255,50,40,.12)'; c.beginPath(); c.arc(x, y - bh * 0.5, bh * 0.6, 0, 6.28); c.fill(); }
+    if (e.hp < e.max) { const w = e.boss ? 46 : 26; c.fillStyle = '#300'; c.fillRect(x - w / 2, y - bh - 6, w, 3); c.fillStyle = e.ally ? '#8aff6a' : e.boss ? '#ff4060' : '#e05040'; c.fillRect(x - w / 2, y - bh - 6, w * Math.max(0, e.hp / e.max), 3); }
+    c.textAlign = 'center';
+    if (e.stun > 0) { c.fillStyle = '#b0b0ff'; c.font = '700 10px sans-serif'; c.fillText('Zzz', x + 8, y - bh - 8); }
+    if (e.lost > 0) { c.fillStyle = '#ffb0f0'; c.font = '700 13px sans-serif'; c.fillText('?', x, y - bh - 8); }
+    if (e.root > 0) { c.strokeStyle = '#8aff6a'; c.lineWidth = 2; c.beginPath(); c.ellipse(x, y, 12, 5, 0, 0, 6.28); c.stroke(); }
+    if (e.poison > 0) { c.fillStyle = 'rgba(160,255,90,.85)'; c.fillRect(x - 2 + Math.sin(e.walk * 3) * 6, y - bh * 0.6, 3, 3); }
+  }
+  function drawHero(c, run, hh) {
+    const [x, y] = run.V.s(hh.gx, hh.gy);
+    c.strokeStyle = hh.col; c.lineWidth = 2; c.beginPath(); c.ellipse(x, y, 16, 7, 0, 0, 6.28); c.stroke();
+    const im = run.img, HH0 = 62, Wd = HH0 * 200 / 210, bob = hh.moving ? -Math.abs(Math.sin(hh.walk)) * 3 : 0, srcR = hh.back ? !!hh.br : !!hh.fr;
+    if (im.complete && im.naturalWidth) { c.save(); c.translate(x + (hh.atkT > 0 ? hh.f * 4 : 0), y + 4 + bob); c.scale((hh.f > 0) === srcR ? 1 : -1, 1); c.drawImage(im, hh.back ? 400 : 0, 0, 200, 210, -Wd / 2, -HH0, Wd, HH0); c.restore(); }
+    c.fillStyle = '#300'; c.fillRect(x - 16, y - 62, 32, 3); c.fillStyle = '#7ad060'; c.fillRect(x - 16, y - 62, 32 * hh.hp / hh.max, 3);
+    if (run.mark && Math.hypot(hh.tx - hh.gx, hh.ty - hh.gy) > 0.2) { const [mx, my] = run.V.s(hh.tx, hh.ty); c.strokeStyle = hh.col; c.globalAlpha = 0.7; c.lineWidth = 2; c.beginPath(); c.ellipse(mx, my, 10, 5, 0, 0, 6.28); c.stroke(); c.globalAlpha = 1; }
+  }
+
+  // ---------- окно постройки: что это, починить, разобрать, усилить
+  function openPop(run, b) { run.pop = { b, k: '' }; const p = run.hud.pop; p.hidden = false; fillPop(run); const [x, y] = run.V.s(b.i + b.w / 2, b.j + b.h / 2); p.style.left = Math.max(6, Math.min(run.FR.w - 250, x - 120)) + 'px'; p.style.top = (y > run.FR.y + run.FR.h * 0.5 ? Math.max(50, y - 240) : y + 20) + 'px'; G.sfx && G.sfx('click'); }
+  function closePop(run) { run.pop = null; run.hud.pop.hidden = true; }
   function fillPop(run) {
-    const p = run.hud.pop, s = run.sel, t = s.tower, k = (t ? t.type + t.lvl : 'new') + ':' + Math.floor(run.gold / 10);
-    if (p._k === k) return; p._k = k;
-    if (!t) p.innerHTML = Object.keys(TOWERS).map(id => { const T = TOWERS[id]; return `<button data-b="${id}" ${run.gold < T.cost ? 'disabled' : ''}><b>${T.name}</b><span>${T.desc}</span><em>${T.cost}</em></button>`; }).join('');
-    else { const T = TOWERS[t.type], c = upCost(t); p.innerHTML = `<div class="td-info"><b>${T.name} · ступень ${t.lvl}</b><span>${T.desc}</span></div>${t.lvl < 3 ? `<button data-u="1" ${run.gold < c ? 'disabled' : ''}><b>Усилить</b><span>урон ×1,6, дальность +10%</span><em>${c}</em></button>` : '<div class="td-max">максимум</div>'}<button data-s="1"><b>Продать</b><span>вернуть монеты</span><em>+${Math.round(t.spent * 0.6)}</em></button>`; }
-    p.querySelectorAll('[data-b]').forEach(b => b.onclick = () => { const T = TOWERS[b.dataset.b]; if (run.gold < T.cost) return; run.gold -= T.cost; s.tower = { type: b.dataset.b, lvl: 1, cd: 0, atkT: 0, spent: T.cost }; A().burst(s.x, s.y, '#ffd65a', 14); G.sfx && G.sfx('build'); run.sel = null; showPop(run); });
-    const u = p.querySelector('[data-u]'); if (u) u.onclick = () => { const c = upCost(t); if (run.gold < c) return; run.gold -= c; t.lvl++; t.spent += c; A().burst(s.x, s.y - 20, '#ffd65a', 18); A().float(s.x, s.y - 50, 'ступень ' + t.lvl, '#ffd65a'); G.sfx && G.sfx('level'); fillPop(run); };
-    const sl = p.querySelector('[data-s]'); if (sl) sl.onclick = () => { run.gold += Math.round(t.spent * 0.6); s.tower = null; run.sel = null; showPop(run); G.sfx && G.sfx('click'); };
+    const P = run.pop, p = run.hud.pop, b = P.b;
+    if (b.dead) return closePop(run);
+    const key = (b.mono != null ? 'm' : b.k + Math.ceil(b.hp)) + ':' + Math.floor(run.r1) + ':' + Math.floor(run.r2) + ':' + run.forge;
+    if (P.k === key) return; P.k = key;
+    const cost = (a, q) => `${a ? `<u class="c1"></u>${a}` : ''}${q ? ` <u class="c2"></u>${q}` : ''}`;
+    const on = (a, f) => { const el = p.querySelector(`[data-a="${a}"]`); if (el) el.onclick = f; };
+    if (b.mono != null) {
+      const C0 = G.CAPTURE_COST || { scrap: 150, aether: 20 }, [n, d] = I().bName(run.race, 'tower');
+      p.innerHTML = `<div class="td-info"><b>Дикий монолит</b><span>Займи — станет твоим: ${n.toLowerCase()}. ${d.split('.')[0]}.</span></div><button data-a="mono" ${run.r1 < C0.scrap || run.r2 < C0.aether ? 'disabled' : ''}><b>Занять</b><span>дешевле, чем строить</span><em>${cost(C0.scrap, C0.aether)}</em></button>`;
+      on('mono', () => { if (run.r1 < C0.scrap || run.r2 < C0.aether) return; run.r1 -= C0.scrap; run.r2 -= C0.aether; run.obj[b.mono] = null; const nb = addBld(run, 'tower', b.i, b.j, true); nb.spent = [C0.scrap, C0.aether]; closePop(run); G.sfx && G.sfx('build'); });
+      return;
+    }
+    const [n, d] = b.k === 'barricade' ? ['Баррикада', G.BUILDINGS.barricade.desc] : I().bName(run.race, b.k), S0 = b.k === 'citadel' ? null : bstat(run.race, b.k);
+    const miss = 1 - b.hp / b.max, rep = S0 ? [Math.ceil(S0.cost[0] * miss * 0.5), Math.ceil(S0.cost[1] * miss * 0.5)] : [Math.ceil(120 * miss), 0];
+    let h = `<div class="td-info"><b>${n}</b><span>${d}</span><span class="hp">прочность ${Math.ceil(b.hp)} / ${Math.round(b.max)}</span></div>`;
+    if (miss > 0.01) h += `<button data-a="rep" ${run.r1 < rep[0] || run.r2 < rep[1] ? 'disabled' : ''}><b>Починить</b><span>до полной прочности</span><em>${cost(rep[0], rep[1])}</em></button>`;
+    if (b.k === 'forge') { const [un, ud] = I().uName(run.race, 'tower'), uc = G.UPGRADES.tower.cost(run.forge), a = uc.scrap || 0, q = uc.aether || 0; h += run.forge < 4 ? `<button data-a="up" ${run.r1 < a || run.r2 < q ? 'disabled' : ''}><b>${un} · ${run.forge + 1} из 4</b><span>${ud}</span><em>${cost(a, q)}</em></button>` : `<div class="td-max">${un}: все ступени</div>`; }
+    const back = S0 ? [Math.floor(b.spent[0] * 0.5 * (1 - miss)), Math.floor(b.spent[1] * 0.5 * (1 - miss))] : null;
+    if (S0) h += `<button data-a="sell"><b>Разобрать</b><span>вернуть половину</span><em>+${cost(back[0], back[1]) || '0'}</em></button>`;
+    p.innerHTML = h;
+    on('rep', () => { if (run.r1 < rep[0] || run.r2 < rep[1]) return; run.r1 -= rep[0]; run.r2 -= rep[1]; b.hp = b.max; G.sfx && G.sfx('build'); });
+    on('up', () => { const uc = G.UPGRADES.tower.cost(run.forge); if (run.r1 < (uc.scrap || 0) || run.r2 < (uc.aether || 0)) return; run.r1 -= uc.scrap || 0; run.r2 -= uc.aether || 0; run.forge++; G.sfx && G.sfx('level'); });
+    on('sell', () => { run.r1 += back[0]; run.r2 += back[1]; b.dead = true; freeTiles(run, b); closePop(run); G.sfx && G.sfx('click'); });
   }
+
+  // ---------- итоги
+  function lose(run) { if (run.over) return; A().finish({ title: `${I().bName(run.race, 'citadel')[0]}: конец на набеге ${run.wave}`, wave: run.wave, win: false, sparks: run.wave * 3 + Math.floor(run.kills / 10), lines: [['Набег', `${run.wave} из ${WAVES}`], ['Врагов повержено', run.kills], ['Построек', run.blds.filter(b => !b.dead).length - 1]] }); }
+  function win(run) { if (run.over) return; const cb = run.blds[0]; A().finish({ title: 'Все 15 набегов отбиты', wave: WAVES, win: true, sparks: WAVES * 3 + 25 + Math.floor(run.kills / 10), lines: [['Цитадель', `${Math.ceil(cb.hp / cb.max * 100)}% прочности`], ['Врагов повержено', run.kills], ['Построек', run.blds.filter(b => !b.dead).length - 1]] }); }
+  const set = (e, v) => { v = String(v); if (e._v !== v) { e._v = v; e.textContent = v; } };
   function buildHud(run) {
-    const ui = A().ui, L = run.land;
-    ui.innerHTML = `<div class="td-top"><span class="td-lives"><i></i><b></b></span><span class="td-gold"><i></i><b></b></span><span class="td-wave"></span></div>
-      <div class="wl-ban"></div><div class="td-pop" hidden></div>
-      <div class="td-bot"><div class="td-hero" style="--hc:${run.hero.col}"><i style="background-image:url(art/heroes/${run.race}.webp)"></i><div><em></em><span><u></u></span></div></div>
-      <button class="td-ult"><b>${run.hero.ult}</b><em></em></button><button class="td-call"><b>Волна</b><em></em></button></div>`;
+    const ui = A().ui, L = run.land, R1 = I().RES2[run.race] || ['Лом', 'Эфир'];
+    const cards = DEF.filter(k => available(run.race, k)).map(k => {
+      const S0 = bstat(run.race, k), sp = (SPECIAL[run.race] || {})[k], n = k === 'barricade' ? 'Баррикада' : I().bName(run.race, k)[0];
+      const ic = k === 'barricade' ? '' : I().icon(run.race, k, 44, 52);
+      return `<button data-k="${k}" title="${n}"><i class="${k === 'barricade' ? 'bar' : ''}" style="${ic ? `background-image:url(${ic})` : ''}"></i><b>${n}</b><span>${SHORT[sp || k]}</span><em>${S0.cost[0] ? `<u class="c1"></u>${S0.cost[0]}` : ''}${S0.cost[1] ? ` <u class="c2"></u>${S0.cost[1]}` : ''}</em></button>`;
+    }).join('');
+    ui.innerHTML = `<div class="td-top"><span class="td-res"><u class="c1"></u><b class="r1"></b><small>${R1[0]}</small></span><span class="td-res"><u class="c2"></u><b class="r2"></b><small>${R1[1]}</small></span><span class="td-wave"></span><span class="td-res"><small>${I().bName(run.race, 'citadel')[0]}</small><span class="td-cit"><u></u></span></span></div>
+      <div class="td-info2"></div><div class="wl-ban"></div><div class="td-pop" hidden></div>
+      <div class="td-panel${L ? ' side' : ''}"><div class="td-row"><div class="td-hero" style="--hc:${run.hero.col}"><i style="background-image:url(art/heroes/${run.race}.webp)"></i><div><em></em><span><u></u></span></div></div>
+      <button class="td-ult"><b>${run.hero.ult}</b><em></em></button><button class="td-call"><b>Набег</b><em></em></button></div><div class="td-cards">${cards}</div></div>`;
     const q = s => ui.querySelector(s);
-    run.hud = { lives: q('.td-lives b'), gold: q('.td-gold b'), wave: q('.td-wave'), ban: q('.wl-ban'), pop: q('.td-pop'), hp: q('.td-hero u'), hpT: q('.td-hero em'), ult: q('.td-ult'), ultT: q('.td-ult em'), call: q('.td-call'), callT: q('.td-call em') };
-    if (L) { const bot = q('.td-bot'); bot.classList.add('side'); Object.assign(q('.td-top').style, { right: '120px' }); Object.assign(run.hud.ban.style, { right: '120px', top: '200px' }); }
-    run.hud.call.onclick = () => { if (run.queue > 0 || run.enemies.length || run.wave >= WAVES) return; run.gold += 15; callWave(run); };
-    run.hud.ult.onclick = () => { const h = run.hero; if (h.ultCd > 0 || h.down > 0) return; h.ultCd = 18; run.blast = { x: h.x, y: h.y, t: 0 }; for (const e of run.enemies) if (Math.hypot(e.x - h.x, e.y - h.y) < 120) { hit(run, e, 60 + 25 * run.wave); e.slowT = 2; } A().burst(h.x, h.y - 20, h.col, 30, 1.3); A().shake(8); G.castBanner && G.castBanner(h.ult, null, h.col, h.name); G.sfx && G.sfx('boom'); };
+    run.hud = { r1: q('.r1'), r2: q('.r2'), wave: q('.td-wave'), cit: q('.td-cit u'), info: q('.td-info2'), ban: q('.wl-ban'), pop: q('.td-pop'), hp: q('.td-hero u'), hpT: q('.td-hero em'), ult: q('.td-ult'), ultT: q('.td-ult em'), call: q('.td-call'), callT: q('.td-call em'), cards: q('.td-cards') };
+    if (L) { q('.td-top').style.right = '180px'; run.hud.info.style.right = '180px'; Object.assign(run.hud.ban.style, { right: '180px', top: '200px' }); }
+    run.hud.cards.querySelectorAll('[data-k]').forEach(b => b.onclick = () => { run.sel = run.sel === b.dataset.k ? null : b.dataset.k; run.ghost = null; if (run.pop) closePop(run); G.sfx && G.sfx('click'); });
+    run.hud.call.onclick = () => { if (run.queue.length || run.enemies.length || run.wave >= WAVES) return; const bonus = Math.round(run.next * 2); run.r1 += bonus; if (bonus) A().float(...sc(run, N / 2, N / 2, 110), `+${bonus} за спешку`, '#ffd65a'); callWave(run); };
+    run.hud.ult.onclick = () => { const h = run.hero; if (h.ultCd > 0 || h.down > 0) return; h.ultCd = 18; run.fx.push({ gx: h.gx, gy: h.gy, r: 2.5, t: 0, d: 0.6, col: 'rgba(255,230,160,A)' }); for (const e of run.enemies) if (Math.hypot(e.gx - h.gx, e.gy - h.gy) < 2.5) { hurt(run, e, 60 + 25 * run.wave); e.stun = Math.max(e.stun || 0, 1); } const [x, y] = sc(run, h.gx, h.gy, 20); A().burst(x, y, h.col, 30, 1.3); A().shake(8); G.castBanner && G.castBanner(h.ult, null, h.col, h.name); G.sfx && G.sfx('boom'); };
     run.hud.pop.addEventListener('pointerdown', e => e.stopPropagation());
   }
+  // для проверок
+  G.arena.tdDbg = { bstat, build, canPlace, flow, plan, pathFrom, N, available };
   G.arena.register('td', mode);
 })();
 
