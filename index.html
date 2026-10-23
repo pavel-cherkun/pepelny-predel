@@ -1210,7 +1210,12 @@ body.heromode #heroBar .hb-face::before { content: 'меню'; position: absolut
 @keyframes abTeach { from { box-shadow: 0 0 0 0 rgba(255,214,90,.2); transform: translateY(0); } to { box-shadow: 0 0 22px 6px rgba(255,214,90,.75); transform: translateY(-4px); } }
 #heroBar .hb-ab.fresh { animation: abFresh 1.2s ease 2; }
 @keyframes abFresh { 0% { transform: scale(.6); opacity: 0; } 60% { transform: scale(1.12); opacity: 1; } 100% { transform: scale(1); } }
-body.mission #handFab, body.mission #hand, body.mission .hud-res { display: none !important; }
+body.mission:not(.m-base) #handFab, body.mission:not(.m-base) #hand, body.mission:not(.m-base) .hud-res { display: none !important; }
+body.m-base #goalPill, body.m-base [data-dock="vehicles"], body.m-base [data-dock="mechs"], body.m-base #modeBtn, body.m-base #r-water, body.m-base #r-fuel, body.m-base #r-power { display: none !important; }
+body.m-nobase .cmd, body.m-nobase .hud-res, body.m-nobase #heroDot, body.m-nobase .hb-home, body.m-nobase #raidPill { display: none !important; }
+body.m-nohero #heroDot, body.m-nohero #heroBar { display: none !important; }
+body.mission #goalTrack, body.mission #goalPill, body.mission #celebrate { display: none !important; }
+.cmd [data-dock].teach { animation: abTeach .8s ease-in-out infinite alternate; outline: 2px solid #ffd36a; }
 #mainMenu .mm-pro { margin-left: 6px; padding: 2px 10px; border: 1px solid rgba(255,123,35,.5); background: none; color: #ff9a50; font: 700 11px 'JetBrains Mono', monospace; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
 #mainMenu .mm-i.lk { color: rgba(232,224,216,.32); cursor: default; } #mainMenu .mm-i.lk em { color: rgba(232,224,216,.45); }
 @media (max-width: 700px) { #bigHint { bottom: 132px; padding: 12px 14px; } #bigHint b { font-size: 21px; } #bigHint p { font-size: 15px; } #bigHint > i { width: 42px; height: 42px; } }
@@ -2583,6 +2588,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRnZ2BABXRUJQVlA4WAoA
   // меню стройки расы — и заодно список того, что раса вообще может ставить
   G.buildGroups = function (race) {
     race = race || G.race;
+    if (G.S && G.S.allowB) return [['Постройки', G.S.allowB.slice()]]; // миссия кампании: открыто то, чему учим
     const skinB = (G.skinOf(race) || {}).build;
     if (skinB) return skinB.map(g => [g[0], g[1].slice()]);
     return [
@@ -6077,9 +6083,12 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRnZ2BABXRUJQVlA4WAoA
     r.threat = ratio < 0.6 ? 'низкая' : ratio < 1.1 ? 'средняя' : ratio < 1.8 ? 'высокая' : 'смертельная — уводи рабочих и строй вышки';
     G.notify(boss ? `Земля дрожит. Через ${wt} с с ${r.dir} придёт ${G.ENEMIES[G.FC(r.fac).raidBoss].name}! Угроза: ${r.threat}` : `Набег №${nextWave} через ${wt} с: ${FN}, с ${r.dir}. Угроза: ${r.threat}`, { x: r.sx, y: r.sy, kind: 'bad' });
   }
+  // набег по сценарию миссии: состав задан заранее, после него автоматических набегов нет
+  G.missionRaid = function (list, warn, fac) { const r = S.raid; r.script = list.slice(); r.scriptFac = fac; r.timer = warn; r.warned = false; S.noRaids = false; };
   function startRaid() {
     const r = S.raid; r.wave++; r.active = true; r.elapsed = 0; r.spawnT = 0; r.lost = 0; r.razed = 0;
     r.startUnits = S.units.filter(u => isFighter(u)).length;
+    if (r.script) { r.fac = r.scriptFac || r.fac; r.queue = r.script; r.script = null; r.elite = 1; G.sfx('horn'); G.notify(`Набег: ${r.queue.length} врагов с ${r.dir}`, { x: r.sx, y: r.sy, kind: 'bad' }); G.shake = 4; return; }
     const w = r.wave;
     let budget = raidBudget(w, S.raid.fac || G.foes()[0]) * (G.isNight() ? 1.15 : 1);
     // больше 40 тел не приводим: лишний бюджет делает врагов сильнее
@@ -6103,7 +6112,8 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRnZ2BABXRUJQVlA4WAoA
     G.shake = 4;
   }
   function endRaid(lostRaid) {
-    const r = S.raid; r.active = false; r.warned = false; r.timer = raidInterval();
+    const r = S.raid; r.active = false; r.warned = false; r.timer = S.mission ? 1e9 : raidInterval();
+    if (S.mission) { S.noRaids = true; S.raidsDone = (S.raidsDone || 0) + 1; }
     S.stats.raids++;
     if (!lostRaid && G.chapter) G.chapter('neighbors', r.fac || G.foes()[0]);
     if (!lostRaid && G.offerDraft) setTimeout(() => G.offerDraft(), 1800); // драфт карты после отбитого набега
@@ -6544,15 +6554,15 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRnZ2BABXRUJQVlA4WAoA
     const gt = G._gridT || 0; if (S.t >= gt || S.t < gt - 1) { G._gridT = S.t + 0.1; buildGrid(); }
     if (camp && !S.noRaids) updRaid(dt);
     updRaces(dt);
-    if (camp) updWanderers(dt);
+    if (camp && !S.mission) updWanderers(dt);
     updForagers(dt);
-    updFoe(dt);
+    if (!S.mission) updFoe(dt);
     updAscension(dt);
     if (S.flowDirty && S.t > (S.flowT || 0)) { S.flowDirty = false; S.flowT = S.t + 5; G.computeFlow(); }
     // скорость прихода ресурсов (для табло)
     G._rateT = (G._rateT || 0) - dt;
     if (G._rateT <= 0) { G._rateT = 1; (G.resHist = G.resHist || []).push(Object.assign({ t: S.t }, S.res)); if (G.resHist.length > 16) G.resHist.shift(); (G.flowHist = G.flowHist || []).push(flowCur); flowCur = { inc: {}, use: {} }; if (G.flowHist.length > 60) G.flowHist.shift(); }
-    if (camp) { updEvents(dt); updCaravan(dt); }
+    if (camp && !S.mission) { updEvents(dt); updCaravan(dt); }
     for (const u of S.units) {
       if (u.hp <= 0 || S.over) continue;
       if (u.inBld) {
@@ -9419,11 +9429,11 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRnZ2BABXRUJQVlA4WAoA
         if (!inf.length) h += `<p class="desc-note">Своих бойцов у грибницы нет. ${G.BUILDINGS.tower.name} заражает убитых врагов, и они встают за нас. Растить можно только тех, в кого кордицепс уже пророс, — по порядку заражения.</p>`;
         else { h += `<div class="sub">Проросшие</div>`; h += orderTilesInf(inf); }
       } else {
-        const all = Object.keys(G.CLASSES).filter(k => G.CLASSES[k].role !== 'vehicle' && !G.CLASSES[k].hidden && G.classForRace(k));
+        const all = Object.keys(G.CLASSES).filter(k => G.CLASSES[k].role !== 'vehicle' && !G.CLASSES[k].hidden && G.classForRace(k) && (!s.allowU || s.allowU.includes(k)));
         // у выживших специалисты — отдельным разделом: каждого открывает захват своего места
         const isPro = k => G.race === 'survivors' && (G.CLASSES[k].pro || G.CLASSES[k].unlock || k === 'flamer');
         h += orderTiles(all.filter(k => !isPro(k)), 'u');
-        const pros = all.filter(isPro);
+        const pros = s.allowU ? [] : all.filter(isPro);
         if (pros.length) { h += `<div class="sub">Профессионалы · открыто ${pros.filter(k => G.classUnlocked(k)).length} из ${pros.length}</div>`; h += orderTiles(pros.sort((a, b) => G.classUnlocked(b) - G.classUnlocked(a)), 'u'); }
       }
       const par = G.prodSlots().length;
@@ -11125,7 +11135,8 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRnZ2BABXRUJQVlA4WAoA
   function mission(id) {
     const M = G.MISSIONS[id]; if (!M) return;
     const mm = document.getElementById('mainMenu'); if (mm && !mm.hidden && G.menu && G.menu.close) G.menu.close(true);
-    G.newGame(undefined, M.race, { hero: true }); G.S.campaign = id; G.S.mission = id;
+    if (M.base) G.newGame(undefined, M.race, { noRaids: true, diff: 'easy' }); else G.newGame(undefined, M.race, { hero: true });
+    G.S.campaign = id; G.S.mission = id;
     const c = G.cit(); G.lookAt(c.x + 1.5, c.y + 1.5, true); G.ui.reset(); G.ui.updHud && G.ui.updHud();
     panels(G.STORY.races[M.race].img, `${M.kicker} · ${M.title}`, M.intro, M.call || 'В путь', () => { G.S.intro = false; const h = G.heroUnit(); if (h) G.ui.followId = h.id; G.heroBegin(); }, M.race);
   }
@@ -12776,12 +12787,13 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
     for (let k = 0; k < 40; k++) { const a = R() * Math.PI * 2, d = d0 + R() * (d1 - d0), x = h.x + Math.cos(a) * d, y = h.y + Math.sin(a) * d; if (x > 2 && y > 2 && x < G.GN - 2 && y < G.GN - 2 && G.walk(Math.floor(x), Math.floor(y))) return { x, y }; }
     return { x: h.x + 10, y: h.y };
   }
-  const foeOf = () => { const f = HEROES[G.race].foe; return G.FC && G.FC(f) ? f : G.foes()[0]; };
+  const foeOf = () => { const S = S_(), f = (S && S.missionFoe) || HEROES[G.race].foe; return G.FC && G.FC(f) ? f : G.foes()[0]; };
   function foeTypes(f) { const F = G.FC(f); const pool = (F.raidPool || []).map(p => p[0]).filter(t => G.ENEMIES[t]); return { light: (F.light || pool.slice(0, 2)).filter(t => G.ENEMIES[t]), heavy: G.ENEMIES[F.heavy] ? F.heavy : pool[pool.length - 1], boss: (F.bosses || []).find(t => G.ENEMIES[t]) || F.raidBoss || pool[pool.length - 1] }; }
   function spawnAt(type, x, y, o) { return G.makeEnemy(type, x, y, Object.assign({ fac: foeOf() }, o)); }
   G.heroBegin = function () {
-    const S = S_(), h = hero(); if (!S || !S.heroMode || !h) return;
+    const S = S_(), h = hero(); if (!S || !h) return;
     if (M_()) { mBegin(); updBar(true); return; }
+    if (!S.heroMode) return;
     S.hs = { act: 0, phase: 'go', calmT: 12, line: 0, lives: 3, cp: { x: h.x, y: h.y } };
     camLink = true; lastFollow = null; G.ui.followId = h.id;
     setAct(0);
@@ -12900,6 +12912,7 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
   const big = document.createElement('div'); big.id = 'bigHint'; big.hidden = true; document.getElementById('app').appendChild(big);
   function bigHint(t) {
     const S = S_(), hs = S.hs; hideHint();
+    t = Object.assign({}, t, { title: nm(t.title), what: nm(t.what), when: nm(t.when) });
     const A = t.ab != null ? HEROES[G.race].ab[t.ab] : null;
     big.innerHTML = `${A ? `<i style="-webkit-mask-image:url(${icon(A.k)});mask-image:url(${icon(A.k)})"></i>` : ''}<div><span>${A ? (t.ab === 3 ? 'Главная способность' : 'Новая способность') : 'Подсказка'}</span><b>${t.title || (A && A.name) || ''}</b><p>${t.what}</p>${t.when ? `<em>${t.when}</em>` : ''}${A ? `<small>Кнопка внизу светится${matchMedia('(pointer: coarse)').matches ? '' : ` · клавиша ${KEYS[t.ab].toUpperCase()}`}</small>` : ''}</div>`;
     big.hidden = false; big.classList.remove('go'); void big.offsetWidth; big.classList.add('go');
@@ -12922,10 +12935,12 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
     actEl.hidden = false; actEl.classList.remove('go'); void actEl.offsetWidth; actEl.classList.add('go');
     clearTimeout(actBanner.t); actBanner.t = setTimeout(() => { actEl.hidden = true; }, 3600);
   }
-  const mSay = (l, who) => Array.isArray(l) ? say(l[1], l[0]) : say(l, who);
+  const nm = t => typeof t === 'string' ? t.replace(/\{b:(\w+)\}/g, (_, k) => (G.BUILDINGS[k] || {}).name || k).replace(/\{u:(\w+)\}/g, (_, k) => (G.CLASSES[k] || {}).name || k) : t;
+  const mSay = (l, who) => Array.isArray(l) ? say(nm(l[1]), l[0]) : say(nm(l), who);
   function mBegin() {
     const S = S_(), h = hero(), M = M_();
-    S.hs = { act: 0, phase: 'go', calmT: 14, line: 0, lives: 3, cp: { x: h.x, y: h.y }, unl: [0, 0, 0, 0], step: -1, used: [], m: true };
+    S.hs = { act: 0, phase: 'go', calmT: 14, line: 0, lives: 3, cp: { x: h.x, y: h.y }, unl: M.base ? [1, 1, 1, 1] : [0, 0, 0, 0], step: -1, used: [], m: true, charge: 0 };
+    if (M.base) return mBeginBase(S, h, M);
     // тихий мир: учим по одному врагу — чужих рядом убираем, место для обыска открываем
     for (const e of S.enemies) if (alive(e) && !isBoss(e) && hyp(e.x - h.x, e.y - h.y) < 70) { e.hp = 0; e.dead = true; }
     for (const p of G.W.pois) if (hyp(p.x - h.x, p.y - h.y) < 70) p.guarded = false;
@@ -12937,10 +12952,35 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
     document.body.classList.add('mission');
     mStep(0);
   }
+  // миссия с базой: цитадель есть, вождь ведётся сам; лишнее скрыто, стройка и найм открываются по шагам
+  function mBeginBase(S, h, M) {
+    const B = M.base, c = G.cit(), cx = c.x + 1.5, cy = c.y + 1.5;
+    S.quiet = !!M.quiet; S.allowB = (B.allowB || []).slice(); S.allowU = (B.allowU || []).slice(); S.missionFoe = M.foe || null;
+    if (S.tut) S.tut.off = true; else S.tut = { off: true };
+    const keep = (B.keep || []).slice();
+    for (const u of S.units) { if (u.hero || u.hp <= 0) continue; const i = keep.indexOf(u.cls); if (i >= 0) { keep.splice(i, 1); u.squad = true; } else { u.hp = 0; u.dead = true; } }
+    for (const e of S.enemies) if (alive(e) && !isBoss(e) && hyp(e.x - cx, e.y - cy) < 40) { e.hp = 0; e.dead = true; }
+    if (B.res) for (const k in B.res) S.res[k] = B.res[k];
+    // готовые постройки — на ближайшем свободном месте у цитадели
+    const aB = S.allowB; S.allowB = null;
+    for (const k of (B.prebuilt || [])) { let done = false; for (let r = 3; r < 12 && !done; r++) for (let q = 0; q < 24 && !done; q++) { const a = q / 24 * Math.PI * 2 + r, x = Math.round(c.x + 1 + Math.cos(a) * r), y = Math.round(c.y + 1 + Math.sin(a) * r); if (!G.canPlace(k, x, y)) { G.placeBuilding(k, x, y, true); done = true; } } }
+    S.allowB = aB;
+    if (B.heroAt) { const a = R() * Math.PI * 2, p = walkNear(cx + Math.cos(a) * B.heroAt, cy + Math.sin(a) * B.heroAt); h.x = p[0]; h.y = p[1]; h.path = null; for (const u of S.units) if (u.squad && u.hp > 0) { const q = walkNear(h.x + R() * 2 - 1, h.y + R() * 2 - 1); u.x = q[0]; u.y = q[1]; u.path = null; } }
+    S.hs.cp = { x: h.x, y: h.y }; S.hs.far = { x: cx, y: cy, name: G.BUILDINGS.citadel.name };
+    document.body.classList.add('mission', 'm-base'); if (B.hideBase) document.body.classList.add('m-nobase');
+    if (B.noHero) { h.down = true; h.hp = 0; h.upT = 0; h.goal = h.order = null; document.body.classList.add('m-nohero'); }
+    if (B.control !== false && !B.noHero) G.heroControl(true);
+    camLink = true; G.ui.followId = B.control !== false && !B.noHero ? h.id : null; if (B.control === false || B.noHero) G.lookAt(cx, cy, true);
+    mStep(0);
+  }
+  const cnt = (k, done) => { const S = S_(); return S.buildings.filter(b => b.type === k && b.hp > 0 && (!done || b.prog >= 1)).length; };
+  const ucnt = k => S_().units.filter(u => u.cls === k && u.hp > 0 && !u.dead).length;
+  const upSum = () => { const S = S_(); let n = 0; for (const k in (S.upg || {})) n += S.upg[k] || 0; for (const k in (S.mutBuff || {})) n += S.mutBuff[k] || 0; return n; };
   function mPoint(h, st) {
     const hs = S_().hs, f = hs.far;
     if (st.at === 'toward') { const k = st.k || 0.5, p = walkNear(hs.cp.x + (f.x - hs.cp.x) * k, hs.cp.y + (f.y - hs.cp.y) * k); return { x: p[0], y: p[1] }; }
     if (st.at === 'far') return Object.assign({}, f);
+    if (st.at === 'cit') { const c = G.cit(), k = st.k == null ? 1 : st.k, p = walkNear(hs.cp.x + (c.x + 1.5 - hs.cp.x) * k, hs.cp.y + (c.y + 1.5 - hs.cp.y) * k); return { x: p[0], y: p[1], name: G.BUILDINGS.citadel.name }; }
     const t = pickWant(h, st.d[0], st.d[1], st.want || [], hs.used); if (t.poi) hs.used.push(t.poi); return t;
   }
   function mStep(i) {
@@ -12952,10 +12992,11 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
     hs.phase = st.kind === 'leader' ? 'meet' : st.kind;
     if (st.kind === 'hold') { hs.t = { x: h.x, y: h.y, label: st.label || 'Держать' }; hs.holdT = st.sec; hs.holdMax = st.sec; hs.waveT = 2; hs.ang = Math.atan2(hs.far.y - h.y, hs.far.x - h.x); }
     else if (st.kind === 'bite' || st.kind === 'end') hs.t = st.kind === 'end' ? Object.assign({}, hs.far, { label: st.label || hs.far.name }) : null;
+    else if (['reveal', 'hire', 'build', 'raid', 'card', 'day', 'ignite', 'upgrade', 'res', 'hatch', 'raze'].includes(st.kind)) hs.t = null;
     else { hs.t = mPoint(h, st); hs.t.label = (st.label && !st.goal.includes('{place}') ? st.label : hs.t.name) || st.label || st.goal; }
-    hs.goal = st.goal.replace('{place}', (hs.t && hs.t.name) || st.label || 'место');
+    hs.goal = nm(st.goal.replace('{place}', (hs.t && hs.t.name) || st.label || 'место'));
     if (hs.t) G.reveal(hs.t.x, hs.t.y, 5);
-    const T = foeTypes(foeOf()), F = G.FC(foeOf()) || {}, type = k => k === 'fast' ? (G.ENEMIES[F.fast] ? F.fast : T.light[1] || T.light[0]) : k === 'heavy' ? T.heavy : T.light[0];
+    const T = foeTypes(foeOf()), F = G.FC(foeOf()) || {}, type = k => k === 'fast' ? (G.ENEMIES[F.fast] ? F.fast : T.light[1] || T.light[0]) : k === 'heavy' ? T.heavy : k === 'ranged' ? (G.ENEMIES[F.ranged] ? F.ranged : T.light[0]) : k === 'boss' ? (G.ENEMIES[F.raidBoss] ? F.raidBoss : T.boss) : T.light[0];
     hs.type = type;
     // одинокий враг на полпути — первый бой без способностей
     if (st.mid) { const p = walkNear(h.x + (hs.t.x - h.x) * 0.5, h.y + (hs.t.y - h.y) * 0.5), e = spawnAt(type(st.mid.type), p[0], p[1], { mode: 'guard', aggro: 0.6, leash: 20, mul: 0.6, dmul: 0.6 }); hs.mid = e.id; }
@@ -12963,12 +13004,51 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
     else if (st.tip && st.kind !== 'ambush' && st.kind !== 'bite' && st.kind !== 'leader') bigHint(st.tip);
     if (st.say) mSay(st.say);
     if (st.kind === 'end') { camLink = false; G.ui.followId = null; G.lookAt(hs.far.x, hs.far.y); hs.endT = S.t; hs.endI = 0; }
+    // база: что открывается на этом шаге
+    if (st.allowB) for (const k of st.allowB) if (!S.allowB.includes(k)) S.allowB.push(k);
+    if (st.allowU) for (const k of st.allowU) if (!S.allowU.includes(k)) S.allowU.push(k);
+    if (st.allowB || st.allowU) { const dk = document.querySelector(`.cmd [data-dock="${st.allowB ? 'build' : 'recruit'}"]`); if (dk) { dk.classList.add('teach'); hs.dockEl = dk; } }
+    if (st.kind === 'clear') { const p = hs.t; for (let q = 0; q < (st.n || 3); q++) { const w = walkNear(p.x + R() * 4 - 2, p.y + R() * 4 - 2), e = spawnAt(type(st.type || 'light'), w[0], w[1], { mode: 'guard', aggro: 0.6, leash: 18, mul: 0.6, dmul: 0.6 }); hs.spawned.push(e.id); } }
+    if (st.kind === 'ignite') { const c = G.cit(); hs.t = { x: c.x + 1.5, y: c.y + 1.5, label: G.BUILDINGS.citadel.name }; }
+    if (st.kind === 'reveal') { document.body.classList.remove('m-nobase'); const c = G.cit(); for (const k of (st.arrive || [])) { const p = walkNear(c.x + 1.5 + R() * 4 - 2, c.y + c.h + 1 + R() * 2), u = G.makeUnit(k, p[0], p[1]); G.fxBurst(u.x, u.y, '#ffd36a', 10); } if (h.ctl) G.heroControl(false); hs.tips = (st.tips || []).slice(); hs.tipT = 0; G.ui.updHud && G.ui.updHud(); }
+    if (st.kind === 'hire') hs.base0 = ucnt(st.k);
+    if (st.kind === 'build') hs.base0 = cnt(st.k, true);
+    if (st.kind === 'raid') { hs.raid0 = S.raidsDone || 0; G.missionRaid([].concat(...st.list.map(([k, n]) => Array(n).fill(type(k)))), st.warn || 30, foeOf()); }
+    if (st.kind === 'card') hs.hand0 = (S.hand || []).length;
+    if (st.kind === 'day') hs.dayT = st.sec || 40;
+    if (st.kind === 'upgrade') hs.up0 = upSum();
+    if (st.kind === 'res') { hs.raid0 = S.raidsDone || 0; if (st.raid) G.missionRaid([].concat(...st.raid.map(([k, n]) => Array(n).fill(type(k)))), st.warn || 20, foeOf()); }
+    if (st.kind === 'raze') { const f = foeOf(), c = G.cit(), cx = c.x + 1.5, cy = c.y + 1.5; const liveG = p => (p.guardIds || []).some(id => alive(G.ents.get(id))); hs.raze = G.W.pois.filter(p => p.guarded && liveG(p) && p.faction === f && p.type !== 'capital' && p.type !== 'boss').sort((a, b) => (hyp(a.x - cx, a.y - cy) + (a.type === 'lair' ? 0 : 12)) - (hyp(b.x - cx, b.y - cy) + (b.type === 'lair' ? 0 : 12))).slice(0, st.n || 3).map(p => p.id); hs.razeN = hs.raze.length; for (const id of hs.raze) { const p = G.W.pois.find(q => q.id === id); p.discovered = true; G.reveal(p.x + 0.5, p.y + 0.5, 4); } }
+    if (st.kind === 'hatch') { const c = G.cit(), p = walkNear(c.x + 1.5, c.y + c.h + 1); h.x = p[0]; h.y = p[1]; h.down = false; h.upT = 0; G.recalc(h); h.hp = h.st.hp; h.path = null; document.body.classList.remove('m-nohero'); FX({ k: 'cloud', x: h.x, y: h.y, r: 2, col: '#9ad040', dur: 2 }); FX({ k: 'pillar', x: h.x, y: h.y, col: HEROES[G.race].col, dur: 2, w: 60 }); G.shake = 6; G.lookAt(h.x, h.y); }
     mBanner(hs.goal); updBar(true);
   }
   function mNext() { const S = S_(), hs = S.hs, st = M_().steps[hs.step]; if (st && st.done) mSay(st.done); if (G.gainXp) G.gainXp(hero(), 40 + 25 * hs.step); hs.done = hs.step + 1; const h = hero(); FX({ k: 'pillar', x: h.x, y: h.y, col: HEROES[G.race].col, dur: 1.4, w: 46 }); hs.phase = 'wait'; const go = () => { if (S_() === S && S.hs.phase === 'wait') mStep(hs.step + 1); }; G.later ? G.later(st && st.done ? 1.6 : 0.4, go) : setTimeout(go, 1000); }
   function mTick(dt) {
-    const S = S_(), hs = S.hs, h = hero(), M = M_(); if (!hs || !h || h.down || hs.phase === 'done' || hs.phase === 'wait') return;
+    const S = S_(), hs = S.hs, h = hero(), M = M_(); if (!hs || !h || (h.down && !M.base) || hs.phase === 'done' || hs.phase === 'wait') return;
     const st = M.steps[hs.step]; if (!st) return;
+    if (hs.dockEl && (st.kind !== 'build' && st.kind !== 'hire')) { hs.dockEl.classList.remove('teach'); hs.dockEl = null; }
+    if (st.kind === 'clear') { if (!hs.spawned.some(id => alive(G.ents.get(id)))) mNext(); return; }
+    if (st.kind === 'ignite') { const c = G.cit(), d0 = hyp(h.x - c.x - 1.5, h.y - c.y - 1.5), sh = G.ui.sheet; if (d0 < 6 && !hs.sub) { hs.sub = 1; if (st.tip2) bigHint(st.tip2); } if ((sh && sh.kind === 'building' && sh.data && sh.data.id === c.id) || (d0 < 3 && (hs.near = (hs.near || 0) + dt) > 6)) { if (G.ui.close) G.ui.close(); FX({ k: 'pillar', x: c.x + 1.5, y: c.y + 1.5, col: '#ffb040', dur: 2, w: 90 }); FX({ k: 'shock', x: c.x + 1.5, y: c.y + 1.5, r: 9, col: '#ffd070', dur: 1.2, w: 8 }); G.reveal(c.x + 1.5, c.y + 1.5, 12); G.fxFlash && G.fxFlash('rgba(255,200,120,.35)', 600); mNext(); } return; }
+    if (st.kind === 'reveal') { hs.tipT -= dt; if (hs.tipT <= 0 && hs.tips.length) { bigHint(hs.tips.shift()); hs.tipT = 6.5; } if (!hs.tips.length && hs.tipT <= 0) mNext(); return; }
+    if (st.kind === 'hire') { if (ucnt(st.k) >= hs.base0 + (st.n || 1)) mNext(); return; }
+    if (st.kind === 'build') { if (cnt(st.k, true) >= hs.base0 + (st.n || 1)) mNext(); return; }
+    if (st.kind === 'raid') { if ((S.raidsDone || 0) > hs.raid0) { if (st.charge) hs.charge = Math.min(100, hs.charge + st.charge); mNext(); } return; }
+    if (st.kind === 'card') { if ((S.hand || []).length > hs.hand0 || S.t - hs.t0 > 30) mNext(); return; }
+    if (st.kind === 'day') { hs.dayT -= dt; if (hs.dayT <= 0) mNext(); return; }
+    if (st.kind === 'upgrade') { if (upSum() > hs.up0) mNext(); return; }
+    if (st.kind === 'res') {
+      if ((S.res[st.k] || 0) >= st.n) { mNext(); return; }
+      // набеги идут волнами, пока цель не набрана: страх берут с врагов
+      if (st.raid && st.every && !S.raid.active && !S.raid.script && (S.raidsDone || 0) > hs.raid0) { hs.raid0 = S.raidsDone; G.missionRaid([].concat(...st.raid.map(([k, n]) => Array(n).fill(hs.type(k)))), st.every, foeOf()); }
+      return;
+    }
+    if (st.kind === 'hatch') { if (S.t - hs.t0 > 4) mNext(); return; }
+    if (st.kind === 'raze') {
+      const left = hs.raze.map(id => G.W.pois.find(q => q.id === id)).filter(p => { if (!p || !p.guarded) return false; if (!(p.guardIds || []).some(id => alive(G.ents.get(id)))) { p.guarded = false; FX({ k: 'pillar', x: p.x + 0.5, y: p.y + 0.5, col: '#ff7040', dur: 1.6, w: 50 }); return false; } return true; });
+      if (!left.length) { mNext(); return; }
+      const c = G.cit(), p = left[0]; hs.t = { x: p.x + 0.5, y: p.y + 0.5, label: `${p.name || 'поселение'} · ${hs.razeN - left.length + 1} из ${hs.razeN}` };
+      hs.goal = nm(st.goal).replace('{n}', hs.razeN - left.length).replace('{all}', hs.razeN); return;
+    }
     const d = hs.t ? hyp(h.x - hs.t.x, h.y - hs.t.y) : 99, live = () => hs.spawned.filter(id => alive(G.ents.get(id)));
     if (hs.mid) { const e = G.ents.get(hs.mid); if (alive(e) && !hs.midSeen && hyp(e.x - h.x, e.y - h.y) < 8) { hs.midSeen = true; if (st.mid.tip) bigHint(st.mid.tip); if (st.mid.say) mSay(st.mid.say); } if (!alive(e)) { hs.mid = null; if (hs.midSeen) hideHint(); } }
     const ring = (n, k, r, o) => { for (let q = 0; q < n; q++) { const a = (q / n) * Math.PI * 2 + R() * 0.4, p = walkNear(h.x + Math.cos(a) * r, h.y + Math.sin(a) * r), e = spawnAt(hs.type(k), p[0], p[1], Object.assign({ mode: 'raid', mul: 0.65, dmul: 0.6 }, o)); e.aggro = 12; e.provokedT = S.t + 60; e.provokedBy = h.id; hs.spawned.push(e.id); } };
@@ -13011,7 +13091,7 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
     if (calm && hs.calmT <= 0 && hs.line < C.length) { hs.calmT = 24; mSay(C[hs.line++]); }
   }
   function mWin() {
-    const S = S_(), hs = S.hs, M = M_(); if (hs.phase === 'done') return; hs.phase = 'done'; hideHint(); document.body.classList.remove('mission');
+    const S = S_(), hs = S.hs, M = M_(); if (hs.phase === 'done') return; hs.phase = 'done'; hideHint(); document.body.classList.remove('mission', 'm-base', 'm-nobase', 'm-nohero'); S.allowB = S.allowU = null; S.missionFoe = null;
     if (G.campDone) G.campDone(S.mission);
     G.fxFlash && G.fxFlash('rgba(255,240,200,.6)', 1500);
     const o = M.outro || {}, A = G.ADV || {}, img = G.ADV_IMG || {};
@@ -13168,7 +13248,7 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
   function updQuest() {
     const S = S_(), hs = S.hs, st = STORY[G.race], h = hero();
     { const fd = document.getElementById('feed'); if (fd) fd.style.top = S.heroMode && !quest.hidden ? Math.round(quest.getBoundingClientRect().bottom + 8) + 'px' : ''; }
-    if (!S.heroMode || !hs) { quest.hidden = bossBar.hidden = arrow.hidden = true; return; }
+    if ((!S.heroMode && !M_()) || !hs) { quest.hidden = bossBar.hidden = arrow.hidden = true; return; }
     quest.hidden = false; quest.style.setProperty('--hc', HEROES[G.race].col);
     const done = hs.phase === 'done';
     let prog = '';
@@ -13177,7 +13257,9 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
     if (M) {
       const cur = M.steps[hs.step] || {};
       if (hs.phase === 'hold') prog = `<div class="hq-bar"><i style="width:${(100 - hs.holdT / hs.holdMax * 100).toFixed(1)}%"></i><em>${Math.ceil(Math.max(0, hs.holdT))} с</em></div>`;
-      const qm = `<div class="hq-t">${M.title}</div><ol>${M.steps.slice(0, Math.min(M.steps.length, (hs.step || 0) + 1)).map((q, i) => { const cls = done || i < hs.step ? 'ok' : 'now'; return `<li class="${cls}"><b>${i + 1}</b><span>${i === hs.step ? hs.goal : (q.goalDone || q.goal).replace('{place}', 'место')}</span>${cls === 'now' && q.hint ? `<em>${q.hint}</em>` : ''}${cls === 'now' ? prog : ''}</li>`; }).join('')}</ol>${done ? '<div class="hq-win">Миссия пройдена</div>' : ''}`;
+      if (M.beacon) prog += `<div class="hq-bar"><i style="width:${hs.charge}%"></i><em>маяк ${Math.round(hs.charge)}%</em></div>`;
+      if (hs.phase === 'day') prog += `<div class="hq-bar"><i style="width:${(100 - hs.dayT / (cur.sec || 40) * 100).toFixed(1)}%"></i><em>до ночи ${Math.ceil(Math.max(0, hs.dayT))} с</em></div>`;
+      const qm = `<div class="hq-t">${M.title}</div><ol>${M.steps.slice(0, Math.min(M.steps.length, (hs.step || 0) + 1)).map((q, i) => { const cls = done || i < hs.step ? 'ok' : 'now'; return `<li class="${cls}"><b>${i + 1}</b><span>${i === hs.step ? hs.goal : nm((q.goalDone || q.goal).replace('{place}', 'место').replace(/ ?\{n\} из \{all\}/, ''))}</span>${cls === 'now' && q.hint ? `<em>${nm(q.hint)}</em>` : ''}${cls === 'now' ? prog : ''}</li>`; }).join('')}</ol>${done ? '<div class="hq-win">Миссия пройдена</div>' : ''}`;
       if (quest._h !== qm) { quest.innerHTML = qm; quest._h = qm; }
     }
     const qh = M ? quest._h : `<div class="hq-t">${st.title}</div><ol>${STEPS.map((s, i) => {
@@ -13273,6 +13355,7 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
       if (!S.intro) (M_() ? mTick(dt) : storyTick(dt));
       if (G.race === 'fungi' && G.mycSeed && !h.down) { mycT -= dt; if (mycT <= 0) { mycT = 1; G.mycSeed(h.x, h.y, 1.3, 1); } }
     }
+    if (!S.heroMode && M_() && !S.intro) mTick(dt);
     barT -= dt; if (barT <= 0) { barT = 0.15; updBar(); }
   };
   setInterval(() => { if (G.S && (G.S.intro || G.tutPause)) updBar(); }, 500);
@@ -13298,7 +13381,7 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
       c.fillStyle = G.rgba ? G.rgba(HEROES[G.race].col, 0.12) : 'rgba(255,255,255,.1)';
       c.beginPath(); c.ellipse(px, py, 45.25 * preview, 22.6 * preview, 0, 0, Math.PI * 2); c.fill(); c.stroke(); c.restore();
     }
-    if (!S.heroMode || !S.hs || S.hs.phase === 'done' || !S.hs.t) return;
+    if ((!S.heroMode && !M_()) || !S.hs || S.hs.phase === 'done' || !S.hs.t) return;
     const [px, py] = iso(S.hs.t.x, S.hs.t.y), col = HEROES[G.race].col;
     c.save(); c.strokeStyle = col; c.lineWidth = 3; c.globalAlpha = 0.6 + 0.3 * Math.sin(t * 3);
     for (let k = 0; k < 2; k++) { const r = 28 + k * 12 + Math.sin(t * 2 + k) * 3; c.beginPath(); c.ellipse(px, py, r, r * 0.5, 0, 0, Math.PI * 2); c.stroke(); }
@@ -13309,8 +13392,8 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
     c.restore();
   };
   G.heroOverlayTop = function (c, iso, glow) {
-    const S = S_(); if (!S || !S.heroMode) return;
-    lootTags(c, iso);
+    const S = S_(); if (!S || (!S.heroMode && !M_())) return;
+    if (S.heroMode) lootTags(c, iso);
     if (!S.hs || S.hs.phase === 'done' || !S.hs.t) return;
     const [px, py] = iso(S.hs.t.x, S.hs.t.y), col = HEROES[G.race].col, t = G.time;
     const g = c.createLinearGradient(px, py - 260, px, py);
@@ -13453,6 +13536,162 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
         title: 'Нас семеро',
         lines: ['Ночь. Тележка, шестеро усталых людей, Дед впереди. «Нас семеро. Еды на три дня. Лампочка одна».', 'Лампа у ворот, фонарь в руке. «В посёлке цитадель. Старая. Если разжечь — согреемся».', 'За рекой над телом Загонщика склоняются тени. «Огонёк ушёл дальше. Ешьте. Растите. Идите на тёплое»'],
       },
+    },
+
+    // База с вождём: первая половина пешком, потом цитадель и интерфейс базы по шагам
+    '1.2': {
+      race: 'survivors', kicker: 'Глава 1', title: 'Свет', quiet: true,
+      intro: ['Посёлок под вышкой пустой. Дома без крыш, на площади — старая цитадель. Холодная.'], call: 'Войти в посёлок',
+      base: { hideBase: true, heroAt: 16, keep: ['guard', 'gunner'], res: { scrap: 300, food: 140 }, allowB: [], allowU: [] },
+      steps: [
+        { kind: 'clear', at: 'cit', k: 0.6, n: 3, type: 'light', goal: 'Зачистить посёлок', label: 'Развалины', hint: 'В развалинах прячутся гули.',
+          tip: { title: 'Отряд', what: 'Свои идут за Лампой и бьются рядом.', when: 'Веди Лампу — отряд не отстанет.' } },
+        { kind: 'ignite', goal: 'Разжечь цитадель', hint: 'Подойди к цитадели и нажми на неё.',
+          tip2: { title: 'Цитадель', what: 'Нажми на цитадель — разжечь огонь.', when: 'Огонь отгонит туман.' },
+          done: 'Дед: Ну. Теперь мы не беглецы. Теперь мы посёлок.' },
+        { kind: 'reveal', arrive: ['scav', 'scav', 'scout', 'guard'], goal: 'Свои пришли', hint: 'Дед и остальные дошли до посёлка.',
+          tips: [{ title: 'База', what: 'Это база. Внизу — стройка и найм.', when: 'Цитадель — сердце посёлка. Падёт — конец.' },
+            { title: 'Кружок вождя', what: 'Кружок с Лампой — повести её самому. «К базе» — назад.', when: 'Пока ты с Лампой, база живёт сама.' }] },
+        { kind: 'hire', k: 'scav', allowU: ['scav'], goal: 'Нанять мусорщика', hint: 'Внизу «Найм», потом плитка мусорщика.',
+          tip: { title: 'Мусорщик', what: 'Мусорщик сам находит лом и носит в цитадель. Лом — на постройки.', when: 'Нажми «Найм» внизу.' },
+          say: 'Дед: Лом — это всё. Из лома делают дома, ружья и надежду. Надежду — реже.' },
+        { kind: 'build', k: 'house', allowB: ['house'], goal: 'Построить жилище', hint: 'Внизу «Стройка», потом место рядом с цитаделью.',
+          tip: { title: 'Жилище', what: 'Каждый житель где-то спит. Жилище — плюс четыре места.', when: 'Нажми «Стройка» внизу.' } },
+        { kind: 'build', k: 'farm', allowB: ['farm'], goal: 'Построить теплицу', hint: 'Еда кончается — без неё найм встаёт.',
+          tip: { title: 'Теплица', what: 'Теплица растит грибы. Грибы — это еда.', when: 'Еда видна сверху.' },
+          say: 'Дед: Грибы. В мои годы их ели только по праздникам. Теперь у нас каждый день праздник.' },
+        { kind: 'build', k: 'barracks', allowB: ['barracks'], goal: 'Построить казарму', hint: 'Казарма учит бойцов.',
+          tip: { title: 'Казарма', what: 'Казарма учит стражей и стрелков.', when: 'Без неё — только мусорщики и следопыты.' } },
+        { kind: 'hire', k: 'guard', allowU: ['guard', 'gunner'], goal: 'Нанять стража', hint: 'Страж держит удар впереди.',
+          tip: { title: 'Страж и стрелок', what: 'Страж держит удар впереди. Стрелок бьёт издалека, вблизи хрупкий.', when: 'Найми обоих.' } },
+        { kind: 'hire', k: 'gunner', goal: 'Нанять стрелка', hint: 'Стрелок бьёт издалека.' },
+        { kind: 'raid', list: [['light', 5], ['fast', 1]], warn: 45, goal: 'Отбить набег', hint: 'Красная стрелка — откуда идут.',
+          say: 'Дед: Слышишь? Воют. Идут. Минута у нас.',
+          tip: { title: 'Набег', what: 'Враги придут с края карты — откуда красная стрелка.', when: 'Бойцы защищают базу сами. Лампа — тоже: нажми на кружок.' } },
+        { kind: 'card', goal: 'Выбрать трофей', hint: 'Выбери одну карту.',
+          tip: { title: 'Карта', what: 'Трофей с набега — карта. Карта — разовое усиление.', when: 'Выбери одну из трёх.' },
+          done: 'Дед: В мои годы за такое давали медаль. Медалей нет. Держи сухарь.' },
+        { kind: 'end', goal: 'Посёлок выстоял', lines: [['h', 'Назовём его Свет.'], ['d', 'Хорошее имя. Короткое. Как лампочка.']] },
+      ],
+      calm: {
+        3: ['Дед: Не спеши. Сначала лом, потом стены. В мои годы наоборот делали — где они теперь.'],
+        5: ['Дед: Еда — это время. Нет еды — нет времени.'],
+      },
+      outro: {
+        title: 'Пять ночей',
+        lines: ['Лампа у подножия вышки, рука на ржавой ферме. «Дед, провода гудят».', 'Дед с паяльником. «Маяк проснётся, если дать ему свет. Много света. Пять ночей».', '«А если придут?» — «Придут. Свет видно не только своим».'],
+      },
+    },
+
+    // Испытание: готовый посёлок, пять ночей, шкала маяка
+    '1.3': {
+      race: 'survivors', kicker: 'Глава 1', title: 'Маяк', quiet: true, beacon: true,
+      intro: ['Лампа поднимается на вышку и ставит лампочку в маяк. Чтобы он заговорил, нужно пять ночей.'], call: 'Держать',
+      base: { control: false, keep: ['scav', 'scav', 'scav', 'guard', 'guard', 'gunner', 'scout'], res: { scrap: 360, food: 200 },
+        prebuilt: ['house', 'farm', 'barracks'], allowB: ['house', 'farm', 'barracks'], allowU: ['scav', 'guard', 'gunner'] },
+      steps: [
+        { kind: 'day', sec: 40, allowB: ['tower'], goal: 'День первый', hint: 'Поставь вышки у тропы.',
+          tip: { title: 'Вышка', what: 'Вышка стреляет сама — как турель Лампы, только навсегда.', when: 'Ставь у тропы, откуда идут.' },
+          say: 'Дед: Видишь? Турель, только надолго.' },
+        { kind: 'raid', list: [['light', 6], ['fast', 2]], warn: 12, charge: 20, goal: 'Ночь первая', hint: 'Держать посёлок.' },
+        { kind: 'day', sec: 30, allowB: ['barricade'], goal: 'День второй', hint: 'Баррикады — в проходы.',
+          tip: { title: 'Баррикада', what: 'Баррикада держит врагов в проходе, пока вышки стреляют.', when: 'Дешёвая. Ставь много.' } },
+        { kind: 'raid', list: [['light', 8], ['fast', 3]], warn: 12, charge: 20, goal: 'Ночь вторая', hint: 'Держать посёлок.' },
+        { kind: 'day', sec: 25, goal: 'День третий', hint: 'Найми стрелков: ночью придут плевуны.' },
+        { kind: 'raid', list: [['light', 6], ['ranged', 4]], warn: 12, charge: 20, goal: 'Ночь третья', hint: 'Плевуны бьют издалека.',
+          say: 'Дед: Плевуны. Бьют из темноты. Стрелков — вперёд, стражей не надо, не добегут.' },
+        { kind: 'day', sec: 25, goal: 'День четвёртый', hint: 'Почини то, что сломали.',
+          tip: { title: 'Починка', what: 'Нажми на свою постройку — её можно починить.', when: 'Разбитое лучше починить до ночи.' } },
+        { kind: 'raid', list: [['heavy', 3], ['light', 6]], warn: 12, charge: 20, goal: 'Ночь четвёртая', hint: 'Громилы ломают постройки.',
+          say: 'Дед: Громилы ломают дома. Держи их подальше от вышек.' },
+        { kind: 'day', sec: 25, goal: 'День пятый', hint: 'Последняя ночь. Придёт что-то большое.' },
+        { kind: 'raid', list: [['boss', 1], ['light', 8], ['fast', 3]], warn: 12, charge: 20, goal: 'Ночь пятая', hint: 'Владыка Улья идёт на свет.',
+          say: 'Дед: На свет пришло что-то большое.' },
+        { kind: 'end', goal: 'Маяк горит', lines: [['h', 'Дед. Он горит.'], ['d', 'Вижу. Отсюда видно на сорок вёрст. Значит, и нас видно на сорок вёрст.']] },
+      ],
+      calm: { 0: ['Дед: Вышку ставь там, где тропа. Не там, где красиво.'] },
+      outro: {
+        title: 'Тысячи глаз',
+        lines: ['Маяк горит третью ночь. С севера пришли двое. Потом ещё пятеро.', 'Дед плачет и говорит, что это дым. Дыма нет.', 'Лампочка одна. Но теперь её видно всем.', 'Темнота за рекой. Одна за другой открываются тысячи глаз. «Видим»'],
+      },
+    },
+
+    // ---------- Глава 2 · Мутанты. Порядок: база → вождь → испытание. Базу игрок уже знает — учим новым бойцам и мутации
+    '2.1': {
+      race: 'mutants', kicker: 'Глава 2', title: 'Голод', quiet: true,
+      intro: ['Свет над рекой. Улей проснулся. Выводок голоден, а Мать — ещё голоднее.'], call: 'Есть',
+      base: { noHero: true, control: false, keep: ['scav', 'scav', 'scav'], res: { scrap: 480, food: 160, aether: 40 }, allowB: [], allowU: ['scav'] },
+      steps: [
+        { kind: 'hire', k: 'scav', n: 2, goal: 'Вырастить двух: {u:scav}', hint: 'Внизу «Найм».',
+          tip: { title: '{u:scav}', what: 'Трутни сами носят камень и грибы в Улей.', when: 'Нажми «Найм» внизу.' },
+          say: 'Мать: Ешь. Расти. Нас мало — значит, мы голодны.' },
+        { kind: 'build', k: 'farm', allowB: ['farm'], goal: 'Построить: {b:farm}', hint: 'Грибы — еда выводка.',
+          tip: { title: '{b:farm}', what: 'Растит грибы. Без грибов выводок не растёт.', when: 'Нажми «Стройка» внизу.' } },
+        { kind: 'build', k: 'barracks', allowB: ['barracks'], goal: 'Построить: {b:barracks}', hint: 'Здесь растут бойцы Улья.',
+          tip: { title: '{b:barracks}', what: 'Здесь растут бойцы Улья.', when: 'Без неё — только трутни.' } },
+        { kind: 'hire', k: 'guard', n: 2, allowU: ['guard', 'gunner'], goal: 'Вырастить двух: {u:guard}', hint: 'Громилы держат удар и ломают стены.',
+          tip: { title: '{u:guard}', what: 'Держит удар и ломает постройки.', when: '{u:gunner} бьёт кислотой издалека — тоже пригодится.' },
+          say: 'Мать: Крупнее. Ещё крупнее.' },
+        { kind: 'build', k: 'forge', allowB: ['forge'], goal: 'Построить: {b:forge}', hint: 'Здесь Улей меняет форму.',
+          tip: { title: '{b:forge}', what: 'Здесь Улей меняет форму.', when: 'Мутация меняет всех сразу.' } },
+        { kind: 'upgrade', goal: 'Первая мутация', hint: 'Нажми на {b:forge} и выбери мутацию.',
+          tip: { title: 'Мутация', what: 'Нажми на {b:forge} — выбери мутацию.', when: 'Правильной формы нет. Есть та, что выжила.' } },
+        { kind: 'raid', list: [['light', 5]], warn: 40, goal: 'Люди у Улья', hint: 'Люди с ружьями идут к Улью.',
+          say: 'Мать: Люди. Пахнут железом. Ешьте их.' },
+        { kind: 'hatch', goal: 'Кокон', say: 'Мать: Кокон треснул.' },
+        { kind: 'end', goal: 'Первенец', lines: [['d', 'Ты — серп. Ты — мой.'], ['h', 'Тепло. Там, за рекой, — тепло.'], ['d', 'Иди к свету, Первенец.']] },
+      ],
+      calm: { 1: ['Мать: Грибы любят тень. Мы тоже.'], 4: ['Мать: Сорок лет люди нас жгут. Сорок лет мы растём.'] },
+      outro: { title: 'Первенец', lines: ['Улей стал тесным. Матери нужен второй — дальше, теплее, сытнее.', 'Первенец смотрит на свет за рекой. Он не голоден. Ему интересно.'] },
+    },
+    '2.3': {
+      race: 'mutants', kicker: 'Глава 2', title: 'Тёплые люди', quiet: true,
+      intro: ['У маяка выросли поселения. Люди пришли на свет. Мать чует их тепло за сорок вёрст.'], call: 'На тепло',
+      base: { keep: ['scav', 'scav', 'scav', 'guard', 'guard', 'gunner'], res: { scrap: 320, food: 200 }, prebuilt: ['farm', 'barracks', 'forge'],
+        allowB: ['house', 'farm', 'barracks', 'tower'], allowU: ['scav', 'guard', 'gunner'] },
+      steps: [
+        { kind: 'day', sec: 25, goal: 'Собрать выводок', hint: 'Вырасти громил и плевунов: впереди три поселения.',
+          tip: { title: 'Нападение', what: 'Теперь идём мы. Громилы ломают постройки, плевуны бьют издалека.', when: 'Веди Первенца — выводок пойдёт за ним.' } },
+        { kind: 'raze', n: 3, goal: 'Разорить поселения: {n} из {all}', hint: 'Охрана поселения — люди с ружьями. Убей охрану — поселение наше.',
+          say: 'Мать: Тёплые люди. Много тёплых людей.' },
+        { kind: 'end', goal: 'У вышки', lines: [['h', 'Там, у вышки, — девчонка с огнём.'], ['d', 'Мать хочет её.'], ['h', 'Я — нет.']] },
+      ],
+      calm: { 1: ['Мать: Не трогай вышку. Пока.'] },
+      outro: { title: 'Тёплые люди', lines: ['Третье поселение горит. В последнем доме — девчонка с фонарём.', 'Вспышка в лицо. Первенец закрывается лапой — и видит её лицо. «Ты светишься. Мать хочет тебя. Я — нет». Он уходит.', 'Ночью Улей пробил коллекторы под городом. Из темноты — смех. Много смеха.'] },
+    },
+
+    // ---------- Глава 3 · Клоуны. Порядок: испытание → вождь → база. Глава начинается с середины чужой атаки
+    '3.1': {
+      race: 'clowns', kicker: 'Глава 3', title: 'Антракт', quiet: true, foe: 'mutants',
+      intro: ['Почтеннейшая публика! Посреди номера из канализации лезет Улей.'], call: 'Шоу продолжается',
+      base: { control: false, keep: ['scav', 'scav', 'scav', 'guard', 'guard', 'gunner', 'gunner'], res: { scrap: 320, food: 200 }, prebuilt: ['house', 'farm', 'barracks'],
+        allowB: ['house', 'farm', 'barracks'], allowU: ['scav', 'guard', 'gunner'] },
+      steps: [
+        { kind: 'raid', list: [['light', 6], ['fast', 2]], warn: 8, goal: 'Удержать арену', hint: 'Мутанты лезут из люков.',
+          say: ['h', 'Почтеннейшая публика, у нас гости. Без билетов.'] },
+        { kind: 'day', sec: 25, allowB: ['tower'], goal: 'Антракт', hint: 'Поставь вышки у люков.',
+          tip: { title: '{b:tower}', what: 'Стреляет сама. Клоунам — бесплатное представление.', when: 'Ставь у люков, откуда лезут.' } },
+        { kind: 'raid', list: [['light', 8], ['fast', 3]], warn: 10, goal: 'Второй акт', hint: 'Улей не уходит.' },
+        { kind: 'day', sec: 20, goal: 'Антракт', hint: 'Найми ещё бойцов.' },
+        { kind: 'raid', list: [['heavy', 2], ['light', 8]], warn: 10, goal: 'Третий акт', hint: 'Громилы Улья.', say: ['h', 'Тяжёлый зал.'] },
+        { kind: 'end', goal: 'Поклон', lines: [['h', 'Публика ушла. Без аплодисментов. Нахалы.'], ['h', 'Нам нужен зал побольше. Где не смеются.']] },
+      ],
+      outro: { title: 'Гастроли', lines: ['Где-то есть замок, где не смеются уже триста лет.', 'Бим-Бом надевает лучший нос. Труппа едет на гастроли.'] },
+    },
+    '3.3': {
+      race: 'clowns', kicker: 'Глава 3', title: 'Огненное шоу', quiet: true, foe: 'mutants',
+      intro: ['Улей не уходит. Нужно большое шоу. Такое, чтобы мутанты убежали за реку.'], call: 'Музыку',
+      base: { control: false, keep: ['scav', 'scav', 'scav', 'guard', 'guard', 'gunner', 'gunner'], res: { scrap: 360, food: 220, aether: 10 }, prebuilt: ['house', 'farm', 'barracks', 'tower'],
+        allowB: ['house', 'farm', 'barracks', 'tower'], allowU: ['scav', 'guard', 'gunner'] },
+      steps: [
+        { kind: 'build', k: 'spire', allowB: ['spire'], goal: 'Построить: {b:spire}', hint: 'Страх — деньги клоунов.',
+          tip: { title: 'Страх', what: 'Клоуны платят Страхом. Его дают напуганные и убитые враги и {b:spire}.', when: 'Страх виден сверху.' } },
+        { kind: 'res', k: 'aether', n: 80, raid: [['light', 8], ['fast', 3]], warn: 20, every: 25, goal: 'Страх до восьмидесяти', hint: 'Пугай и бей мутантов — Страх растёт.',
+          say: ['h', 'Почтеннейшая публика! Сегодня — огонь!'] },
+        { kind: 'raid', list: [['heavy', 3], ['light', 8]], warn: 10, goal: 'Финальный номер', hint: 'Улей идёт последний раз.' },
+        { kind: 'end', goal: 'Фейерверк', lines: [['h', 'Фейерверк! Музыку!'], ['h', 'Ой.']] },
+      ],
+      outro: { title: 'Ой', lines: ['Шоу удалось. Мутанты бегут за реку.', 'Последняя ракета уходит в лес.', 'Лес горит. В середине пожара — Старое Древо.'] },
     },
   };
 })();
@@ -14738,16 +14977,16 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
   const CH = [
     { n: 1, race: 'survivors', title: 'Последняя лампочка', teach: 'добыча, стройка, найм, оборона', art: 'ch1', ms: [
       M('1.1', 'Лампа', 'hero', 'Последняя лампочка на сто вёрст. Дойти до посёлка под радиовышкой.', true),
-      M('1.2', 'Свет', 'base', 'Мёртвый посёлок: разжечь цитадель, жилище, теплица, казарма, первые бойцы. Первый набег — маленький.'),
-      M('1.3', 'Маяк', 'trial', 'Пять ночей держать вышку, пока маяк набирает свет.')] },
+      M('1.2', 'Свет', 'base', 'Мёртвый посёлок: разжечь цитадель, жилище, теплица, казарма, первые бойцы. Первый набег — маленький.', true),
+      M('1.3', 'Маяк', 'trial', 'Пять ночей держать вышку, пока маяк набирает свет.', true)] },
     { n: 2, race: 'mutants', title: 'Первый выводок', teach: 'рост, мутации, нападение', art: 'ch2', ms: [
-      M('2.1', 'Голод', 'base', 'Улей тесен. Кормить выводок и растить формы.'),
+      M('2.1', 'Голод', 'base', 'Улей проснулся от света. Кормить выводок, растить формы, первая мутация.', true),
       M('2.2', 'Первенец', 'hero', 'Тёплое место для второго Улья — у света.', true),
-      M('2.3', 'Тёплые люди', 'trial', 'Разорить три поселения у маяка.')] },
+      M('2.3', 'Тёплые люди', 'trial', 'Разорить три поселения у маяка.', true)] },
     { n: 3, race: 'clowns', title: 'Гастроли', teach: 'страх вместо экономики', art: 'ch3', ms: [
-      M('3.1', 'Антракт', 'base', 'Улей залез в канализацию к цирку. Труппа выходит наверх.'),
+      M('3.1', 'Антракт', 'trial', 'Улей лезет из канализации посреди номера. Удержать арену.', true),
       M('3.2', 'Бим-Бом', 'hero', 'Сцена там, где не смеются.', true),
-      M('3.3', 'Огненное шоу', 'trial', 'Страх до ста за отведённое время.')] },
+      M('3.3', 'Огненное шоу', 'base', 'Страх до ста — и фейерверк над лесом.', true)] },
     { n: 4, race: 'primates', title: 'Семя', teach: 'вода, лес, рост бойцов', ms: [] },
     { n: 5, race: 'vampires', title: 'Приглашение', teach: 'день и ночь, подземелья', ms: [] },
     { n: 6, race: 'bears', title: 'Возврат игрушек', teach: 'небо, острова, уровни карты', ms: [] },
@@ -14765,7 +15004,7 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
   G.campDone = function (id) { const p = prog(); p.done[id] = Date.now(); ls.set('pepel_campaign', p); };
   G.campStarted = () => Object.keys(prog().done).length > 0;
   // режимы открываются по ходу кампании (ch1.md): пока готова только «Лампа» — после неё
-  const GATE = { skirmish: '1.1', wall: '1.1', defense: '1.1' };
+  const GATE = { skirmish: '1.3', wall: '1.3', defense: '1.3' };
   const gated = k => GATE[k] && !isDone(GATE[k]);
 
   // ---------- Фон: ключевой арт мира, дальше — арт последней главы, где что-то пройдено
@@ -14792,7 +15031,7 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
     ['settings', 'Настройки'], ['about', 'Об игре'],
   ];
   function drawList() {
-    list.innerHTML = ITEMS.filter(([, , show]) => !show || show()).map(([k, t, , tag]) => { const lk = gated(k); return `<button class="mm-i${tag ? ' soon' : ''}${lk ? ' lk' : ''}" data-k="${k}"><span>${t}</span>${lk ? '<em>после миссии «Лампа»</em>' : tag ? `<em>${tag}</em>` : ''}</button>`; }).join('');
+    list.innerHTML = ITEMS.filter(([, , show]) => !show || show()).map(([k, t, , tag]) => { const lk = gated(k); return `<button class="mm-i${tag ? ' soon' : ''}${lk ? ' lk' : ''}" data-k="${k}"><span>${t}</span>${lk ? '<em>после главы 1</em>' : tag ? `<em>${tag}</em>` : ''}</button>`; }).join('');
   }
   list.addEventListener('click', e => { const b = e.target.closest('.mm-i'); if (!b) return; G.sfx && G.sfx('click'); act(b.dataset.k); });
   list.addEventListener('mouseover', e => { const b = e.target.closest('.mm-i'); if (b && b !== list._hov) { list._hov = b; G.sfx && G.sfx('click'); } });
