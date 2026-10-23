@@ -1194,6 +1194,26 @@ body.heromode #heroBar .hb-face::before { content: 'меню'; position: absolut
 #heroBoss b { display: block; font: 700 14px 'Tektur', sans-serif; color: #ff7a80; text-shadow: 0 0 6px #000; text-transform: uppercase; letter-spacing: .05em; }
 #heroBoss div { height: 12px; margin-top: 3px; background: rgba(20,0,0,.85); border: 1px solid #000; box-shadow: 0 0 0 1px rgba(255,90,90,.4); }
 #heroBoss i { display: block; height: 100%; background: linear-gradient(#ff6a6a, #b8202a); transition: width .2s; }
+/* сценарий миссии кампании: крупная подсказка, закрытые способности, свечение новой кнопки */
+#bigHint { position: absolute; z-index: 32; left: 50%; bottom: 150px; transform: translateX(-50%); width: min(520px, calc(100% - 24px)); display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; background: rgba(10,8,10,.96); border: 1px solid rgba(255,255,255,.14); border-top: 3px solid var(--hc, #ffd36a); box-shadow: 0 12px 40px rgba(0,0,0,.6); pointer-events: auto; }
+#bigHint[hidden] { display: none; }
+#bigHint.go { animation: bhIn .35s ease; }
+@keyframes bhIn { from { opacity: 0; transform: translate(-50%, 16px); } to { opacity: 1; transform: translate(-50%, 0); } }
+#bigHint > i { flex: none; width: 56px; height: 56px; background: var(--hc, #ffd36a); -webkit-mask: center / contain no-repeat; mask: center / contain no-repeat; }
+#bigHint span { display: block; font: 700 11px 'JetBrains Mono', monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--hc, #ffd36a); }
+#bigHint b { display: block; margin: 2px 0 6px; font: 700 26px/1.1 'Tektur', sans-serif; color: #fff; }
+#bigHint p { margin: 0 0 4px; font: 500 17px/1.4 'Golos Text', sans-serif; color: #eee; }
+#bigHint em { display: block; font: 500 14px/1.4 'Golos Text', sans-serif; font-style: normal; color: #bbb; }
+#bigHint small { display: block; margin-top: 8px; font: 600 11px 'JetBrains Mono', monospace; color: var(--hc, #ffd36a); opacity: .8; }
+#heroBar .hb-ab.lk { display: none; }
+#heroBar .hb-ab.teach { animation: abTeach .8s ease-in-out infinite alternate; border-color: var(--hc, #ffd36a); z-index: 2; }
+@keyframes abTeach { from { box-shadow: 0 0 0 0 rgba(255,214,90,.2); transform: translateY(0); } to { box-shadow: 0 0 22px 6px rgba(255,214,90,.75); transform: translateY(-4px); } }
+#heroBar .hb-ab.fresh { animation: abFresh 1.2s ease 2; }
+@keyframes abFresh { 0% { transform: scale(.6); opacity: 0; } 60% { transform: scale(1.12); opacity: 1; } 100% { transform: scale(1); } }
+body.mission #handFab, body.mission #hand, body.mission .hud-res { display: none !important; }
+#mainMenu .mm-pro { margin-left: 6px; padding: 2px 10px; border: 1px solid rgba(255,123,35,.5); background: none; color: #ff9a50; font: 700 11px 'JetBrains Mono', monospace; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
+#mainMenu .mm-i.lk { color: rgba(232,224,216,.32); cursor: default; } #mainMenu .mm-i.lk em { color: rgba(232,224,216,.45); }
+@media (max-width: 700px) { #bigHint { bottom: 132px; padding: 12px 14px; } #bigHint b { font-size: 21px; } #bigHint p { font-size: 15px; } #bigHint > i { width: 42px; height: 42px; } }
 #heroAct { position: absolute; z-index: 25; left: 50%; top: 36%; transform: translate(-50%, -50%); width: min(560px, calc(100% - 24px)); text-align: center; pointer-events: none; padding: 16px 20px; background: linear-gradient(90deg, transparent, rgba(8,6,8,.92) 15%, rgba(8,6,8,.92) 85%, transparent); }
 #heroAct.go { animation: actIn 4.2s ease forwards; }
 #heroAct span { display: block; font: 700 12px 'JetBrains Mono', monospace; letter-spacing: .12em; text-transform: uppercase; color: var(--th-acc, #ffd36a); opacity: .85; }
@@ -3465,6 +3485,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRnZ2BABXRUJQVlA4WAoA
   }
   G.flushReward = function (title, text, o) {
     const P = G.pendingGain; G.pendingGain = null;
+    if (S && S.quiet) return false; // обучающая миссия: без окон наград
     if (!P || (!Object.keys(P.gain).length && !P.arts.length)) return false;
     if (G.ui && G.ui.reward) G.ui.reward(P, title, text, o || {}); return true;
   };
@@ -3474,6 +3495,8 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRnZ2BABXRUJQVlA4WAoA
   G.takeTrophy = takeTrophy;
   G.notify = function (text, o) {
     o = o || {};
+    // обучающая миссия: без ленты находок и окон наград — только то, что говорит сценарий
+    if (S && S.quiet) { G.pendingGain = null; if (String(text).startsWith('Найдено: ') || o.kind === 'legend') return; }
     if (G.pendingGain) {
       // сообщение о награде — окном: заголовок — первая фраза, перечень ресурсов — иконками
       let t = String(text);
@@ -11098,7 +11121,16 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRnZ2BABXRUJQVlA4WAoA
     const R = G.STORY.races[r];
     panels(R.img, G.RACES[r].name, R.panels, R.call, () => { G.S.intro = false; if (G.tutor && !(opt && opt.noHints)) G.tutor('start'); }, r);
   }
+  // миссия кампании по сценарию (missions.js): одна панель — и в бой
+  function mission(id) {
+    const M = G.MISSIONS[id]; if (!M) return;
+    const mm = document.getElementById('mainMenu'); if (mm && !mm.hidden && G.menu && G.menu.close) G.menu.close(true);
+    G.newGame(undefined, M.race, { hero: true }); G.S.campaign = id; G.S.mission = id;
+    const c = G.cit(); G.lookAt(c.x + 1.5, c.y + 1.5, true); G.ui.reset(); G.ui.updHud && G.ui.updHud();
+    panels(G.STORY.races[M.race].img, `${M.kicker} · ${M.title}`, M.intro, M.call || 'В путь', () => { G.S.intro = false; const h = G.heroUnit(); if (h) G.ui.followId = h.id; G.heroBegin(); }, M.race);
+  }
   G.story = {
+    mission,
     scene,
     hero: (r, opt) => startRace(r, true, opt),
     skirmish,
@@ -11110,7 +11142,8 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRnZ2BABXRUJQVlA4WAoA
 // старый экран выбора расы заменён историей
 // перед историей — заставка со знаком «Войны с энтропией»
 // вход в игру: заставка один раз, дальше — главное меню
-if (G.ui) G.ui.intro = () => { if (!G._splashed && G.brandSplash) { G._splashed = true; G.brandSplash(() => G.menu.open()); } else G.menu.open(); };
+// первый запуск — сразу в бой, без меню (ch1.md, сцена 0)
+if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStarted() && G.story && G.story.mission ? G.story.mission('1.1') : G.menu.open()); if (!G._splashed && G.brandSplash) { G._splashed = true; G.brandSplash(first); } else G.menu.open(); };
 
 </script>
 <script>
@@ -12589,6 +12622,7 @@ if (G.ui) G.ui.intro = () => { if (!G._splashed && G.brandSplash) { G._splashed 
   function cdOf(A, h) { return A.cd * (1 - Math.min(0.3, (h.lvl - 1) * 0.015)) * (G.cardHas && G.cardHas('quickhands') ? 0.75 : 1) * (1 - 0.12 * (rankOf(A.k) - 1)); }
   G.heroCast = function (i) {
     const S = S_(), h = hero(); if (!S || !h || h.down || S.over || S.intro || G.tutPause) return;
+    if (abLocked(i)) return;
     const A = HEROES[G.race].ab[i]; S.heroCd = S.heroCd || {};
     const left = (S.heroCd[A.k] || 0) - S.t;
     if (left > 0) { G.floatText(h.x, h.y, 'ещё ' + Math.ceil(left) + ' с', '#aaa'); return; }
@@ -12598,6 +12632,7 @@ if (G.ui) G.ui.intro = () => { if (!G._splashed && G.brandSplash) { G._splashed 
     if (i === 3 && G.castBanner) G.castBanner(A.name, icon(A.k), HEROES[G.race].col, h.name);
     else G.floatText(h.x, h.y - 0.6, A.name, HEROES[G.race].col);
     G.sfx && G.sfx('cast');
+    G.heroHintCast && G.heroHintCast(i);
     updBar(true);
   };
 
@@ -12746,6 +12781,7 @@ if (G.ui) G.ui.intro = () => { if (!G._splashed && G.brandSplash) { G._splashed 
   function spawnAt(type, x, y, o) { return G.makeEnemy(type, x, y, Object.assign({ fac: foeOf() }, o)); }
   G.heroBegin = function () {
     const S = S_(), h = hero(); if (!S || !S.heroMode || !h) return;
+    if (M_()) { mBegin(); updBar(true); return; }
     S.hs = { act: 0, phase: 'go', calmT: 12, line: 0, lives: 3, cp: { x: h.x, y: h.y } };
     camLink = true; lastFollow = null; G.ui.followId = h.id;
     setAct(0);
@@ -12778,6 +12814,7 @@ if (G.ui) G.ui.intro = () => { if (!G._splashed && G.brandSplash) { G._splashed 
   const actEl = document.createElement('div'); actEl.id = 'heroAct'; actEl.hidden = true; document.getElementById('app').appendChild(actEl);
   function actBanner() {
     const S = S_(), hs = S.hs, st = STORY[G.race];
+    if (M_()) { if (hs && hs.goal) mBanner(hs.goal); return; }
     actEl.innerHTML = `<span>Акт ${hs.act + 1} из 4 · ${STEPS[hs.act]}</span><b>${goalOf(hs.act)}</b><em>${hint()}</em>`;
     actEl.hidden = false; actEl.classList.remove('go'); void actEl.offsetWidth; actEl.classList.add('go');
     clearTimeout(actBanner.t); actBanner.t = setTimeout(() => { actEl.hidden = true; }, 4200);
@@ -12854,13 +12891,140 @@ if (G.ui) G.ui.intro = () => { if (!G._splashed && G.brandSplash) { G._splashed 
     setTimeout(() => G.story && G.story.scene({ race: G.race, img: ((G.STORY.races || {})[G.race] || {}).img, who: { name: (A[G.race] || {}).name, img: img[G.race] }, lines: st.win, kicker: 'Эпилог · ' + st.title, title: 'История пройдена', call: S.campaign ? 'К кампании' : 'Играть дальше', done: S.campaign ? () => { const go = () => { G.menu.open(); G.menu.campaign(); }; G.ads ? G.ads.after(go) : go(); } : null }), 1500);
   }
 
+  // ---------- Сценарий миссии кампании (docs/campaign): шаги по порядку, способности открываются по одной,
+  // крупная подсказка объясняет каждую и замедляет время до первого нажатия
+  const M_ = () => { const S = S_(); return S && S.mission && G.MISSIONS && G.MISSIONS[S.mission]; };
+  const abLocked = i => { const S = S_(), hs = S && S.hs; return !!(S && S.mission && hs && hs.unl && !hs.unl[i]); };
+  G.heroAbLocked = abLocked;
+  function unlock(i) { const hs = S_().hs; if (!hs.unl[i]) { hs.unl[i] = 1; updBar(true); const b = bar.querySelector(`.hb-ab[data-i="${i}"]`); if (b) { b.classList.add('fresh'); setTimeout(() => b.classList.remove('fresh'), 2600); } } }
+  const big = document.createElement('div'); big.id = 'bigHint'; big.hidden = true; document.getElementById('app').appendChild(big);
+  function bigHint(t) {
+    const S = S_(), hs = S.hs; hideHint();
+    const A = t.ab != null ? HEROES[G.race].ab[t.ab] : null;
+    big.innerHTML = `${A ? `<i style="-webkit-mask-image:url(${icon(A.k)});mask-image:url(${icon(A.k)})"></i>` : ''}<div><span>${A ? (t.ab === 3 ? 'Главная способность' : 'Новая способность') : 'Подсказка'}</span><b>${t.title || (A && A.name) || ''}</b><p>${t.what}</p>${t.when ? `<em>${t.when}</em>` : ''}${A ? `<small>Кнопка внизу светится${matchMedia('(pointer: coarse)').matches ? '' : ` · клавиша ${KEYS[t.ab].toUpperCase()}`}</small>` : ''}</div>`;
+    big.hidden = false; big.classList.remove('go'); void big.offsetWidth; big.classList.add('go');
+    big.style.setProperty('--hc', HEROES[G.race].col);
+    if (A) { hs.teach = t.ab; const b = bar.querySelector(`.hb-ab[data-i="${t.ab}"]`); if (b) b.classList.add('teach'); }
+    if (t.slow) { hs.slow = true; G.speed = 0.25; clearTimeout(bigHint.st); bigHint.st = setTimeout(() => { if (hs.slow) { hs.slow = false; G.speed = 1; } }, 14000); }
+    clearTimeout(bigHint.t); if (!A) bigHint.t = setTimeout(hideHint, t.ms || 7000);
+    G.sfx && G.sfx('goal');
+  }
+  function hideHint() {
+    big.hidden = true; const S = S_(), hs = S && S.hs;
+    bar.querySelectorAll('.hb-ab.teach').forEach(b => b.classList.remove('teach'));
+    if (hs) { hs.teach = null; if (hs.slow) { hs.slow = false; G.speed = 1; } }
+  }
+  big.addEventListener('pointerdown', e => { e.stopPropagation(); });
+  big.addEventListener('click', e => { e.stopPropagation(); const hs = S_() && S_().hs; if (!hs || hs.teach == null) hideHint(); });
+  G.heroHintCast = i => { const hs = S_() && S_().hs; if (hs && hs.teach === i) { hideHint(); const st = M_() && M_().steps[hs.step]; if (st && st.sayOn) say(st.sayOn); } };
+  function mBanner(goal) {
+    const M = M_(); actEl.innerHTML = `<span>${M.kicker || ''} · ${M.title}</span><b>${goal}</b>`;
+    actEl.hidden = false; actEl.classList.remove('go'); void actEl.offsetWidth; actEl.classList.add('go');
+    clearTimeout(actBanner.t); actBanner.t = setTimeout(() => { actEl.hidden = true; }, 3600);
+  }
+  const mSay = (l, who) => Array.isArray(l) ? say(l[1], l[0]) : say(l, who);
+  function mBegin() {
+    const S = S_(), h = hero(), M = M_();
+    S.hs = { act: 0, phase: 'go', calmT: 14, line: 0, lives: 3, cp: { x: h.x, y: h.y }, unl: [0, 0, 0, 0], step: -1, used: [], m: true };
+    // тихий мир: учим по одному врагу — чужих рядом убираем, место для обыска открываем
+    for (const e of S.enemies) if (alive(e) && !isBoss(e) && hyp(e.x - h.x, e.y - h.y) < 70) { e.hp = 0; e.dead = true; }
+    for (const p of G.W.pois) if (hyp(p.x - h.x, p.y - h.y) < 70) p.guarded = false;
+    S.quiet = !!M.quiet;
+    // вождь в начале один (отряд приходит позже по сценарию)
+    if (M.alone) for (const u of S.units) if (!u.hero && u.hp > 0) { u.hp = 0; u.dead = true; }
+    S.hs.far = pickWant(h, M.farD ? M.farD[0] : 40, M.farD ? M.farD[1] : 60, M.far || []);
+    camLink = true; lastFollow = null; G.ui.followId = h.id;
+    document.body.classList.add('mission');
+    mStep(0);
+  }
+  function mPoint(h, st) {
+    const hs = S_().hs, f = hs.far;
+    if (st.at === 'toward') { const k = st.k || 0.5, p = walkNear(hs.cp.x + (f.x - hs.cp.x) * k, hs.cp.y + (f.y - hs.cp.y) * k); return { x: p[0], y: p[1] }; }
+    if (st.at === 'far') return Object.assign({}, f);
+    const t = pickWant(h, st.d[0], st.d[1], st.want || [], hs.used); if (t.poi) hs.used.push(t.poi); return t;
+  }
+  function mStep(i) {
+    const S = S_(), hs = S.hs, h = hero(), M = M_(), st = M.steps[i];
+    hideHint();
+    hs.step = i; hs.act = i; hs.sub = 0; hs.t0 = S.t; hs.line = 0; hs.calmT = 16; hs.spawned = []; hs.talked = false; hs.provoked = false; hs.bestD = undefined; hs.stuck = 0;
+    if (i > 0) hs.cp = { x: h.x, y: h.y };
+    if (!st) return mWin();
+    hs.phase = st.kind === 'leader' ? 'meet' : st.kind;
+    if (st.kind === 'hold') { hs.t = { x: h.x, y: h.y, label: st.label || 'Держать' }; hs.holdT = st.sec; hs.holdMax = st.sec; hs.waveT = 2; hs.ang = Math.atan2(hs.far.y - h.y, hs.far.x - h.x); }
+    else if (st.kind === 'bite' || st.kind === 'end') hs.t = st.kind === 'end' ? Object.assign({}, hs.far, { label: st.label || hs.far.name }) : null;
+    else { hs.t = mPoint(h, st); hs.t.label = (st.label && !st.goal.includes('{place}') ? st.label : hs.t.name) || st.label || st.goal; }
+    hs.goal = st.goal.replace('{place}', (hs.t && hs.t.name) || st.label || 'место');
+    if (hs.t) G.reveal(hs.t.x, hs.t.y, 5);
+    const T = foeTypes(foeOf()), F = G.FC(foeOf()) || {}, type = k => k === 'fast' ? (G.ENEMIES[F.fast] ? F.fast : T.light[1] || T.light[0]) : k === 'heavy' ? T.heavy : T.light[0];
+    hs.type = type;
+    // одинокий враг на полпути — первый бой без способностей
+    if (st.mid) { const p = walkNear(h.x + (hs.t.x - h.x) * 0.5, h.y + (hs.t.y - h.y) * 0.5), e = spawnAt(type(st.mid.type), p[0], p[1], { mode: 'guard', aggro: 0.6, leash: 20, mul: 0.6, dmul: 0.6 }); hs.mid = e.id; }
+    if (st.unlock != null && (st.kind === 'hold')) { unlock(st.unlock); if (st.tip) bigHint(st.tip); }
+    else if (st.tip && st.kind !== 'ambush' && st.kind !== 'bite' && st.kind !== 'leader') bigHint(st.tip);
+    if (st.say) mSay(st.say);
+    if (st.kind === 'end') { camLink = false; G.ui.followId = null; G.lookAt(hs.far.x, hs.far.y); hs.endT = S.t; hs.endI = 0; }
+    mBanner(hs.goal); updBar(true);
+  }
+  function mNext() { const S = S_(), hs = S.hs, st = M_().steps[hs.step]; if (st && st.done) mSay(st.done); if (G.gainXp) G.gainXp(hero(), 40 + 25 * hs.step); hs.done = hs.step + 1; const h = hero(); FX({ k: 'pillar', x: h.x, y: h.y, col: HEROES[G.race].col, dur: 1.4, w: 46 }); hs.phase = 'wait'; const go = () => { if (S_() === S && S.hs.phase === 'wait') mStep(hs.step + 1); }; G.later ? G.later(st && st.done ? 1.6 : 0.4, go) : setTimeout(go, 1000); }
+  function mTick(dt) {
+    const S = S_(), hs = S.hs, h = hero(), M = M_(); if (!hs || !h || h.down || hs.phase === 'done' || hs.phase === 'wait') return;
+    const st = M.steps[hs.step]; if (!st) return;
+    const d = hs.t ? hyp(h.x - hs.t.x, h.y - hs.t.y) : 99, live = () => hs.spawned.filter(id => alive(G.ents.get(id)));
+    if (hs.mid) { const e = G.ents.get(hs.mid); if (alive(e) && !hs.midSeen && hyp(e.x - h.x, e.y - h.y) < 8) { hs.midSeen = true; if (st.mid.tip) bigHint(st.mid.tip); if (st.mid.say) mSay(st.mid.say); } if (!alive(e)) { hs.mid = null; if (hs.midSeen) hideHint(); } }
+    const ring = (n, k, r, o) => { for (let q = 0; q < n; q++) { const a = (q / n) * Math.PI * 2 + R() * 0.4, p = walkNear(h.x + Math.cos(a) * r, h.y + Math.sin(a) * r), e = spawnAt(hs.type(k), p[0], p[1], Object.assign({ mode: 'raid', mul: 0.65, dmul: 0.6 }, o)); e.aggro = 12; e.provokedT = S.t + 60; e.provokedBy = h.id; hs.spawned.push(e.id); } };
+    if (st.kind === 'go') { if (d < 2.6) mNext(); }
+    else if (st.kind === 'search') {
+      const p = hs.t.poi && G.W.pois.find(q => q.id === hs.t.poi);
+      if (!p) { if (d < 2.6) mNext(); }
+      else if (p.state !== 'new') mNext();
+      else if (d < 4 && !hs.sub) { hs.sub = 1; if (st.tip2) bigHint(st.tip2); }
+    } else if (st.kind === 'ambush') {
+      if (!hs.sub && d < 3) { hs.sub = 1; ring(st.n || 4, st.type, 3.6); if (st.unlock != null) unlock(st.unlock); if (st.tip) bigHint(st.tip); }
+      else if (hs.sub && !live().length) mNext();
+    } else if (st.kind === 'bite') {
+      if (!hs.sub) { hs.sub = 1; const a = Math.atan2(h.y - hs.cp.y, h.x - hs.cp.x) + Math.PI, p = walkNear(h.x + Math.cos(a) * 5, h.y + Math.sin(a) * 5), e = spawnAt(hs.type(st.type), p[0], p[1], { mode: 'raid', mul: 0.7, dmul: 0.5 }); e.aggro = 12; e.provokedT = S.t + 60; e.provokedBy = h.id; hs.spawned.push(e.id); hs.biter = e.id; }
+      const e = G.ents.get(hs.biter);
+      if (hs.sub === 1 && alive(e) && hyp(e.x - h.x, e.y - h.y) < 1.6) { hs.sub = 2; h.hp = Math.min(h.hp, h.st.hp * 0.4); G.floatText(h.x, h.y, 'укус', '#ff6050'); G.fxFlash && G.fxFlash('rgba(160,0,0,.3)', 400); if (st.unlock != null) unlock(st.unlock); if (st.tip) bigHint(st.tip); hs.biteT = S.t; }
+      if (hs.sub === 2 && !live().length && (hs.teach == null || S.t - hs.biteT > 14)) mNext();
+      if (hs.sub === 1 && !alive(e)) { hs.sub = 2; h.hp = Math.min(h.hp, h.st.hp * 0.4); G.floatText(h.x, h.y, 'укус', '#ff6050'); if (st.unlock != null) unlock(st.unlock); if (st.tip) bigHint(st.tip); hs.biteT = S.t; }
+    } else if (st.kind === 'hold') {
+      if (d <= HOLD_R) { hs.holdT -= dt; hs.waveT -= dt; }
+      if (hs.waveT <= 0) { hs.waveT = st.every || 7; for (let q = 0; q < (st.wave || 2); q++) { const a = hs.ang + (R() - 0.5) * 0.7, p = walkNear(hs.t.x + Math.cos(a) * 11, hs.t.y + Math.sin(a) * 11), e = spawnAt(hs.type(st.type), p[0], p[1], { mode: 'raid', mul: 0.55, dmul: 0.5 }); e.aggro = 14; e.provokedT = S.t + 40; e.provokedBy = h.id; hs.spawned.push(e.id); } }
+      if (hs.holdT <= 0) mNext();
+    } else if (st.kind === 'leader') {
+      if (!hs.sub) { hs.sub = 1; const ST = STORY[G.race], p = walkNear(hs.t.x, hs.t.y), L = spawnAt(hs.type('heavy'), p[0], p[1], { mode: 'guard', aggro: 0.5, leash: 30, mul: 1, dmul: 0.6 }); L.maxHp = L.hp = st.hp || 900; L.dmg = Math.min(L.dmg, 10); L.name = ST.leader; L.leader = true; hs.leader = L.id; hs.spawned.push(L.id); hs.pack = [L.id]; for (let q = 0; q < (st.pack || 2); q++) { const e = spawnAt(hs.type('light'), p[0] + R() * 3 - 1.5, p[1] + R() * 3 - 1.5, { mode: 'guard', aggro: 0.5, leash: 30, mul: 0.5, dmul: 0.5 }); hs.pack.push(e.id); } }
+      const L = G.ents.get(hs.leader);
+      if (!alive(L)) { mNext(); return; }
+      hs.t.x = L.x; hs.t.y = L.y;
+      const provoke = () => { hs.provoked = true; for (const id of hs.pack) { const e = G.ents.get(id); if (alive(e)) { e.aggro = 9; e.provokedT = S.t + 60; e.provokedBy = h.id; } } if (st.unlock != null) { unlock(st.unlock); if (st.tip) bigHint(st.tip); (st.afterTip || []).forEach((l, k) => G.later ? G.later(2.6 + k * 2.8, () => mSay(l)) : 0); } };
+      const packNear = hs.pack.some(id => { const e = G.ents.get(id); return alive(e) && hyp(e.x - h.x, e.y - h.y) < 6; });
+      if (!hs.talked && (hyp(h.x - L.x, h.y - L.y) < 9 || packNear || L.hp < L.maxHp) && menu.hidden) { hs.talked = true; dialog(STORY[G.race].meet, L, provoke); }
+    } else if (st.kind === 'end') {
+      const L = st.lines || []; if (hs.endI < L.length && S.t - hs.endT > 1.2 + hs.endI * 3.2) { mSay(L[hs.endI]); hs.endI++; }
+      if (hs.endI >= L.length && S.t - hs.endT > L.length * 3.2 + 2.5) mWin();
+      return;
+    }
+    // тишина — Дед говорит
+    const calm = !S.enemies.some(e => alive(e) && hyp(e.x - h.x, e.y - h.y) < 12);
+    hs.calmT -= calm ? dt : 0;
+    const C = (M.calm || {})[hs.step] || [];
+    if (calm && hs.calmT <= 0 && hs.line < C.length) { hs.calmT = 24; mSay(C[hs.line++]); }
+  }
+  function mWin() {
+    const S = S_(), hs = S.hs, M = M_(); if (hs.phase === 'done') return; hs.phase = 'done'; hideHint(); document.body.classList.remove('mission');
+    if (G.campDone) G.campDone(S.mission);
+    G.fxFlash && G.fxFlash('rgba(255,240,200,.6)', 1500);
+    const o = M.outro || {}, A = G.ADV || {}, img = G.ADV_IMG || {};
+    setTimeout(() => G.story && G.story.scene({ race: G.race, img: ((G.STORY.races || {})[G.race] || {}).img, who: { name: (A[G.race] || {}).name, img: img[G.race] }, lines: o.lines || ['Миссия пройдена.'], kicker: `${M.kicker} · ${M.title}`, title: o.title || 'Миссия пройдена', call: 'К кампании', done: () => { const go = () => { G.menu.open(); G.menu.campaign(); }; G.ads ? G.ads.after(go) : go(); } }), 1200);
+  }
+
   // ---------- Голос капитана: плашка сверху, игра идёт
-  function say(text) {
+  function say(text, who) {
     const bark = document.getElementById('bark'); if (!bark || !text) return;
-    const A = (G.ADV || {})[G.race] || {}, im = (G.ADV_IMG || {})[G.race];
+    const A = (G.ADV || {})[G.race] || {}, im = (G.ADV_IMG || {})[G.race], me = who === 'h';
     const t = String(text).replace(/^([^:<]{2,30}): /, '');
     bark.dataset.race = G.race;
-    bark.innerHTML = `<div class="bk-face" style="background-image:url(${im})"></div><div class="bk-txt"><b>${A.name || ''}</b><span>${t}</span></div>`;
+    bark.innerHTML = `<div class="bk-face" style="${me ? face(G.race) : `background-image:url(${im})`}"></div><div class="bk-txt"><b>${me ? HEROES[G.race].name : A.name || ''}</b><span>${t}</span></div>`;
     bark.hidden = false; bark.classList.remove('out'); clearTimeout(say.t);
     say.t = setTimeout(() => { bark.classList.add('out'); setTimeout(() => { bark.hidden = true; }, 500); }, 7500);
   }
@@ -12983,7 +13147,7 @@ if (G.ui) G.ui.intro = () => { if (!G._splashed && G.brandSplash) { G._splashed 
     HEROES[G.race].ab.forEach((a, i) => {
       const b = bar.querySelector(`.hb-ab[data-i="${i}"]`); if (!b) return;
       const left = Math.max(0, (cd[a.k] || 0) - S.t), tot = cdOf(a, h);
-      b.classList.toggle('cool', left > 0); b.classList.toggle('ready', left <= 0);
+      b.classList.toggle('lk', abLocked(i)); b.classList.toggle('cool', left > 0); b.classList.toggle('ready', left <= 0);
       const c = b.querySelector('.hb-cd'); c.style.setProperty('--p', (left / tot * 100).toFixed(1) + '%'); c.textContent = left > 0 ? Math.ceil(left) : '';
       const rk = rankOf(a.k), cost = upCost(rk); b.querySelector('.hb-rk').textContent = rk > 1 ? 'I'.repeat(rk) : '';
       b.classList.toggle('canup', !!(S.heroMode && cost && (S.res[mainRes()] || 0) >= cost));
@@ -13009,7 +13173,14 @@ if (G.ui) G.ui.intro = () => { if (!G._splashed && G.brandSplash) { G._splashed 
     const done = hs.phase === 'done';
     let prog = '';
     if (hs.phase === 'hold') prog = `<div class="hq-bar"><i style="width:${(100 - hs.holdT / 75 * 100).toFixed(1)}%"></i><em>${Math.ceil(Math.max(0, hs.holdT))} с</em></div>`;
-    const qh = `<div class="hq-t">${st.title}</div><ol>${STEPS.map((s, i) => {
+    const M = M_();
+    if (M) {
+      const cur = M.steps[hs.step] || {};
+      if (hs.phase === 'hold') prog = `<div class="hq-bar"><i style="width:${(100 - hs.holdT / hs.holdMax * 100).toFixed(1)}%"></i><em>${Math.ceil(Math.max(0, hs.holdT))} с</em></div>`;
+      const qm = `<div class="hq-t">${M.title}</div><ol>${M.steps.slice(0, Math.min(M.steps.length, (hs.step || 0) + 1)).map((q, i) => { const cls = done || i < hs.step ? 'ok' : 'now'; return `<li class="${cls}"><b>${i + 1}</b><span>${i === hs.step ? hs.goal : (q.goalDone || q.goal).replace('{place}', 'место')}</span>${cls === 'now' && q.hint ? `<em>${q.hint}</em>` : ''}${cls === 'now' ? prog : ''}</li>`; }).join('')}</ol>${done ? '<div class="hq-win">Миссия пройдена</div>' : ''}`;
+      if (quest._h !== qm) { quest.innerHTML = qm; quest._h = qm; }
+    }
+    const qh = M ? quest._h : `<div class="hq-t">${st.title}</div><ol>${STEPS.map((s, i) => {
       const cls = done || i < hs.act ? 'ok' : i === hs.act ? 'now' : '';
       return `<li class="${cls}"><b>${s}</b><span>${goalOf(i)}</span>${cls === 'now' ? `<em>${hint()}</em>${prog}` : ''}</li>`;
     }).join('')}</ol>${done ? '<div class="hq-win">История пройдена</div>' : ''}`;
@@ -13099,7 +13270,7 @@ if (G.ui) G.ui.intro = () => { if (!G._splashed && G.brandSplash) { G._splashed 
     if (S.heroMode) {
       if (camLink && !h.down) { if (lastFollow === h.id && G.ui.followId !== h.id && !h._justUp) { camLink = false; updBar(); } else G.ui.followId = h.id; h._justUp = false; }
       lastFollow = G.ui.followId;
-      if (!S.intro) storyTick(dt);
+      if (!S.intro) (M_() ? mTick(dt) : storyTick(dt));
       if (G.race === 'fungi' && G.mycSeed && !h.down) { mycT -= dt; if (mycT <= 0) { mycT = 1; G.mycSeed(h.x, h.y, 1.3, 1); } }
     }
     barT -= dt; if (barT <= 0) { barT = 0.15; updBar(); }
@@ -13182,11 +13353,12 @@ if (G.ui) G.ui.intro = () => { if (!G._splashed && G.brandSplash) { G._splashed 
     if (hs && hs.phase === 'go' && hs.t && hs.t.name && p.name === hs.t.name && p.id !== hs.t.poi) { hs.t.x = p.x + 0.5; hs.t.y = p.y + 0.5; hs.t.poi = p.id; }
     const L = lootOf(p), msg = L && L[1] ? L[1](p, h) : '';
     // карта — в каждом третьем месте и в каждом тайнике, руины без своего бонуса — всегда
-    let card = null; if (G.cardFind && (!L || L[0] === 'карта' || p.type === 'cache' || R() < 0.33)) card = G.cardFind();
+    const quiet = S_().quiet;
+    let card = null; if (!quiet && G.cardFind && (!L || L[0] === 'карта' || p.type === 'cache' || R() < 0.33)) card = G.cardFind();
     if (G.gainXp) G.gainXp(h, 20);
     const txt = [msg, card ? `карта «${card.name}»` : ''].filter(Boolean).join('. ');
     if (txt) G.notify(`${p.name}: ${txt}.`, { kind: 'good', x: p.x, y: p.y });
-    if (L && L[0] && !card && G.castBanner) G.castBanner(L[0], null, '#ffd65a', p.name);
+    if (L && L[0] && !card && !quiet && G.castBanner) G.castBanner(L[0], null, '#ffd65a', p.name);
   };
   // над необысканными местами — что там найдётся
   function lootTags(c, iso) {
@@ -13215,6 +13387,73 @@ if (G.ui) G.ui.intro = () => { if (!G._splashed && G.brandSplash) { G._splashed 
     const ad = f => () => { m.hidden = true; G.ads ? G.ads.after(f) : f(); };
     card.querySelector('#heroAgain').onclick = ad(() => G.story.hero(G.race));
     card.querySelector('#heroPick').onclick = ad(() => G.story.picker());
+  };
+})();
+
+</script>
+<script>
+// js/missions.js
+'use strict';
+// Миссии кампании по сценам (docs/campaign/ch1.md). Шаги идут по порядку, движок — в hero.js (mStep, mTick).
+// Виды шагов: search — дойти и обыскать место; ambush — засада по приходу; bite — укус сзади; hold — удержать точку;
+// leader — вожак у цели, разговор, бой; end — камера к цели, последние реплики, итоги.
+// Реплики: строка с «Дед:» — голос советника; ['h', '…'] — сам вождь; ['d', '…'] — советник.
+(function () {
+  G.MISSIONS = {
+    '1.1': {
+      race: 'survivors', kicker: 'Глава 1', title: 'Лампа', alone: true, quiet: true,
+      intro: ['Лампочка в фонаре — последняя на сто вёрст. Дед берёг её двадцать лет.'], call: 'В путь',
+      far: ['radio', 'Телевышка'], farD: [38, 56],
+      steps: [
+        {
+          kind: 'search', want: ['bunker', 'НИИ', 'Склад'], d: [10, 18], goal: 'Обыскать «{place}»', goalDone: 'Обыскать тайник', label: 'Тайник',
+          hint: 'Нажми на землю — Лампа пойдёт туда. Столб света — цель.',
+          tip: { title: 'Иди', what: 'Нажми на землю — Лампа пойдёт туда.', when: 'Столб света и стрелка у края экрана — куда идти.' },
+          say: 'Дед: Проверка связи. Слышишь? Хорошо. Иди по трассе. И не свети зря — фонарь видно издалека. И не только нам.',
+          mid: { type: 'light', tip: { title: 'Враг', what: 'Лампа бьёт сама, когда враг рядом.', when: 'Просто подойди. Или нажми на врага.' }, say: 'Дед: Это гуль. Медленный и глупый. Как мой шурин.' },
+          tip2: { title: 'Обыскать', what: 'Нажми на здание со столбом света — Лампа обыщет его.', when: 'Внутри бывает полезное.' },
+          done: ['h', 'Патрон. Ржавый, но держит. Теперь не страшно, если лампа треснет.'],
+        },
+        {
+          kind: 'ambush', at: 'toward', k: 0.35, goal: 'Дойти до моста', label: 'Мост', n: 4, type: 'light', unlock: 0,
+          hint: 'Мост — по дороге к вышке.',
+          tip: { ab: 0, slow: true, what: 'Фонарь на полную — все вокруг ослеплены на 2 секунды и получают урон.', when: 'Жми, когда окружили.' },
+          sayOn: 'Дед: Свети. Сейчас можно.',
+        },
+        {
+          kind: 'bite', type: 'fast', unlock: 1, goal: 'Отбиться',
+          hint: 'Сзади кто-то есть.',
+          tip: { ab: 1, slow: true, what: 'Лечит Лампу и тех, кто рядом.', when: 'Жми, когда полоска здоровья красная.' },
+          sayOn: 'Дед: Изолента держит всё. Меня тридцать лет держит.',
+        },
+        {
+          kind: 'hold', sec: 40, every: 7, wave: 2, type: 'fast', unlock: 2, goal: 'Удержать мост 40 секунд', label: 'Мост',
+          hint: 'Стой в круге. Псы бегут с того берега.',
+          tip: { ab: 2, slow: true, what: 'Лампа собирает стрелка из хлама — он стреляет сам 25 секунд.', when: 'Ставь в проходе, откуда бегут.' },
+          say: 'Дед: Помнишь, как я учил? Две трубы, моторчик и злость.',
+          done: 'Дед: Вот так и строят. Только надолго.',
+        },
+        {
+          kind: 'leader', at: 'toward', k: 0.86, goal: 'Победить Загонщика у ворот', label: 'Ворота посёлка', unlock: 3, hp: 900, pack: 2,
+          hint: 'У ворот посёлка ждёт вожак мутантов.',
+          tip: { ab: 3, slow: true, what: 'Слепящий взрыв — большой урон и ослепление на 4 секунды.', when: 'Копится долго. Береги для сильного врага.' },
+          afterTip: [['d', 'Только лампочку не разбей.'], ['h', 'Я аккуратно.']],
+          done: ['h', 'Загонщик лёг. Улей запомнит наш запах.'],
+        },
+        {
+          kind: 'end', goal: 'Посёлок под вышкой', lines: [['h', 'Дед, я дошла. Тут посёлок. Пустой.'], ['d', 'Пустой — значит наш. Ждите, идём.']],
+        },
+      ],
+      calm: {
+        1: ['Дед: Мост старый. Перила кто-то снял до нас. Может, я.'],
+        3: ['Дед: Не стой на месте — турель стоит за тебя.'],
+        4: ['Дед: За мостом посёлок. Там раньше пекли хлеб. Сейчас — не знаю.'],
+      },
+      outro: {
+        title: 'Нас семеро',
+        lines: ['Ночь. Тележка, шестеро усталых людей, Дед впереди. «Нас семеро. Еды на три дня. Лампочка одна».', 'Лампа у ворот, фонарь в руке. «В посёлке цитадель. Старая. Если разжечь — согреемся».', 'За рекой над телом Загонщика склоняются тени. «Огонёк ушёл дальше. Ешьте. Растите. Идите на тёплое»'],
+      },
+    },
   };
 })();
 
@@ -14498,9 +14737,9 @@ if (G.ui) G.ui.intro = () => { if (!G._splashed && G.brandSplash) { G._splashed 
   const M = (id, name, kind, desc, ready) => ({ id, name, kind, desc, ready: !!ready });
   const CH = [
     { n: 1, race: 'survivors', title: 'Последняя лампочка', teach: 'добыча, стройка, найм, оборона', art: 'ch1', ms: [
-      M('1.1', 'Свет', 'base', 'Посёлок у костра: жилище, теплица, казарма, первые трое бойцов. Первый набег — маленький.'),
-      M('1.2', 'Лампа', 'hero', 'Последняя лампочка на сто вёрст. Донести её до радиовышки.', true),
-      M('1.3', 'Маяк', 'trial', 'Держать вышку пять волн, пока маяк набирает свет.')] },
+      M('1.1', 'Лампа', 'hero', 'Последняя лампочка на сто вёрст. Дойти до посёлка под радиовышкой.', true),
+      M('1.2', 'Свет', 'base', 'Мёртвый посёлок: разжечь цитадель, жилище, теплица, казарма, первые бойцы. Первый набег — маленький.'),
+      M('1.3', 'Маяк', 'trial', 'Пять ночей держать вышку, пока маяк набирает свет.')] },
     { n: 2, race: 'mutants', title: 'Первый выводок', teach: 'рост, мутации, нападение', art: 'ch2', ms: [
       M('2.1', 'Голод', 'base', 'Улей тесен. Кормить выводок и растить формы.'),
       M('2.2', 'Первенец', 'hero', 'Тёплое место для второго Улья — у света.', true),
@@ -14517,12 +14756,17 @@ if (G.ui) G.ui.intro = () => { if (!G._splashed && G.brandSplash) { G._splashed 
     { n: 9, race: 'others', title: 'Жатва', teach: 'энтропия', ms: [] },
   ];
   G.CAMPAIGN = CH;
-  const prog = () => ls.get('pepel_campaign', { done: {} });
+  // v2: глава 1 начинается с «Лампы» — раньше она была 1.2
+  const prog = () => { const p = ls.get('pepel_campaign', { done: {} }); if (!p.v) { if (p.done['1.2'] && !p.done['1.1']) { p.done['1.1'] = p.done['1.2']; delete p.done['1.2']; } p.v = 2; ls.set('pepel_campaign', p); } return p; };
   const isDone = id => !!prog().done[id];
   const chDone = c => c.ms.length && c.ms.every(m => isDone(m.id));
   // глава открыта, если первая или в прошлой главе пройдено испытание (или все готовые миссии)
   const chOpen = c => c.n === 1 || (() => { const p = CH[c.n - 2]; return p && p.ms.length && p.ms.filter(m => m.ready).every(m => isDone(m.id)); })();
   G.campDone = function (id) { const p = prog(); p.done[id] = Date.now(); ls.set('pepel_campaign', p); };
+  G.campStarted = () => Object.keys(prog().done).length > 0;
+  // режимы открываются по ходу кампании (ch1.md): пока готова только «Лампа» — после неё
+  const GATE = { skirmish: '1.1', wall: '1.1', defense: '1.1' };
+  const gated = k => GATE[k] && !isDone(GATE[k]);
 
   // ---------- Фон: ключевой арт мира, дальше — арт последней главы, где что-то пройдено
   function bgKey() {
@@ -14542,18 +14786,19 @@ if (G.ui) G.ui.intro = () => { if (!G._splashed && G.brandSplash) { G._splashed 
   el.addEventListener('pointerdown', e => e.stopPropagation());
 
   const ITEMS = [
-    ['continue', 'Продолжить', () => G.S && !G.S.intro && !G.S.over],
+    ['continue', 'Продолжить', () => G.S && !G.S.intro && !G.S.over && !(G.S.mission && G.S.hs && G.S.hs.phase === 'done')],
     ['campaign', 'Кампания'], ['skirmish', 'Схватка'],
     ['wall', 'Стена', null, 'мерж-оборона'], ['defense', 'Оборона', null, 'башни'],
     ['settings', 'Настройки'], ['about', 'Об игре'],
   ];
   function drawList() {
-    list.innerHTML = ITEMS.filter(([, , show]) => !show || show()).map(([k, t, , tag]) => `<button class="mm-i${tag ? ' soon' : ''}" data-k="${k}"><span>${t}</span>${tag ? `<em>${tag}</em>` : ''}</button>`).join('');
+    list.innerHTML = ITEMS.filter(([, , show]) => !show || show()).map(([k, t, , tag]) => { const lk = gated(k); return `<button class="mm-i${tag ? ' soon' : ''}${lk ? ' lk' : ''}" data-k="${k}"><span>${t}</span>${lk ? '<em>после миссии «Лампа»</em>' : tag ? `<em>${tag}</em>` : ''}</button>`; }).join('');
   }
   list.addEventListener('click', e => { const b = e.target.closest('.mm-i'); if (!b) return; G.sfx && G.sfx('click'); act(b.dataset.k); });
   list.addEventListener('mouseover', e => { const b = e.target.closest('.mm-i'); if (b && b !== list._hov) { list._hov = b; G.sfx && G.sfx('click'); } });
 
   function act(k) {
+    if (gated(k)) { G.sfx && G.sfx('bad'); return; }
     if (k === 'continue') return close();
     if (k === 'campaign') return showCampaign();
     if (k === 'skirmish') return showSkirmish();
@@ -14568,13 +14813,8 @@ if (G.ui) G.ui.intro = () => { if (!G._splashed && G.brandSplash) { G._splashed 
 
   // ---------- Кампания
   function showCampaign() {
-    // первый вход — пролог мира
-    if (!ls.get('pepel_prologue_seen', false) && G.STORY && G.STORY.world) {
-      ls.set('pepel_prologue_seen', true);
-      el.hidden = true;
-      return G.story.prologue(() => { el.hidden = false; showCampaign(); });
-    }
-    const html = `<h2>Хроника энтропии</h2><p class="mm-sub">Девять рас — по очереди. Противник одной главы становится героем следующей.</p>
+    // пролог мира — не перед кампанией, а по желанию (позже — в летописи)
+    const html = `<h2>Хроника энтропии</h2><p class="mm-sub">Девять рас — по очереди. Противник одной главы становится героем следующей. <button class="mm-pro">Пролог</button></p>
       <div class="mm-chs">${CH.map(c => {
         const open = chOpen(c), done = chDone(c), img = (G.STORY.races[c.race] || {}).img;
         return `<div class="mm-ch${open ? '' : ' locked'}${done ? ' done' : ''}" data-race="${c.race}">
@@ -14584,11 +14824,13 @@ if (G.ui) G.ui.intro = () => { if (!G._splashed && G.brandSplash) { G._splashed 
       }).join('')}</div>`;
     openPanel(html, 'camp');
     panel.querySelectorAll('.mm-m[data-m]').forEach(b => b.onclick = () => startMission(b.dataset.m));
+    const pro = panel.querySelector('.mm-pro'); if (pro) pro.onclick = () => { el.hidden = true; G.story.prologue(() => { el.hidden = false; showCampaign(); }); };
   }
   function startMission(id) {
     const c = CH.find(q => q.ms.some(m => m.id === id)), m = c.ms.find(q => q.id === id);
     if (!m.ready) return;
     close(true);
+    if (G.MISSIONS && G.MISSIONS[id]) return G.story.mission(id);
     if (m.kind === 'hero') { G.story.hero(c.race, { campaign: id }); }
   }
 
