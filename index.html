@@ -1195,6 +1195,38 @@ body.heromode #heroBar .hb-face::before { content: 'меню'; position: absolut
 #heroBoss div { height: 12px; margin-top: 3px; background: rgba(20,0,0,.85); border: 1px solid #000; box-shadow: 0 0 0 1px rgba(255,90,90,.4); }
 #heroBoss i { display: block; height: 100%; background: linear-gradient(#ff6a6a, #b8202a); transition: width .2s; }
 /* сценарий миссии кампании: крупная подсказка, закрытые способности, свечение новой кнопки */
+/* победа и поражение в миссии (16.4) */
+.m-banner { position: absolute; left: 0; right: 0; top: 38%; z-index: 60; display: flex; justify-content: center; pointer-events: none; animation: mbIn .5s ease-out both; }
+.m-banner span { padding: 12px 34px; font: 700 clamp(22px, 4.4vw, 40px) 'Tektur', sans-serif; letter-spacing: .06em; text-transform: uppercase; color: #ffe7a8; background: linear-gradient(90deg, transparent, rgba(10,8,10,.88) 18%, rgba(10,8,10,.88) 82%, transparent); text-shadow: 0 0 18px rgba(255,200,90,.6); }
+.m-banner.out { opacity: 0; transition: opacity .5s; }
+@keyframes mbIn { from { opacity: 0; transform: scale(1.12); } to { opacity: 1; transform: none; } }
+.mres .mr-st { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; margin: 12px 0; }
+.mres .mr-st > div { padding: 8px 10px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); text-align: left; }
+.mres .mr-st span { display: block; font: 600 10px 'JetBrains Mono', monospace; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.55); }
+.mres .mr-st b { font: 700 18px 'Tektur', sans-serif; color: #fff; }
+.mres .mr-st .mr-w { grid-column: 1 / -1; } .mres .mr-st .mr-w b { font-size: 15px; font-family: 'Golos Text', sans-serif; }
+.mres .mr-mds { display: flex; gap: 10px; justify-content: center; margin: 4px 0 12px; }
+.mres .mr-md { flex: 1; max-width: 170px; padding: 10px; border: 1px solid rgba(255,255,255,.12); opacity: .45; text-align: center; }
+.mres .mr-md i { display: block; width: 26px; height: 26px; margin: 0 auto 6px; border-radius: 50%; border: 2px solid rgba(255,255,255,.4); }
+.mres .mr-md b { display: block; font: 700 13px 'Tektur', sans-serif; color: #fff; } .mres .mr-md small { font-size: 11px; color: rgba(255,255,255,.6); }
+.mres .mr-md.on { opacity: 1; border-color: var(--gold); animation: mdOn .6s .3s ease-out both; }
+.mres .mr-md.on i { background: radial-gradient(circle at 35% 35%, #fff3c0, var(--gold) 55%, #a8741c); border-color: #fff0b0; box-shadow: 0 0 14px rgba(255,211,106,.6); }
+@keyframes mdOn { from { transform: scale(.7); } 60% { transform: scale(1.08); } to { transform: none; } }
+.mres .mr-pg { display: block; width: 100%; margin: 6px 0 12px; padding: 0; border: 0; background: none; perspective: 900px; cursor: pointer; color: inherit; }
+.mres .mr-in { position: relative; min-height: 110px; transition: transform .7s cubic-bezier(.2,.8,.2,1); transform-style: preserve-3d; }
+.mres .mr-pg.open .mr-in { transform: rotateY(180deg); }
+.mres .mr-bk, .mres .mr-fr { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; padding: 12px 16px; backface-visibility: hidden; border: 1px solid #c9a86a; }
+.mres .mr-bk { background: repeating-linear-gradient(45deg, #2a2016, #2a2016 6px, #231a12 6px, #231a12 12px); animation: pgPulse 1.6s ease-in-out infinite; }
+.mres .mr-bk b { font: 700 16px 'Tektur', sans-serif; color: #f0d9a8; } .mres .mr-bk small { color: rgba(240,217,168,.7); font-size: 12px; }
+.mres .mr-fr { transform: rotateY(180deg); background: #efe3c8; color: #2a2016; text-align: left; }
+.mres .mr-fr b { font: 700 14px 'Tektur', sans-serif; } .mres .mr-fr p { margin: 4px 0 0; font-size: 13px; line-height: 1.4; }
+@keyframes pgPulse { 50% { box-shadow: 0 0 16px rgba(255,211,106,.45); } }
+.mres .mr-grey { color: #c8ccd8; font-style: italic; } .mres .mr-help { font-size: 12px; opacity: .7; } .mres .mr-nx b { color: var(--gold); }
+#mainMenu .mm-m.next { border-color: #ff7b23; animation: mmNext 1.8s ease-in-out infinite; }
+@keyframes mmNext { 50% { box-shadow: 0 0 0 2px rgba(255,123,35,.35), 0 0 18px rgba(255,123,35,.35); } }
+#mainMenu .mm-md { display: inline-flex; gap: 3px; margin-left: 6px; vertical-align: middle; text-decoration: none; }
+#mainMenu .mm-md s { width: 9px; height: 9px; border-radius: 50%; border: 1px solid rgba(255,255,255,.35); }
+#mainMenu .mm-md s.on { background: var(--gold); border-color: var(--gold); }
 #finale { position: absolute; inset: 0; z-index: 70; display: flex; align-items: center; justify-content: center; padding: 16px; background: radial-gradient(ellipse at center, rgba(40,30,20,.6), rgba(0,0,0,.92)); }
 #finale .fn-card { width: min(520px, 100%); padding: 24px; text-align: center; background: rgba(10,8,10,.96); border: 1px solid rgba(255,255,255,.14); border-top: 3px solid #ffd36a; }
 #finale span { font: 700 11px 'JetBrains Mono', monospace; letter-spacing: .16em; text-transform: uppercase; color: #ffd36a; }
@@ -1216,7 +1248,7 @@ body.heromode #heroBar .hb-face::before { content: 'меню'; position: absolut
 @keyframes abTeach { from { box-shadow: 0 0 0 0 rgba(255,214,90,.2); transform: translateY(0); } to { box-shadow: 0 0 22px 6px rgba(255,214,90,.75); transform: translateY(-4px); } }
 #heroBar .hb-ab.fresh { animation: abFresh 1.2s ease 2; }
 @keyframes abFresh { 0% { transform: scale(.6); opacity: 0; } 60% { transform: scale(1.12); opacity: 1; } 100% { transform: scale(1); } }
-body.mission:not(.m-base) #handFab, body.mission:not(.m-base) #hand, body.m-alone .hud-res { display: none !important; }
+body.m-alone #handFab, body.m-alone #hand, body.m-alone .hud-res { display: none !important; }
 body.m-base #goalPill, body.m-base [data-dock="vehicles"], body.m-base [data-dock="mechs"] { display: none !important; }
 body.m-nobase .cmd, body.m-nobase .hud-res, body.m-nobase #heroDot, body.m-nobase .hb-home, body.m-nobase #raidPill { display: none !important; }
 body.m-nohero #heroDot, body.m-nohero #heroBar { display: none !important; }
@@ -3568,7 +3600,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRnZ2BABXRUJQVlA4WAoA
       lairsCleared: 0, eventT: 200, wanderT: 45, caravanT: 260, shelterT: 0, rainT: 0, starving: false,
       lastEvent: null, over: false, intro: true,
     };
-    S.diff = opt.diff || 'normal'; S.noRaids = !!opt.noRaids;
+    S.diff = opt.diff || 'normal'; S.noRaids = !!opt.noRaids; S.foeMul = opt.foeMul || 1; S.help = !!opt.help;
     S.raid.timer = D().first; for (const k in S.res) S.res[k] = Math.round(S.res[k] * D().res);
     W = G.W = G.genWorld(seed);
     G.resHist = []; G.flowHist = []; G.alerts.length = 0;
@@ -3805,6 +3837,17 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRnZ2BABXRUJQVlA4WAoA
     if (o.lvl) { for (let l = 1; l < o.lvl; l++) { u.lvl++; } G.recalc(u); u.hp = u.st.hp; if (u.lvl >= 5 && !u.spec) { const L = G.SPECS[u.cls]; if (L) { u.spec = pick(L).id; G.recalc(u); u.hp = u.st.hp; } } }
     return u;
   };
+  // память о прошлом поселении: сильнейший житель проигранной партии приходит в новую с половиной уровня (16.4)
+  G.memoryJoin = function (race) {
+    let mem = null; try { mem = (JSON.parse(localStorage.getItem('pepel_memory') || '{}') || {})[race]; } catch (e) { }
+    if (!mem || !G.CLASSES[mem.cls] || G.RC().noUnits || S.heroMode) return null;
+    const c = G.cit(); if (!c) return null;
+    const p = G.nearestWalkable(Math.floor(c.x + 1), Math.floor(c.y + c.h + 1), 6) || [c.x + 1, c.y + c.h + 1];
+    const u = G.makeUnit(mem.cls, p[0] + 0.5, p[1] + 0.5, { name: mem.name, lvl: Math.max(1, Math.floor(mem.lvl / 2)) });
+    u.title = mem.title; u.memory = true;
+    G.later(3, () => { if (u.hp > 0) { G.floatText(u.x, u.y, 'помнит прошлое поселение', '#ffd36a'); G.notify(`${u.name} пришёл из прошлого поселения — ${u.lvl} уровень`, { ent: u.id, kind: 'good' }); } });
+    return u;
+  };
 
   G.recalc = function (u) {
     const C = G.CLASSES[u.cls], lv = u.lvl;
@@ -3950,7 +3993,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRnZ2BABXRUJQVlA4WAoA
     o = o || {};
     // враг всегда появляется на проходимой клетке — иначе до него не добраться и место не отбить
     if (!G.ENEMIES[type].static && !G.walk(Math.floor(x), Math.floor(y))) { const w = G.nearestWalkable(Math.floor(x), Math.floor(y), 6); if (w) { x = w[0] + 0.5; y = w[1] + 0.5; } }
-    const T = G.ENEMIES[type], m = (o.mul || 1) * (G.race === 'mutants' ? 0.95 : 1);
+    const T = G.ENEMIES[type], m = (o.mul || 1) * (G.race === 'mutants' ? 0.95 : 1) * (S.foeMul || 1); // foeMul: пик главы крепче, «с помощью» слабее (16.4)
     if (!o.fac) { const pp = o.poi && W.pois.find(q => q.id === o.poi); o.fac = (pp && pp.faction) || T.race || (G.ENEMY_SPR[type] && G.ENEMY_SPR[type][0]) || null; } // выжившие-враги чуть слабее: у них дальнобойность и машины
     const e = {
       id: nid(), kind: 'e', team: 'e', type, x, y, hp: T.hp * m, maxHp: T.hp * m, dmg: T.dmg * (o.dmul || (0.5 + 0.5 * m)),
@@ -4805,6 +4848,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRnZ2BABXRUJQVlA4WAoA
     if (G.cardFx && G.cardFx.unitDied(u, src)) return; // карта спасла бойца
     if (G.entropyAdd) G.entropyAdd(0.6);
     if (u.hero && G.heroDown) { G.heroDown(u, src); return; } // вождь не умирает насовсем
+    if (S.mission && S.hs && G.MISSIONS[S.mission] && G.MISSIONS[S.mission].base) { S.hs.lost = true; S.hs.fallen = (S.hs.fallen || 0) + 1; }
     if (G.isVeh(u) && u.pass && u.pass.length) {
       for (const id of u.pass) { const p = G.ents.get(id); if (p) { p.inVeh = null; p.ride = null; p.hp *= 0.7; p.x = u.x + rnd(-1, 1); p.y = u.y + rnd(-1, 1); } }
       u.pass = [];
@@ -10688,14 +10732,20 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRnZ2BABXRUJQVlA4WAoA
   };
   ui.gameOver = function () {
     const s = S();
+    if (s.mission && G.missionLose) { G.clearSave(); return G.missionLose(); } // кампания — свой экран (16.4)
     if (s.heroMode && G.heroGameOver) { G.clearSave(); return G.heroGameOver(); }
     G.clearSave();
     const best = s.units.concat(s.fallen).sort((a, b) => b.lvl - a.lvl)[0];
+    // память: сильнейший придёт в следующую партию той же расы с половиной уровня (16.4)
+    if (best && best.lvl >= 2 && G.CLASSES[best.cls] && G.CLASSES[best.cls].role !== 'vehicle') { try { const mem = JSON.parse(localStorage.getItem('pepel_memory') || '{}'); mem[s.race] = { name: best.name, cls: best.cls, lvl: best.lvl, title: best.title || null }; localStorage.setItem('pepel_memory', JSON.stringify(mem)); } catch (e) { } }
+    const seed = s.seed, race = s.race, diff = s.diff;
     modalCard.innerHTML = `<div class="intro"><div class="kicker" style="color:var(--blood)">Огонь погас</div><h1>${G.BUILDINGS.citadel.name}: конец</h1>
       <p class="p">Поселение продержалось <b>${G.day()}</b> ${plural(G.day(), 'день', 'дня', 'дней')} и отбило <b>${s.stats.raids}</b> ${plural(s.stats.raids, 'набег', 'набега', 'набегов')}. Убито врагов: ${s.stats.kills}. Зачищено логов: ${s.lairsCleared}. Легенд: ${s.stats.legends}.</p>
       ${best ? `<p class="p">Сильнейший житель: ${esc(best.name)}${best.title ? ' «' + esc(best.title) + '»' : ''}, ${best.lvl} уровень.</p>` : ''}
-      <div class="opts"><button class="btn pri" id="againGo">Новое поселение</button></div></div>`;
+      ${best && best.lvl >= 2 ? `<p class="p">${esc(best.name)} запомнит это поселение и придёт в следующее.</p>` : ''}
+      <div class="opts"><button class="btn pri" id="sameGo">Ещё раз на этой карте</button><button class="btn" id="againGo">Новое поселение</button></div></div>`;
     modal.hidden = false; modalCard.onclick = null;
+    $('#sameGo').onclick = () => { modal.hidden = true; const go = () => G.story.skirmish(race, { seed, diff }); G.ads ? G.ads.after(go) : go(); };
     $('#againGo').onclick = () => { modal.hidden = true; const go = () => G.start(null, true); G.ads ? G.ads.after(go) : go(); };
   };
   function plural(n, a, b, c) { const m = n % 10, h = n % 100; return m === 1 && h !== 11 ? a : m >= 2 && m <= 4 && (h < 10 || h >= 20) ? b : c; }
@@ -11162,16 +11212,21 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRnZ2BABXRUJQVlA4WAoA
   }
   // «Схватка» из главного меню: раса, сложность, набеги, подсказки
   function skirmish(r, opt) {
-    G.newGame(undefined, r, opt || {}); const c = G.cit(); G.lookAt(c.x + 1.5, c.y + 1.5, true); G.ui.reset(); G.ui.updHud && G.ui.updHud();
+    G.newGame(opt && opt.seed, r, opt || {});
+    if (G.memoryJoin) G.memoryJoin(r); const c = G.cit(); G.lookAt(c.x + 1.5, c.y + 1.5, true); G.ui.reset(); G.ui.updHud && G.ui.updHud();
     if (opt && opt.noHints) { G.S.tut = { off: true }; }
     const R = G.STORY.races[r];
     panels(R.img, G.RACES[r].name, R.panels, R.call, () => { G.S.intro = false; if (G.tutor && !(opt && opt.noHints)) G.tutor('start'); }, r);
   }
   // миссия кампании по сценарию (missions.js): одна панель — и в бой
-  function mission(id) {
-    const M = G.MISSIONS[id]; if (!M) return;
+  function mission(id, opt) {
+    const M = G.MISSIONS[id]; if (!M) return; opt = opt || {};
+    // реклама — при запуске следующей миссии после итогов; повтор той же — без рекламы (16.4)
+    if (G.adNext && id !== G.lastMission && G.ads && !opt.noAd) { G.adNext = false; return G.ads.after(() => mission(id, Object.assign({}, opt, { noAd: true }))); }
+    G.adNext = false; G.lastMission = id;
     const mm = document.getElementById('mainMenu'); if (mm && !mm.hidden && G.menu && G.menu.close) G.menu.close(true);
-    if (M.base) G.newGame(undefined, M.race, { noRaids: true, diff: 'easy' }); else G.newGame(undefined, M.race, { hero: true });
+    const foeMul = opt.help ? 0.67 : (M.hard || 1);
+    if (M.base) G.newGame(undefined, M.race, { noRaids: true, diff: 'easy', foeMul, help: opt.help }); else G.newGame(undefined, M.race, { hero: true, foeMul, help: opt.help });
     G.S.campaign = id; G.S.mission = id;
     const c = G.cit(); G.lookAt(c.x + 1.5, c.y + 1.5, true); G.ui.reset(); G.ui.updHud && G.ui.updHud();
     panels(G.STORY.races[M.race].img, `${M.kicker} · ${M.title}`, M.intro, M.call || 'В путь', () => { G.S.intro = false; const h = G.heroUnit(); if (h) G.ui.followId = h.id; G.heroBegin(); }, M.race);
@@ -12753,6 +12808,7 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
       hs.notyet = hs.act; u.hp = u.st.hp * 0.5; FX({ k: 'pillar', x: u.x, y: u.y, col: '#7aff8a', dur: 1.5, w: 40 }); G.floatText(u.x, u.y, 'НЕ СЕГОДНЯ', '#7aff8a'); return;
     }
     u.hp = 0; u.down = true; u.goal = null; u.order = null; u.path = null;
+    if (S.mission && hs) { hs.lost = true; hs.fallen = (hs.fallen || 0) + 1; } // медаль «Без потерь» (16.4)
     G.fxBurst(u.x, u.y, '#ff4040', 40); G.shake = 8; G.fxFlash && G.fxFlash('rgba(160,0,0,.35)', 700);
     if (S.heroMode && hs) {
       hs.lives = (hs.lives === undefined ? 3 : hs.lives) - 1;
@@ -12892,7 +12948,7 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
     return '';
   }
   const draftOpen = () => { const b = document.getElementById('hand'); return !!(b && !b.hidden && b.dataset.mode === 'draft'); };
-  function draftWhenFree() { if (!dlg.hidden || !menu.hidden || (S_() && S_().over)) { setTimeout(draftWhenFree, 700); return; } G.offerDraft && G.offerDraft(); }
+  function draftWhenFree() { const S = S_(); if (S && (S.over || (S.hs && (S.hs.phase === 'done' || S.hs.phase === 'lost')))) return; if (!dlg.hidden || !menu.hidden) { setTimeout(draftWhenFree, 700); return; } G.offerDraft && G.offerDraft(); }
   function actDone() {
     const S = S_(), hs = S.hs, st = STORY[G.race], A = st.acts[hs.act], h = hero();
     if (A && A.done) say(A.done);
@@ -12992,7 +13048,7 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
   const mSay = (l, who) => Array.isArray(l) ? say(nm(l[1]), l[0]) : say(nm(l), who);
   function mBegin() {
     const S = S_(), h = hero(), M = M_();
-    S.hs = { act: 0, phase: 'go', calmT: 14, line: 0, lives: 3, cp: { x: h.x, y: h.y }, unl: M.base ? [1, 1, 1, 1] : [0, 0, 0, 0], step: -1, used: [], m: true, charge: 0 };
+    S.hs = { act: 0, phase: 'go', calmT: 14, line: 0, lives: 3, cp: { x: h.x, y: h.y }, unl: M.base ? [1, 1, 1, 1] : [0, 0, 0, 0], step: -1, used: [], m: true, charge: 0, t0m: S.t, fallen: 0 };
     if (M.base) return mBeginBase(S, h, M);
     // тихий мир: учим по одному врагу — чужих рядом убираем, место для обыска открываем
     for (const e of S.enemies) if (alive(e) && !isBoss(e) && hyp(e.x - h.x, e.y - h.y) < 70) { e.hp = 0; e.dead = true; }
@@ -13129,7 +13185,9 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
     if (st.kind === 'hatch') { const c = G.cit(), p = walkNear(c.x + 1.5, c.y + c.h + 1); h.x = p[0]; h.y = p[1]; h.down = false; h.upT = 0; G.recalc(h); h.hp = h.st.hp; h.path = null; document.body.classList.remove('m-nohero'); FX({ k: 'cloud', x: h.x, y: h.y, r: 2, col: '#9ad040', dur: 2 }); FX({ k: 'pillar', x: h.x, y: h.y, col: HEROES[G.race].col, dur: 2, w: 60 }); G.shake = 6; G.lookAt(h.x, h.y); }
     mBanner(hs.goal); updBar(true);
   }
-  function mNext() { const S = S_(), hs = S.hs, st = M_().steps[hs.step]; if (st && st.done) mSay(st.done); if (G.gainXp) G.gainXp(hero(), 40 + 25 * hs.step); hs.done = hs.step + 1; const h = hero(); FX({ k: 'pillar', x: h.x, y: h.y, col: HEROES[G.race].col, dur: 1.4, w: 46 }); hs.phase = 'wait'; const go = () => { if (S_() === S && S.hs.phase === 'wait') mStep(hs.step + 1); }; G.later ? G.later(st && st.done ? 1.6 : 0.4, go) : setTimeout(go, 1000); }
+  function mNext() { const S = S_(), hs = S.hs, st = M_().steps[hs.step]; if (st && st.done) mSay(st.done);
+    // карта — награда и в миссии вождя (16.4): после вожака и удержания, не больше двух; в 1.1 карт ещё нет
+    if (st && !M_().base && S.mission !== '1.1' && (st.kind === 'leader' || st.kind === 'hold') && (hs.drafts || 0) < 2) { hs.drafts = (hs.drafts || 0) + 1; G.later ? G.later(2.2, draftWhenFree) : setTimeout(draftWhenFree, 2200); } if (G.gainXp) G.gainXp(hero(), 40 + 25 * hs.step); hs.done = hs.step + 1; const h = hero(); FX({ k: 'pillar', x: h.x, y: h.y, col: HEROES[G.race].col, dur: 1.4, w: 46 }); hs.phase = 'wait'; const go = () => { if (S_() === S && S.hs.phase === 'wait') mStep(hs.step + 1); }; G.later ? G.later(st && st.done ? 1.6 : 0.4, go) : setTimeout(go, 1000); }
   function mTick(dt) {
     const S = S_(), hs = S.hs, h = hero(), M = M_(); if (!hs || !h || (h.down && !M.base) || hs.phase === 'done' || hs.phase === 'wait') return;
     const st = M.steps[hs.step]; if (!st) return;
@@ -13222,12 +13280,74 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
     const S = S_(), hs = S.hs, M = M_(); if (hs.phase === 'done') return; hs.phase = 'done'; hideHint(); document.body.classList.remove('mission', 'm-base', 'm-nobase', 'm-nohero', 'm-alone'); S.allowB = S.allowU = null; S.missionFoe = null;
     if (G.campDone) G.campDone(S.mission);
     try { localStorage.setItem(ENT_KEY, String(entGet() + (S.entT || 0))); } catch (e) { }
+    const fresh = (M.pages || []).filter(pg => pg.at === 'win' && !G.pageHave(pg.id));
     for (const pg of (M.pages || [])) if (pg.at === 'win') G.pageGet(pg.id);
-    G.fxFlash && G.fxFlash('rgba(255,240,200,.6)', 1500);
-    if (M.finale) return setTimeout(() => finaleChoice(M), 1200);
-    const o = M.outro || {}, A = G.ADV || {}, img = G.ADV_IMG || {};
-    setTimeout(() => G.story && G.story.scene({ race: G.race, img: ((G.STORY.races || {})[G.race] || {}).img, who: { name: (A[G.race] || {}).name, img: img[G.race] }, lines: o.lines || ['Миссия пройдена.'], kicker: `${M.kicker} · ${M.title}`, title: o.title || 'Миссия пройдена', call: M.after ? 'Дальше' : 'К кампании', done: () => { const go = () => { G.menu.open(); G.menu.campaign(); }; const fin = () => (G.ads ? G.ads.after(go) : go()); if (M.after) G.story.scene({ race: M.after.race || 'others', img: ((G.STORY.races || {})[M.after.race || 'others'] || {}).img, lines: M.after.lines, kicker: M.after.kicker || 'Интерлюдия', title: M.after.title, call: 'К кампании', gray: true, done: fin }); else fin(); } }), 1200);
+    // итоги и медали (16.4): «Быстро» — быстрее нормы, «Без потерь» — вождь не падал / в миссии с базой никто не пал
+    const sec = Math.max(0, S.t - (hs.t0m || 0)), par = M.par || 360;
+    const res = { sec, par, kills: S.stats.kills, fallen: hs.fallen || 0, med: { fast: !S.help && sec <= par, safe: !S.help && !hs.lost }, pages: fresh, help: !!S.help };
+    if (G.campMedals) G.campMedals(S.mission, res.med);
+    if (G.campLose) G.campLose(S.mission, 0);
+    winBeat();
+    if (M.finale) return setTimeout(() => finaleChoice(M), 1800);
+    const o = M.outro || {}, A = G.ADV || {}, img = G.ADV_IMG || {}, id = S.mission;
+    const go = () => { G.adNext = true; G.menu.open(); G.menu.campaign(); };
+    const after = () => (M.after ? G.story.scene({ race: M.after.race || 'others', img: ((G.STORY.races || {})[M.after.race || 'others'] || {}).img, lines: M.after.lines, kicker: M.after.kicker || 'Интерлюдия', title: M.after.title, call: 'К кампании', gray: true, done: go }) : go());
+    setTimeout(() => G.story && G.story.scene({ race: G.race, img: ((G.STORY.races || {})[G.race] || {}).img, who: { name: (A[G.race] || {}).name, img: img[G.race] }, lines: o.lines || ['Миссия пройдена.'], kicker: `${M.kicker} · ${M.title}`, title: o.title || 'Миссия пройдена', call: 'Итоги', done: () => results(M, id, res, after) }), 2200);
   }
+  // последний удар: замедление, звук, плашка на карте
+  function winBeat() {
+    G.fxFlash && G.fxFlash('rgba(255,240,200,.6)', 1500);
+    G.sfx && G.sfx('legend'); G.speed = 0.3; setTimeout(() => { if (G.speed < 1) G.speed = 1; }, 1100);
+    const b = document.createElement('div'); b.className = 'm-banner'; b.innerHTML = '<span>Миссия пройдена</span>'; document.getElementById('app').appendChild(b);
+    setTimeout(() => b.classList.add('out'), 1700); setTimeout(() => b.remove(), 2300);
+  }
+  // поверх итогов не висят плашка шага и голос капитана
+  function quietTop() { actEl.hidden = true; clearTimeout(actBanner.t); const bk = document.getElementById('bark'); if (bk) bk.hidden = true; }
+  const mmss = t => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}`;
+  // карточка итогов: время, павшие, медали, листок рубашкой вверх, следующая миссия
+  function results(M, id, r, done) {
+    quietTop();
+    const m = document.getElementById('modal'), card = document.getElementById('modalCard'), nx = G.campNext ? G.campNext(id) : null;
+    const med = (on, t, d) => `<div class="mr-md${on ? ' on' : ''}"><i></i><b>${t}</b><small>${d}</small></div>`;
+    card.innerHTML = `<div class="intro mres"><div class="kicker" style="color:var(--gold)">${M.kicker} · итоги</div><h1>${M.title}</h1>
+      <div class="mr-st"><div><span>Время</span><b>${mmss(r.sec)}</b></div><div><span>Павшие</span><b>${r.fallen}</b></div><div><span>Убито врагов</span><b>${r.kills}</b></div></div>
+      ${r.help ? '<p class="p mr-help">Пройдено с помощью — без медалей. Без помощи медали ждут.</p>' : `<div class="mr-mds">${med(r.med.fast, 'Быстро', 'быстрее ' + mmss(r.par))}${med(r.med.safe, 'Без потерь', M.base ? 'никто не пал' : 'вождь не падал')}</div>`}
+      ${r.pages.map(pg => `<button class="mr-pg"><div class="mr-in"><div class="mr-bk"><b>Листок летописи</b><small>нажми, чтобы прочесть</small></div><div class="mr-fr"><b>${pg.t}</b><p>${pg.x}</p></div></div></button>`).join('')}
+      ${nx ? `<p class="p mr-nx">Дальше: <b>${nx.name}</b></p>` : ''}
+      <div class="opts"><button class="btn pri" id="mrGo">К главам</button><button class="btn" id="mrAgain">Ещё раз</button></div></div>`;
+    m.hidden = false; card.onclick = null;
+    card.querySelectorAll('.mr-pg').forEach(b => b.onclick = () => { b.classList.add('open'); G.sfx && G.sfx('level'); });
+    card.querySelector('#mrGo').onclick = () => { m.hidden = true; done(); };
+    card.querySelector('#mrAgain').onclick = () => { m.hidden = true; G.story.mission(id); };
+  }
+  // поражение в миссии (16.4): что успел, «Ещё раз» сразу, «С помощью» после двух поражений подряд
+  G.missionLose = function () {
+    const S = S_(), hs = S.hs || {}, M = M_(), id = S.mission; if (!M) return false;
+    if (hs.phase === 'done' || hs.phase === 'lost') return true; hs.phase = 'lost';
+    hideHint(); document.body.classList.remove('mission', 'm-base', 'm-nobase', 'm-nohero', 'm-alone'); S.allowB = S.allowU = null; S.missionFoe = null;
+    try { localStorage.setItem(ENT_KEY, String(entGet() + (S.entT || 0))); } catch (e) { } // мир помнит и проигранную битву
+    const n = G.campLose ? G.campLose(id, 1) : 1;
+    const all = M.steps.length, at = Math.min(hs.step || 0, all);
+    const boss = S.enemies.find(e => alive(e) && isBoss(e) && e.hp < e.maxHp);
+    const goal = String(hs.goal || '').replace(/<[^>]+>/g, '');
+    const grey = !['1.1', '1.2'].includes(id) && !String(id).startsWith('9.'); // в главе 9 Серый — это ты
+    const show = () => {
+      quietTop();
+      const m = document.getElementById('modal'), card = document.getElementById('modalCard');
+      card.innerHTML = `<div class="intro mres"><div class="kicker" style="color:var(--blood)">Миссия провалена</div><h1>${M.title}</h1>
+        <div class="mr-st"><div><span>Пройдено шагов</span><b>${at} из ${all}</b></div>${goal ? `<div class="mr-w"><span>Цель</span><b>${goal}</b></div>` : ''}${boss ? `<div><span>${boss.name || (G.ENEMIES[boss.type] || {}).name || 'Владыка'}</span><b>${Math.ceil(boss.hp / boss.maxHp * 100)}%</b></div>` : ''}</div>
+        ${grey ? '<p class="p mr-grey">Серый: «Записано».</p>' : ''}
+        <div class="opts"><button class="btn pri" id="mlAgain">Ещё раз</button>${n >= 2 && !S.help ? '<button class="btn" id="mlHelp">С помощью</button>' : ''}<button class="btn" id="mlMenu">К главам</button></div>
+        ${n >= 2 && !S.help ? '<p class="p mr-help">«С помощью» — враги слабее на треть, медалей нет.</p>' : ''}</div>`;
+      m.hidden = false; card.onclick = null;
+      card.querySelector('#mlAgain').onclick = () => { m.hidden = true; G.story.mission(id, { help: S.help }); };
+      const hb = card.querySelector('#mlHelp'); if (hb) hb.onclick = () => { m.hidden = true; G.story.mission(id, { help: true }); };
+      card.querySelector('#mlMenu').onclick = () => { m.hidden = true; G.adNext = true; G.menu.open(); G.menu.campaign(); };
+    };
+    const L = M.lose;
+    setTimeout(() => (L ? G.story.scene({ race: L.race || G.race, img: ((G.STORY.races || {})[L.race || G.race] || {}).img, lines: L.lines, kicker: `${M.kicker} · ${M.title}`, title: L.title, call: 'Дальше', gray: true, done: show }) : show()), 1200);
+    return true;
+  };
 
   // ---------- Голос капитана: плашка сверху, игра идёт
   function say(text, who) {
@@ -13849,6 +13969,7 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
       outro: { title: 'Гастроли', lines: ['Где-то есть замок, где не смеются уже триста лет.', 'Бим-Бом надевает лучший нос. Труппа едет на гастроли.'] },
     },
     '3.3': {
+      hard: 1.25, // пик главы — враги крепче на четверть (16.4)
       race: 'clowns', kicker: 'Глава 3', title: 'Огненное шоу', quiet: true, foe: 'mutants', grey: { step: 1 },
       pages: [{ id: '3.3w', at: 'win', t: 'Ой', x: 'Фейерверк был лучшим номером сезона. Публика убежала за реку. Лес сгорел. Бим-Бом считает, что это два разных события.' },
         { id: '3.3g', at: 'grey', t: 'Зритель', x: 'В первом ряду сидел зритель в сером. Не смеялся. Не боялся. Спросил только: «Сколько вас?»' }],
@@ -13972,6 +14093,7 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
       outro: { title: 'Список', lines: ['Капитан Пуговка пишет список. Сто двенадцать имён.', 'Внизу — свалка людей. Там лежат все.'] },
     },
     '6.3': {
+      hard: 1.25, // пик главы — враги крепче на четверть (16.4)
       race: 'bears', kicker: 'Глава 6', title: 'Небо над посёлком', quiet: true, foe: 'survivors',
       pages: [{ id: '6.3w', at: 'win', t: 'Старик', x: 'Старик закрыл лампочку собой. Глупо. Мы бы тоже так сделали.' }],
       intro: ['Последние игрушки — у людей, в посёлке Свет. Три острова зависают над посёлком.'], call: 'Забрать своё',
@@ -14039,6 +14161,7 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
       outro: { title: 'Шум', lines: ['> шум идёт с юга. похоже на смех', '> модуль Омега: найти и вернуть тишину'] },
     },
     '8.3': {
+      hard: 1.25, // пик главы — враги крепче на четверть (16.4)
       race: 'ai', kicker: 'Глава 8', title: 'Источник', quiet: true, foe: 'survivors', grey: { step: 1 },
       pages: [{ id: '8.3w', at: 'win', t: 'Второй приёмник', x: '> маяк вещает вниз. > второй приёмник ответил. > вопрос: кто. > ответ: не определено' },
         { id: '8.3g', at: 'grey', t: '> аномалия', x: '> объект без массы. считает. > вопрос: сколько вас. > ответ: один. мы всегда один' }],
@@ -14073,6 +14196,8 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
       outro: { title: 'Ответ', lines: ['Свет на вышке виден отовсюду.', 'Жнец идёт к нему. За спиной гаснет мир.'] },
     },
     '9.3': {
+      hard: 1.25,
+      lose: { title: 'Утро', race: 'survivors', lines: ['Союз закрыл Разлом. Восемь рас стоят у маяка — и не знают, что дальше.', 'Мир выжил без твоего выбора.', 'Утром Лампа гасит фонарь сама.', 'Его больше не нужно прятать.'] },
       race: 'others', kicker: 'Глава 9', title: 'Последняя лампочка', quiet: true, foe: 'ai',
       pages: [{ id: '9.3w', at: 'win', t: 'Последняя страница', x: 'Последнюю страницу летописи пишет тот, кто остался.' }],
       intro: ['Энтропия растёт от всего, что гибнет и рушится. Война — урожай. Собери его.', 'Восемь рас. Восемь столиц. Иные — одни.'], call: 'Жатва',
@@ -15433,6 +15558,12 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
   const chOpen = c => c.n === 1 || (() => { const p = CH[c.n - 2]; return p && p.ms.length && p.ms.filter(m => m.ready).every(m => isDone(m.id)); })();
   G.campDone = function (id) { const p = prog(); p.done[id] = Date.now(); ls.set('pepel_campaign', p); };
   G.campStarted = () => Object.keys(prog().done).length > 0;
+  // медали, серия поражений, следующая миссия (16.4)
+  G.campIsDone = isDone;
+  G.campMedals = function (id, m) { const p = prog(); p.med = p.med || {}; const o = p.med[id] || {}; if (m.fast) o.fast = 1; if (m.safe) o.safe = 1; p.med[id] = o; ls.set('pepel_campaign', p); };
+  G.campLose = function (id, add) { const p = prog(); p.lose = p.lose || {}; p.lose[id] = add ? (p.lose[id] || 0) + 1 : 0; ls.set('pepel_campaign', p); return p.lose[id]; };
+  G.campNext = function (id) { const all = CH.reduce((a, c) => a.concat(c.ms), []); const i = all.findIndex(m => m.id === id); return all[i + 1] || null; };
+  const medHTML = id => { const o = (prog().med || {})[id] || {}; return isDone(id) ? `<u class="mm-md"><s class="${o.fast ? 'on' : ''}" title="Быстро"></s><s class="${o.safe ? 'on' : ''}" title="Без потерь"></s></u>` : ''; };
   // летопись: листки за победы и спрятанные в миссиях (docs/campaign) — без рекламы
   G.pageHave = id => !!ls.get('pepel_letopis', {})[id];
   G.pageGet = id => { const L = ls.get('pepel_letopis', {}); if (!L[id]) { L[id] = Date.now(); ls.set('pepel_letopis', L); } };
@@ -15487,13 +15618,14 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
   function showCampaign() {
     // пролог мира — не перед кампанией, а по желанию (позже — в летописи)
     const ew = G.entropyWorld ? G.entropyWorld() : 0;
+    let nextId = null; for (const c of CH) { if (!chOpen(c)) continue; const m = c.ms.find(q => q.ready && !isDone(q.id)); if (m) { nextId = m.id; break; } }
     const html = `<div class="mm-ent" title="Энтропия мира"><span>Энтропия мира</span><i style="width:${ew.toFixed(1)}%"></i></div><h2>Хроника энтропии</h2><p class="mm-sub">Девять рас — по очереди. Противник одной главы становится героем следующей. <button class="mm-pro">Летопись</button></p>
       <div class="mm-chs">${CH.map(c => {
         const open = chOpen(c), done = chDone(c), img = (G.STORY.races[c.race] || {}).img;
         return `<div class="mm-ch${open ? '' : ' locked'}${done ? ' done' : ''}" data-race="${c.race}">
           <div class="mm-ch-art" style="background-image:url(${img})"><b>${c.n}</b></div>
           <div class="mm-ch-t"><span>Глава ${c.n} · ${G.RACES[c.race].name}</span><h3>${c.title}</h3><em>${open ? 'учит: ' + c.teach : 'откроется после главы ' + (c.n - 1)}</em>
-          ${open && c.ms.length ? `<div class="mm-ms">${c.ms.map((m, i) => `<button class="mm-m${isDone(m.id) ? ' ok' : ''}${m.ready ? '' : ' wip'}" data-m="${m.id}" ${m.ready ? '' : 'disabled'}><b>${i + 1}</b><span><strong>${m.name}</strong>${m.desc}</span><i>${m.kind === 'hero' ? 'вождь' : m.kind === 'base' ? 'база' : 'испытание'}${m.ready ? '' : ' · в работе'}</i></button>`).join('')}</div>` : ''}</div></div>`;
+          ${open && c.ms.length ? `<div class="mm-ms">${c.ms.map((m, i) => `<button class="mm-m${isDone(m.id) ? ' ok' : ''}${m.id === nextId ? ' next' : ''}${m.ready ? '' : ' wip'}" data-m="${m.id}" ${m.ready ? '' : 'disabled'}><b>${i + 1}</b><span><strong>${m.name}</strong>${m.desc}</span><i>${m.kind === 'hero' ? 'вождь' : m.kind === 'base' ? 'база' : 'испытание'}${m.ready ? '' : ' · в работе'}${medHTML(m.id)}</i></button>`).join('')}</div>` : ''}</div></div>`;
       }).join('')}</div>`;
     openPanel(html, 'camp');
     panel.querySelectorAll('.mm-m[data-m]').forEach(b => b.onclick = () => startMission(b.dataset.m));
