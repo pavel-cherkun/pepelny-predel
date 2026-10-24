@@ -1216,8 +1216,8 @@ body.heromode #heroBar .hb-face::before { content: 'меню'; position: absolut
 @keyframes abTeach { from { box-shadow: 0 0 0 0 rgba(255,214,90,.2); transform: translateY(0); } to { box-shadow: 0 0 22px 6px rgba(255,214,90,.75); transform: translateY(-4px); } }
 #heroBar .hb-ab.fresh { animation: abFresh 1.2s ease 2; }
 @keyframes abFresh { 0% { transform: scale(.6); opacity: 0; } 60% { transform: scale(1.12); opacity: 1; } 100% { transform: scale(1); } }
-body.mission:not(.m-base) #handFab, body.mission:not(.m-base) #hand, body.mission:not(.m-base) .hud-res { display: none !important; }
-body.m-base #goalPill, body.m-base [data-dock="vehicles"], body.m-base [data-dock="mechs"], body.m-base #modeBtn, body.m-base #r-water, body.m-base #r-fuel, body.m-base #r-power { display: none !important; }
+body.mission:not(.m-base) #handFab, body.mission:not(.m-base) #hand, body.m-alone .hud-res { display: none !important; }
+body.m-base #goalPill, body.m-base [data-dock="vehicles"], body.m-base [data-dock="mechs"] { display: none !important; }
 body.m-nobase .cmd, body.m-nobase .hud-res, body.m-nobase #heroDot, body.m-nobase .hb-home, body.m-nobase #raidPill { display: none !important; }
 body.m-nohero #heroDot, body.m-nohero #heroBar { display: none !important; }
 body.mission #goalTrack, body.mission #goalPill, body.mission #celebrate { display: none !important; }
@@ -3548,6 +3548,9 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRnZ2BABXRUJQVlA4WAoA
   G.DIFF = { easy: { raid: 0.6, interval: 1.4, res: 1.5, first: 300 }, normal: { raid: 1, interval: 1, res: 1, first: 170 }, hard: { raid: 1.3, interval: 0.85, res: 0.8, first: 140 } };
   const D = () => G.DIFF[(S && S.diff) || 'normal'] || G.DIFF.normal;
   G.newGame = function (seed, race, opt) {
+    // метки интерфейса прошлой миссии не переносятся в новую партию
+    if (typeof document !== 'undefined' && document.body) document.body.classList.remove('mission', 'm-base', 'm-nobase', 'm-nohero', 'm-alone', 'heroctl', 'heromode', 'hdlg-on');
+    if (G.heroHideHint) G.heroHideHint();
     G.speed = 1; opt = opt || {}; if (G.FX) G.FX.clear(); G._later = [];
     seed = seed || ((Math.random() * 1e9) | 0);
     race = race || 'survivors';
@@ -6395,7 +6398,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRnZ2BABXRUJQVlA4WAoA
     if (S.t > sigT || sigT - S.t > 1) {
       sigT = S.t + 0.5; sigList = [];
       for (const b of S.buildings) if (b.prog >= 1) sigList.push([b.x + b.w / 2, b.y + b.h / 2, (SIG_R[b.type] || 6) + (b.type === 'citadel' ? (b.lvl || 1) : 0)]);
-      for (const u of S.units) if (u.hp > 0 && G.CLASSES[u.cls].mech) sigList.push([u.x, u.y, 8]);
+      for (const u of S.units) if (u.hp > 0 && (G.CLASSES[u.cls].mech || (u.hero && !u.down))) sigList.push([u.x, u.y, u.hero ? 12 : 8]); // вождь носит ретранслятор пошире
     }
     return sigList;
   }
@@ -12686,6 +12689,9 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
     // миссия «разорить»: армия сама идёт на текущую цель и бьёт охрану (у грибов вождя нет — вести некому)
     if (S && S.mission && S.hs && S.hs.phase === 'raze' && S.hs.t && !u.hero && !u.turret && u.cls !== 'scav' && G.CLASSES[u.cls] && G.CLASSES[u.cls].role === 'fighter' && u.hp > u.st.hp * 0.3) {
       const t = S.hs.t, e = nearestFoe(u.x, u.y, 6);
+      // машины держатся у вождя: дальше его ретранслятора — нет связи
+      const ld = G.race === 'ai' ? S.units.find(q => q.hero && !q.down && q.hp > 0) : null;
+      if (ld && hyp(u.x - ld.x, u.y - ld.y) > 9 && !(e && G.inSignal(e.x, e.y))) { const g = u.goal; if (!g || g.type !== 'move' || hyp(g.x - ld.x, g.y - ld.y) > 3) u.goal = { type: 'move', x: ld.x + ((u.id % 5) - 2) * 0.8, y: ld.y + ((u.id % 3) - 1) * 0.8 }; return true; }
       if (e) u.goal = { type: 'attack', t: e.id };
       else if (hyp(u.x - t.x, u.y - t.y) > 2.5) { const g = u.goal; const tx = t.x + ((u.id % 5) - 2) * 0.8, ty = t.y + ((u.id % 3) - 1) * 0.8; if (!g || g.type !== 'move' || hyp(g.x - tx, g.y - ty) > 1) u.goal = { type: 'move', x: tx, y: ty }; }
       else u.goal = null;
@@ -12973,6 +12979,7 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
     bar.querySelectorAll('.hb-ab.teach').forEach(b => b.classList.remove('teach'));
     if (hs) { hs.teach = null; if (hs.slow) { hs.slow = false; G.speed = 1; } }
   }
+  G.heroHideHint = () => { big.hidden = true; if (G.speed < 1) G.speed = 1; };
   big.addEventListener('pointerdown', e => { e.stopPropagation(); });
   big.addEventListener('click', e => { e.stopPropagation(); const hs = S_() && S_().hs; if (!hs || hs.teach == null) hideHint(); });
   G.heroHintCast = i => { const hs = S_() && S_().hs; if (hs && hs.teach === i) { hideHint(); const st = M_() && M_().steps[hs.step]; if (st && st.sayOn) say(st.sayOn); } };
@@ -12995,7 +13002,7 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
     if (M.alone) for (const u of S.units) if (!u.hero && u.hp > 0) { u.hp = 0; u.dead = true; }
     S.hs.far = pickWant(h, M.farD ? M.farD[0] : 40, M.farD ? M.farD[1] : 60, M.far || []);
     camLink = true; lastFollow = null; G.ui.followId = h.id;
-    document.body.classList.add('mission');
+    document.body.classList.add('mission'); document.body.classList.toggle('m-alone', !!M.alone);
     mStep(0);
   }
   // финал кампании: выбор игрока (story.md) — «Погасить» или «Оставить гореть»
@@ -13028,8 +13035,10 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
     document.body.classList.add('mission', 'm-base'); if (B.hideBase) document.body.classList.add('m-nobase');
     for (const k of (B.infected || [])) { const p = walkNear(cx + R() * 4 - 2, cy + c.h + 1 + R() * 2), u = G.makeUnit(k, p[0], p[1]); u.srace = M.foe || 'survivors'; u.infected = true; G.recalc(u); u.hp = u.st.hp; }
     if (B.noHero) { h.down = true; h.hp = 0; h.upT = 0; h.goal = h.order = null; document.body.classList.add('m-nohero'); }
-    if (B.control !== false && !B.noHero) G.heroControl(true);
-    camLink = true; G.ui.followId = B.control !== false && !B.noHero ? h.id : null; if (B.control === false || B.noHero) G.lookAt(cx, cy, true);
+    // вождём ведём сразу только там, где базы ещё нет (1.2); в остальных — база на экране, вождь — по кружку
+    const ctl = !B.noHero && (B.control === true || (B.control == null && B.hideBase));
+    if (ctl) G.heroControl(true);
+    camLink = true; G.ui.followId = ctl ? h.id : null; if (!ctl) G.lookAt(cx, cy, true);
     mStep(0);
   }
   const cnt = (k, done) => { const S = S_(); return S.buildings.filter(b => b.type === k && b.hp > 0 && (!done || b.prog >= 1)).length; };
@@ -13108,7 +13117,9 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
     if (st.kind === 'res') { hs.raid0 = S.raidsDone || 0; if (st.raid) G.missionRaid([].concat(...st.raid.map(([k, n]) => Array(n).fill(type(k)))), st.warn || 20, foeOf()); }
     if (st.kind === 'raze') {
       const f = foeOf(), c = G.cit(), cx = c.x + 1.5, cy = c.y + 1.5, lay = G.layerAt ? G.layerAt(Math.floor(cx), Math.floor(cy)) : null, liveG = p => (p.guardIds || []).some(id => alive(G.ents.get(id)));
-      hs.razeT = G.W.pois.filter(p => p.guarded && liveG(p) && p.faction === f && p.type !== 'capital' && p.type !== 'boss' && hyp(p.x - cx, p.y - cy) < (st.maxD || 48) && (!lay || G.layerAt(p.x, p.y) === lay))
+      // настоящая охрана мест бывает из основной игры (стражи бункера по 900) — берём только посильную
+      const soft = p => { let sum = 0, top = 0; for (const id of p.guardIds || []) { const e = G.ents.get(id); if (alive(e)) { sum += e.hp; top = Math.max(top, e.hp); } } return sum <= (st.maxHp || 700) && top <= 320; };
+      hs.razeT = G.W.pois.filter(p => p.guarded && liveG(p) && soft(p) && p.faction === f && p.type !== 'capital' && p.type !== 'boss' && hyp(p.x - cx, p.y - cy) < (st.maxD || 48) && (!lay || G.layerAt(p.x, p.y) === lay))
         .sort((a, b) => (hyp(a.x - cx, a.y - cy) + (a.type === 'lair' ? 0 : 12)) - (hyp(b.x - cx, b.y - cy) + (b.type === 'lair' ? 0 : 12))).slice(0, st.n || 3)
         .map(p => ({ x: p.x + 0.5, y: p.y + 0.5, name: p.name, ids: p.guardIds.slice(), poi: p.id }));
       // настоящих поселений рядом мало (небо мишек, глухая карта) — сценарий ставит свои лагеря с охраной
@@ -13208,7 +13219,7 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
     if (calm && hs.calmT <= 0 && hs.line < C.length) { hs.calmT = 24; mSay(C[hs.line++]); }
   }
   function mWin() {
-    const S = S_(), hs = S.hs, M = M_(); if (hs.phase === 'done') return; hs.phase = 'done'; hideHint(); document.body.classList.remove('mission', 'm-base', 'm-nobase', 'm-nohero'); S.allowB = S.allowU = null; S.missionFoe = null;
+    const S = S_(), hs = S.hs, M = M_(); if (hs.phase === 'done') return; hs.phase = 'done'; hideHint(); document.body.classList.remove('mission', 'm-base', 'm-nobase', 'm-nohero', 'm-alone'); S.allowB = S.allowU = null; S.missionFoe = null;
     if (G.campDone) G.campDone(S.mission);
     try { localStorage.setItem(ENT_KEY, String(entGet() + (S.entT || 0))); } catch (e) { }
     for (const pg of (M.pages || [])) if (pg.at === 'win') G.pageGet(pg.id);
@@ -13746,7 +13757,8 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
         { kind: 'day', sec: 40, allowB: ['tower'], goal: 'День первый', hint: 'Поставь вышки у тропы.',
           tip: { title: 'Вышка', what: 'Вышка стреляет сама — как турель Лампы, только навсегда.', when: 'Ставь у тропы, откуда идут.' },
           say: 'Дед: Видишь? Турель, только надолго.' },
-        { kind: 'raid', list: [['light', 6], ['fast', 2]], warn: 12, charge: 20, goal: 'Ночь первая', hint: 'Держать посёлок.' },
+        { kind: 'raid', list: [['light', 6], ['fast', 2]], warn: 12, charge: 20, goal: 'Ночь первая', hint: 'Держать посёлок. Режим «Оборона» — кнопка у мини-карты.',
+          tip: { title: 'Режим поселения', what: '«Экономика» — все носят ресурсы. «Оборона» — бойцы держатся у стен, вышки бьют сильнее. «Экспансия» — бойцы сами идут на логова.', when: 'Перед набегом — «Оборона». Кнопка рядом с мини-картой.' } },
         { kind: 'day', sec: 30, allowB: ['barricade'], goal: 'День второй', hint: 'Баррикады — в проходы.',
           tip: { title: 'Баррикада', what: 'Баррикада держит врагов в проходе, пока вышки стреляют.', when: 'Дешёвая. Ставь много.' } },
         { kind: 'raid', list: [['light', 8], ['fast', 3]], warn: 12, charge: 20, goal: 'Ночь вторая', hint: 'Держать посёлок.' },
