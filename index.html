@@ -1497,6 +1497,18 @@ body.heromode #bark { top: calc(env(safe-area-inset-top, 0px) + 96px); left: aut
 #arena .td-panel.side .td-cards button span { display: none; }
 @media (max-width: 700px) { #arena .ar-races { grid-template-columns: repeat(5, 1fr); } #arena .ar-ups { grid-template-columns: 1fr; } #arena h2 { font-size: 24px; } }
 #fxBan { z-index: 80 !important; }
+
+/* лента событий: одно место, без прыжков, один вид для всех тем */
+#feed { left: 50% !important; right: auto !important; top: 54px !important; transform: translateX(-50%); width: min(440px, calc(100% - 24px)) !important; align-items: center; gap: 6px; }
+#feed .toast { animation: toastIn .35s ease !important; transition: opacity .4s !important; transform: none !important; max-width: 100%; padding: 7px 14px 7px 12px !important; border: 0 !important; border-radius: 999px !important; background: rgba(10,8,10,.88) !important; box-shadow: 0 4px 14px rgba(0,0,0,.45) !important; font: 500 13px/1.3 'Golos Text', sans-serif !important; color: #eee !important; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#feed .toast::before { content: '' !important; display: inline-block; width: 7px; height: 7px; margin-right: 8px; border-radius: 50%; vertical-align: 1px; background: #9a9088; }
+#feed .toast.good::before { background: #7ad060; } #feed .toast.bad::before { background: #ff4a3a; } #feed .toast.legend::before { background: #ffd36a; } #feed .toast.event::before { background: #b48cff; }
+#feed .toast.bad { color: #ffd0c8 !important; } #feed .toast.legend { color: #ffe9b0 !important; }
+#feed .toast.out { opacity: 0 !important; }
+@keyframes toastIn { from { opacity: 0; } to { opacity: 1; } }
+#feed::after { display: none !important; }
+@media (min-width: 1100px) and (pointer: fine) { #rewards { top: 124px !important; left: 50% !important; right: auto !important; transform: translateX(-50%) !important; } }
+@media (max-width: 700px) { #feed { top: 116px !important; } body.heromode #feed, body.mission #feed { top: 60px !important; } }
 </style>
 
 </head>
@@ -9230,7 +9242,7 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRnZ2BABXRUJQVlA4WAoA
   let foundEl = null, foundT = 0;
   // строки событий: одинаковые склеиваются, новые — не чаще раза в 0.7 с, на телефоне видна одна
   const tQ = []; let tLast = 0;
-  const tMax = () => innerWidth < 700 ? 1 : 3;
+  const tMax = () => innerWidth < 700 ? 1 : 2;
   setInterval(() => {
     if (!tQ.length) return;
     const busy = celBusy() || rwBox.children.length > 0;
@@ -9239,13 +9251,17 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRnZ2BABXRUJQVlA4WAoA
     showToast(q.text, q.o);
     feed.dataset.more = tQ.length ? '+' + tQ.length : '';
   }, 700);
+  // мелочь, которую и так видно на поле, — не в ленту (жалоба: «уведомлений очень много»)
+  const QUIET = /^(Найдено: |Пополнение: |Построено: |Отстроено: |Заказано: |Переход: |Появилось: |Истощено: |Молодые жители|Вылупились|Место оставлено|Режим «|Разобрали «|Экспансия: )/;
   ui.toast = function (text, o) {
+    o = o || {};
+    if (o.kind !== 'bad' && o.kind !== 'legend' && QUIET.test(String(text))) return;
     // то же самое уже на экране — счётчик и продление
     for (const el of feed.children) if (el.dataset.t === text) { const n = (+el.dataset.n || 1) + 1; el.dataset.n = n; el.textContent = text + ' ×' + n; el.dataset.t = text; clearTimeout(el._t); el._t = setTimeout(() => el._out && el._out(), 4500); return; }
     const dq = tQ.find(q => q.text === text); if (dq) return;
     if (tQ.length > 6) tQ.splice(0, tQ.length - 6); // старое неважное не копится
     tQ.push({ text, o });
-    if (performance.now() - tLast > 700 && rwBox.children.length === 0 && !celBusy()) { tLast = performance.now(); const q = tQ.pop(); showToast(q.text, q.o); }
+    if (performance.now() - tLast > 1200 && rwBox.children.length === 0 && !celBusy()) { tLast = performance.now(); const q = tQ.pop(); showToast(q.text, q.o); }
   };
   function showToast(text, o) {
     tLast = performance.now();
@@ -9267,8 +9283,8 @@ G.SPRITE_META = {"world":{"src":"data:image/webp;base64,UklGRnZ2BABXRUJQVlA4WAoA
       else if (o.choice) openChoices();
       el.remove();
     });
-    feed.prepend(el);
-    while (feed.children.length > tMax()) feed.lastChild.remove();
+    feed.appendChild(el);
+    while (feed.children.length > tMax()) feed.firstChild.remove();
     const life = o.kind === 'legend' ? 6500 : o.kind === 'bad' ? 6000 : 4000;
     el._out = () => { el.classList.add('out'); setTimeout(() => el.remove(), 400); };
     el._t = setTimeout(el._out, life);
@@ -13351,7 +13367,7 @@ if (G.ui) G.ui.intro = () => { const first = () => (G.campStarted && !G.campStar
   }
   function updQuest() {
     const S = S_(), hs = S.hs, st = STORY[G.race], h = hero();
-    { const fd = document.getElementById('feed'); if (fd) fd.style.top = S.heroMode && !quest.hidden ? Math.round(quest.getBoundingClientRect().bottom + 8) + 'px' : ''; }
+
     if ((!S.heroMode && !M_()) || !hs) { quest.hidden = bossBar.hidden = arrow.hidden = true; return; }
     quest.hidden = false; quest.style.setProperty('--hc', HEROES[G.race].col);
     const done = hs.phase === 'done';
